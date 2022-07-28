@@ -140,44 +140,46 @@ export default {
             >
                 Time remaining
             </p>
-            <BorderedContainer class="border-wgh-purple-3 bg-white p-4">
-                <div
-                    class="flex flex-row justify-between rounded bg-wgh-gray-0.5 px-4 py-3"
-                >
-                    <p
-                        class="font-grota text-sm font-normal uppercase text-wgh-gray-6"
+            <BorderedContainer class="bg-wgh-purple-3">
+                <div class="rounded-lg bg-white p-4">
+                    <div
+                        class="flex flex-row justify-between rounded bg-wgh-gray-0.5 px-4 py-3"
                     >
-                        {{ gameLobby.game.name }}
-                    </p>
-                    <p
-                        class="font-grota text-sm font-semibold uppercase text-wgh-gray-6"
-                    >
-                        RESTRICTED GAME
-                    </p>
-                </div>
-                <div class="w-full py-16">
-                    <img
-                        class="mx-auto w-40"
-                        :src="config.game_lobby_loading_gif"
-                        alt="Loading.."
-                    />
-                    <p
-                        class="text-center font-inter text-xs font-normal uppercase text-wgh-gray-2"
-                    >
-                        WAITING TIME
-                    </p>
-                    <p
-                        v-if="!gameLobby.timeToStartAsString"
-                        class="mt-2 text-center font-grota text-3xl font-extrabold text-wgh-red-2"
-                    >
-                        Loading...
-                    </p>
-                    <p
-                        v-if="gameLobby.timeToStartAsString"
-                        class="mt-2 text-center font-grota text-3xl font-extrabold text-wgh-red-2"
-                    >
-                        {{ gameLobby.timeToStartAsString }}
-                    </p>
+                        <p
+                            class="font-grota text-sm font-normal uppercase text-wgh-gray-6"
+                        >
+                            {{ gameLobby.game.name }}
+                        </p>
+                        <p
+                            class="font-grota text-sm font-semibold uppercase text-wgh-gray-6"
+                        >
+                            RESTRICTED GAME
+                        </p>
+                    </div>
+                    <div class="w-full py-16">
+                        <img
+                            class="mx-auto w-40"
+                            :src="config.game_lobby_loading_gif"
+                            alt="Loading.."
+                        />
+                        <p
+                            class="text-center font-inter text-xs font-normal uppercase text-wgh-gray-2"
+                        >
+                            WAITING TIME
+                        </p>
+                        <p
+                            v-if="!gameLobby.timeToStartAsString"
+                            class="mt-2 text-center font-grota text-3xl font-extrabold text-wgh-red-2"
+                        >
+                            Loading...
+                        </p>
+                        <p
+                            v-if="gameLobby.timeToStartAsString"
+                            class="mt-2 text-center font-grota text-3xl font-extrabold text-wgh-red-2"
+                        >
+                            {{ gameLobby.timeToStartAsString }}
+                        </p>
+                    </div>
                 </div>
             </BorderedContainer>
         </div>
@@ -190,39 +192,43 @@ export default {
                 Chat
             </p>
             <div class="relative h-full w-full w-full">
-                <BorderedContainer
-                    class="absolute inset-0 flex h-full w-full grow flex-col justify-between border-wgh-purple-3 bg-white p-4"
-                >
+                <BorderedContainer class="absolute inset-0 bg-wgh-purple-3">
                     <div
-                        id="chat-messages"
-                        class="flex flex-col space-y-2 overflow-y-scroll px-2 pb-2"
+                        class="flex h-full h-full w-full w-full grow flex-col justify-between rounded-lg bg-white p-4"
                     >
-                        <ChatMessage
-                            v-for="chatMessage in chatMessages"
-                            :from-me="chatMessage.sender.id === currentUser.id"
-                            :user-image-url="chatMessage.sender.image_url"
-                            :time="chatMessage.created_at_human_readable"
-                            :username="chatMessage.sender.username"
-                            :message="chatMessage.message.message"
-                        />
-                    </div>
-                    <div
-                        class="flex w-full flex-row space-x-2 rounded-md border-2 border-wgh-gray-1 p-px"
-                    >
-                        <input
-                            type="text"
-                            class="shrink grow p-2 outline-none ring-0"
-                            placeholder="Type your message here"
-                            v-model="chatMessageInput"
-                            @keyup.enter="sendChatMessage"
-                        />
-                        <button
-                            :disabled="chatMessageInput.length <= 0"
-                            @click.prevent="sendChatMessage"
-                            class="rounded-md bg-wgh-purple-2 py-2 px-4 disabled:cursor-no-drop"
+                        <div
+                            id="chat-messages"
+                            class="flex flex-col space-y-2 overflow-y-scroll px-2 pb-2"
                         >
-                            <KiteArrow class="h-4 w-4" />
-                        </button>
+                            <ChatMessage
+                                v-for="chatMessage in chatMessages"
+                                :from-me="
+                                    chatMessage.sender.id === currentUser.id
+                                "
+                                :user-image-url="chatMessage.sender.image_url"
+                                :time="chatMessage.created_at_human_readable"
+                                :username="chatMessage.sender.username"
+                                :message="chatMessage.message.message"
+                            />
+                        </div>
+                        <div
+                            class="flex w-full flex-row space-x-2 rounded-md border-2 border-wgh-gray-1 p-px"
+                        >
+                            <input
+                                type="text"
+                                class="shrink grow p-2 outline-none ring-0"
+                                placeholder="Type your message here"
+                                v-model="chatMessageInput"
+                                @keyup.enter="sendChatMessage"
+                            />
+                            <button
+                                :disabled="chatMessageInput.length <= 0"
+                                @click.prevent="sendChatMessage"
+                                class="rounded-md bg-wgh-purple-2 py-2 px-4 disabled:cursor-no-drop"
+                            >
+                                <KiteArrow class="h-4 w-4" />
+                            </button>
+                        </div>
                     </div>
                 </BorderedContainer>
             </div>
@@ -237,12 +243,10 @@ export default {
                 {{ gameLobby.max_players }})
             </p>
             <div class="relative h-full w-full w-full">
-                <BorderedContainer
-                    class="absolute inset-0 flex h-full w-full grow flex-col justify-between border-wgh-purple-3 bg-white p-2"
-                >
+                <BorderedContainer class="absolute inset-0 bg-wgh-purple-3">
                     <div
                         id="players-list"
-                        class="divider-wgh-gray-0.5 flex flex-col divide-y overflow-y-scroll px-2 pb-2"
+                        class="divider-wgh-gray-0.5 flex flex h-full w-full grow flex-col flex-col justify-between divide-y overflow-y-scroll rounded-lg bg-white p-2 px-2 pb-2"
                     >
                         <div
                             class="flex flex-row justify-between py-2"
