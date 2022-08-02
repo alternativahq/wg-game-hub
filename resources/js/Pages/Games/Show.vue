@@ -100,7 +100,7 @@ function modalCancelGameButtonClicked() {
         <BorderedContainer class="mb-10 bg-wgh-purple-3">
             <div class="flex flex-col justify-between rounded-lg bg-wgh-purple-2 p-7 md:flex-row">
                 <div class="mb-4 flex flex-row space-x-6 lg:mb-0">
-                    <Link href="/dashboard">
+                    <Link :href="route('landing')">
                         <ButtonShape type="whiteBorderPurple">
                             <ChevronLeft class="text-white" />
                         </ButtonShape>
