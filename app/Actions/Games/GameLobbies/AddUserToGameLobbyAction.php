@@ -69,13 +69,9 @@ class AddUserToGameLobbyAction
                 $gameLobby->decrement('available_spots');
 
                 broadcast(new UserJoinedGameLobbyEvent(gameLobby: $gameLobby, user: $user, entranceFee: $fee));
-
-                Event::dispatch(
-                    new PrizeUpdatedEvent(
-                        gameLobby: $gameLobby,
-                        newPrize: (int) GameLobbyUser::whereBelongsTo($gameLobby)->sum('entrance_fee'),
-                    ),
-                );
+                $prize =
+                    ((float) GameLobbyUser::where('game_lobby_id', $gameLobby->id)->sum('entrance_fee') * 100) / 80;
+                Event::dispatch(new PrizeUpdatedEvent(gameLobby: $gameLobby, newPrize: $prize));
                 return $gameLobby;
             },
         );
