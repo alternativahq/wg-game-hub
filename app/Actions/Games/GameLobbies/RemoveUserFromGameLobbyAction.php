@@ -69,7 +69,7 @@ class RemoveUserFromGameLobbyAction
                 Event::dispatch(new UserLeftGameLobbyEvent(gameLobby: $gameLobby, user: $user));
 
                 $total = (float) GameLobbyUser::where('game_lobby_id', $gameLobby->id)->sum('entrance_fee');
-                $prize = (float) ($total - ($total * 100.0) / 80.0);
+                $prize = (float) ($total - ($total * 20.0) / 100.0);
 
                 Event::dispatch(new PrizeUpdatedEvent(gameLobby: $gameLobby, newPrize: $prize));
 

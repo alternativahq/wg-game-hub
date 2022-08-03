@@ -24,8 +24,8 @@ class GameLobbiesController extends Controller
         }
 
         $total = (float) GameLobbyUser::where('game_lobby_id', $gameLobby->id)->sum('entrance_fee');
-        $prize = (float) ($total - ($total * 100.0) / 80.0);
 
+        $prize = (float) ($total - ($total * 20.0) / 100.0);
         return Inertia::render('Games/Lobbies/Show', [
             'gameLobby' => new GameLobbyResource($gameLobby),
             'prize' => (int) $prize,
