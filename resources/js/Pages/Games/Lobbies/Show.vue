@@ -172,7 +172,7 @@ export default {
                             />
                         </svg>
                         <div>
-                            <p class="font-grota text-lg font-extrabold uppercase text-wgh-gray-6">Live updated</p>
+                            <p class="font-grota text-lg font-extrabold uppercase text-wgh-gray-6">Live updates</p>
                             <p class="font-inter font-normal uppercase text-wgh-gray-6">{{ latestUpdateMessage }}</p>
                         </div>
                     </div>
