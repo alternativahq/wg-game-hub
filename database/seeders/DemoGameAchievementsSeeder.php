@@ -426,7 +426,7 @@ class DemoGameAchievementsSeeder extends Seeder
                 ],
             ])->merge(
                 Achievement::factory()
-                    ->count(30)
+                    ->count(300)
                     ->make()
                     ->toArray(),
             ),
@@ -833,7 +833,7 @@ class DemoGameAchievementsSeeder extends Seeder
                 ],
             ])->merge(
                 Achievement::factory()
-                    ->count(30)
+                    ->count(300)
                     ->make()
                     ->toArray(),
             ),
@@ -1240,7 +1240,7 @@ class DemoGameAchievementsSeeder extends Seeder
                 ],
             ])->merge(
                 Achievement::factory()
-                    ->count(30)
+                    ->count(300)
                     ->make()
                     ->toArray(),
             ),
