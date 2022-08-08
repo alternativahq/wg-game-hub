@@ -48,3 +48,4 @@ npm install -g @soketi/soketi
 There is a `Dockerfile` ready in the root of the project.
 
 // TODO: Add production deployment commands
+
