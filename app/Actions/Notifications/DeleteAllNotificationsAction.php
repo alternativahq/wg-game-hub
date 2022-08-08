@@ -2,15 +2,13 @@
 
 namespace App\Actions\Notification;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DeleteNotificationsAction
 {
-    public function execute(): void
+    public function execute(User $user): void
     {
-        $user =auth()->user();
-        if(count($notification =$user->notifications)>1){
-            $user->notifications()->delete();
-        }
+        $user->notifications()->delete();
     }
 }

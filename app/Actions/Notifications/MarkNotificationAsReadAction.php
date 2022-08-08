@@ -2,15 +2,13 @@
 
 namespace App\Actions\Notification;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MarkNotificationAsReadAction
 {
-    public function execute(Request $request): void
+    public function execute(Request $request, User $user, Notification $notification): void
     {
-        $user = auth()->user();
-        $user->unreadNotifications->when($request->id,function($quary) use ($request){
-            return $quary->where('id', $request->id);
-        })->markAsRead();
+        $user->unreadNotifications->where('id', $notification->id)->markAsRead();
     }
 }

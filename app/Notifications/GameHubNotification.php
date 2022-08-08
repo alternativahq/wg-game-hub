@@ -17,11 +17,7 @@ class GameHubNotification extends Notification
      *
      * @return void
      */
-
-    public function __construct(
-        public  $message,
-    ) {
-    }
+    public function __construct(public  $message){}
 
     /**
      * Get the notification's delivery channels.

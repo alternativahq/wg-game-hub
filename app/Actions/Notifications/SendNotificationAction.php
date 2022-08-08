@@ -2,14 +2,14 @@
 
 namespace App\Actions\Notification;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Notifications\GameHubNotification;
 
 class SendNotificationAction
 {
-    public function execute($message): void
+    public function execute(User $user, $message): void
     {
-        $user = auth()->user();
         $user->notify(new GameHubNotification($message));
     }
 }
