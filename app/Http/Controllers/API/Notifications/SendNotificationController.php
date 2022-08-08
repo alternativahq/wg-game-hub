@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\API\Notifications;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Actions\Notification\SendNotificationAction;
+use App\Http\Requests\SendNotificationRequest;
+use App\Actions\Notifications\SendNotificationAction;
 
 class SendNotificationController extends Controller
 {
@@ -14,9 +16,11 @@ class SendNotificationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request, SendNotificationAction $sendNotificationAction)
+    public function __invoke(SendNotificationRequest $request, SendNotificationAction $sendNotificationAction)
     {
-        $sendNotificationAction->execute(auth()->user(), $request->message);
+        // return $request->message;
+        $user = User::first();
+        $sendNotificationAction->execute($user, $request->message);
         return response()->noContent();
     }
 }

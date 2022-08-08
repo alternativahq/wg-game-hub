@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Actions\Notification;
+namespace App\Actions\Notifications;
 
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class DeleteNotificationsAction
+class DeleteAllNotificationsAction
 {
     public function execute(User $user): void
     {

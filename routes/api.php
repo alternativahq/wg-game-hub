@@ -10,7 +10,7 @@ use App\Http\Controllers\API\{
     Notifications\NotificationController,
     Notifications\SendNotificationController,
     Notifications\MarkNotificationAsReadController,
-    Notifications\DeleteNotificationController,
+    Notifications\DeleteNotificationsController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -61,7 +61,7 @@ Route::get('notificaions/unreadnotificationscount',
 ])->name('notificaions.unreadnotificationscount');
 
 Route::delete('notificaions',
-     DeleteNotificationController::class
+    DeleteNotificationsController::class
 )->name('notificaions.delete');
 
 Route::put('notificaions/{notification}/read',
@@ -71,3 +71,4 @@ Route::put('notificaions/{notification}/read',
 Route::post('notificaions/send',
     SendNotificationController::class
 )->name('notificaions.send');
+    

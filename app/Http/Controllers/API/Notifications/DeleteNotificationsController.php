@@ -4,9 +4,9 @@ namespace App\Http\Controllers\API\Notifications;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Actions\Notification\DeleteAllNotificationsAction;
+use App\Actions\Notifications\DeleteAllNotificationsAction;
 
-class DeleteNotificationController extends Controller
+class DeleteNotificationsController extends Controller
 {
     /**
      * Handle the incoming request.

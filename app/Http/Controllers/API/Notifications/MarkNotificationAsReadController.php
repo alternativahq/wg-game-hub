@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API\Notifications;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Actions\Notification\MarkNotificationAsReadAction;
+use App\Actions\Notifications\MarkNotificationAsReadAction;
 
 class MarkNotificationAsReadController extends Controller
 {
