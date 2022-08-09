@@ -55,7 +55,7 @@ Route::get('notificaions',
     [NotificationController::class,'index'
 ])->name('notificaions.index');
 
-Route::get('notificaions/unreadnotificationscount',
+Route::get('notificaions/unread-count',
     [NotificationController::class,
     'unreadnotificationscount'
 ])->name('notificaions.unreadnotificationscount');
@@ -68,7 +68,7 @@ Route::put('notificaions/{notification}/read',
     MarkNotificationAsReadController::class
 )->name('notificaions.read');
 
-Route::post('notificaions/send',
+Route::post('notificaions',
     SendNotificationController::class
 )->name('notificaions.send');
     
