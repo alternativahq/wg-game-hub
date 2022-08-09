@@ -7,6 +7,10 @@ use App\Http\Controllers\API\{
     Games\GameLobbyLeaveController,
     Games\GameLobbyResultsController,
     Games\GamesController,
+    Notifications\NotificationController,
+    Notifications\SendNotificationController,
+    Notifications\MarkNotificationAsReadController,
+    Notifications\DeleteNotificationsController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -45,3 +49,26 @@ Route::post(
     'chat-rooms/{chatRoom}/message',
     ChatRoomMessageController::class,
 )->name('chat-rooms.message');
+
+// Notifications
+Route::get('notificaions',
+    [NotificationController::class,'index'
+])->name('notificaions.index');
+
+Route::get('notificaions/unread-count',
+    [NotificationController::class,
+    'unreadnotificationscount'
+])->name('notificaions.unreadnotificationscount');
+
+Route::post('notificaions',
+    SendNotificationController::class
+)->name('notificaions.send');
+
+Route::put('notificaions/{notification}/read',
+MarkNotificationAsReadController::class
+)->name('notificaions.read');
+
+Route::delete('notificaions',
+    DeleteNotificationsController::class
+)->name('notificaions.delete');
+   
