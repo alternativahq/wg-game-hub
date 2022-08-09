@@ -12,12 +12,17 @@ class SendNotificationAction
 {
     public function execute(User $user, $data): void
     {
-        $user->notify(new GameHubNotification($data));
-
-        match ($data->type) {
-            NotificationType::UserLeftLobby     => $user->notify(new GameHubNotification($data)),
-            NotificationType::UserJoinedLobby   => $user->notify(new GameHubNotification($data)),
+        $notification = match ($data->type) {
+            NotificationType::UserLeftLobby->value => new GameHubNotification($data),
+            NotificationType::UserJoinedLobby->value => new GameHubNotification($data),
+            default => null,
         };
+
+        if (!$notification) {
+            return;
+        }
+
+        $user->notify($notification);
 
         // Notification::send($user ,new GameHubNotification($message));
     }

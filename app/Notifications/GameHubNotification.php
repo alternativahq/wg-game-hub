@@ -3,23 +3,22 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
 class GameHubNotification extends Notification
 {
     use Queueable;
-    
-    public $data;
-    
+
+    public array $data;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($data){
+    public function __construct($data)
+    {
         $this->data = $data;
     }
 
@@ -31,14 +30,14 @@ class GameHubNotification extends Notification
      */
     public function via($notifiable)
     {
-        return ['database','broadcast'];
+        return ['database', 'broadcast'];
     }
 
     /**
      * Get the broadcastable representation of the notification.
      *
      * @param  mixed  $notifiable
-     * 
+     *
      */
     public function toDatabase($notifiable)
     {
