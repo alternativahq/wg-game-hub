@@ -24,8 +24,9 @@ class SendNotificationRequest extends FormRequest
     public function rules()
     {
         return [
-            'message' => ['required'],
-            'type'    => ['required'],
+            'type'        => ['required'],
+            'data'        => ['required', 'json'],
+            'user_ids'    => ['required', 'array', 'min:1'],
         ];
     }
 }

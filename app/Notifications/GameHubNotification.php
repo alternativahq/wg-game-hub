@@ -12,15 +12,15 @@ class GameHubNotification extends Notification
 {
     use Queueable;
     
-    public $message;
+    public $data;
     
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($message){
-        $this->message = $message;
+    public function __construct($data){
+        $this->data = $data;
     }
 
     /**
@@ -42,9 +42,7 @@ class GameHubNotification extends Notification
      */
     public function toDatabase($notifiable)
     {
-        return [
-            'message' => $this->message,
-        ];
+        return $this->data;
     }
 
     /**
@@ -55,8 +53,6 @@ class GameHubNotification extends Notification
      */
     public function toBroadcast($notifiable)
     {
-        return new BroadcastMessage([
-            'message' => $this->message,
-        ]);
+        return new BroadcastMessage($this->data);
     }
 }

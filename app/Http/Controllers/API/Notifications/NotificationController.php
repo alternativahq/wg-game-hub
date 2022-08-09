@@ -25,9 +25,9 @@ class NotificationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function unreadnotificationscount()
+    public function unreadNotificationsCount()
     {
         $user = User::first();
-        return $user->unreadNotifications->count();
+        return $user->unreadNotifications()->count();
     }
 }

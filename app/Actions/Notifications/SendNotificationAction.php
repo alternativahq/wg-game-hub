@@ -10,14 +10,13 @@ use App\Notifications\GameHubNotification;
 
 class SendNotificationAction
 {
-    public function execute(User $user, $message, $type): void
+    public function execute(User $user, $data): void
     {
-        $user->notify(new GameHubNotification($message));
+        $user->notify(new GameHubNotification($data));
 
-        match ($type) {
-            NotificationType::UserLeftLobby     => $user->notify(new GameHubNotification($message)),
-            NotificationType::UserJoinedLobby   => $user->notify(new GameHubNotification($message)),
-            default => "their is no such notification",
+        match ($data->type) {
+            NotificationType::UserLeftLobby     => $user->notify(new GameHubNotification($data)),
+            NotificationType::UserJoinedLobby   => $user->notify(new GameHubNotification($data)),
         };
 
         // Notification::send($user ,new GameHubNotification($message));

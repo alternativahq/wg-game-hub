@@ -9,6 +9,6 @@ class MarkNotificationAsReadAction
 {
     public function execute(Request $request, User $user, Notification $notification): void
     {
-        $user->unreadNotifications->where('id', $notification->id)->markAsRead();
+        $user->unreadNotifications()->where('id', $notification->id)->markAsRead();
     }
 }

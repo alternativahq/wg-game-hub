@@ -19,7 +19,7 @@ class SendNotificationController extends Controller
     public function __invoke(SendNotificationRequest $request, SendNotificationAction $sendNotificationAction)
     {
         $user = User::first();
-        $sendNotificationAction->execute($user, $request->message, $request->type);
+        $sendNotificationAction->execute($user, $request);
         return "message sent successfully";
     }
 }
