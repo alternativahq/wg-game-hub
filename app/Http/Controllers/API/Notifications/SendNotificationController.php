@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\API\Notifications;
 
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SendNotificationRequest;
 use App\Actions\Notifications\SendNotificationAction;
@@ -18,9 +16,7 @@ class SendNotificationController extends Controller
      */
     public function __invoke(SendNotificationRequest $request, SendNotificationAction $sendNotificationAction)
     {
-        $user = User::first();
-
-        $sendNotificationAction->execute($user, $request->data);
+        $sendNotificationAction->execute(auth()->user(), $request->data);
         return response()->noContent();
     }
 }

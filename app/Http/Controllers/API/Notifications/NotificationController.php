@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\API\Notifications;
 
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\NotificationResource;
 
@@ -16,7 +14,7 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        $user = User::first();
+        $user = auth()->user();
         return NotificationResource::collection($user->notifications()->paginate());
     }
 
@@ -27,7 +25,7 @@ class NotificationController extends Controller
      */
     public function unreadNotificationsCount()
     {
-        $user = User::first();
+        $user = auth()->user();
         return $user->unreadNotifications()->count();
     }
 }

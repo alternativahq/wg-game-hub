@@ -3,7 +3,6 @@
 namespace App\Actions\Notifications;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class DeleteAllNotificationsAction
 {

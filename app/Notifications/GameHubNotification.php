@@ -10,16 +10,13 @@ class GameHubNotification extends Notification
 {
     use Queueable;
 
-    public array $data;
-
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct(public array $data)
     {
-        $this->data = $data;
     }
 
     /**
@@ -34,16 +31,15 @@ class GameHubNotification extends Notification
     }
 
     /**
-     * Get the broadcastable representation of the notification.
+     * Get the array representation of the notification.
      *
      * @param  mixed  $notifiable
-     *
+     * @return array
      */
     public function toDatabase($notifiable)
     {
         return $this->data;
     }
-
     /**
      * Get the broadcastable representation of the notification.
      *

@@ -64,7 +64,7 @@ Route::post('notificaions',
     SendNotificationController::class
 )->name('notificaions.send');
 
-Route::put('notificaions/{notification}/read',
+Route::put('notificaions/{notificationid}/read',
 MarkNotificationAsReadController::class
 )->name('notificaions.read');
 

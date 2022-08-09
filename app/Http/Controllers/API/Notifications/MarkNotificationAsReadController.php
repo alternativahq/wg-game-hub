@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\API\Notifications;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Actions\Notifications\MarkNotificationAsReadAction;
+use Notification;
 
 class MarkNotificationAsReadController extends Controller
 {
@@ -14,7 +14,7 @@ class MarkNotificationAsReadController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request, Notification $notification, MarkNotificationAsReadAction $markNotificationAsReadAction)
+    public function __invoke(Notification $notification, MarkNotificationAsReadAction $markNotificationAsReadAction)
     {
         $markNotificationAsReadAction->execute(auth()->user(), $notification);
         return response()->noContent();
