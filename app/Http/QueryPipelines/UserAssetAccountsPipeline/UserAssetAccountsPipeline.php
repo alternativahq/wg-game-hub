@@ -22,6 +22,7 @@ class UserAssetAccountsPipeline extends Pipeline
     protected function pipes()
     {
         return [new Sort(request: $this->request), new ByAssetFilter(request: $this->request)];
+        // return [new Sort(request: $this->request), new ByAssetFilter(request: $this->request)];
     }
 
     public static function make(Builder $builder, Request $request): Builder
@@ -32,9 +33,6 @@ class UserAssetAccountsPipeline extends Pipeline
                 $builder->with([
                     'asset' => function ($query) {
                         $query->select('id', 'name','description','symbol');
-                    },
-                    'assetAccounts' => function ($query) {
-                        $query->select('id', 'balance', 'status');
                     },
                 ]),
             )

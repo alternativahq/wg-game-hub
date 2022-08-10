@@ -21,48 +21,48 @@ class Sort
     {
         return collect([
             [
-                'key' => 'game_name',
-                'value' => 'games.name',
+                'key' => 'assetAcount_name',
+                'value' => 'assetAcount.name',
             ],
-            [
-                'key' => 'achievement_name',
-                'value' => 'achievements.name',
-            ],
-            [
-                'key' => 'earned_at',
-                'value' => 'created_at',
-            ],
+            // [
+            //     'key' => 'assetAcount_balance',
+            //     'value' => 'assetAcount.balance',
+            // ],
+            // [
+            //     'key' => 'assetAcount_status',
+            //     'value' => 'assetAcount.balance',
+            // ],
         ]);
     }
 
     public function handle(Builder $builder, Closure $next)
     {
-        // $sortBy = $this->request->get('sort_by');
-        // $sortOrder = $this->request->get('sort_order', 'asc');
+        $sortBy = $this->request->get('sort_by');
+        $sortOrder = $this->request->get('sort_order', 'asc');
 
-        // if (
-        //     !in_array(
-        //         $sortBy,
-        //         $this->allowedSortFields()
-        //             ->values()
-        //             ->pluck('key')
-        //             ->toArray(),
-        //     ) ||
-        //     !in_array($sortOrder, ['asc', 'desc'])
-        // ) {
-        //     return $next($builder);
-        // }
+        if (
+            !in_array(
+                $sortBy,
+                $this->allowedSortFields()
+                    ->values()
+                    ->pluck('key')
+                    ->toArray(),
+            ) ||
+            !in_array($sortOrder, ['asc', 'desc'])
+        ) {
+            return $next($builder);
+        }
 
-        // $builder
-        //     ->select('user_asset_account.*', 'asset.name as asset_name')
-        //     ->join('assets', 'user_asset_account.asset_id', '=', 'asset.id')
-        //     ->join('achievements', 'user_achievements.achievement_id', '=', 'achievements.id')
-        //     ->orderBy(
-        //         $this->allowedSortFields()
-        //             ->where('key', $sortBy)
-        //             ->value('value'),
-        //         $sortOrder,
-        //     );
+        $builder
+            ->select('user_asset_account.*', 'asset.name as asset_name')
+            ->join('assets', 'user_asset_account.asset_id', '=', 'asset.id')
+            ->join('user_asset_account', 'user_asset_account.asset_id', '=', 'asset.id')
+            ->orderBy(
+                $this->allowedSortFields()
+                    ->where('key', $sortBy)
+                    ->value('value'),
+                $sortOrder,
+            );
         return $next($builder);
     }
 }

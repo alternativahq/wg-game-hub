@@ -1,5 +1,3 @@
-
-
 <script setup>
 import { ChevronDownIcon } from '@heroicons/vue/solid';
 import { defineProps, reactive, watch } from 'vue';
@@ -40,9 +38,9 @@ function byAssetFilterChanged() {
                             @change.prevent="byAssetFilterChanged"
                         >
                             <option :value="undefined">All</option>
-                            <option :key="asset.id" v-for="asset in assets" :value="asset.id">
+                            <!-- <option :key="asset.id" v-for="asset in assets" :value="asset.id">
                                 {{ asset.name }}
-                            </option>
+                            </option> -->
                         </select>
                     </div>
                 </BorderedContainer>
@@ -149,8 +147,8 @@ function byAssetFilterChanged() {
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y divide-gray-200 bg-white">
-                                        <tr v-for="userAssetAccout in userAssetAccouns.data" :key="userAssetAccout.id">
+                                    <!-- <tbody class="divide-y divide-gray-200 bg-white">
+                                        <tr v-for="assetAccout in userAssetAccouns.data" :key="assetAccout.id">
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
                                                 {{ assetAcount.name }}
                                             </td>
@@ -167,7 +165,7 @@ function byAssetFilterChanged() {
                                                 {{ assetAcount.asset.description }}
                                             </td>
                                         </tr>
-                                    </tbody>
+                                    </tbody> -->
                                 </table>
                             </div>
                         </div>
