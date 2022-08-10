@@ -23,7 +23,6 @@ class AssetAccountsController extends Controller
         dd($assetAccounts );
 
         $assets = Asset::get(['id', 'name','description','symbol']);
-        // dd($assets );
 
         return Inertia::render('User/AssetAccounts', [
             'userAssetAccouns' => UserAssetAccountResource::collection($assetAccounts->paginate()->withQueryString()),

@@ -365,11 +365,11 @@ function timePlayedSecondsToHours(s) {
         <section class="overflow-x-auto">
             <div class="mb-6 flex flex-row items-center justify-between">
                 <h2 class="truncate font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">
-                    Total Earnings Asset Accounts
+                    Asset Accounts
                 </h2>
-                <!-- <Link class="shrink-0" :href="route('user.assetAccounts', { user: currentUser.username })">
+                <Link class="shrink-0" :href="route('user.assetAccounts', { user: currentUser.username })">
                     <ButtonShape type="red"> View All</ButtonShape>
-                </Link> -->
+                </Link>
             </div>
             <BorderedContainer class="bg-wgh-gray-1.5">
                 <div class="rounded-lg">
@@ -418,7 +418,7 @@ function timePlayedSecondsToHours(s) {
                                                     {{ assetAcount.asset.name }}
                                                 </td>
                                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                    {{ assetAcount.asset.sympol }}
+                                                    {{ assetAcount.asset.symbol }}
                                                 </td>
                                                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
                                                     {{ assetAcount.balance }}
