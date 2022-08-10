@@ -147,25 +147,25 @@ function byAssetFilterChanged() {
                                             </th>
                                         </tr>
                                     </thead>
-                                    <!-- <tbody class="divide-y divide-gray-200 bg-white">
+                                    <tbody class="divide-y divide-gray-200 bg-white">
                                         <tr v-for="assetAccout in userAssetAccouns.data" :key="assetAccout.id">
                                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                                                {{ assetAcount.name }}
+                                                {{ assetAccout.asset.name }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ assetAcount.asset.symbol  }}
+                                                {{ assetAccout.asset.symbol  }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ assetAcount.balance }}
+                                                {{ assetAccout.balance }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ assetAcount.status }}
+                                                {{ assetAccout.status }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ assetAcount.asset.description }}
+                                                {{ assetAccout.asset.description }}
                                             </td>
                                         </tr>
-                                    </tbody> -->
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

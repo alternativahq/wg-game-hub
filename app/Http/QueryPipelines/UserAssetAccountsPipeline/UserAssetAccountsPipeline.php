@@ -22,7 +22,6 @@ class UserAssetAccountsPipeline extends Pipeline
     protected function pipes()
     {
         return [new Sort(request: $this->request), new ByAssetFilter(request: $this->request)];
-        // return [new Sort(request: $this->request), new ByAssetFilter(request: $this->request)];
     }
 
     public static function make(Builder $builder, Request $request): Builder

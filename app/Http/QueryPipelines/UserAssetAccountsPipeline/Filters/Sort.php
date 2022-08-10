@@ -30,7 +30,7 @@ class Sort
             // ],
             // [
             //     'key' => 'assetAcount_status',
-            //     'value' => 'assetAcount.balance',
+            //     'value' => 'assetAcount.status',
             // ],
         ]);
     }
