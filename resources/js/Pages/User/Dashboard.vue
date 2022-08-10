@@ -365,11 +365,11 @@ function timePlayedSecondsToHours(s) {
         <section class="overflow-x-auto">
             <div class="mb-6 flex flex-row items-center justify-between">
                 <h2 class="truncate font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">
-                    Total Earnings
+                    Total Earnings Asset Accounts
                 </h2>
-                <Link class="shrink-0" :href="route('user.assetAccounts', { user: currentUser.username })">
+                <!-- <Link class="shrink-0" :href="route('user.assetAccounts', { user: currentUser.username })">
                     <ButtonShape type="red"> View All</ButtonShape>
-                </Link>
+                </Link> -->
             </div>
             <BorderedContainer class="bg-wgh-gray-1.5">
                 <div class="rounded-lg">

@@ -2,34 +2,33 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
-use App\Http\QueryPipelines\UserAchievementsPipeline\UserAchievementsPipeline;
-use App\Http\Resources\GameResource;
-use App\Http\Resources\UserAchievementResource;
-use App\Models\Game;
 use App\Models\User;
-use App\Models\UserAchievement;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Asset;
+use Illuminate\Http\Request;
+use App\Models\UserAssetAccount;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\AssetResource;
+use App\Http\Resources\UserAssetAccountResource;
+use App\Http\QueryPipelines\UserAssetAccountsPipeline\UserAssetAccountsPipeline;
 
 class AssetAccountsController extends Controller
 {
     public function __invoke(User $user, Request $request)
     {
+        $assetAccounts = UserAssetAccountsPipeline::make(
+            builder: UserAssetAccount::query()->whereBelongsTo($user),
+            request: $request,
+        );
+        dd($assetAccounts );
 
-        // need to be changed
-        
-        // $achievements = UserAchievementsPipeline::make(
-        //     builder: UserAchievement::query()->whereBelongsTo($user),
-        //     request: $request,
-        // );
+        $assets = Asset::get(['id', 'name','description','symbol']);
+        // dd($assets );
 
-        // $games = Game::get(['id', 'name']);
-
-        // return Inertia::render('User/Achievements', [
-        //     'userAchievements' => UserAchievementResource::collection($achievements->paginate()->withQueryString()),
-        //     'games' => GameResource::collection($games),
-        //     'filters' => $request->only('sort_by', 'sort_order', 'filter_by_game'),
-        // ]);
+        return Inertia::render('User/AssetAccounts', [
+            'userAssetAccouns' => UserAssetAccountResource::collection($assetAccounts->paginate()->withQueryString()),
+            'assets'           => AssetResource::collection($assets),
+            'filters'          => $request->only('sort_by', 'sort_order', 'filter_by_asset'),
+        ]);
     }
 }
