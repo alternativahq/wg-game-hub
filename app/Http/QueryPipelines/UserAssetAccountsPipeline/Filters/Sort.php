@@ -19,20 +19,20 @@ class Sort
 
     protected function allowedSortFields(): Collection
     {
-        // return collect([
-        //     [
-        //         'key' => 'game_name',
-        //         'value' => 'games.name',
-        //     ],
-        //     [
-        //         'key' => 'achievement_name',
-        //         'value' => 'achievements.name',
-        //     ],
-        //     [
-        //         'key' => 'earned_at',
-        //         'value' => 'created_at',
-        //     ],
-        // ]);
+        return collect([
+            [
+                'key' => 'game_name',
+                'value' => 'games.name',
+            ],
+            [
+                'key' => 'achievement_name',
+                'value' => 'achievements.name',
+            ],
+            [
+                'key' => 'earned_at',
+                'value' => 'created_at',
+            ],
+        ]);
     }
 
     public function handle(Builder $builder, Closure $next)

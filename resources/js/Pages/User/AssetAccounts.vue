@@ -1,46 +1,34 @@
+
+
 <script setup>
 import { ChevronDownIcon } from '@heroicons/vue/solid';
 import { defineProps, reactive, watch } from 'vue';
 import BorderedContainer from '@/Shared/BorderedContainer';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import duration from 'dayjs/plugin/duration';
 import ButtonShape from '@/Shared/ButtonShape';
 import Pagination from '@/Models/Pagination';
 import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.extend(relativeTime);
-dayjs.extend(duration);
-
 let props = defineProps({
-    games: Object,
-    userAchievements: Object,
+    assets: Object,
+    userAssetAccouns: Object,
     filters: Object,
     current_url: String,
 });
 
 let filters = reactive(props.filters);
 let currentUrl = window.location.toString();
-let availableGames = props.games.data;
-let pagination = reactive(new Pagination(props.userAchievements));
+// let availableGames = props.games.data;
+let pagination = reactive(new Pagination(props.userAssetAccouns));
 
-function UTCToHumanReadable(u) {
-    return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
-}
-
-function byGameFilterChanged() {
-    Inertia.get(currentUrl, { filter_by_game: filters.filter_by_game });
+function byAssetFilterChanged() {
+    Inertia.get(currentUrl, { filter_by_asset: filters.filter_by_asset });
 }
 </script>
 <template>
     <div>
         <div class="flex flex-row justify-between">
-            <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Achievements</h2>
+            <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Asset Accounts</h2>
             <div class="filters">
                 <BorderedContainer class="bg-wgh-gray-1.5">
                     <div class="rounded-lg">
@@ -48,12 +36,12 @@ function byGameFilterChanged() {
                             id="location"
                             name="location"
                             class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                            v-model="filters.filter_by_game"
-                            @change.prevent="byGameFilterChanged"
+                            v-model="filters.filter_by_asset"
+                            @change.prevent="byAssetFilterChanged"
                         >
                             <option :value="undefined">All</option>
-                            <option :key="game.id" v-for="game in availableGames" :value="game.id">
-                                {{ game.name }}
+                            <option :key="asset.id" v-for="asset in assets" :value="asset.id">
+                                {{ asset.name }}
                             </option>
                         </select>
                     </div>
@@ -77,7 +65,7 @@ function byGameFilterChanged() {
                                                     class="group inline-flex"
                                                     :href="currentUrl"
                                                     :data="{
-                                                        sort_by: 'achievement_name',
+                                                        sort_by: 'assetAcount_name',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
                                                 >
@@ -85,11 +73,11 @@ function byGameFilterChanged() {
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'achievement_name',
+                                                                filters.sort_by !== 'assetAcount_name',
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'achievement_name',
+                                                                filters.sort_by === 'assetAcount_name',
                                                             'rotate-180':
-                                                                filters.sort_by === 'achievement_name' &&
+                                                                filters.sort_by === 'assetAcount_name' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
@@ -97,27 +85,30 @@ function byGameFilterChanged() {
                                                     </span>
                                                 </Link>
                                             </th>
+                                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                                <span class="group inline-flex">Sympols</span>
+                                            </th>
                                             <th
                                                 scope="col"
-                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                                             >
                                                 <Link
                                                     class="group inline-flex"
                                                     :href="currentUrl"
                                                     :data="{
-                                                        sort_by: 'game_name',
+                                                        sort_by: 'assetAcount_balance',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
                                                 >
-                                                    Game
+                                                    Balance
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'game_name',
+                                                                filters.sort_by !== 'assetAcount_balance',
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'game_name',
+                                                                filters.sort_by === 'assetAcount_balance',
                                                             'rotate-180':
-                                                                filters.sort_by === 'game_name' &&
+                                                                filters.sort_by === 'assetAcount_balance' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
@@ -127,25 +118,25 @@ function byGameFilterChanged() {
                                             </th>
                                             <th
                                                 scope="col"
-                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                                             >
                                                 <Link
                                                     class="group inline-flex"
                                                     :href="currentUrl"
                                                     :data="{
-                                                        sort_by: 'earned_at',
+                                                        sort_by: 'assetAcount_status',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
                                                 >
-                                                    Earned At
+                                                    Status
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'earned_at',
+                                                                filters.sort_by !== 'assetAcount_status',
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'earned_at',
+                                                                filters.sort_by === 'assetAcount_status',
                                                             'rotate-180':
-                                                                filters.sort_by === 'earned_at' &&
+                                                                filters.sort_by === 'assetAcount_status' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
@@ -153,29 +144,27 @@ function byGameFilterChanged() {
                                                     </span>
                                                 </Link>
                                             </th>
-                                            <th
-                                                scope="col"
-                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                            >
+                                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                                 <span class="group inline-flex">Description</span>
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 bg-white">
-                                        <tr v-for="userAchievement in userAchievements.data" :key="userAchievements.id">
-                                            <td
-                                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
-                                            >
-                                                {{ userAchievement.achievement.name }}
+                                        <tr v-for="userAssetAccout in userAssetAccouns.data" :key="userAssetAccout.id">
+                                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                                {{ assetAcount.name }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ userAchievement.game.name }}
+                                                {{ assetAcount.asset.symbol  }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ UTCToHumanReadable(userAchievement.created_at) }}
+                                                {{ assetAcount.balance }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ userAchievement.achievement.description }}
+                                                {{ assetAcount.status }}
+                                            </td>
+                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                {{ assetAcount.asset.description }}
                                             </td>
                                         </tr>
                                     </tbody>
@@ -220,3 +209,4 @@ function byGameFilterChanged() {
         </BorderedContainer>
     </div>
 </template>
+
