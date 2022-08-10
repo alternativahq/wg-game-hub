@@ -24,9 +24,14 @@ class SendNotificationRequest extends FormRequest
     public function rules()
     {
         return [
-            'type'        => ['required'],
-            'data'        => ['required', 'json'],
-            'user_ids'    => ['required', 'array', 'min:1'],
+            'type' => ['required'],
+            'data' => ['required', 'json'],
+            'user_ids' => ['required', 'array', 'min:1'],
         ];
+    }
+
+    public function dataToObject()
+    {
+        return json_decode($this->data, true);
     }
 }

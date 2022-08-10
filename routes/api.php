@@ -28,47 +28,25 @@ Route::resource('games.game-lobbies', GameLobbiesController::class)
     ->only('show', 'index')
     ->scoped();
 
-Route::post(
-    'game-lobbies/{gameLobby}/join',
-    GameLobbyJoinController::class,
-)->name('games.game-lobbies.join');
+Route::post('game-lobbies/{gameLobby}/join', GameLobbyJoinController::class)->name('games.game-lobbies.join');
 
-Route::post(
-    'game-lobbies/{gameLobby}/leave',
-    GameLobbyLeaveController::class,
-)->name('games.game-lobbies.leave');
+Route::post('game-lobbies/{gameLobby}/leave', GameLobbyLeaveController::class)->name('games.game-lobbies.leave');
 
 // Should be protected only by internal
-Route::post(
-    'game-lobbies/{gameLobby}/results',
-    GameLobbyResultsController::class,
-);
+Route::post('game-lobbies/{gameLobby}/results', GameLobbyResultsController::class);
 
 // Chatroom message
-Route::post(
-    'chat-rooms/{chatRoom}/message',
-    ChatRoomMessageController::class,
-)->name('chat-rooms.message');
+Route::post('chat-rooms/{chatRoom}/message', ChatRoomMessageController::class)->name('chat-rooms.message');
 
 // Notifications
-Route::get('notificaions',
-    [NotificationController::class,'index'
-])->name('notificaions.index');
+Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
 
-Route::get('notificaions/unread-count',
-    [NotificationController::class,
-    'unreadNotificationsCount'
-])->name('notificaions.unread-count');
+Route::get('notifications/unread-count', [NotificationController::class, 'unreadNotificationsCount'])->name(
+    'notifications.unread-count',
+);
 
-Route::post('notificaions',
-    SendNotificationController::class
-)->name('notificaions.send');
+Route::post('notifications', SendNotificationController::class)->name('notifications.send');
 
-Route::put('notificaions/{notificationid}/read',
-MarkNotificationAsReadController::class
-)->name('notificaions.read');
+Route::put('notifications/{notification}/read', MarkNotificationAsReadController::class)->name('notifications.read');
 
-Route::delete('notificaions',
-    DeleteNotificationsController::class
-)->name('notificaions.delete');
-   
+Route::delete('notifications', DeleteNotificationsController::class)->name('notifications.delete');

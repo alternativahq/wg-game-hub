@@ -2,24 +2,28 @@
 
 namespace App\Actions\Notifications;
 
+use App\Http\Requests\SendNotificationRequest;
 use App\Models\User;
 use App\Enums\NotificationType;
 use App\Notifications\GameHubNotification;
+use Illuminate\Support\Facades\Notification;
 
 class SendNotificationAction
 {
-    public function execute(User $user, $data): void
+    public function execute(SendNotificationRequest $request): void
     {
-        $notification = match ($data->type) {
-            NotificationType::UserLeftLobby->value   => new GameHubNotification($data),
-            NotificationType::UserJoinedLobby->value => new GameHubNotification($data),
+        $notification = match ($request->type) {
+            NotificationType::UserLeftLobby->value => GameHubNotification::class,
+            NotificationType::UserJoinedLobby->value => GameHubNotification::class,
             default => null,
         };
 
-        if (!$notification){
+        if (!$notification) {
             return;
         }
 
-        $user->notify($notification);
+        $users = User::whereIn('id', $request->user_ids)->get(['id']);
+        new $notification($request->dataToObject());
+        Notification::send($users, new $notification($request->dataToObject()));
     }
 }
