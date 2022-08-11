@@ -8,7 +8,6 @@ import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 
 let props = defineProps({
-    assets: Object,
     userAssetAccouns: Object,
     filters: Object,
     current_url: String,
@@ -16,35 +15,13 @@ let props = defineProps({
 
 let filters = reactive(props.filters);
 let currentUrl = window.location.toString();
-// let availableGames = props.games.data;
 let pagination = reactive(new Pagination(props.userAssetAccouns));
 
-function byAssetFilterChanged() {
-    Inertia.get(currentUrl, { filter_by_asset: filters.filter_by_asset });
-}
 </script>
 <template>
     <div>
         <div class="flex flex-row justify-between">
             <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Asset Accounts</h2>
-            <div class="filters">
-                <BorderedContainer class="bg-wgh-gray-1.5">
-                    <div class="rounded-lg">
-                        <select
-                            id="location"
-                            name="location"
-                            class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                            v-model="filters.filter_by_asset"
-                            @change.prevent="byAssetFilterChanged"
-                        >
-                            <option :value="undefined">All</option>
-                            <!-- <option :key="asset.id" v-for="asset in assets" :value="asset.id">
-                                {{ asset.name }}
-                            </option> -->
-                        </select>
-                    </div>
-                </BorderedContainer>
-            </div>
         </div>
         <BorderedContainer class="mb-2 overflow-hidden bg-wgh-gray-1.5">
             <div class="rounded-lg bg-white px-4 sm:px-0 lg:px-0">

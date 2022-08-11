@@ -2,7 +2,6 @@
 
 namespace App\Http\QueryPipelines\UserAssetAccountsPipeline;
 
-use App\Http\QueryPipelines\UserAssetAccountsPipeline\Filters\ByAssetFilter;
 use App\Http\QueryPipelines\UserAssetAccountsPipeline\Filters\Sort;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -21,7 +20,7 @@ class UserAssetAccountsPipeline extends Pipeline
 
     protected function pipes()
     {
-        return [new Sort(request: $this->request), new ByAssetFilter(request: $this->request)];
+        return [new Sort(request: $this->request)];
     }
 
     public static function make(Builder $builder, Request $request): Builder
