@@ -11,6 +11,7 @@ import { Link } from '@inertiajs/inertia-vue3';
 import { Popover, PopoverButton, PopoverOverlay, PopoverPanel, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import { MenuIcon, XIcon, BellIcon } from '@heroicons/vue/outline';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
+import SildeoverEmpty from '../Shared/sildeover-empty.vue';
 
 const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, external: false }];
 let currentUser = useCurrentUser();
@@ -43,6 +44,7 @@ let props = defineProps({
                     </div>
                 </div>
                 <div class="hidden flex-row items-center space-x-8 lg:flex">
+                    <SildeoverEmpty/>
                     <!--                    <SearchIcon class="h-6 w-6 cursor-pointer" />-->
                     <!--                    <BellIcon class="h-6 w-6 cursor-pointer" />-->
                     <Link v-if="currentUser" :href="route('user.profile', { user: currentUser.username })">
