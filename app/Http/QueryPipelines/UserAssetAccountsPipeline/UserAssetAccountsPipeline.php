@@ -2,7 +2,10 @@
 
 namespace App\Http\QueryPipelines\UserAssetAccountsPipeline;
 
-use App\Http\QueryPipelines\UserAssetAccountsPipeline\Filters\Sort;
+use App\Http\QueryPipelines\UserAssetAccountsPipeline\Filters\SearchFilter;
+use App\Http\QueryPipelines\UserAssetAccountsPipeline\Filters\SortByNameFilter;
+use App\Http\QueryPipelines\UserAssetAccountsPipeline\Filters\SortBySymbolFilter;
+use App\Http\QueryPipelines\UserAssetAccountsPipeline\Filters\SortByUserAssetBalance;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Pipeline;
@@ -18,22 +21,21 @@ class UserAssetAccountsPipeline extends Pipeline
         return $this;
     }
 
-    protected function pipes()
+    protected function pipes(): array
     {
-        return [new Sort(request: $this->request)];
+        return [
+            new SortByNameFilter($this->request),
+            new SortBySymbolFilter($this->request),
+            new SortByUserAssetBalance($this->request),
+            new SearchFilter($this->request),
+        ];
     }
 
     public static function make(Builder $builder, Request $request): Builder
     {
         return app(static::class)
             ->setRequest(request: $request)
-            ->send(
-                $builder->with([
-                    'asset' => function ($query) {
-                        $query->select('id', 'name','description','symbol');
-                    },
-                ]),
-            )
+            ->send($builder)
             ->thenReturn();
     }
 }

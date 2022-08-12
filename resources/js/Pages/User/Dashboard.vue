@@ -23,7 +23,7 @@ dayjs.extend(relativeTime);
 dayjs.extend(duration);
 
 let props = defineProps({
-    assetAcounts: Object,
+    assetAccounts: Object,
     totalPlayed: Number,
     lastGamePlayed: Object,
     latestGamesPlayedHistory: Object,
@@ -364,9 +364,7 @@ function timePlayedSecondsToHours(s) {
         <!-- ***************************************AssetAccounts********************************************* -->
         <section class="overflow-x-auto">
             <div class="mb-6 flex flex-row items-center justify-between">
-                <h2 class="truncate font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">
-                    Asset Accounts
-                </h2>
+                <h2 class="truncate font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Asset Accounts</h2>
                 <Link class="shrink-0" :href="route('user.assetAccounts', { user: currentUser.username })">
                     <ButtonShape type="red"> View All</ButtonShape>
                 </Link>
@@ -390,7 +388,7 @@ function timePlayedSecondsToHours(s) {
                                                     scope="col"
                                                     class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                                 >
-                                                    Sympol
+                                                    Symbol
                                                 </th>
                                                 <th
                                                     scope="col"
@@ -398,12 +396,7 @@ function timePlayedSecondsToHours(s) {
                                                 >
                                                     Balance
                                                 </th>
-                                                <th
-                                                    scope="col"
-                                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                                >
-                                                    Status
-                                                </th>
+
                                                 <th
                                                     scope="col"
                                                     class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
@@ -413,21 +406,23 @@ function timePlayedSecondsToHours(s) {
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-gray-200 bg-white">
-                                            <tr v-for="assetAcount in assetAcounts" :key="assetAcount.id">
-                                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-                                                    {{ assetAcount.asset.name }}
+                                            <tr v-for="assetAccount in assetAccounts" :key="assetAccount.id">
+                                                <td
+                                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
+                                                >
+                                                    {{ assetAccount.name }}
                                                 </td>
                                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                    {{ assetAcount.asset.symbol }}
+                                                    {{ assetAccount.symbol }}
                                                 </td>
-                                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-                                                    {{ assetAcount.balance }}
+                                                <td
+                                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
+                                                >
+                                                    {{ assetAccount.pivot.balance }}
                                                 </td>
-                                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-                                                    {{ assetAcount.status }}
-                                                </td>
+
                                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                    {{ assetAcount.asset.description }}
+                                                    {{ assetAccount.description }}
                                                 </td>
                                             </tr>
                                         </tbody>

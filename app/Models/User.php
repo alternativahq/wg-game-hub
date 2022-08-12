@@ -18,13 +18,7 @@ class User extends Authenticatable
     use Notifiable;
     use HasUUID;
 
-    protected $fillable = [
-        'name',
-        'last_name',
-        'email',
-        'password',
-        'username',
-    ];
+    protected $fillable = ['name', 'last_name', 'email', 'password', 'username'];
 
     protected $hidden = ['password', 'remember_token'];
 
@@ -50,16 +44,14 @@ class User extends Authenticatable
 
     public function chatRooms(): BelongsToMany
     {
-        return $this->belongsToMany(ChatRoom::class)->using(
-            ChatRoomUser::class,
-        );
+        return $this->belongsToMany(ChatRoom::class)->using(ChatRoomUser::class);
     }
 
     public function assets(): BelongsToMany
     {
-        return $this->belongsToMany(Asset::class, 'user_asset_account')->using(
-            UserAssetAccount::class,
-        );
+        return $this->belongsToMany(Asset::class, 'user_asset_account')
+            ->withPivot('balance', 'status')
+            ->using(UserAssetAccount::class);
     }
 
     public function assetAccounts(): HasMany
@@ -83,9 +75,10 @@ class User extends Authenticatable
 
     public function achievements(): BelongsToMany
     {
-        return $this->belongsToMany(
-            Achievement::class,
-            'user_achievements',
-        )->withPivot('game_id', 'game_lobby_id', 'additional_info');
+        return $this->belongsToMany(Achievement::class, 'user_achievements')->withPivot(
+            'game_id',
+            'game_lobby_id',
+            'additional_info',
+        );
     }
 }
