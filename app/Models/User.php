@@ -18,21 +18,16 @@ class User extends Authenticatable
     use Notifiable;
     use HasUUID;
 
-    protected $fillable = [
-        'name',
-        'last_name',
-        'email',
-        'password',
-        'username',
-    ];
+    protected $fillable = ['name', 'last_name', 'email', 'password', 'username', 'cooldown_end_at'];
 
     protected $hidden = ['password', 'remember_token'];
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'cooldown_end_at' => 'datetime',
     ];
 
-    protected $appends = ['full_name', 'image_url'];
+    protected $appends = ['full_name', 'image_url', 'is_in_cooldown_period'];
 
     public function gameLobbies(): BelongsToMany
     {
@@ -50,16 +45,12 @@ class User extends Authenticatable
 
     public function chatRooms(): BelongsToMany
     {
-        return $this->belongsToMany(ChatRoom::class)->using(
-            ChatRoomUser::class,
-        );
+        return $this->belongsToMany(ChatRoom::class)->using(ChatRoomUser::class);
     }
 
     public function assets(): BelongsToMany
     {
-        return $this->belongsToMany(Asset::class, 'user_asset_account')->using(
-            UserAssetAccount::class,
-        );
+        return $this->belongsToMany(Asset::class, 'user_asset_account')->using(UserAssetAccount::class);
     }
 
     public function assetAccounts(): HasMany
@@ -83,9 +74,28 @@ class User extends Authenticatable
 
     public function achievements(): BelongsToMany
     {
-        return $this->belongsToMany(
-            Achievement::class,
-            'user_achievements',
-        )->withPivot('game_id', 'game_lobby_id', 'additional_info');
+        return $this->belongsToMany(Achievement::class, 'user_achievements')->withPivot(
+            'game_id',
+            'game_lobby_id',
+            'additional_info',
+        );
+    }
+
+    public function isInCooldownPeriod(): Attribute
+    {
+        return new Attribute(
+            get: function () {
+                return !is_null($this->cooldown_end_at) && $this->cooldown_end_at->isAfter(now());
+            },
+        );
+    }
+
+    public function resetCooldown()
+    {
+        if (!is_null($this->cooldown_ended_at)) {
+            $this->update([
+                'cooldown_end_at' => null,
+            ]);
+        }
     }
 }
