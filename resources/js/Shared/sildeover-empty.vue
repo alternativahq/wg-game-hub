@@ -49,7 +49,7 @@ const open = ref(false)
             <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
               <TransitionChild as="template" enter="transform transition ease-in-out duration-500 sm:duration-700" enter-from="translate-x-full" enter-to="translate-x-0" leave="transform transition ease-in-out duration-500 sm:duration-700" leave-from="translate-x-0" leave-to="translate-x-full">
                 <DialogPanel class="pointer-events-auto w-screen max-w-md">
-                  <div class="flex h-full flex-col overflow-y-scroll bg-white py-6 shadow-xl">
+                  <div class="flex h-full flex-col  bg-white py-6 shadow-xl">
                     <div class="px-4 sm:px-6">
                       <div class="flex items-start justify-between">
                         <DialogTitle class="text-lg font-medium text-gray-900"> Notifications </DialogTitle>
@@ -63,7 +63,7 @@ const open = ref(false)
                     </div>
                     <div class="relative mt-6 flex-1 px-4 sm:px-6" v-if="currentUser">
                       <!-- Replace with your content -->
-                      <div class="absolute inset-0 px-4 sm:px-6" >
+                      <div class="absolute inset-0 px-4 sm:px-6 overflow-y-scroll" >
                           <div class="flex justify-end">
                             <button @click="deleteAllNotifications" class="text-red-500 hover:text-red-300">Clear All</button>
                           </div>
