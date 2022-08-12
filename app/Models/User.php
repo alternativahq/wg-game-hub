@@ -18,7 +18,9 @@ class User extends Authenticatable
     use Notifiable;
     use HasUUID;
 
+
     protected $fillable = ['name', 'last_name', 'email', 'password', 'username', 'cooldown_end_at'];
+
 
     protected $hidden = ['password', 'remember_token'];
 
@@ -50,7 +52,9 @@ class User extends Authenticatable
 
     public function assets(): BelongsToMany
     {
-        return $this->belongsToMany(Asset::class, 'user_asset_account')->using(UserAssetAccount::class);
+        return $this->belongsToMany(Asset::class, 'user_asset_account')
+            ->withPivot('balance', 'status')
+            ->using(UserAssetAccount::class);
     }
 
     public function assetAccounts(): HasMany

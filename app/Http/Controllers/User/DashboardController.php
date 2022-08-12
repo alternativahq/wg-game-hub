@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Asset;
 use App\Models\GameLobbyUser;
 use App\Models\User;
 use App\Models\UserAchievement;
@@ -42,6 +43,11 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        $assetAccounts = $user
+            ->assets()
+            ->take(5)
+            ->get(['user_asset_account.id', 'name', 'description', 'symbol']);
+
         return Inertia::render('User/Dashboard', [
             'totalPlayed' => GameLobbyUser::whereBelongsTo($user)->count(),
             'totalTimePlayed' => (int) $totalTimePlayed,
@@ -49,6 +55,7 @@ class DashboardController extends Controller
             'lastGamePlayed' => $lastLobbyPlayedIn?->game,
             'latestAchievements' => $achievements,
             'latestGamesPlayedHistory' => $gamePlayedHistory,
+            'assetAccounts' => $assetAccounts,
         ]);
     }
 }

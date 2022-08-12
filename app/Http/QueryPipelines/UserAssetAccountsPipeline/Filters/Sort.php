@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\QueryPipelines\UserAchievementsPipeline\Filters;
+namespace App\Http\QueryPipelines\UserAssetAccountsPipeline\Filters;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,23 +21,23 @@ class Sort
     {
         return collect([
             [
-                'key' => 'asset_name',
-                'value' => 'assets.name',
+                'key' => 'assetAcount_name',
+                'value' => 'assetAcount.name',
             ],
-            [
-                'key' => 'assetAccount_name',
-                'value' => 'assetAccounts.name',
-            ],
-            [
-                'key' => 'earned_at',
-                'value' => 'created_at',
-            ],
+            // [
+            //     'key' => 'assetAcount_balance',
+            //     'value' => 'assetAcount.balance',
+            // ],
+            // [
+            //     'key' => 'assetAcount_status',
+            //     'value' => 'assetAcount.status',
+            // ],
         ]);
     }
 
     public function handle(Builder $builder, Closure $next)
     {
-        $sortBy    = $this->request->get('sort_by');
+        $sortBy = $this->request->get('sort_by');
         $sortOrder = $this->request->get('sort_order', 'asc');
 
         if (
@@ -54,9 +54,9 @@ class Sort
         }
 
         $builder
-            ->select('user_achievements.*', 'games.name as game_name')
-            ->join('games', 'user_achievements.game_id', '=', 'games.id')
-            ->join('achievements', 'user_achievements.achievement_id', '=', 'achievements.id')
+            ->select('user_asset_account.*', 'asset.name as asset_name')
+            ->join('assets', 'user_asset_account.asset_id', '=', 'asset.id')
+            ->join('user_asset_account', 'user_asset_account.asset_id', '=', 'asset.id')
             ->orderBy(
                 $this->allowedSortFields()
                     ->where('key', $sortBy)
