@@ -18,15 +18,18 @@ class User extends Authenticatable
     use Notifiable;
     use HasUUID;
 
-    protected $fillable = ['name', 'last_name', 'email', 'password', 'username'];
+
+    protected $fillable = ['name', 'last_name', 'email', 'password', 'username', 'cooldown_end_at'];
+
 
     protected $hidden = ['password', 'remember_token'];
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'cooldown_end_at' => 'datetime',
     ];
 
-    protected $appends = ['full_name', 'image_url'];
+    protected $appends = ['full_name', 'image_url', 'is_in_cooldown_period'];
 
     public function gameLobbies(): BelongsToMany
     {
@@ -80,5 +83,23 @@ class User extends Authenticatable
             'game_lobby_id',
             'additional_info',
         );
+    }
+
+    public function isInCooldownPeriod(): Attribute
+    {
+        return new Attribute(
+            get: function () {
+                return !is_null($this->cooldown_end_at) && $this->cooldown_end_at->isAfter(now());
+            },
+        );
+    }
+
+    public function resetCooldown()
+    {
+        if (!is_null($this->cooldown_ended_at)) {
+            $this->update([
+                'cooldown_end_at' => null,
+            ]);
+        }
     }
 }

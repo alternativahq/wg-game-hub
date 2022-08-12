@@ -30,7 +30,9 @@ Route::middleware('auth')->group(function () {
         ->scoped();
 
     // GameLobbies
-    Route::post('game-lobbies/{gameLobby}/join', GameLobbyJoinController::class)->name('games.game-lobbies.join');
+    Route::post('game-lobbies/{gameLobby}/join', GameLobbyJoinController::class)
+        ->name('games.game-lobbies.join')
+        ->middleware('EnsureUserIsNotInCooldownPeriod');
 
     Route::delete('game-lobbies/{gameLobby}/leave', GameLobbyLeaveController::class)->name('games.game-lobbies.leave');
 
