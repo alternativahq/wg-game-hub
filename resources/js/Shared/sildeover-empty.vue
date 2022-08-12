@@ -6,6 +6,7 @@ import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } fro
 import { XIcon } from '@heroicons/vue/outline'
 import { Inertia } from '@inertiajs/inertia';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
+import Navigation from './navigation.vue';
 
 let currentUser = useCurrentUser();
 
@@ -18,7 +19,7 @@ function markNotificationAsRead(notification){
     Inertia.put(`/notifications/${notification.id}/read`);
 }
 
-const open = ref(true)
+const open = ref(false)
 </script>
 
 <template>
@@ -63,29 +64,34 @@ const open = ref(true)
                     <div class="relative mt-6 flex-1 px-4 sm:px-6" v-if="currentUser">
                       <!-- Replace with your content -->
                       <div class="absolute inset-0 px-4 sm:px-6" >
-                        <div class="flex justify-end">
-                          <button @click="deleteAllNotifications" class="text-red-500 hover:text-red-300">Clear All</button>
-                        </div>
-                        <div class="flex justify-between items-center my-5 py-4 px-4 bg-gray-100" v-for="notification in currentUser.notifications" :key="notification.id">
-                          <div class="flex justify-between items-center">
-                            <div class="mr-2">
-                              <img
-                                    :src="currentUser.image_url"
-                                    alt="user profile image"
-                                    class="h-12 w-12 object-cover rounded-full md:h-15 md:w-15"
-                                />
+                          <div class="flex justify-end">
+                            <button @click="deleteAllNotifications" class="text-red-500 hover:text-red-300">Clear All</button>
+                          </div>
+                          <div class="flex justify-between items-center my-5 py-4 px-4 bg-gray-100" v-for="notification in currentUser.notifications.data" :key="notification.id">
+                            <div class="flex justify-between items-center">
+                              <div class="mr-2">
+                                <img
+                                      :src="currentUser.image_url"
+                                      alt="user profile image"
+                                      class="h-12 w-12 object-cover rounded-full md:h-15 md:w-15"
+                                  />
+                              </div>
+                              <div class="text-sm">
+                                <div >{{notification.id}}the notifications message static</div>
+                              </div>
                             </div>
-                            <div class="text-sm">
-                              <div >{{notification.data}}the lo notifications message statck</div>
+                            <div @click="markNotificationAsRead(notification)" class="bg-blue-200 py-2 px-2 rounded text-md hover:cursor-pointer hover:bg-blue-300 hover:text-white">
+                              Read
                             </div>
                           </div>
-                          <div @click="markNotificationAsRead(notification)" class="text-xl hover:cursor-pointer hover:text-red-600">
-                            &times;
-                          </div>
-                        </div>
                       </div>
                       <!-- /End replace -->
                     </div>
+                    <!-- /start paginate -->
+                    <div>
+                      <Navigation/>
+                    </div>
+                    <!-- /End paginate -->
                   </div>
                 </DialogPanel>
               </TransitionChild>
