@@ -360,5 +360,8 @@ function timePlayedSecondsToHours(s) {
                 </div>
             </BorderedContainer>
         </section>
+        <Link class="shrink-0" :href="route('user.transactions')">
+            <ButtonShape type="red"> Transactions</ButtonShape>
+        </Link>
     </div>
 </template>

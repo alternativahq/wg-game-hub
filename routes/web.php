@@ -11,6 +11,7 @@ use App\Http\Controllers\{
     User\AchievementsController as UserAchievementsController,
     User\DashboardController as UserDashboardController,
     User\GamePlayedHistoryController as UserGamePlayedHistoryController,
+    Wallet\TransactionController as UserTransactionController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -41,4 +42,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/w/{user:username}/games-played-history', UserGamePlayedHistoryController::class)->name(
         'user.games-played-history',
     );
+    // User Transactions
+    Route::get('/wallet/transactions', UserTransactionController::class)->name('user.transactions');
 });
