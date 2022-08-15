@@ -13,6 +13,8 @@ import TentModal from '@/Shared/Modals/TentModal';
 import ActiveSessionBanner from '@/Shared/ActiveSessionBanner';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
 import Game from '@/Models/Game';
+import CooldownBanner from '@/Shared/CooldownBanner';
+import { onBeforeMount, onMounted } from 'vue';
 
 let currentUser = useCurrentUser();
 
@@ -20,6 +22,18 @@ let props = defineProps({
     game: Object,
     gameLobbies: Object,
     flash: Object,
+});
+
+onMounted(() => {
+    if (currentUser) {
+        currentUser.startCooldownCountdownTimer();
+    }
+});
+
+onBeforeMount(() => {
+    if (currentUser) {
+        currentUser.killCooldownCountdownTimer();
+    }
 });
 
 let game = reactive(new Game(props.game.data));
@@ -139,6 +153,7 @@ function modalCancelGameButtonClicked() {
             </div>
         </BorderedContainer>
         <ActiveSessionBanner />
+        <CooldownBanner />
         <BorderedContainer
             v-if="flash.error"
             class="mb-8 flex flex-col space-y-6 border-wgh-red-3 bg-wgh-red-2 p-6 md:flex-row md:space-x-6 md:space-y-0"
@@ -164,15 +179,16 @@ function modalCancelGameButtonClicked() {
                             :alt="`${game.name} - ${gameLobby.name} Art`"
                         />
                     </div>
-                    <div class="mb-4 flex flex-row justify-between">
+                    <div class="mb-4 flex flex-row justify-between space-x-2">
                         <h2 class="font-grota text-xl font-extrabold uppercase text-wgh-gray-6">
                             {{ gameLobby.name }}
                         </h2>
-                        <div class="text-bold font-grota text-base text-wgh-gray-6">
+                        <div class="text-bold shrink-0 font-grota text-base text-wgh-gray-6">
                             <span>{{ gameLobby.base_entrance_fee }} {{ gameLobby.asset.symbol }}</span>
                         </div>
                     </div>
                     <button
+                        v-if="!currentUser?.cooldown_end_at"
                         class="mb-6 w-full uppercase disabled:cursor-not-allowed"
                         @click.prevent="startGameButtonClicked(gameLobby)"
                         :disabled="

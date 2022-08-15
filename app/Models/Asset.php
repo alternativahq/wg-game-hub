@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Builders\AssetBuilder;
 use App\Models\Concerns\HasUUID;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,11 +18,16 @@ class Asset extends Model
 
     protected $guarded = [];
 
+    public function newEloquentBuilder($query): AssetBuilder
+    {
+        return new AssetBuilder(query: $query);
+    }
+
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_asset_account')->using(
-            UserAssetAccount::class,
-        );
+        return $this->belongsToMany(User::class, 'user_asset_account')
+            ->using(UserAssetAccount::class)
+            ->withPivot('balance', 'status');
     }
 
     public function wodoAssetAccounts(): HasMany

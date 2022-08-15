@@ -18,6 +18,7 @@ import { isEmpty } from 'lodash';
 import { Inertia } from '@inertiajs/inertia';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
 import ChatRoom from '@/Models/ChatRoom';
+import CooldownBanner from '@/Shared/CooldownBanner';
 
 let chatMessages = reactive([]);
 let chatMessageInput = ref('');
@@ -77,6 +78,7 @@ watch(
     <div class="flex h-full flex-col lg:flex-row lg:space-x-6">
         <div class="w-full lg:w-3/4">
             <ActiveSessionBanner />
+            <CooldownBanner />
 
             <BorderedContainer class="mb-8 bg-wgh-red-3">
                 <div class="flex flex-col space-y-6 rounded-lg bg-wgh-red-2 p-6 md:flex-row md:space-x-6 md:space-y-0">
