@@ -360,6 +360,8 @@ function timePlayedSecondsToHours(s) {
                 </div>
             </BorderedContainer>
         </section>
+        <!-- //Todo need to put this button on top of assets account table in the profile -->
+
         <Link class="shrink-0" :href="route('user.transactions')">
             <ButtonShape type="red"> Transactions</ButtonShape>
         </Link>

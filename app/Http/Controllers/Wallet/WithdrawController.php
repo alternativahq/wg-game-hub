@@ -12,19 +12,18 @@ use App\Http\Resources\AssetResource;
 use App\Http\Resources\TransactionResource;
 use App\Http\QueryPipelines\UserTransactionsPipeline\UserTransactionsPipeline;
 
-class TransactionController extends Controller
+class WithdrawController extends Controller
 {
     public function __invoke(User $user,Request $request) {
-        // dd('asd');
-
-        $transactions = [
+        //Todo need to get all transactions and fillter them and get them by type to withdraw
+        $withdrawTransactions = [
             [
                 'id' => "11111",
                 'globalTxId' => "12",
                 'tenantId' => "122",
                 'refId' => "1224",
                 'hash' => "1asdasd224",
-                'type' => "DEPOSIT",
+                'type' => "Withdraw",
                 'state' => "SUBMITTED",
                 "asset" => "XNO",
                 'fromAccountId' => "5cf1f635-5359-415f-b940-4bd9601727bb",
@@ -41,7 +40,7 @@ class TransactionController extends Controller
                 'tenantId' => "122",
                 'refId' => "1224",
                 'hash' => "1asdasd224",
-                'type' => "DEPOSIT",
+                'type' => "Withdraw",
                 'state' => "SUBMITTED",
                 "asset" => "XNO",
                 'fromAccountId' => "5cf1f635-5359-415f-b940-4bd9601727bb",
@@ -53,17 +52,17 @@ class TransactionController extends Controller
                 'updatedAt' => "2022-08-15T07:53:06.001Z"
             ]
         ];
+        //Todo need to set up the pipeline
 
         // $transactions = UserTransactionPipeline::make(
         //     builder: Transcation::query()->whereBelongsTo($user),
         //     request: $request,
         // );
-
-        $assets = Asset::get(['id','name']);
         
-        return Inertia::render('Wallet/Transaction', [
-            'usertransactions' => $transactions,
-            // 'usertransactions' => TransactionResource::collection($transactions->paginate()->withQueryString()),
+        $assets = Asset::get(['id','name']);
+        return Inertia::render('Wallet/Withdraw', [
+            'userWithdrawTransactions' => $withdrawTransactions,
+            // 'usertransactions' => TransactionResource::collection($withdrawTransactions->paginate()->withQueryString()),
             'assets' => AssetResource::collection($assets),
             'filters' => $request->only('sort_by', 'sort_order', 'filter_by_game'),
         ]);

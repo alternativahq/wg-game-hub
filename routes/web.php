@@ -12,6 +12,7 @@ use App\Http\Controllers\{
     User\DashboardController as UserDashboardController,
     User\GamePlayedHistoryController as UserGamePlayedHistoryController,
     Wallet\TransactionController as UserTransactionController,
+    Wallet\WithdrawController as UserWithdrawController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -44,4 +45,5 @@ Route::middleware('auth')->group(function () {
     );
     // User Transactions
     Route::get('/wallet/transactions', UserTransactionController::class)->name('user.transactions');
+    Route::get('/wallet/withdraw', UserWithdrawController::class)->name('user.withdraw');
 });
