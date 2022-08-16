@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AssetResource;
 use App\Http\Resources\TransactionResource;
-use App\Http\QueryPipelines\UserTransactionsPipeline\UserTransactionsPipeline;
+use App\Http\QueryPipelines\UserWithdrawalsPipeline\UserWithdrawalsPipeline;
 
 class WithdrawController extends Controller
 {
@@ -54,7 +54,7 @@ class WithdrawController extends Controller
         ];
         //Todo need to set up the pipeline
 
-        // $transactions = UserTransactionPipeline::make(
+        // $transactions = UserWithdrawalsPipeline::make(
         //     builder: Transcation::query()->whereBelongsTo($user),
         //     request: $request,
         // );

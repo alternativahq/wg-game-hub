@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AssetResource;
 use App\Http\Resources\TransactionResource;
-use App\Http\QueryPipelines\UserTransactionsPipeline\UserTransactionsPipeline;
+use App\Http\QueryPipelines\UserDepositsPipeline\UserDepositsPipeline;
 
 class DepositController extends Controller
 {
@@ -55,7 +55,7 @@ class DepositController extends Controller
         ];
         //Todo need to set up the pipeline
         
-        // $transactions = UserTransactionPipeline::make(
+        // $transactions = UserDepositsPipeline::make(
         //     builder: Transcation::query()->whereBelongsTo($user),
         //     request: $request,
         // );
