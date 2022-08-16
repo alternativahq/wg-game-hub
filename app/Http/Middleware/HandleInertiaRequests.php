@@ -41,6 +41,11 @@ class HandleInertiaRequests extends Middleware
             'username' => $request->user()->username,
             'last_name' => $request->user()->last_name,
             'full_name' => $request->user()->full_name,
+            'unread_notifications' => $request
+                ->user()
+                ->unreadNotifications()
+                ->take(10)
+                ->get(),
             'email' => $request->user()->email,
             'image' => $request->user()->image,
             'image_url' => $request->user()->image_url,
@@ -65,7 +70,7 @@ class HandleInertiaRequests extends Middleware
                     ]);
                     return null;
                 }
-                return $user->cooldown_end_at;
+                return null;
             },
             'current_lobby_session' => Cache::remember(
                 key: 'user.' . $request->user()->id . '.current-lobby-session',

@@ -76,7 +76,6 @@ function modalStartGameButtonClicked() {
 
 function modalCancelGameButtonClicked() {
     state.settings.startGameConfirmationModalIsOpen = false;
-    state.selectedGameLobby = null;
 }
 </script>
 

@@ -1,8 +1,14 @@
 import Model from '@/Models/Model';
+import { Inertia } from '@inertiajs/inertia';
+import Notification from '@/Models/Notification';
 
 export default class User extends Model {
     get secondsToEndCooldown() {
         return this._secondsToEndCooldown;
+    }
+
+    get unreadNotifications() {
+        return this.unread_notifications.map((notification) => new Notification(notification));
     }
 
     startCooldownCountdownTimer() {
@@ -22,5 +28,32 @@ export default class User extends Model {
 
     killCooldownCountdownTimer() {
         clearInterval(this._cooldownTimerInterval);
+    }
+
+    markNotificationAsRead(notificationId) {
+        this.unread_notifications = this.unread_notifications.filter((singleNotification) => {
+            return singleNotification.id !== notificationId;
+        });
+
+        Inertia.put(
+            route('notifications.read', { notification: notificationId }),
+            {},
+            {
+                preserveState: true,
+                preserveScroll: true,
+            }
+        );
+    }
+
+    markAllNotificationsAsRead() {
+        this.unread_notifications = [];
+    }
+
+    deleteAllNotifications() {
+        this.unread_notifications = [];
+        Inertia.delete(route('notifications.delete'), {
+            preserveState: true,
+            preserveScroll: true,
+        });
     }
 }

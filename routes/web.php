@@ -12,6 +12,8 @@ use App\Http\Controllers\{
     User\AssetAccountsController as UserAssetAccountsController,
     User\DashboardController as UserDashboardController,
     User\GamePlayedHistoryController as UserGamePlayedHistoryController,
+    Notifications\DeleteNotificationsController,
+    Notifications\MarkNotificationAsReadController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -45,4 +47,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/w/{user:username}/games-played-history', UserGamePlayedHistoryController::class)->name(
         'user.games-played-history',
     );
+    // Notifications
+    Route::put('notifications/{notification}/read', MarkNotificationAsReadController::class)->name(
+        'notifications.read',
+    );
+
+    Route::delete('notifications', DeleteNotificationsController::class)->name('notifications.delete');
 });
