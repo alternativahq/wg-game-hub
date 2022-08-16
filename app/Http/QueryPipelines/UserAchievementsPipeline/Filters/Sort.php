@@ -21,12 +21,12 @@ class Sort
     {
         return collect([
             [
-                'key' => 'game_name',
-                'value' => 'games.name',
+                'key' => 'asset_name',
+                'value' => 'assets.name',
             ],
             [
-                'key' => 'achievement_name',
-                'value' => 'achievements.name',
+                'key' => 'assetAccount_name',
+                'value' => 'assetAccounts.name',
             ],
             [
                 'key' => 'earned_at',
@@ -37,7 +37,7 @@ class Sort
 
     public function handle(Builder $builder, Closure $next)
     {
-        $sortBy = $this->request->get('sort_by');
+        $sortBy    = $this->request->get('sort_by');
         $sortOrder = $this->request->get('sort_order', 'asc');
 
         if (

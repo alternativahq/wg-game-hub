@@ -33,11 +33,6 @@ class Game extends Model
         return $this->hasMany(GameLobby::class);
     }
 
-    public function gameMatchScores(): HasMany
-    {
-        return $this->hasMany(UserScore::class);
-    }
-
     public function achievements(): HasMany
     {
         return $this->hasMany(Achievement::class, 'game_id');

@@ -3,25 +3,23 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Asset;
 use App\Models\GameLobbyUser;
 use App\Models\User;
 use App\Models\UserAchievement;
-use App\Models\UserScore;
+use App\Models\GameLobbyUserScore;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function __invoke(User $user)
+    public function __invoke(User $user): Response
     {
-        $totalTimePlayed = UserScore::whereBelongsTo($user)->sum('time_played');
+        $totalTimePlayed = GameLobbyUserScore::whereBelongsTo($user)->sum('time_played');
 
-        $topThreePlayedGamesAndTotalTimePlayed = UserScore::where('user_id', $user->id)
-            ->selectRaw('game_id, sum(time_played) as total_time_played')
-            ->groupBy('game_id')
-            ->orderBy('total_time_played', 'DESC')
-            ->with('game:id,name')
-            ->take(3)
-            ->get();
+        $topThreePlayedGamesAndTotalTimePlayed = GameLobbyUserScore::topThreePlayedGamesWithTotalTimePlayed(
+            user: $user,
+        )->get();
 
         $lastLobbyPlayedIn = $user
             ->gameLobbies()
@@ -42,6 +40,11 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
+        $assetAccounts = $user
+            ->assets()
+            ->take(5)
+            ->get(['user_asset_account.id', 'name', 'description', 'symbol']);
+
         return Inertia::render('User/Dashboard', [
             'totalPlayed' => GameLobbyUser::whereBelongsTo($user)->count(),
             'totalTimePlayed' => (int) $totalTimePlayed,
@@ -49,6 +52,7 @@ class DashboardController extends Controller
             'lastGamePlayed' => $lastLobbyPlayedIn?->game,
             'latestAchievements' => $achievements,
             'latestGamesPlayedHistory' => $gamePlayedHistory,
+            'assetAccounts' => $assetAccounts,
         ]);
     }
 }
