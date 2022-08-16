@@ -47,7 +47,6 @@ function UTCToHumanReadable(u) {
 </script>
 <template>
     <div>
-                    <div v-if="withdrawalForm.errors.email" class="mt-2">
         <section class="flex justify-between items-center">
             <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Withdraw Crypto</h2>
             <div class="mb-6 text-lg round mx-5 px-3 py-2 bg-gray-300 font-semibold text-black">Withdrawal Fiat  -></div>
