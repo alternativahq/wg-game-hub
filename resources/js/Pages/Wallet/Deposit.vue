@@ -11,6 +11,9 @@ import ButtonShape from '@/Shared/ButtonShape';
 import Pagination from '@/Models/Pagination';
 import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
+import TextInput from '@/Shared/Inputs/TextInput';
+import InputError from '@/Shared/InputError';
+import { useForm } from '@inertiajs/inertia-vue3';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -18,7 +21,7 @@ dayjs.extend(relativeTime);
 dayjs.extend(duration);
 
 let props = defineProps({
-    usertransactions: Object,
+    userDepositTransactions: Object,
     assets: Object,
     filters: Object,
     current_url: String,
@@ -26,7 +29,13 @@ let props = defineProps({
 
 let filters = reactive(props.filters);
 let currentUrl = window.location.toString();
-let pagination = reactive(new Pagination(props.usertransactions));
+let pagination = reactive(new Pagination(props.userDepositTransactions));
+
+let withdrawalForm = useForm({
+    email: '',
+    password: '',
+    remember_me: false,
+});
 
 function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
@@ -38,34 +47,132 @@ function UTCToHumanReadable(u) {
 </script>
 <template>
     <div>
-        <div class="flex justify-end items-center mb-5">
-            <Link class="shrink-0 mr-4" :href="route('user.deposit')">
-                <ButtonShape type="red">Deposit</ButtonShape>
-            </Link>
-            <Link class="shrink-0" :href="route('user.withdraw')">
-                <ButtonShape type="red">Withdraw</ButtonShape>
-            </Link>
-        </div>
-        <div class="flex flex-row justify-between">
-            <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Transactions</h2>
-            <div class="filters">
-                <BorderedContainer class="bg-wgh-gray-1.5">
-                    <div class="rounded-lg">
-                        <select
-                            id="location"
-                            name="location"
-                            class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                        >
-                            <!-- v-model="filters.filter_by_asset"
-                            @change.prevent="byTransactionChanged" -->
-                            <option :value="undefined">All</option>
-                            <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
-                                {{ asset.name }}
-                            </option> 
-                        </select>
+        <section class="flex justify-between items-center">
+            <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Deposit Crypto</h2>
+            <div class="mb-6 text-lg round mx-5 px-3 py-2 bg-gray-300 font-semibold text-black">Deposit Fiat  -></div>
+        </section>
+        <section class=" flex">
+            <div class="flex justify-center items-center w-2/3" >
+                <form @submit.prevent="" class="w-full mb-10" > 
+                    <div class=" flex items-center py-4 px-4 mb-5">
+                        <div class="w-2/5 text-right mr-20">Select a Coin</div>
+                        <div class="w-3/5">
+                            <div class="mb-2">coin</div>
+                            <BorderedContainer class="bg-wgh-gray-1.5">
+                                <div class="rounded-lg">
+                                    <select
+                                        id="location"
+                                        name="location"
+                                        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                    >
+                                        <!-- v-model="filters.filter_by_asset"
+                                        @change.prevent="byTransactionChanged" -->
+                                        <option :value="undefined">All</option>
+                                        <!-- <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
+                                            {{ asset.name }}
+                                        </option>  -->
+                                    </select>
+                                </div>
+                            </BorderedContainer>
+                            <InputError class="mt-2">
+                                <div v-if="withdrawalForm.errors.email" class="mt-2">
+                                    {{ withdrawalForm.errors.email }}
+                                </div>
+                            </InputError>
+                        </div>
                     </div>
-                </BorderedContainer>
+                    <div class=" flex items-center py-4 px-4 mb-5">
+                        <div class="w-2/5 text-right mr-20">Select a Network</div>
+                        <div class="w-3/5">
+                            <div class="mb-2">Network</div>
+                            <BorderedContainer class="bg-wgh-gray-1.5">
+                                <div class="rounded-lg">
+                                    <select
+                                        id="location"
+                                        name="location"
+                                        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                    >
+                                        <!-- v-model="filters.filter_by_asset"
+                                        @change.prevent="byTransactionChanged" -->
+                                        <option :value="undefined">All</option>
+                                        <!-- <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
+                                            {{ asset.name }}
+                                        </option>  -->
+                                    </select>
+                                </div>
+                            </BorderedContainer>
+                            <InputError class="mt-2">
+                                <div v-if="withdrawalForm.errors.email" class="mt-2">
+                                    {{ withdrawalForm.errors.email }}
+                                </div>
+                            </InputError>
+                        </div>
+                    </div>
+                    <!-- <button
+                        type="submit"
+                        class="w-full"
+                        :disabled="withdrawalForm.processing"
+                    >
+                        <ButtonShape type="purple">
+                            <span class="w-full uppercase">Sign in</span>
+                        </ButtonShape>
+                    </button> -->
+                </form>
             </div>
+            <div class="w-1/3 ml-8">
+                <div class="text-lg font-bold mb-4">FAQ</div>
+                <Link href="" class="text-gray-500 mb-6 underline block">
+                    How do i deposit from my KuCoin account?
+                </Link>
+                <Link href="" class="text-gray-500 mb-6 underline block">
+                    What should i do if i didn't receive my deposit or if i made a withdrawal to an incorrect address?
+                </Link>
+                <Link href="" class="text-gray-500 mb-6 underline block">
+                    What should i do if i deposit the wrong crypto?
+                </Link>
+                <Link href="" class="text-gray-500 mb-6 underline block">
+                    What should i do if i forget to specif the Memo Tag or Message for my deposit?
+                </Link>
+                <Link href="" class="text-gray-500 mb-6 underline block">
+                    what are the commen deposit crypto?
+                </Link>
+            </div>
+        </section>
+        <section class="mb-10 flex ">
+            <div class="w-2/3 flex">
+                <div class="w-2/5 mr-20"></div>
+                <div class="w-3/5">
+                    <div class="font-semibold">Address</div>
+                    <div class="w-1/2">OJHKUSDHGFKHIUYANEUYWNKJCIPAPYEUYKHDIUYOYSD</div>
+                </div>
+            </div>
+            <div class="w-1/3"></div>
+        </section>
+        <section class="mb-10 flex">
+            <div class="w-2/3 flex">
+                <div class="w-2/5 mr-20"></div>
+                <div class="w-3/5 flex">
+                    <div class="w-1/2 ">
+                        <div class="mb-4">
+                            <div class="font-semibold">Recipent Account</div>
+                            <div class="text-sm">Main Account</div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="font-semibold">Confirm that your network is NANO(NANO)</div>
+                        </div>
+                    </div>
+                    <div class="w-1/2">
+                        <div class="mb-4">
+                            <div class="font-semibold">Deposit Conformation</div>
+                            <div>1 block(s)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="w-1/3"></div>
+        </section>
+        <div class="flex flex-row justify-between">
+            <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Deposit History</h2>
         </div>
         <BorderedContainer class="mb-2 overflow-hidden bg-wgh-gray-1.5">
             <div class="rounded-lg bg-white px-4 sm:px-0 lg:px-0">
@@ -76,96 +183,6 @@ function UTCToHumanReadable(u) {
                                 <table class="min-w-full divide-y divide-gray-300">
                                     <thead class="bg-gray-50">
                                         <tr>
-                                            <th
-                                                scope="col"
-                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                            >
-                                                <Link
-                                                    class="group inline-flex"
-                                                    :href="currentUrl"
-                                                    :data="{
-                                                        sort_by: 'created_at',
-                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                    }"
-                                                >
-                                                    Time
-                                                    <span
-                                                        :class="{
-                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'created_at',
-                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'created_at',
-                                                            'rotate-180':
-                                                                filters.sort_by === 'created_at' &&
-                                                                filters.sort_order === 'asc',
-                                                        }"
-                                                    >
-                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
-                                                    </span>
-                                                </Link>
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                            >
-                                                <Link
-                                                    class="group inline-flex"
-                                                    :href="currentUrl"
-                                                    :data="{
-                                                        sort_by: 'transaction_type',
-                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                    }"
-                                                >
-                                                    Type
-                                                    <span
-                                                        :class="{
-                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'transaction_type',
-                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'transaction_type',
-                                                            'rotate-180':
-                                                                filters.sort_by === 'transaction_type' &&
-                                                                filters.sort_order === 'asc',
-                                                        }"
-                                                    >
-                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
-                                                    </span> 
-                                                </Link>
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                            >
-                                                <span class="group inline-flex">Deposit Wallet</span>
-                                            </th>
-                                            <th
-                                                scope="col"
-                                                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                            >
-                                                <Link
-                                                    class="group inline-flex"
-                                                    :href="currentUrl"
-                                                    :data="{
-                                                        sort_by: 'transaction_asset',
-                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                    }"
-                                                > 
-                                                    Asset
-                                                    <span
-                                                        :class="{
-                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'transaction_asset',
-                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'transaction_asset',
-                                                            'rotate-180':
-                                                                filters.sort_by === 'transaction_asset' &&
-                                                                filters.sort_order === 'asc',
-                                                        }"
-                                                    >
-                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
-                                                    </span>
-                                                </Link>
-                                            </th>
                                             <th
                                                 scope="col"
                                                 class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
@@ -202,19 +219,19 @@ function UTCToHumanReadable(u) {
                                                     class="group inline-flex"
                                                     :href="currentUrl"
                                                     :data="{
-                                                        sort_by: 'transaction_destination',
+                                                        sort_by: 'transaction_network',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
                                                 >
-                                                    Destination
+                                                    Network
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'transaction_destination',
+                                                                filters.sort_by !== 'transaction_network',
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'transaction_destination',
+                                                                filters.sort_by === 'transaction_network',
                                                             'rotate-180':
-                                                                filters.sort_by === 'transaction_destination' &&
+                                                                filters.sort_by === 'transaction_network' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
@@ -230,19 +247,19 @@ function UTCToHumanReadable(u) {
                                                     class="group inline-flex"
                                                     :href="currentUrl"
                                                     :data="{
-                                                        sort_by: 'transaction_txid',
+                                                        sort_by: 'transaction_blockchain_record',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
                                                 >
-                                                    TxID
+                                                    Blockchain Record
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'transaction_txid',
+                                                                filters.sort_by !== 'transaction_blockchain_record',
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'transaction_txid',
+                                                                filters.sort_by === 'transaction_blockchain_record',
                                                             'rotate-180':
-                                                                filters.sort_by === 'transaction_txid' &&
+                                                                filters.sort_by === 'transaction_blockchain_record' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
@@ -278,40 +295,92 @@ function UTCToHumanReadable(u) {
                                                     </span>
                                                 </Link>
                                             </th>
+                                            <th
+                                                scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            >
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'transaction_status',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                >
+                                                    Remarks
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'transaction_status',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'transaction_status',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'transaction_status' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            >
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'created_at',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                >
+                                                    Start Time
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'created_at',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'created_at',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'created_at' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 bg-white ">
-                                        <tr v-for="transaction in usertransactions" :key="transaction.id">
+                                        <tr v-for="transaction in userDepositTransactions" :key="transaction.id">
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
-                                                {{ UTCToHumanReadable(transaction.createdAt) }}
-
-                                            </td>
-                                            <td
-                                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
-                                            >
-                                                {{ transaction.type }}
-                                            </td>
-                                            <td
-                                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
-                                            >
-                                                {{ transaction.fromAccountId }}
-                                            </td>
-                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ transaction.asset }}
-                                            </td>
-                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                 {{ transaction.amount }}
                                             </td>
-                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ transaction.toAccountId }}
+                                            <td
+                                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                                            >
+                                                <!-- {{ transaction.type }} -->
+                                                network
                                             </td>
-                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ transaction.globalTxId }}
+                                            <td
+                                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                                            >
+                                                <!-- {{ transaction.fromAccountId }} -->
+                                                record
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                 {{ transaction.state }}
+                                            </td>
+                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                <!-- {{ transaction.toAccountId }} -->
+                                                remark
+                                            </td>
+                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                {{ UTCToHumanReadable(transaction.createdAt) }}
                                             </td>
                                         </tr>
                                     </tbody>
