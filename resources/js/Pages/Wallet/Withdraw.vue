@@ -47,41 +47,150 @@ function UTCToHumanReadable(u) {
 </script>
 <template>
     <div>
-        <section class="my-20 flex items-center">
-            <form @submit.prevent=""> 
-                 <TextInput
-                    name="email"
-                    placeholder="Email"
-                    type="email"
-                    v-model="withdrawalForm.email"
-                /> 
-                <InputError class="mt-2">
                     <div v-if="withdrawalForm.errors.email" class="mt-2">
-                        {{ withdrawalForm.errors.email }}
+        <section class="flex justify-between items-center">
+            <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Withdraw Crypto</h2>
+            <div class="mb-6 text-lg round mx-5 px-3 py-2 bg-gray-300 font-semibold text-black">Withdrawal Fiat  -></div>
+        </section>
+        <section class=" flex">
+            <div class="flex justify-center items-center w-2/3" >
+                <form @submit.prevent="" class="w-full mb-10" > 
+                    <div class=" flex items-center py-4 px-4 mb-5">
+                        <div class="w-2/5 text-right mr-20">Select a Coin</div>
+                        <div class="w-3/5">
+                            <div class="mb-2">coin</div>
+                            <BorderedContainer class="bg-wgh-gray-1.5">
+                                <div class="rounded-lg">
+                                    <select
+                                        id="location"
+                                        name="location"
+                                        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                    >
+                                        <!-- v-model="filters.filter_by_asset"
+                                        @change.prevent="byTransactionChanged" -->
+                                        <option :value="undefined">All</option>
+                                        <!-- <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
+                                            {{ asset.name }}
+                                        </option>  -->
+                                    </select>
+                                </div>
+                            </BorderedContainer>
+                            <InputError class="mt-2">
+                                <div v-if="withdrawalForm.errors.email" class="mt-2">
+                                    {{ withdrawalForm.errors.email }}
+                                </div>
+                            </InputError>
+                        </div>
                     </div>
-                </InputError>
-                <button
-                    type="submit"
-                    class="w-full"
-                    :disabled="withdrawalForm.processing"
-                >
-                    <ButtonShape type="purple">
-                        <span class="w-full uppercase">Sign in</span>
-                    </ButtonShape>
-                </button> 
-
-            </form>
-            <!-- <div class="flex justify-center items-center w-2/3" >
-                <label class="justify-end mr-6">Select Coin</label>
-                <div class=" ">
-                    <input type="text" class=" bg-red-900">
+                    <div class=" flex items-center py-4 px-4 mb-5">
+                        <div class="w-2/5 text-right mr-20">Withdrawal Information</div>
+                        <div class="w-3/5">
+                            <div class="mb-2">Wallet Address</div>
+                            <BorderedContainer class="bg-wgh-gray-1.5">
+                                <div class="rounded-lg">
+                                    <select
+                                        id="location"
+                                        name="location"
+                                        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                    >
+                                        <!-- v-model="filters.filter_by_asset"
+                                        @change.prevent="byTransactionChanged" -->
+                                        <option :value="undefined">All</option>
+                                        <!-- <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
+                                            {{ asset.name }}
+                                        </option>  -->
+                                    </select>
+                                </div>
+                            </BorderedContainer>
+                            <InputError class="mt-2">
+                                <div v-if="withdrawalForm.errors.email" class="mt-2">
+                                    {{ withdrawalForm.errors.email }}
+                                </div>
+                            </InputError>
+                        </div>
+                    </div>
+                    <div class=" flex items-center py-4 px-4 mb-5">
+                        <div class="w-2/5 text-right mr-20"></div>
+                        <div class="w-3/5">
+                            <div class="mb-2">Network</div>
+                            <BorderedContainer class="bg-wgh-gray-1.5">
+                                <div class="rounded-lg">
+                                    <select
+                                        id="location"
+                                        name="location"
+                                        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                    >
+                                        <!-- v-model="filters.filter_by_asset"
+                                        @change.prevent="byTransactionChanged" -->
+                                        <option :value="undefined">All</option>
+                                        <!-- <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
+                                            {{ asset.name }}
+                                        </option>  -->
+                                    </select>
+                                </div>
+                            </BorderedContainer>
+                            <InputError class="mt-2">
+                                <div v-if="withdrawalForm.errors.email" class="mt-2">
+                                    {{ withdrawalForm.errors.email }}
+                                </div>
+                            </InputError>
+                        </div>
+                    </div>
+                    <!-- <button
+                        type="submit"
+                        class="w-full"
+                        :disabled="withdrawalForm.processing"
+                    >
+                        <ButtonShape type="purple">
+                            <span class="w-full uppercase">Sign in</span>
+                        </ButtonShape>
+                    </button> -->
+                </form>
+            </div>
+            <div class="w-1/3 ml-8">
+                <div class="text-lg font-bold mb-4">FAQ</div>
+                <Link href="" class="text-gray-500 mb-2 underline block">
+                    How do i withdrawal from my kucoin account?
+                </Link>
+                <Link href="" class="text-gray-500 mb-2 underline block">
+                    What should i do if i didn't receive my withdrawal or if i made a withdrawal to an incorrect address?
+                </Link>
+                <Link href="" class="text-gray-500 mb-2 underline block">
+                    is there a limit on 24h withdrawal?
+                </Link>
+            </div>
+        </section>
+        <section class="mb-10 flex ">
+            <div class="w-2/3 flex">
+                <div class="w-2/5 mr-20"></div>
+                <div class="w-3/5 flex items-center">
+                    <div class="w-1/2 ">
+                        <div class="mb-2">
+                            <div>Avalibale Balance</div>
+                            <div>0.00 XNO</div>
+                        </div>
+                        <div class="mb-2">
+                            <div>Fees</div>
+                            <div>0.02 XNO</div>
+                        </div>
+                    </div>
+                    <div class="w-1/2">
+                        <div class="mb-2">
+                            <div>Minimom Withdrawal</div>
+                            <div>1.00 XNO</div>
+                        </div>
+                        <div class="mb-2">
+                            <div>Remaning daily withdrawal amount</div>
+                            <div>1 BTC</div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="w-1/3">faq</div> -->
-
+            <div class="w-1/3"></div>
         </section>
         <div class="flex flex-row justify-between">
             <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Recent Withdrawals</h2>
+            <div class="font-grota text-sm text-wgh-gray-6">can't find a blockchain record?</div>
         </div>
         <BorderedContainer class="mb-2 overflow-hidden bg-wgh-gray-1.5">
             <div class="rounded-lg bg-white px-4 sm:px-0 lg:px-0">
