@@ -33,7 +33,7 @@ function UTCToHumanReadable(u) {
 }
 
 // function byTransactionChanged() {
-//     Inertia.get(currentUrl, { filter_by_game: filters.filter_by_asset });
+//     Inertia.get(currentUrl, { filter_by_asset: filters.filter_by_asset });
 // }
 </script>
 <template>
@@ -76,7 +76,7 @@ function UTCToHumanReadable(u) {
                                                     class="group inline-flex"
                                                     :href="currentUrl"
                                                     :data="{
-                                                        sort_by: 'created_at',
+                                                        sort_by: 'transaction_time',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
                                                 >
@@ -84,11 +84,11 @@ function UTCToHumanReadable(u) {
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'created_at',
+                                                                filters.sort_by !== 'transaction_time',
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'created_at',
+                                                                filters.sort_by === 'transaction_time',
                                                             'rotate-180':
-                                                                filters.sort_by === 'created_at' &&
+                                                                filters.sort_by === 'transaction_time' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
