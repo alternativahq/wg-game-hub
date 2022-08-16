@@ -1,17 +1,17 @@
 <script setup>
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue';
-import { defineProps, reactive } from 'vue';
+import { defineProps, inject, reactive } from 'vue';
 import ButtonShape from '@/Shared/ButtonShape';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
 
-let currentUser = useCurrentUser();
+let currentUser = inject('currentUser');
+
 let props = defineProps({
     isOpen: Boolean,
     gameLobby: Object,
 });
 
 let players = _.merge(_.keyBy(props.gameLobby.users, 'id'), _.keyBy(props.gameLobby.scores, 'user_id'));
-
 let orderedPlayers = _.flatten(
     _.merge(
         _.partition(players, (player) => {
