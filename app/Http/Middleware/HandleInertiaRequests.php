@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use App\Enums\GameLobbyStatus;
 use App\Enums\UserAssetAccountStatus;
+use App\Http\Resources\GameLobbyResource;
+use App\Models\GameLobby;
 use Cache;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -39,7 +41,11 @@ class HandleInertiaRequests extends Middleware
             'username' => $request->user()->username,
             'last_name' => $request->user()->last_name,
             'full_name' => $request->user()->full_name,
-            'notifications' => $request->user()->unreadNotifications()->paginate(5),
+            'unread_notifications' => $request
+                ->user()
+                ->unreadNotifications()
+                ->take(10)
+                ->get(),
             'email' => $request->user()->email,
             'image' => $request->user()->image,
             'image_url' => $request->user()->image_url,
@@ -56,9 +62,19 @@ class HandleInertiaRequests extends Middleware
                         ->get();
                 },
             ),
+            'cooldown_end_at' => function () use ($request) {
+                $user = $request->user();
+                if (!$user->is_in_cooldown_period && !is_null($user->cooldown_end_at)) {
+                    $user->update([
+                        'cooldown_end_at' => null,
+                    ]);
+                    return null;
+                }
+                return $user->cooldown_end_at;
+            },
             'current_lobby_session' => Cache::remember(
                 key: 'user.' . $request->user()->id . '.current-lobby-session',
-                ttl: 60,
+                ttl: 1,
                 callback: function () use ($request) {
                     $session = $request
                         ->user()
@@ -70,7 +86,9 @@ class HandleInertiaRequests extends Middleware
                         ])
                         ->first();
 
-                    return $session ? $session->only('id', 'game_id', 'name') : null;
+                    return $session
+                        ? GameLobbyResource::make(new GameLobby($session->only('id', 'game_id', 'name')))
+                        : null;
                 },
             ),
         ];

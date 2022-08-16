@@ -20,3 +20,4 @@ public/fonts/*
 mysqldata/*
 redisdata/*
 http-client/*
+public/vendor/

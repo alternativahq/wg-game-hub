@@ -73,6 +73,10 @@ class RemoveUserFromGameLobbyAction
 
                 Event::dispatch(new PrizeUpdatedEvent(gameLobby: $gameLobby, newPrize: $prize));
 
+                $user->update([
+                    'cooldown_end_at' => now()->addMinutes(2),
+                ]);
+
                 return $gameLobby;
             },
         );

@@ -11,7 +11,6 @@ import ButtonShape from '@/Shared/ButtonShape';
 import Pagination from '@/Models/Pagination';
 import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
-
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(relativeTime);

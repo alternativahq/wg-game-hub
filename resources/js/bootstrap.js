@@ -1,4 +1,12 @@
+import dayjs from 'dayjs';
+
 window._ = require('lodash');
+window.dayjs = require('dayjs');
+let relativeTime = require('dayjs/plugin/relativeTime');
+let duration = require('dayjs/plugin/duration');
+
+dayjs.extend(relativeTime);
+dayjs.extend(duration);
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

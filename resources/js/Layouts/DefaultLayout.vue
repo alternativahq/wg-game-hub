@@ -8,19 +8,124 @@ import Footer from '@/Shared/Footer/Footer';
 import ButtonShape from '@/Shared/ButtonShape';
 import { Link } from '@inertiajs/inertia-vue3';
 
-import { Popover, PopoverButton, PopoverOverlay, PopoverPanel, TransitionChild, TransitionRoot } from '@headlessui/vue';
+import {
+    Popover,
+    PopoverButton,
+    PopoverOverlay,
+    PopoverPanel,
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionChild,
+    TransitionRoot,
+} from '@headlessui/vue';
 import { MenuIcon, XIcon, BellIcon } from '@heroicons/vue/outline';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
-import SildeoverEmpty from '../Shared/sildeover-empty.vue';
-
-const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, external: false }];
-let currentUser = useCurrentUser();
+import { inject, reactive } from 'vue';
 
 let props = defineProps({
     config: Object,
 });
+
+let currentUser = inject('currentUser');
+
+let state = reactive({
+    isNotificationSlideOverOn: false,
+});
+
+const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, external: false }];
 </script>
 <template>
+    <div>
+        <TransitionRoot as="template" :show="state.isNotificationSlideOverOn">
+            <Dialog as="div" class="relative z-10" @close="state.isNotificationSlideOverOn = false">
+                <div class="fixed inset-0" />
+                <div class="fixed inset-0 overflow-hidden">
+                    <div class="absolute inset-0 overflow-hidden">
+                        <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+                            <TransitionChild
+                                as="template"
+                                enter="transform transition ease-in-out duration-500 sm:duration-700"
+                                enter-from="translate-x-full"
+                                enter-to="translate-x-0"
+                                leave="transform transition ease-in-out duration-500 sm:duration-700"
+                                leave-from="translate-x-0"
+                                leave-to="translate-x-full"
+                            >
+                                <DialogPanel class="pointer-events-auto w-screen max-w-md">
+                                    <div class="flex h-full flex-col bg-white py-6 shadow-xl">
+                                        <div class="px-4 sm:px-6">
+                                            <div class="flex items-start justify-between">
+                                                <DialogTitle class="text-lg font-medium text-gray-900">
+                                                    Notifications
+                                                </DialogTitle>
+                                                <div class="ml-3 flex h-7 items-center">
+                                                    <button
+                                                        type="button"
+                                                        class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                                        @click="state.isNotificationSlideOverOn = false"
+                                                    >
+                                                        <span class="sr-only">Close panel</span>
+                                                        <XIcon class="h-6 w-6" aria-hidden="true" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="relative mt-6 flex-1 px-4 sm:px-6" v-if="currentUser">
+                                            <!-- Replace with your content -->
+                                            <div v-if="currentUser.unread_notifications.length <= 0">
+                                                <p>There is no notifications</p>
+                                            </div>
+
+                                            <div
+                                                class="absolute inset-0 overflow-y-scroll px-4 sm:px-6"
+                                                v-if="currentUser.unread_notifications.length > 0"
+                                            >
+                                                <div class="flex justify-between">
+                                                    <button
+                                                        v-if="currentUser.unread_notifications.length > 0"
+                                                        @click.prevent="currentUser.deleteAllNotifications()"
+                                                        class="text-red-500 hover:text-red-300"
+                                                    >
+                                                        Delete all
+                                                    </button>
+                                                </div>
+                                                <TransitionGroup name="notifications" tag="div">
+                                                    <div
+                                                        class="my-5 flex flex-col justify-between space-y-2 bg-gray-100 py-4 px-4"
+                                                        v-for="notification in currentUser.unread_notifications"
+                                                        :key="notification.id"
+                                                    >
+                                                        <div class="flex flex-col justify-between">
+                                                            <div class="text-sm">
+                                                                <div>
+                                                                    {{ notification.data.message }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div
+                                                            @click.prevent="
+                                                                currentUser.markNotificationAsRead(notification.id)
+                                                            "
+                                                            class="self-baseline rounded bg-blue-200 py-2 px-2 text-xs hover:cursor-pointer hover:bg-blue-300 hover:text-white"
+                                                        >
+                                                            Mark as read
+                                                        </div>
+                                                    </div>
+                                                </TransitionGroup>
+                                            </div>
+                                            <!-- /End replace -->
+                                        </div>
+                                    </div>
+                                </DialogPanel>
+                            </TransitionChild>
+                        </div>
+                    </div>
+                </div>
+            </Dialog>
+        </TransitionRoot>
+    </div>
     <div
         id="wrapper"
         class="flex min-h-screen w-full flex-col justify-between bg-[#F6F6F7]"
@@ -44,9 +149,19 @@ let props = defineProps({
                     </div>
                 </div>
                 <div class="hidden flex-row items-center space-x-8 lg:flex">
-                    <SildeoverEmpty/>
-                    <!--                    <SearchIcon class="h-6 w-6 cursor-pointer" />-->
-                    <!--                    <BellIcon class="h-6 w-6 cursor-pointer" />-->
+                    <!--                                        <SearchIcon class="h-6 w-6 cursor-pointer" />-->
+                    <button @click.prevent="state.isNotificationSlideOverOn = true" class="relative" v-if="currentUser">
+                        <BellIcon class="h-7 w-7 cursor-pointer" />
+                        <span
+                            v-if="currentUser.unread_notifications.length > 0"
+                            class="absolute -top-2 -right-2 inline-block rounded-full bg-wgh-red-1 px-2 py-1 text-xs text-white"
+                            >{{
+                                currentUser.unread_notifications.length > 9
+                                    ? '+9'
+                                    : currentUser.unread_notifications.length
+                            }}</span
+                        >
+                    </button>
                     <Link v-if="currentUser" :href="route('user.profile', { user: currentUser.username })">
                         <ButtonShape type="purple">
                             <span class="flex flex-row space-x-2.5">
@@ -167,6 +282,7 @@ let props = defineProps({
                                                 </div>
                                                 <button
                                                     type="button"
+                                                    @click.prevent="state.isNotificationSlideOverOn = true"
                                                     class="ml-auto flex-shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                                 >
                                                     <span class="sr-only">View notifications</span>
