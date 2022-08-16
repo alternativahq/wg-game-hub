@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Wallet;
 
-use Redirect;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Asset;

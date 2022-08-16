@@ -2,11 +2,11 @@
 
 namespace App\Http\QueryPipelines\UserWithdrawalsPipeline;
 
-use App\Http\QueryPipelines\UserAchievementsPipeline\Filters\ByGameFilter;
-use App\Http\QueryPipelines\UserAchievementsPipeline\Filters\Sort;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Pipeline;
+use Illuminate\Database\Eloquent\Builder;
+use App\Http\QueryPipelines\UserWithdrawalsPipeline\Filters\SortByState;
+use App\Http\QueryPipelines\UserWithdrawalsPipeline\Filters\SortByAmount;
 
 class UserDepositsPipeline extends Pipeline
 {
@@ -21,23 +21,17 @@ class UserDepositsPipeline extends Pipeline
 
     protected function pipes()
     {
-        return [new Sort(request: $this->request), new ByAssetFilter(request: $this->request)];
+        return [
+            new SortByAmount(request: $this->request),
+            new SortByState(request: $this->request),
+        ];
     }
 
     public static function make(Builder $builder, Request $request): Builder
     {
         return app(static::class)
             ->setRequest(request: $request)
-            ->send(
-                $builder->with([
-                    'game' => function ($query) {
-                        $query->select('id', 'name');
-                    },
-                    'achievement' => function ($query) {
-                        $query->select('id', 'name', 'description');
-                    },
-                ]),
-            )
+            ->send($builder)
             ->thenReturn();
     }
 }
