@@ -2,7 +2,6 @@
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import { defineProps, inject, reactive } from 'vue';
 import ButtonShape from '@/Shared/ButtonShape';
-import { useCurrentUser } from '@/Composables/useCurrentUser';
 
 let currentUser = inject('currentUser');
 
