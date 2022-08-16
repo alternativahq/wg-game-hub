@@ -1,6 +1,7 @@
 import { reactive } from 'vue';
 import dayjs from 'dayjs';
 import Model from '@/Models/Model';
+import { Inertia } from '@inertiajs/inertia';
 
 export default class GameLobby extends Model {
     static get socketEvents() {
@@ -71,5 +72,17 @@ export default class GameLobby extends Model {
 
     killCountDownTimer() {
         clearInterval(this._countDownTimerInterval);
+    }
+
+    is(gameLobby) {
+        return this.id === gameLobby.id;
+    }
+
+    join() {
+        Inertia.post(`/game-lobbies/${this.id}/join`, {}, { replace: true });
+    }
+
+    redirectBackToGameLobby() {
+        Inertia.replace(`/game-lobbies/${this.id}`);
     }
 }

@@ -8,7 +8,7 @@ use App\Http\Resources\GameResource;
 use App\Http\Resources\UserScoreResource;
 use App\Models\Game;
 use App\Models\User;
-use App\Models\UserScore;
+use App\Models\GameLobbyUserScore;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -16,7 +16,7 @@ class GamePlayedHistoryController extends Controller
 {
     public function __invoke(User $user, Request $request)
     {
-        $userScoreBuilder = UserScore::query()->whereBelongsTo($user);
+        $userScoreBuilder = GameLobbyUserScore::query()->whereBelongsTo($user);
 
         $gamePlayedHistory = UserGamesPlayedHistoryPipeline::make(
             builder: $userScoreBuilder->with(['game:id,name', 'gameLobby:id,created_at,scheduled_at']),

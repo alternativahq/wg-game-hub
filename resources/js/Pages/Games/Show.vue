@@ -5,18 +5,18 @@ import BorderedContainer from '@/Shared/BorderedContainer';
 import ButtonShape from '@/Shared/ButtonShape';
 import ChevronLeft from '@/Shared/SVG/ChevronLeft';
 import { Inertia } from '@inertiajs/inertia';
-
 import { Link } from '@inertiajs/inertia-vue3';
-import { reactive, ref } from 'vue';
+import { inject, reactive, ref } from 'vue';
 import { isEmpty } from 'lodash';
 import TentModal from '@/Shared/Modals/TentModal';
 import ActiveSessionBanner from '@/Shared/ActiveSessionBanner';
-import { useCurrentUser } from '@/Composables/useCurrentUser';
 import Game from '@/Models/Game';
+import GameLobby from '@/Models/GameLobby';
 import CooldownBanner from '@/Shared/CooldownBanner';
 import { onBeforeMount, onMounted } from 'vue';
+import GameLobbyCollection from '@/Models/GameLobbyCollection';
 
-let currentUser = useCurrentUser();
+let currentUser = inject('currentUser');
 
 let props = defineProps({
     game: Object,
@@ -36,64 +36,61 @@ onBeforeMount(() => {
     }
 });
 
-let game = reactive(new Game(props.game.data));
-
-let settings = reactive({
-    startGameConfirmationModalIsOpen: false,
-    selectedGameOption: {},
-    isThereActiveLobbySession: () => {
-        return !!currentUser?.current_lobby_session;
-    },
-    getActiveGameLobbySession: () => {
-        return settings.isThereActiveLobbySession() ? currentUser.current_lobby_session : null;
+let state = reactive({
+    game: new Game(props.game.data),
+    gameLobbies: new GameLobbyCollection(props.gameLobbies),
+    selectedGameLobby: {},
+    settings: {
+        startGameConfirmationModalIsOpen: false,
+        currentActiveLobbySession: currentUser?.current_lobby_session
+            ? new GameLobby(currentUser.current_lobby_session.data)
+            : null,
     },
 });
 
 // Open Modal and set the selected game option
-function startGameButtonClicked(gameOption) {
+function startGameButtonClicked(gameLobby) {
     if (!currentUser) {
         Inertia.visit('/login');
         return;
     }
-    if (settings.isThereActiveLobbySession() && gameOption.id === settings.getActiveGameLobbySession().id) {
-        Inertia.replace(`/game-lobbies/${gameOption.id}`);
+
+    gameLobby = new GameLobby(gameLobby);
+    if (state.settings.currentActiveLobbySession && state.settings.currentActiveLobbySession.is(gameLobby)) {
+        gameLobby.redirectBackToGameLobby();
         return;
     }
-    settings.selectedGameOption = gameOption;
 
-    settings.startGameConfirmationModalIsOpen = true;
+    state.selectedGameLobby = gameLobby;
+    state.settings.startGameConfirmationModalIsOpen = true;
 }
 
 function modalStartGameButtonClicked() {
-    if (isEmpty(settings.selectedGameOption)) {
+    if (isEmpty(state.selectedGameLobby)) {
         return;
     }
 
-    Inertia.post(`/game-lobbies/${settings.selectedGameOption.id}/join`, {}, { replace: true });
-    // Participate in session
-    // and redirect to Lobby
-
-    settings.startGameConfirmationModalIsOpen = false;
-    // initialize the game
+    state.selectedGameLobby.join();
+    state.settings.startGameConfirmationModalIsOpen = false;
 }
 
 function modalCancelGameButtonClicked() {
-    settings.startGameConfirmationModalIsOpen = false;
-    // settings.selectedGameOption = {};
+    state.settings.startGameConfirmationModalIsOpen = false;
+    state.selectedGameLobby = null;
 }
 </script>
 
 <template>
-    <TentModal :open="settings.startGameConfirmationModalIsOpen">
+    <TentModal :open="state.settings.startGameConfirmationModalIsOpen">
         <template v-slot:header><p>Ready to Play!</p></template>
         <template v-slot:title>
-            <p>{{ game.name }} - {{ settings.selectedGameOption.name }}</p>
+            <p>{{ state.game.name }} - {{ state.selectedGameLobby.name }}</p>
         </template>
         <template v-slot:subtitle>
             <p class="wgh-gray-6 font-inter text-base font-normal">
                 Entrance fee for this lobby is
-                {{ settings.selectedGameOption?.base_entrance_fee }}
-                {{ settings.selectedGameOption?.asset?.symbol }} <br />
+                {{ state.selectedGameLobby?.base_entrance_fee }}
+                {{ state.selectedGameLobby?.asset?.symbol }} <br />
                 are you sure you want continue ?
             </p>
         </template>
@@ -121,10 +118,10 @@ function modalCancelGameButtonClicked() {
                     </Link>
                     <div class="flex flex-col space-y-2">
                         <h1 class="font-grota text-3xl font-extrabold uppercase text-white">
-                            {{ game.name }}
+                            {{ state.game.name }}
                         </h1>
                         <p class="max-w-3xl font-inter text-sm font-normal text-white">
-                            {{ game.description }}
+                            {{ state.game.description }}
                         </p>
                     </div>
                 </div>
@@ -136,7 +133,7 @@ function modalCancelGameButtonClicked() {
                                 >Game Options</span
                             >
                             <span class="font-grota text-sm font-normal uppercase text-white"
-                                >{{ gameLobbies.meta.total.toLocaleString('en') }} Options</span
+                                >{{ state.gameLobbies.meta.total.toLocaleString('en') }} Options</span
                             >
                         </div>
                     </div>
@@ -167,7 +164,7 @@ function modalCancelGameButtonClicked() {
 
         <div class="flex grid grid-cols-1 flex-row flex-wrap gap-6 md:grid-cols-2 lg:grid-cols-3 lg:px-12">
             <borderedContainer
-                v-for="gameLobby in gameLobbies.data"
+                v-for="gameLobby in state.gameLobbies.data"
                 :key="gameLobby.id"
                 :style="{ 'background-color': `${gameLobby.theme_color}` }"
             >
@@ -176,7 +173,7 @@ function modalCancelGameButtonClicked() {
                         <img
                             class="rounded-lg"
                             :src="gameLobby.image_url"
-                            :alt="`${game.name} - ${gameLobby.name} Art`"
+                            :alt="`${state.game.name} - ${gameLobby.name} Art`"
                         />
                     </div>
                     <div class="mb-4 flex flex-row justify-between space-x-2">
@@ -184,7 +181,7 @@ function modalCancelGameButtonClicked() {
                             {{ gameLobby.name }}
                         </h2>
                         <div class="text-bold shrink-0 font-grota text-base text-wgh-gray-6">
-                            <span>{{ gameLobby.base_entrance_fee }} {{ gameLobby.asset.symbol }}</span>
+                            <span>{{ gameLobby.base_entrance_fee }} {{ gameLobby.asset?.symbol }}</span>
                         </div>
                     </div>
                     <button
@@ -192,8 +189,8 @@ function modalCancelGameButtonClicked() {
                         class="mb-6 w-full uppercase disabled:cursor-not-allowed"
                         @click.prevent="startGameButtonClicked(gameLobby)"
                         :disabled="
-                            settings.isThereActiveLobbySession() &&
-                            gameLobby.id !== settings.getActiveGameLobbySession().id
+                            state.settings.currentActiveLobbySession &&
+                            state.settings.currentActiveLobbySession.is(gameLobby)
                         "
                     >
                         <ButtonShape type="red">
@@ -201,8 +198,8 @@ function modalCancelGameButtonClicked() {
                                 <span
                                     class="w-full"
                                     v-if="
-                                        settings.isThereActiveLobbySession() &&
-                                        gameLobby.id === settings.getActiveGameLobbySession().id
+                                        state.settings.currentActiveLobbySession &&
+                                        state.settings.currentActiveLobbySession.is(gameLobby)
                                     "
                                     >Rejoin Lobby</span
                                 >

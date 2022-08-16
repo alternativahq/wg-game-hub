@@ -15,7 +15,7 @@ use App\Models\ChatRoom;
 use App\Models\Game;
 use App\Models\GameLobby;
 use App\Models\User;
-use App\Models\UserScore;
+use App\Models\GameLobbyUserScore;
 use App\Models\WodoAssetAccount;
 use Database\Factories\AchievementFactory;
 use Database\Factories\GameFactory;
@@ -115,7 +115,7 @@ class WodoGamehubDemoSeedCommand extends Command
                 $users = $lobby->users;
 
                 $scores = $users->map(function (User $user, $index) use ($lobby) {
-                    return new UserScore([
+                    return new GameLobbyUserScore([
                         'game_id' => $lobby->game_id,
                         'game_lobby_id' => $lobby->id,
                         'user_id' => $user->id,

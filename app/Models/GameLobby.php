@@ -95,20 +95,19 @@ class GameLobby extends Model
         return $this->belongsTo(Asset::class);
     }
 
-    public function alreadyJoined(User $user): bool
-    {
-        return $this->users()
-            ->where('id', $user)
-            ->exists();
-    }
-
     public function scores(): HasMany
     {
-        return $this->hasMany(UserScore::class);
+        return $this->hasMany(GameLobbyUserScore::class);
     }
 
     public function usersAchievements(): HasMany
     {
         return $this->hasMany(UserAchievement::class);
+    }
+
+    public function calculateThePrize(): float
+    {
+        $total = GameLobbyUser::where('game_lobby_id', $this->id)->sum('entrance_fee');
+        return (float) ($total - ($total * 20.0) / 100.0);
     }
 }

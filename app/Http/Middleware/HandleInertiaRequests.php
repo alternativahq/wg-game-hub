@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use App\Enums\GameLobbyStatus;
 use App\Enums\UserAssetAccountStatus;
+use App\Http\Resources\GameLobbyResource;
+use App\Models\GameLobby;
 use Cache;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -67,7 +69,7 @@ class HandleInertiaRequests extends Middleware
             },
             'current_lobby_session' => Cache::remember(
                 key: 'user.' . $request->user()->id . '.current-lobby-session',
-                ttl: 60,
+                ttl: 1,
                 callback: function () use ($request) {
                     $session = $request
                         ->user()
@@ -79,7 +81,9 @@ class HandleInertiaRequests extends Middleware
                         ])
                         ->first();
 
-                    return $session ? $session->only('id', 'game_id', 'name') : null;
+                    return $session
+                        ? GameLobbyResource::make(new GameLobby($session->only('id', 'game_id', 'name')))
+                        : null;
                 },
             ),
         ];

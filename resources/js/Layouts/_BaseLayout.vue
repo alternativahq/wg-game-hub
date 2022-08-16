@@ -1,8 +1,10 @@
 <script setup>
-import { onBeforeUnmount, onMounted, defineProps } from 'vue';
+import { onBeforeUnmount, onMounted, provide } from 'vue';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
 
 let currentUser = useCurrentUser();
+
+provide('currentUser', currentUser);
 
 onMounted(() => {
     if (currentUser) {

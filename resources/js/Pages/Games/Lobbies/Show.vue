@@ -15,6 +15,7 @@ let props = defineProps({
     config: Object,
     prize: Number,
 });
+
 let chatBox = ref();
 let latestUpdateMessage = ref('Updates are on the way...');
 
