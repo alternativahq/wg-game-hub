@@ -95,9 +95,9 @@ function UTCToHumanReadable(u) {
                                         <!-- v-model="filters.filter_by_asset"
                                         @change.prevent="byTransactionChanged" -->
                                         <option :value="undefined">All</option>
-                                        <!-- <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
+                                        <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
                                             {{ asset.name }}
-                                        </option>  -->
+                                        </option> 
                                     </select>
                                 </div>
                             </BorderedContainer>
@@ -307,7 +307,7 @@ function UTCToHumanReadable(u) {
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
                                                 >
-                                                    Remarks
+                                                    Scope
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
@@ -354,7 +354,7 @@ function UTCToHumanReadable(u) {
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 bg-white ">
-                                        <tr v-for="transaction in userDepositTransactions" :key="transaction.id">
+                                        <tr v-for="transaction in userDepositTransactions.data" :key="transaction.id">
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
@@ -363,21 +363,18 @@ function UTCToHumanReadable(u) {
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
-                                                <!-- {{ transaction.type }} -->
-                                                network
+                                                {{ transaction.asset }}
                                             </td>
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
-                                                <!-- {{ transaction.fromAccountId }} -->
-                                                record
+                                                {{ transaction.globalTxId }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                 {{ transaction.state }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                <!-- {{ transaction.toAccountId }} -->
-                                                remark
+                                                {{ transaction.scope }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                 {{ UTCToHumanReadable(transaction.createdAt) }}
