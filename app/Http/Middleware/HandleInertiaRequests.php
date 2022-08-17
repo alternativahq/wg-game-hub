@@ -9,7 +9,6 @@ use App\Models\GameLobby;
 use Cache;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
-use Route;
 
 class HandleInertiaRequests extends Middleware
 {

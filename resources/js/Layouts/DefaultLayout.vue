@@ -170,6 +170,13 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                             </span>
                         </ButtonShape>
                     </Link>
+                    <Link as="button" method="POST" v-if="currentUser" :href="route('logout')">
+                        <ButtonShape type="red">
+                            <span class="flex flex-row space-x-2.5">
+                                <span class="font-bold uppercase">Sign out</span>
+                            </span>
+                        </ButtonShape>
+                    </Link>
                     <Link v-if="!currentUser" :href="route('login')">
                         <ButtonShape type="purple">
                             <span class="flex flex-row space-x-2.5">
