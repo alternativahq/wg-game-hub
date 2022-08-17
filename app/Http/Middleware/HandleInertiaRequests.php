@@ -70,7 +70,7 @@ class HandleInertiaRequests extends Middleware
                     ]);
                     return null;
                 }
-                return null;
+                return $user->cooldown_end_at;
             },
             'current_lobby_session' => Cache::remember(
                 key: 'user.' . $request->user()->id . '.current-lobby-session',

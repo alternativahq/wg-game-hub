@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeUnmount, onMounted, provide, reactive } from 'vue';
+import { onBeforeUnmount, onMounted, provide } from 'vue';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
 import SnackService from '@/Services/Snack';
 import Snack from '@/Shared/Snack';
