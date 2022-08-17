@@ -352,7 +352,7 @@ function UTCToHumanReadable(u) {
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
                                                 >
-                                                    Remarks
+                                                    Scope
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
@@ -399,7 +399,7 @@ function UTCToHumanReadable(u) {
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 bg-white ">
-                                        <tr v-for="transaction in userWithdrawTransactions" :key="transaction.id">
+                                        <tr v-for="transaction in userWithdrawTransactions.data" :key="transaction.id">
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
@@ -408,25 +408,21 @@ function UTCToHumanReadable(u) {
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
-                                                <!-- {{ transaction.type }} -->
-                                                network
+                                                {{ transaction.asset }}
                                             </td>
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
-                                                <!-- {{ transaction.fromAccountId }} -->
-                                                record
+                                                {{ transaction.globalTxId }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                <!-- {{ transaction.asset }} -->
-                                                withdrawal account
+                                                {{ transaction.fromAccountId }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                 {{ transaction.state }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                <!-- {{ transaction.toAccountId }} -->
-                                                remark
+                                                {{ transaction.scope }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                 {{ UTCToHumanReadable(transaction.createdAt) }}
@@ -440,7 +436,7 @@ function UTCToHumanReadable(u) {
                 </div>
             </div>
         </BorderedContainer>
-        <!-- <BorderedContainer class="mb-2 bg-wgh-gray-1.5">
+        <BorderedContainer class="mb-2 bg-wgh-gray-1.5">
             <nav
                 class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white bg-white px-4 py-3 sm:px-6"
                 aria-label="Pagination"
@@ -471,6 +467,6 @@ function UTCToHumanReadable(u) {
                     </Link>
                 </div>
             </nav>
-        </BorderedContainer> -->
+        </BorderedContainer>
     </div>
 </template>
