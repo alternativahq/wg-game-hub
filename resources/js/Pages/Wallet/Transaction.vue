@@ -273,7 +273,7 @@ function UTCToHumanReadable(u) {
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 bg-white ">
-                                        <tr v-for="transaction in usertransactions" :key="transaction.id">
+                                        <tr v-for="transaction in usertransactions.data" :key="transaction.id">
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
@@ -314,7 +314,7 @@ function UTCToHumanReadable(u) {
                 </div>
             </div>
         </BorderedContainer>
-        <!-- <BorderedContainer class="mb-2 bg-wgh-gray-1.5">
+        <BorderedContainer class="mb-2 bg-wgh-gray-1.5">
             <nav
                 class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white bg-white px-4 py-3 sm:px-6"
                 aria-label="Pagination"
@@ -345,6 +345,6 @@ function UTCToHumanReadable(u) {
                     </Link>
                 </div>
             </nav>
-        </BorderedContainer> -->
+        </BorderedContainer>
     </div>
 </template>
