@@ -11,13 +11,23 @@ use App\Http\Resources\AssetResource;
 use App\Http\Resources\TransactionResource;
 use App\Http\QueryPipelines\UserTransactionsPipeline\UserTransactionsPipeline;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TransactionController extends Controller
 {
     public function __invoke(User $user,Request $request) {
          
         $response = Http::get(env('TRANSACTION_API'),$request->all());
-        $transactions = $response->json();
+
+        $transactions =  new LengthAwarePaginator(
+            $response->object()->data, 
+            $response->object()->meta->total, 
+            $response->object()->meta->per_page, 
+            $response->object()->meta->current_page,
+            [
+                'path' => url()->current(),
+            ]
+        );
         
         // $transactions = UserTransactionPipeline::make(
         //     builder: Transcation::query()->whereBelongsTo($user),
@@ -27,8 +37,7 @@ class TransactionController extends Controller
         $assets = Asset::get(['id','name']);
         
         return Inertia::render('Wallet/Transaction', [
-            'usertransactions' => $transactions,
-            // 'usertransactions' => TransactionResource::collection($transaction),
+            'usertransactions' => TransactionResource::collection($transactions),
             'assets' => AssetResource::collection($assets),
             'filters' => $request->only('sort_by', 'sort_order', 'filter_by_game'),
         ]);
