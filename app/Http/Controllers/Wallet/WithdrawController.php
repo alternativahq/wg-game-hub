@@ -12,6 +12,7 @@ use App\Http\Resources\AssetResource;
 use App\Http\Resources\TransactionResource;
 use Illuminate\Support\Facades\Http;
 use App\Http\QueryPipelines\UserTransactionsPipeline\UserTransactionsPipeline;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class WithdrawController extends Controller
 {
@@ -19,7 +20,16 @@ class WithdrawController extends Controller
         
         //Todo need to get all transactions and fillter them and get them by type to withdraw
         $response = Http::get(env('TRANSACTION_API'),$request->all());
-        $withdrawTransactions = $response->json();
+
+        $withdrawTransactions =  new LengthAwarePaginator(
+            $response->object()->data, 
+            $response->object()->meta->total, 
+            $response->object()->meta->per_page, 
+            $response->object()->meta->current_page,
+            [
+                'path' => url()->current(),
+            ]
+        );
         
         //Todo need to set up the pipeline
 
@@ -31,8 +41,7 @@ class WithdrawController extends Controller
         $assets = Asset::get(['id','name']);
         
         return Inertia::render('Wallet/Withdraw', [
-            'userWithdrawTransactions' => $withdrawTransactions,
-            // 'usertransactions' => TransactionResource::collection($withdrawTransactions->paginate()->withQueryString()),
+            'userWithdrawTransactions' => TransactionResource::collection($withdrawTransactions),
             'assets' => AssetResource::collection($assets),
             'filters' => $request->only('sort_by', 'sort_order', 'filter_by_game'),
         ]);
