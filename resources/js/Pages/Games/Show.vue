@@ -17,6 +17,7 @@ import { onBeforeMount, onMounted } from 'vue';
 import GameLobbyCollection from '@/Models/GameLobbyCollection';
 import Pagination from '@/Models/Pagination';
 
+
 let currentUser = inject('currentUser');
 
 let props = defineProps({
@@ -24,6 +25,7 @@ let props = defineProps({
     gameLobbies: Object,
     flash: Object,
 });
+
 
 let pagination = reactive(new Pagination(props.gameLobbies));
 
@@ -184,6 +186,7 @@ function modalCancelGameButtonClicked() {
                         </h2>
                         <div class="text-bold shrink-0 font-grota text-base text-wgh-gray-6">
                             <span>{{ gameLobby.base_entrance_fee }} {{ gameLobby.asset?.symbol }}</span>
+
                         </div>
                     </div>
                     <button

@@ -34,6 +34,7 @@ class User extends Authenticatable
         return 'user.' . $this->id;
     }
 
+
     public function gameLobbies(): BelongsToMany
     {
         return $this->belongsToMany(GameLobby::class);
