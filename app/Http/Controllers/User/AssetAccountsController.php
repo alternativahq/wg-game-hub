@@ -22,9 +22,7 @@ class AssetAccountsController extends Controller
         $assets = Asset::get(['id', 'name', 'symbol', 'description']);
 
         return Inertia::render('User/AssetAccounts', [
-            'userAssetAccounts' => UserAssetAccountPageResource::collection(
-                $userAssetAccounts->paginate()->withQueryString(),
-            ),
+            'userAssetAccounts' => UserAssetAccountPageResource::collection($userAssetAccounts->paginate()->withQueryString()),
             'assets' => $assets,
             'filters' => $request->only('sort_by', 'sort_order', 'q'),
         ]);

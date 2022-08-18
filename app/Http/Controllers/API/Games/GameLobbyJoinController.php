@@ -19,9 +19,7 @@ class GameLobbyJoinController extends Controller
 
         $reaction = $addUserToGameLobbyAction->execute(user: Auth::user(), gameLobby: $gameLobby);
 
-        if ($reaction instanceof AddUserToGameLobbyReaction) {
-            return abort(Response::HTTP_FORBIDDEN, $reaction->label());
-        }
+        abort_if($reaction instanceof AddUserToGameLobbyReaction, 403, $reaction->label());
 
         return new GameLobbyResource(resource: $gameLobby);
     }

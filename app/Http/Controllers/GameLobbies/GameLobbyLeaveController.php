@@ -21,8 +21,6 @@ class GameLobbyLeaveController extends Controller
             gameLobby: $gameLobby,
         );
 
-        return redirect()->route('games.show', [
-            'game' => $gameLobby->game_id,
-        ]);
+        return redirect()->route('games.show', ['game' => $gameLobby->game_id]);
     }
 }

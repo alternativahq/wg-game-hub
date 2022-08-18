@@ -20,9 +20,7 @@ class GameLobbyLeaveController extends Controller
 
         $reaction = $removeUserFromGameLobbyAction->execute(request: $request, gameLobby: $gameLobby);
 
-        if ($reaction instanceof RemoveUserFromGameLobbyReaction) {
-            return abort(Response::HTTP_FORBIDDEN, $reaction->label());
-        }
+        abort_if($reaction instanceof RemoveUserFromGameLobbyReaction, 403, $reaction->label());
 
         return response()->noContent();
     }
