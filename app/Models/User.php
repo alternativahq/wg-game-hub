@@ -36,7 +36,9 @@ class User extends Authenticatable
 
     public function gameLobbies(): BelongsToMany
     {
-        return $this->belongsToMany(GameLobby::class);
+        return $this->belongsToMany(GameLobby::class)
+        ->using(GameLobbyUser::class)
+        ->withPivot(['entrance_fee', 'joined_at','left_at']);
     }
 
     public function fullName(): Attribute
@@ -56,8 +58,8 @@ class User extends Authenticatable
     public function assets(): BelongsToMany
     {
         return $this->belongsToMany(Asset::class, 'user_asset_account')
-            ->withPivot('balance', 'status')
-            ->using(UserAssetAccount::class);
+            ->using(UserAssetAccount::class)
+            ->withPivot('balance', 'status');
     }
 
     public function assetAccounts(): HasMany
@@ -81,11 +83,9 @@ class User extends Authenticatable
 
     public function achievements(): BelongsToMany
     {
-        return $this->belongsToMany(Achievement::class, 'user_achievements')->withPivot(
-            'game_id',
-            'game_lobby_id',
-            'additional_info',
-        );
+        return $this->belongsToMany(Achievement::class, 'user_achievements')
+        ->using(UserAchievement::class)
+        ->withPivot('game_id', 'game_lobby_id', 'additional_info');
     }
 
     public function isInCooldownPeriod(): Attribute

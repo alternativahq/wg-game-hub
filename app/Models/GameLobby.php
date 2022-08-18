@@ -82,7 +82,7 @@ class GameLobby extends Model
     {
         return $this->belongsToMany(User::class)
             ->using(GameLobbyUser::class)
-            ->withPivot(['entrance_fee', 'joined_at']);
+            ->withPivot(['entrance_fee', 'joined_at','left_at']);
     }
 
     public function chatRoom(): HasOne
