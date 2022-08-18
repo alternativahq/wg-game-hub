@@ -6,22 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class SendNotificationRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
             'type' => ['required'],
@@ -33,5 +18,10 @@ class SendNotificationRequest extends FormRequest
     public function dataToObject()
     {
         return json_decode($this->data, true);
+    }
+
+    public function authorize(): bool
+    {
+        return true;
     }
 }
