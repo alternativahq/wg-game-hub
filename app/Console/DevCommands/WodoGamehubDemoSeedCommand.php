@@ -67,7 +67,7 @@ class WodoGamehubDemoSeedCommand extends Command
             // Wodo land
             '8f96c6ec-7003-4c5b-b469-4ee0fd1cb42b' => [
                 'wodoland/wodoland_1.jpg',
-                'wodolond/wodoland_10.png',
+                'wodoland/wodoland_10.png',
                 'wodoland/wodoland_2.png',
                 'wodoland/wodoland_3.png',
                 'wodoland/wodoland_4.png',
@@ -76,6 +76,8 @@ class WodoGamehubDemoSeedCommand extends Command
                 'wodoland/wodoland_7.png',
                 'wodoland/wodoland_8.png',
                 'wodoland/wodoland_cover.png',
+                'wodoland/wodoland_cover_1.png',
+                'wodoland/wodoland_cover_2.png',
             ],
             // Wodo Shooter
             '1000a104-f10d-44ea-8a21-9a6dba27408b' => [
