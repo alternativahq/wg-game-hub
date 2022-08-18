@@ -15,6 +15,7 @@ import GameLobby from '@/Models/GameLobby';
 import CooldownBanner from '@/Shared/CooldownBanner';
 import { onBeforeMount, onMounted } from 'vue';
 import GameLobbyCollection from '@/Models/GameLobbyCollection';
+import Pagination from '@/Models/Pagination';
 
 let currentUser = inject('currentUser');
 
@@ -23,6 +24,8 @@ let props = defineProps({
     gameLobbies: Object,
     flash: Object,
 });
+
+let pagination = reactive(new Pagination(props.gameLobbies));
 
 onMounted(() => {
     if (currentUser) {
@@ -216,5 +219,37 @@ function modalCancelGameButtonClicked() {
                 </div>
             </borderedContainer>
         </div>
+            <BorderedContainer class="my-4 bg-wgh-gray-1.5" v-if="pagination.meta.from">
+            <nav
+                class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white bg-white px-4 py-3 sm:px-6"
+                aria-label="Pagination"
+            >
+                <div class="hidden sm:block">
+                    <p class="font-inter text-sm text-gray-700">
+                        Showing
+                        {{ ' ' }}
+                        <span class="font-medium">{{ pagination.meta.from }}</span>
+                        {{ ' ' }}
+                        to
+                        {{ ' ' }}
+                        <span class="font-medium">{{ pagination.meta.to }}</span>
+                        {{ ' ' }}
+                        of
+                        {{ ' ' }}
+                        <span class="font-medium">{{ pagination.meta.total }}</span>
+                        {{ ' ' }}
+                        results
+                    </p>
+                </div>
+                <div class="flex flex-1 justify-between space-x-4 sm:justify-end">
+                    <Link :href="pagination.links.prev">
+                        <ButtonShape v-if="pagination.links.prev" type="gray"> Previous</ButtonShape>
+                    </Link>
+                    <Link :href="pagination.links.next">
+                        <ButtonShape v-if="pagination.links.next" type="gray"> Next</ButtonShape>
+                    </Link>
+                </div>
+            </nav>
+        </BorderedContainer>
     </div>
 </template>
