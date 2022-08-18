@@ -66,7 +66,7 @@ class GameLobbyPipeline extends Pipeline
         ];
     }
 
-    public static function make(Builder $builder, Request $request)
+    public static function make(Builder $builder, Request $request): Builder
     {
         return app(static::class)
             ->setRequest(request: $request)

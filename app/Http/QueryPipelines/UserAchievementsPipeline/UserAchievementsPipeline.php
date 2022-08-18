@@ -19,9 +19,12 @@ class UserAchievementsPipeline extends Pipeline
         return $this;
     }
 
-    protected function pipes()
+    protected function pipes(): array
     {
-        return [new Sort(request: $this->request), new ByGameFilter(request: $this->request)];
+        return [
+            new Sort(request: $this->request),
+            new ByGameFilter(request: $this->request)
+        ];
     }
 
     public static function make(Builder $builder, Request $request): Builder

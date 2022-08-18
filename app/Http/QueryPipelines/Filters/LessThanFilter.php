@@ -9,10 +9,7 @@ class LessThanFilter extends Filter
 {
     public function handle(Builder $builder, Closure $next): mixed
     {
-        $builder->when($this->request->get($this->getParam()), function (
-            Builder $query,
-            $value,
-        ) {
+        $builder->when($this->request->get($this->getParam()), function (Builder $query, $value) {
             $query->where($this->column, '>', $value);
         });
         return $next($builder);
