@@ -24,6 +24,7 @@ class GameResource extends JsonResource
 
             'achievements' => AchievementResource::collection($this->whenLoaded('achievements')),
             'game_lobbies' => GameLobbyResource::collection($this->whenLoaded('gameLobbies')),
+            'game_lobbies_count' => $this->whenCounted('gameLobbies'),
         ];
     }
 }

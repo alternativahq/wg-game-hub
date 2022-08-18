@@ -18,6 +18,45 @@ class DemoGamesSeeder extends Seeder
     {
         return collect([
             [
+                'id' => '8f96c6ec-7003-4c5b-b469-4ee0fd1cb42b',
+                'name' => 'Wodoland',
+                'description' =>
+                    'Wodoland is the first game design and implementation built on top of the wodo gaming platform using the wodo development kit(SDK) ',
+                'status' => GameStatus::Online,
+                'image' => 'wodoland/wodoland_cover.png',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => '1000a104-f10d-44ea-8a21-9a6dba27408b',
+                'name' => 'Wodo Shooter',
+                'description' => 'Wodo Shooter, WFPS another game from Wodo Team',
+                'status' => GameStatus::Online,
+                'image' => 'wfps/wodo_shooter_cover.png',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => 'fdaa08b1-07c4-4d29-aeaf-457285bd1ef5',
+                'name' => 'Tank',
+                'description' =>
+                    'Tank is a Massively-multiplayer top-down strategy browser game. In Tank, the player manipulates a tanks using the mouse and keyboard buttons.',
+                'status' => GameStatus::Online,
+                'image' => 'tank/homepage_bg.png',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'id' => 'a9dad87e-0fd7-449f-a011-c09d45fc8ada',
+                'name' => 'Tankx',
+                'description' =>
+                    'Tankx is a Massively-multiplayer top-down strategy browser game. In Tank, the player manipulates a tanks using the mouse and keyboard buttons.',
+                'status' => GameStatus::Online,
+                'image' => 'tankx/tankx_logo.png',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'id' => '753501ba-a9fa-437b-8b44-8d8ca42f18ab',
                 'name' => 'Agar.io',
                 'description' =>
@@ -40,8 +79,7 @@ class DemoGamesSeeder extends Seeder
             [
                 'id' => '1db03dcf-f131-4a8d-bbe4-c8c8d2d5198b',
                 'name' => 'Hole.io',
-                'description' =>
-                    'Absorb everyone into your black hole in the new game ',
+                'description' => 'Absorb everyone into your black hole in the new game ',
                 'status' => GameStatus::Online,
                 'image' => null,
                 'created_at' => now(),
