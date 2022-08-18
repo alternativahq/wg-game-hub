@@ -21,9 +21,7 @@ Route::get('/', DashboardController::class)->name(name: 'landing');
 Route::resource('games', GamesController::class)->only('show');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', ProfileController::class)
-        ->middleware('auth')
-        ->name(name: 'profile');
+    Route::get('/profile', ProfileController::class)->name(name: 'profile')->middleware('auth');
 
     Route::resource('games.game-lobbies', GameLobbiesController::class)
         ->parameters(['game-lobbies' => 'gameLobby'])
@@ -32,8 +30,7 @@ Route::middleware('auth')->group(function () {
         ->scoped();
 
     // GameLobbies
-    Route::post('game-lobbies/{gameLobby}/join', GameLobbyJoinController::class)
-        ->name('games.game-lobbies.join')
+    Route::post('game-lobbies/{gameLobby}/join', GameLobbyJoinController::class)->name('games.game-lobbies.join')
         ->middleware('EnsureUserIsNotInCooldownPeriod');
 
     Route::delete('game-lobbies/{gameLobby}/leave', GameLobbyLeaveController::class)->name('games.game-lobbies.leave');
@@ -44,13 +41,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/w/{user:username}', UserDashboardController::class)->name('user.profile');
     Route::get('/w/{user:username}/achievements', UserAchievementsController::class)->name('user.achievements');
     Route::get('/w/{user:username}/asset-accounts', UserAssetAccountsController::class)->name('user.assetAccounts');
-    Route::get('/w/{user:username}/games-played-history', UserGamePlayedHistoryController::class)->name(
-        'user.games-played-history',
-    );
-    // Notifications
-    Route::put('notifications/{notification}/read', MarkNotificationAsReadController::class)->name(
-        'notifications.read',
-    );
+    Route::get('/w/{user:username}/games-played-history', UserGamePlayedHistoryController::class)->name('user.games-played-history');
 
+    // Notifications
+    Route::put('notifications/{notification}/read', MarkNotificationAsReadController::class)->name('notifications.read');
     Route::delete('notifications', DeleteNotificationsController::class)->name('notifications.delete');
 });
