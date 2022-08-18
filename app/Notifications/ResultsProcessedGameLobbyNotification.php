@@ -16,7 +16,6 @@ class ResultsProcessedGameLobbyNotification extends Notification implements Shou
 
     public function __construct(public GameLobby $gameLobby)
     {
-        //
     }
 
     public function via($notifiable)
@@ -27,10 +26,7 @@ class ResultsProcessedGameLobbyNotification extends Notification implements Shou
     public function toArray($notifiable)
     {
         return [
-            'message' =>
-                'Results for ' .
-                $this->gameLobby->name .
-                ' has been processed, You can see the results in your dashboard',
+            'message' => 'Results for ' .$this->gameLobby->name . ' has been processed, You can see the results in your dashboard',
             'game_lobby' => new GameLobbyResource(new GameLobby($this->gameLobby->only('id', 'name'))),
         ];
     }
@@ -39,10 +35,7 @@ class ResultsProcessedGameLobbyNotification extends Notification implements Shou
     {
         return new BroadcastMessage([
             'data' => [
-                'message' =>
-                    'Results fo ' .
-                    $this->gameLobby->name .
-                    ' has been processed, You can see the results in your dashboard',
+                'message' => 'Results for ' . $this->gameLobby->name . ' has been processed, You can see the results in your dashboard',
             ],
         ]);
     }

@@ -35,10 +35,7 @@ class ProcessingGameLobbyResultsNotification extends Notification implements Sho
     {
         return new BroadcastMessage([
             'data' => [
-                'message' =>
-                    'We are processing, ' .
-                    $this->gameLobby->name .
-                    ' results. We will notify you once results are ready',
+                'message' => 'We are processing, ' .  $this->gameLobby->name . ' results. We will notify you once results are ready',
             ],
         ]);
     }
