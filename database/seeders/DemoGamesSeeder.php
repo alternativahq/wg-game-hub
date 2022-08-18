@@ -76,15 +76,6 @@ class DemoGamesSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'id' => '1db03dcf-f131-4a8d-bbe4-c8c8d2d5198b',
-                'name' => 'Hole.io',
-                'description' => 'Absorb everyone into your black hole in the new game ',
-                'status' => GameStatus::Online,
-                'image' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
         ]);
     }
 }

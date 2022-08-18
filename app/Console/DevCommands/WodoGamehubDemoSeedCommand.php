@@ -93,17 +93,17 @@ class WodoGamehubDemoSeedCommand extends Command
             ],
             // slither io
             '2934ceee-e195-4cd0-ae6a-d2098c810917' => [
-                'shilterio/shilterio_1.jpg',
-                'shilterio/shilterio_2.jpg',
-                'shilterio/shilterio_3.jpg',
-                'shilterio/shilterio_4.jpg',
-                'shilterio/shilterio_5.jpg',
-                'shilterio/shilterio_6.jpg',
+                'shilterio/slitherio_1.jpg',
+                'shilterio/slitherio_2.jpg',
+                'shilterio/slitherio_3.jpg',
+                'shilterio/slitherio_4.jpg',
+                'shilterio/slitherio_5.jpg',
+                'shilterio/slitherio_6.jpg',
                 'shilterio/shilterio_cover.png',
             ],
             // agario
             '753501ba-a9fa-437b-8b44-8d8ca42f18ab' => [
-                'agario/agario_1.jpg',
+                'agario/agario_1.png',
                 'agario/agario_2.jpg',
                 'agario/agario_3.jpg',
                 'agario/agario_4.jpg',
