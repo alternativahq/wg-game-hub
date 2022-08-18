@@ -28,7 +28,7 @@ class PrizeUpdatedEvent implements ShouldBroadcast
         return 'prize-updated';
     }
 
-    public function broadcastWith()
+    public function broadcastWith(): array
     {
         return [
             'prize' => $this->newPrize,
