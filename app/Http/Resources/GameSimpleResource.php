@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 /** @mixin \App\Models\Game */
 class GameSimpleResource extends JsonResource
 {
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'id' => $this->id,

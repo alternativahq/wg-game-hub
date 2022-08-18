@@ -13,7 +13,6 @@ class ChatRoomResource extends JsonResource
         return [
             'id' => $this->id,
             'type' => $this->type,
-
             'users' => UserResource::collection($this->whenLoaded('users')),
         ];
     }

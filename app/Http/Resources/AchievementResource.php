@@ -12,7 +12,7 @@ class AchievementResource extends JsonResource
      * @param  Request  $request
      * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
         return [
             'id' => $this->id,
@@ -22,7 +22,6 @@ class AchievementResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'user_count' => $this->user_count,
-
             'users' => UserResource::collection($this->whenLoaded('user')),
         ];
     }
