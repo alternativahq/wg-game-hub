@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Storage;
 
 class Game extends Model
 {
@@ -33,11 +34,6 @@ class Game extends Model
         return $this->hasMany(GameLobby::class);
     }
 
-    public function gameMatchScores(): HasMany
-    {
-        return $this->hasMany(UserScore::class);
-    }
-
     public function achievements(): HasMany
     {
         return $this->hasMany(Achievement::class, 'game_id');
@@ -47,6 +43,9 @@ class Game extends Model
     {
         return new Attribute(
             get: function () {
+                if ($this->image) {
+                    return Storage::disk('s3')->url($this->image);
+                }
                 return "https://picsum.photos/seed/{$this->id}/1280/720";
             },
         );

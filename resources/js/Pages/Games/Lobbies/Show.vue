@@ -15,6 +15,7 @@ let props = defineProps({
     config: Object,
     prize: Number,
 });
+
 let chatBox = ref();
 let latestUpdateMessage = ref('Updates are on the way...');
 
@@ -99,6 +100,7 @@ function channelUserLeft(payload) {
 function channelProcessingResults(payload) {}
 
 function channelResultsProccessed(payload) {
+    gameLobby.scores = payload.scores;
     gameLobby.resultsAreProccessed();
 }
 
@@ -115,7 +117,11 @@ export default {
 };
 </script>
 <template>
-    <LeaderBoardModal :is-open="gameLobby.areResultsProcessed" :game-lobby="gameLobby" />
+    <LeaderBoardModal
+        v-if="gameLobby.areResultsProcessed"
+        :is-open="gameLobby.areResultsProcessed"
+        :game-lobby="gameLobby"
+    />
     <div class="col-span-12 mt-4 flex inline-flex lg:col-span-5">
         <Link method="delete" as="button" type="button" :href="`/game-lobbies/${gameLobby.id}/leave`" replace>
             <div

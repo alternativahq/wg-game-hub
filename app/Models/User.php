@@ -18,9 +18,7 @@ class User extends Authenticatable
     use Notifiable;
     use HasUUID;
 
-
     protected $fillable = ['name', 'last_name', 'email', 'password', 'username', 'cooldown_end_at'];
-
 
     protected $hidden = ['password', 'remember_token'];
 
@@ -30,6 +28,12 @@ class User extends Authenticatable
     ];
 
     protected $appends = ['full_name', 'image_url', 'is_in_cooldown_period'];
+
+    public function receivesBroadcastNotificationsOn(): string
+    {
+        return 'user.' . $this->id;
+    }
+
 
     public function gameLobbies(): BelongsToMany
     {
@@ -73,7 +77,7 @@ class User extends Authenticatable
 
     public function gamesScores(): HasMany
     {
-        return $this->hasMany(UserScore::class);
+        return $this->hasMany(GameLobbyUserScore::class);
     }
 
     public function achievements(): BelongsToMany

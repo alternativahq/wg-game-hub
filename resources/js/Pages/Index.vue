@@ -3,68 +3,42 @@ import GameCard from '@/Shared/GameCard';
 import DashboardBalanceCard from '@/Shared/DashboardBalanceCard/DashboardBalanceCard';
 import DashboardBalanceCardCreateAccount from '@/Shared/DashboardBalanceCard/DashboardBalanceCardCreateAccount';
 import ButtonShape from '@/Shared/ButtonShape';
-import TentModal from '@/Shared/Modals/TentModal';
 import ActiveSessionBanner from '@/Shared/ActiveSessionBanner';
 import KiteArrow from '@/Shared/SVG/KiteArrow';
 import ChatMessage from '@/Shared/Chat/ChatMessage';
-import dayjs from 'dayjs';
-let relativeTime = require('dayjs/plugin/relativeTime');
-let duration = require('dayjs/plugin/duration');
 import { Link } from '@inertiajs/inertia-vue3';
-
 import BorderedContainer from '@/Shared/BorderedContainer';
-import { ref, reactive, onMounted, watch } from 'vue';
-import { isEmpty } from 'lodash';
+import { ref, reactive, onMounted, watch, inject } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
 import ChatRoom from '@/Models/ChatRoom';
 import CooldownBanner from '@/Shared/CooldownBanner';
 
-let chatMessages = reactive([]);
-let chatMessageInput = ref('');
-
-let chatBox = ref();
 let currentUser = useCurrentUser();
+let chatBox = ref();
+let snack = inject('snack');
 
 let props = defineProps({
     mainChatRoom: Object,
+    availableGames: Object,
     config: Object,
-    games: Object,
     balance: Array,
 });
 
-let chatRoom = reactive(new ChatRoom(props.mainChatRoom.data));
-
-function sendChatMessage() {
-    if (!currentUser) {
-        return Inertia.get('/login');
-    }
-
-    if (chatMessageInput.value.length <= 0) {
-        return;
-    }
-    Inertia.post(
-        `/chat-rooms/${chatRoom.id}/message`,
-        {
-            message: chatMessageInput.value,
-        },
-        {
-            preserveScroll: true,
-        }
-    );
-    chatMessageInput.value = '';
-}
-
 onMounted(() => {
-    dayjs.extend(relativeTime);
-    dayjs.extend(duration);
     window.echo.channel('chat-rooms.main').listen('.message', (payload) => {
-        chatMessages.push(payload);
+        state.chatMessages.push(payload);
     });
 });
 
+let state = reactive({
+    chatMessages: [],
+    chatMessageBody: '',
+    chatRoom: new ChatRoom(props.mainChatRoom.data),
+});
+
 watch(
-    chatMessages,
+    state.chatMessages,
     () => {
         chatBox.value.scrollTop = chatBox.value.scrollHeight;
     },
@@ -98,7 +72,11 @@ watch(
             <h1 class="mb-6 font-grota text-2xl font-extrabold text-wgh-gray-6">Games</h1>
 
             <div>
-                <GameCard v-for="game in props.games.data" :key="game.id" :game="game" />
+                <GameCard
+                    v-for="availableGame in props.availableGames.data"
+                    :key="availableGame.id"
+                    :game="availableGame"
+                />
             </div>
         </div>
         <div class="flex flex-col space-y-6 lg:w-1/4">
@@ -107,7 +85,7 @@ watch(
             <BorderedContainer class="h-[30rem] grow bg-wgh-purple-3">
                 <div class="flex h-full h-full w-full w-full grow flex-col justify-between rounded-lg bg-white p-4">
                     <img
-                        v-if="chatMessages.length === 0"
+                        v-if="state.chatMessages.length === 0"
                         class="mx-auto w-40 grow"
                         :src="config.game_lobby_loading_gif"
                         alt="Loading.."
@@ -118,7 +96,7 @@ watch(
                         ref="chatBox"
                     >
                         <ChatMessage
-                            v-for="chatMessage in chatMessages"
+                            v-for="chatMessage in state.chatMessages"
                             :from-me="chatMessage.sender.id === currentUser.id"
                             :user-image-url="chatMessage.sender.image_url"
                             :time="chatMessage.created_at_human_readable"
@@ -134,12 +112,15 @@ watch(
                             type="text"
                             class="shrink grow p-2 outline-none ring-0"
                             placeholder="Type your message here"
-                            v-model="chatMessageInput"
-                            @keyup.enter="sendChatMessage"
+                            v-model="state.chatMessageBody"
+                            @keyup.enter="
+                                state.chatRoom.sendChatMessage(state.chatMessageBody);
+                                state.chatMessageBody = '';
+                            "
                         />
                         <button
-                            :disabled="chatMessageInput.length <= 0"
-                            @click.prevent="sendChatMessage"
+                            :disabled="state.chatMessageBody.length <= 0"
+                            @click.prevent="state.chatRoom.sendChatMessage(state.chatMessageBody)"
                             class="rounded-md bg-wgh-purple-2 py-2 px-4 disabled:cursor-no-drop"
                         >
                             <KiteArrow class="h-4 w-4" />
