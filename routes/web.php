@@ -9,9 +9,12 @@ use App\Http\Controllers\{
     GameLobbies\GameLobbiesController,
     ProfileController,
     User\AchievementsController as UserAchievementsController,
+    User\AssetAccountsController as UserAssetAccountsController,
     User\DashboardController as UserDashboardController,
     User\GamePlayedHistoryController as UserGamePlayedHistoryController,
     Wallet\TransactionController as UserTransactionController,
+    Notifications\DeleteNotificationsController,
+    Notifications\MarkNotificationAsReadController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -30,7 +33,9 @@ Route::middleware('auth')->group(function () {
         ->scoped();
 
     // GameLobbies
-    Route::post('game-lobbies/{gameLobby}/join', GameLobbyJoinController::class)->name('games.game-lobbies.join');
+    Route::post('game-lobbies/{gameLobby}/join', GameLobbyJoinController::class)
+        ->name('games.game-lobbies.join')
+        ->middleware('EnsureUserIsNotInCooldownPeriod');
 
     Route::delete('game-lobbies/{gameLobby}/leave', GameLobbyLeaveController::class)->name('games.game-lobbies.leave');
 
@@ -39,9 +44,16 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/w/{user:username}', UserDashboardController::class)->name('user.profile');
     Route::get('/w/{user:username}/achievements', UserAchievementsController::class)->name('user.achievements');
+    Route::get('/w/{user:username}/asset-accounts', UserAssetAccountsController::class)->name('user.assetAccounts');
     Route::get('/w/{user:username}/games-played-history', UserGamePlayedHistoryController::class)->name(
         'user.games-played-history',
     );
     // User Transactions
     Route::get('/wallet/transactions', UserTransactionController::class)->name('user.transactions');
+    // Notifications
+    Route::put('notifications/{notification}/read', MarkNotificationAsReadController::class)->name(
+        'notifications.read',
+    );
+
+    Route::delete('notifications', DeleteNotificationsController::class)->name('notifications.delete');
 });

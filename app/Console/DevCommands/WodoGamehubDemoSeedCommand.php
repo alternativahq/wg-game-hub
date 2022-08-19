@@ -15,7 +15,7 @@ use App\Models\ChatRoom;
 use App\Models\Game;
 use App\Models\GameLobby;
 use App\Models\User;
-use App\Models\UserScore;
+use App\Models\GameLobbyUserScore;
 use App\Models\WodoAssetAccount;
 use Database\Factories\AchievementFactory;
 use Database\Factories\GameFactory;
@@ -29,6 +29,7 @@ use Database\Seeders\DemoWodoAssetAccountsSeeder;
 use Database\Seeders\GeneralChatRoomSeeder;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -38,14 +39,96 @@ class WodoGamehubDemoSeedCommand extends Command
 
     protected $description = 'Clean and seed the database with demo data';
 
+    public function getRandomImageForGame(Game $game)
+    {
+        $images = collect([
+            // Tank
+            'fdaa08b1-07c4-4d29-aeaf-457285bd1ef5' => [
+                'tank/homepage_bg.png',
+                'tank/Tanks-screenshot.png',
+                'tank/Tankgenesiss-sshot2.png',
+                'tank/Tankgenesis-screenshot1.png',
+                'tank/Tank-genesis-website-bg.png',
+                'tank/Tank-Genesis-Cover-art.png',
+                'tank/sample.png',
+                'tank/sample_bg.png',
+                'tank/LogoTank.svg',
+                'tank/image_044_0000.png',
+                'tank/image_031_0000.png',
+                'tank/homepage_bg.png',
+            ],
+            // Tankx
+            'a9dad87e-0fd7-449f-a011-c09d45fc8ada' => [
+                'tankx/tankx_1.png',
+                'tankx/tankx_2.png',
+                'tankx/tankx_cover.png',
+                'tankx/tankx_logo.png',
+            ],
+            // Wodo land
+            '8f96c6ec-7003-4c5b-b469-4ee0fd1cb42b' => [
+                'wodoland/wodoland_1.jpg',
+                'wodoland/wodoland_10.png',
+                'wodoland/wodoland_2.png',
+                'wodoland/wodoland_3.png',
+                'wodoland/wodoland_4.png',
+                'wodoland/wodoland_5.png',
+                'wodoland/wodoland_6.png',
+                'wodoland/wodoland_7.png',
+                'wodoland/wodoland_8.png',
+                'wodoland/wodoland_cover.png',
+                'wodoland/wodoland_cover_1.png',
+                'wodoland/wodoland_cover_2.png',
+            ],
+            // Wodo Shooter
+            '1000a104-f10d-44ea-8a21-9a6dba27408b' => [
+                'wfps/wffps_7.png',
+                'wfps/wfps_1.jpg',
+                'wfps/wfps_2.jpg',
+                'wfps/wfps_3.jpg',
+                'wfps/wfps_4.png',
+                'wfps/wfps_5.png',
+                'wfps/wfps_6.png',
+                'wfps/wfps_cover_2.png',
+                'wfps/wodo_shooter_cover.png',
+            ],
+            // slither io
+            '2934ceee-e195-4cd0-ae6a-d2098c810917' => [
+                'shilterio/slitherio_1.jpg',
+                'shilterio/slitherio_2.jpg',
+                'shilterio/slitherio_3.jpg',
+                'shilterio/slitherio_4.jpg',
+                'shilterio/slitherio_5.jpg',
+                'shilterio/slitherio_6.jpg',
+                'shilterio/shilterio_cover.png',
+            ],
+            // agario
+            '753501ba-a9fa-437b-8b44-8d8ca42f18ab' => [
+                'agario/agario_1.png',
+                'agario/agario_2.jpg',
+                'agario/agario_3.jpg',
+                'agario/agario_4.jpg',
+                'agario/agario_5.jpg',
+                'agario/agario_6.jpg',
+                'agario/agario_cover.jpg',
+            ],
+        ]);
+
+        if ($imagesArray = $images->get($game->id)) {
+            return Arr::random($imagesArray);
+        }
+
+        return null;
+    }
+
     public function handle()
     {
         $this->call('migrate:fresh');
+        $this->info('Seeding...');
         $this->call(GeneralChatRoomSeeder::class);
         $this->call(DemoUsersSeeder::class);
         $this->call(DemoAssetsSeeder::class);
         $this->call(DemoGamesSeeder::class);
-        // Game Achivements
+        // Game achievements
         $this->call(DemoWodoAssetAccountsSeeder::class);
         $this->call(DemoUserAssetAccountsSeeder::class);
         $this->call(DemoGameAchievementsSeeder::class);
@@ -57,11 +140,12 @@ class WodoGamehubDemoSeedCommand extends Command
                 ->count(count: 30)
                 ->for($game)
                 ->state(
-                    new Sequence(function ($sequance) {
+                    new Sequence(function (Sequence $sequance) use ($game) {
                         return [
                             'asset_id' => Asset::all()->random(),
                             'status' => GameLobbyStatus::Scheduled,
                             'scheduled_at' => now()->addHours(rand(5, 200)),
+                            'image' => $this->getRandomImageForGame($game),
                         ];
                     }),
                 )
@@ -77,7 +161,7 @@ class WodoGamehubDemoSeedCommand extends Command
                 )
                 ->create();
 
-            // Decrese the fee for each user joined this lobby
+            // decrease the fee for each user joined this lobby
             $lobbies = GameLobby::factory()
                 ->scheduledInPast()
                 ->count(14)
@@ -87,6 +171,12 @@ class WodoGamehubDemoSeedCommand extends Command
                         return [
                             'asset_id' => Asset::all()->random(),
                             'status' => GameLobbyStatus::Archived,
+                            'image' => Arr::random([
+                                'tankx/tankx_1.png',
+                                'tankx/tankx_2.png',
+                                'tankx/tankx_cover.png',
+                                'tankx/tankx_logo.png',
+                            ]),
                         ];
                     }),
                 )
@@ -115,7 +205,7 @@ class WodoGamehubDemoSeedCommand extends Command
                 $users = $lobby->users;
 
                 $scores = $users->map(function (User $user, $index) use ($lobby) {
-                    return new UserScore([
+                    return new GameLobbyUserScore([
                         'game_id' => $lobby->game_id,
                         'game_lobby_id' => $lobby->id,
                         'user_id' => $user->id,
@@ -154,5 +244,6 @@ class WodoGamehubDemoSeedCommand extends Command
                 }
             }
         }
+        $this->info('Database has been seeded');
     }
 }

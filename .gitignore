@@ -19,3 +19,5 @@ public/fonts/*
 /public/mix-manifest.json
 mysqldata/*
 redisdata/*
+http-client/*
+public/vendor/

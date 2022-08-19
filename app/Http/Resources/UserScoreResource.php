@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin \App\Models\UserScore */
+/** @mixin \App\Models\GameLobbyUserScore */
 class UserScoreResource extends JsonResource
 {
     /**
@@ -24,9 +24,7 @@ class UserScoreResource extends JsonResource
             'user_id' => $this->user_id,
 
             'game' => new GameResource($this->whenLoaded('game')),
-            'game_lobby' => new GameLobbyResource(
-                $this->whenLoaded('gameLobby'),
-            ),
+            'game_lobby' => new GameLobbyResource($this->whenLoaded('gameLobby')),
             'user' => new UserResource($this->whenLoaded('user')),
         ];
     }

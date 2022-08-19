@@ -12,6 +12,7 @@ class GamesController extends Controller
     {
         $games = Game::online()
             ->withCount('gameLobbies')
+            ->select(['id', 'name', 'image'])
             ->paginate();
 
         return GameResource::collection($games);

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class GameLobby extends Model
 {
@@ -36,6 +37,9 @@ class GameLobby extends Model
     {
         return new Attribute(
             get: function () {
+                if ($this->image) {
+                    return Storage::disk('s3')->url($this->image);
+                }
                 return "https://picsum.photos/seed/{$this->id}/1280/720";
             },
         );
@@ -95,20 +99,19 @@ class GameLobby extends Model
         return $this->belongsTo(Asset::class);
     }
 
-    public function alreadyJoined(User $user): bool
-    {
-        return $this->users()
-            ->where('id', $user)
-            ->exists();
-    }
-
     public function scores(): HasMany
     {
-        return $this->hasMany(UserScore::class);
+        return $this->hasMany(GameLobbyUserScore::class);
     }
 
     public function usersAchievements(): HasMany
     {
         return $this->hasMany(UserAchievement::class);
+    }
+
+    public function calculateThePrize(): float
+    {
+        $total = GameLobbyUser::where('game_lobby_id', $this->id)->sum('entrance_fee');
+        return (float) ($total - ($total * 20.0) / 100.0);
     }
 }

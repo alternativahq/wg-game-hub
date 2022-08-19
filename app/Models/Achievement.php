@@ -17,10 +17,9 @@ class Achievement extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(
-            User::class,
-            'user_achievements',
-        )->withPivot('game_id', 'game_lobby_id', 'additional_info');
+        return $this->belongsToMany(User::class, 'user_achievements')
+            ->using(UserAchievement::class)
+            ->withPivot('game_id', 'game_lobby_id', 'additional_info');
     }
 
     public function game(): BelongsTo

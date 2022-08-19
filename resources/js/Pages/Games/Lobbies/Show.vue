@@ -15,6 +15,7 @@ let props = defineProps({
     config: Object,
     prize: Number,
 });
+
 let chatBox = ref();
 let latestUpdateMessage = ref('Updates are on the way...');
 
@@ -99,6 +100,7 @@ function channelUserLeft(payload) {
 function channelProcessingResults(payload) {}
 
 function channelResultsProccessed(payload) {
+    gameLobby.scores = payload.scores;
     gameLobby.resultsAreProccessed();
 }
 
@@ -115,7 +117,11 @@ export default {
 };
 </script>
 <template>
-    <LeaderBoardModal :is-open="gameLobby.areResultsProcessed" :game-lobby="gameLobby" />
+    <LeaderBoardModal
+        v-if="gameLobby.areResultsProcessed"
+        :is-open="gameLobby.areResultsProcessed"
+        :game-lobby="gameLobby"
+    />
     <div class="col-span-12 mt-4 flex inline-flex lg:col-span-5">
         <Link method="delete" as="button" type="button" :href="`/game-lobbies/${gameLobby.id}/leave`" replace>
             <div
@@ -133,7 +139,10 @@ export default {
         <div class="col-span-full h-full space-y-10 lg:col-span-9">
             <!--          Content -->
             <div class="mx-auto max-w-4xl rounded-lg bg-white p-2 shadow-2xl">
-                <img src="/images/agar-io.png" alt="Hello" />
+                <img
+                    src="http://static.wodo.io.s3-website.eu-central-1.amazonaws.com/game_intro_in_lobby.png"
+                    alt="Hello"
+                />
             </div>
             <div class="grid grid-cols-12 place-items-start gap-y-8 lg:gap-x-8">
                 <BorderedContainer class="col-span-full w-full bg-wgh-gray-1.5 lg:col-span-3">
