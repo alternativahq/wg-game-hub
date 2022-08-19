@@ -29,6 +29,12 @@ class User extends Authenticatable
 
     protected $appends = ['full_name', 'image_url', 'is_in_cooldown_period'];
 
+    public function receivesBroadcastNotificationsOn(): string
+    {
+        return 'user.' . $this->id;
+    }
+
+
     public function gameLobbies(): BelongsToMany
     {
         return $this->belongsToMany(GameLobby::class);

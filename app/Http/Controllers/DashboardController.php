@@ -7,6 +7,7 @@ use App\Http\Resources\ChatRoomResource;
 use App\Http\Resources\GameResource;
 use App\Models\ChatRoom;
 use App\Models\Game;
+use Illuminate\Database\Eloquent\Builder;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -15,7 +16,11 @@ class DashboardController extends Controller
     {
         $games = Game::where('status', GameStatus::Online)
             ->select(['id', 'name', 'description', 'image'])
-            ->withCount('gameLobbies')
+            ->withCount([
+                'gameLobbies' => function (Builder $builder) {
+                    $builder->whereAvailableForDashboard();
+                },
+            ])
             ->paginate(pageName: 'games');
 
         return Inertia::render('Index', [

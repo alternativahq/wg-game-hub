@@ -19,7 +19,7 @@ class GameLobbyFactory extends Factory
         return [
             'name' => $this->faker->sentence(),
             'description' => $this->faker->text(),
-            'image' => $this->faker->imageUrl(337, 110),
+            'image' => null,
             'theme_color' => $this->faker->safeHexColor(),
             'type' => $this->faker->randomElement(GameLobbyType::cases()),
             'status' => $this->faker->randomElement(GameLobbyStatus::cases()),

@@ -18,7 +18,7 @@ dayjs.extend(relativeTime);
 dayjs.extend(duration);
 
 let props = defineProps({
-    usertransactions: Object,
+    userTransactions: Object,
     assets: Object,
     filters: Object,
     current_url: String,
@@ -26,7 +26,7 @@ let props = defineProps({
 
 let filters = reactive(props.filters);
 let currentUrl = window.location.toString();
-let pagination = reactive(new Pagination(props.usertransactions));
+let pagination = reactive(new Pagination(props.userTransactions));
 
 function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
@@ -34,11 +34,12 @@ function UTCToHumanReadable(u) {
 
 // function byTransactionChanged() {
 //     Inertia.get(currentUrl, { filter_by_game: filters.filter_by_asset });
+//     Inertia.get(currentUrl, { filter_by_asset: filters.filter_by_asset });
 // }
 </script>
 <template>
     <div>
-        <div class="flex justify-end items-center mb-5">
+        <div class="mb-5 flex items-center justify-end">
             <Link class="shrink-0" :href="route('user.withdraw')">
                 <ButtonShape type="red"> Withdraw</ButtonShape>
             </Link>
@@ -58,7 +59,7 @@ function UTCToHumanReadable(u) {
                             <option :value="undefined">All</option>
                             <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
                                 {{ asset.name }}
-                            </option> 
+                            </option>
                         </select>
                     </div>
                 </BorderedContainer>
@@ -126,7 +127,7 @@ function UTCToHumanReadable(u) {
                                                         }"
                                                     >
                                                         <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
-                                                    </span> 
+                                                    </span>
                                                 </Link>
                                             </th>
                                             <th
@@ -146,7 +147,7 @@ function UTCToHumanReadable(u) {
                                                         sort_by: 'transaction_asset',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
-                                                > 
+                                                >
                                                     Asset
                                                     <span
                                                         :class="{
@@ -277,13 +278,12 @@ function UTCToHumanReadable(u) {
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y divide-gray-200 bg-white ">
-                                        <tr v-for="transaction in usertransactions" :key="transaction.id">
+                                    <tbody class="divide-y divide-gray-200 bg-white">
+                                        <tr v-for="transaction in userTransactions.data" :key="transaction.id">
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
                                                 {{ UTCToHumanReadable(transaction.createdAt) }}
-
                                             </td>
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
@@ -319,7 +319,7 @@ function UTCToHumanReadable(u) {
                 </div>
             </div>
         </BorderedContainer>
-        <!-- <BorderedContainer class="mb-2 bg-wgh-gray-1.5">
+        <BorderedContainer class="mb-2 bg-wgh-gray-1.5">
             <nav
                 class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white bg-white px-4 py-3 sm:px-6"
                 aria-label="Pagination"
@@ -350,6 +350,6 @@ function UTCToHumanReadable(u) {
                     </Link>
                 </div>
             </nav>
-        </BorderedContainer> -->
+        </BorderedContainer>
     </div>
 </template>
