@@ -140,7 +140,7 @@ export default {
             <!--          Content -->
             <div class="mx-auto max-w-4xl rounded-lg bg-white p-2 shadow-2xl">
                 <img
-                    src="https://static.wodo.io.s3-website.eu-central-1.amazonaws.com/game_intro_in_lobby.png"
+                    src="https://s3.eu-central-1.amazonaws.com/static.wodo.io/game_intro_in_lobby.png"
                     alt="lobby image"
                 />
             </div>
