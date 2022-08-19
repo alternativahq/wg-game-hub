@@ -12,6 +12,7 @@ use App\Http\Controllers\{
     User\AssetAccountsController as UserAssetAccountsController,
     User\DashboardController as UserDashboardController,
     User\GamePlayedHistoryController as UserGamePlayedHistoryController,
+    Wallet\TransactionController as UserTransactionController,
     Notifications\DeleteNotificationsController,
     Notifications\MarkNotificationAsReadController,
 };
@@ -47,6 +48,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/w/{user:username}/games-played-history', UserGamePlayedHistoryController::class)->name(
         'user.games-played-history',
     );
+    // User Transactions
+    Route::get('/wallet/transactions', UserTransactionController::class)->name('user.transactions');
     // Notifications
     Route::put('notifications/{notification}/read', MarkNotificationAsReadController::class)->name(
         'notifications.read',

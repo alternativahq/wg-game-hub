@@ -361,6 +361,9 @@ function timePlayedSecondsToHours(s) {
                 </div>
             </BorderedContainer>
         </section>
+        <Link class="shrink-0" :href="route('user.transactions')">
+            <ButtonShape type="red"> Transactions</ButtonShape>
+        </Link>
         <!-- ***************************************AssetAccounts********************************************* -->
         <section class="overflow-x-auto">
             <div class="mb-6 flex flex-row items-center justify-between">
