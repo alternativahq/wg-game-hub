@@ -46,6 +46,7 @@ class HandleInertiaRequests extends Middleware
                 ->take(10)
                 ->get(),
             'email' => $request->user()->email,
+            'is_admin' => $request->user()->is_admin,
             'image' => $request->user()->image,
             'image_url' => $request->user()->image_url,
             'asset_accounts' => Cache::remember(

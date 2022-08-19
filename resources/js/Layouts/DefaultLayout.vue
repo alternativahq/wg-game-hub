@@ -162,6 +162,13 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                             }}</span
                         >
                     </button>
+                    <Link v-if="currentUser.is_admin" :href="route('admin-games')">
+                        <ButtonShape type="red">
+                            <span class="flex flex-row space-x-2.5">
+                                <span class="font-bold uppercase"> Admin </span>
+                            </span>
+                        </ButtonShape>
+                    </Link>
                     <Link v-if="currentUser" :href="route('user.profile', { user: currentUser.username })">
                         <ButtonShape type="purple">
                             <span class="flex flex-row space-x-2.5">

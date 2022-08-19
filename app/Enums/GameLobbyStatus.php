@@ -36,4 +36,9 @@ enum GameLobbyStatus: int
             GameLobbyStatus::ProcessingResults,
         ]);
     }
+    
+    public function toLabel(): string
+    {
+        return __('gamehub.' . $this->name);
+    }
 }
