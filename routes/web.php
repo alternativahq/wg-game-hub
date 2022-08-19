@@ -15,6 +15,8 @@ use App\Http\Controllers\{
     Wallet\TransactionController as UserTransactionController,
     Wallet\WithdrawController as UserWithdrawController,
     Wallet\DepositController as UserDepositController,
+    Notifications\DeleteNotificationsController,
+    Notifications\MarkNotificationAsReadController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -52,4 +54,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/wallet/transactions', UserTransactionController::class)->name('user.transactions');
     Route::get('/wallet/withdraw', UserWithdrawController::class)->name('user.withdraw');
     Route::get('/wallet/deposit', UserDepositController::class)->name('user.deposit');
+    // Notifications
+    Route::put('notifications/{notification}/read', MarkNotificationAsReadController::class)->name(
+        'notifications.read',
+    );
+
+    Route::delete('notifications', DeleteNotificationsController::class)->name('notifications.delete');
 });

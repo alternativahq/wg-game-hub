@@ -8,7 +8,7 @@ import KiteArrow from '@/Shared/SVG/KiteArrow';
 import ChatMessage from '@/Shared/Chat/ChatMessage';
 import { Link } from '@inertiajs/inertia-vue3';
 import BorderedContainer from '@/Shared/BorderedContainer';
-import { ref, reactive, onMounted, watch } from 'vue';
+import { ref, reactive, onMounted, watch, inject } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
 import ChatRoom from '@/Models/ChatRoom';
@@ -16,6 +16,7 @@ import CooldownBanner from '@/Shared/CooldownBanner';
 
 let currentUser = useCurrentUser();
 let chatBox = ref();
+let snack = inject('snack');
 
 let props = defineProps({
     mainChatRoom: Object,

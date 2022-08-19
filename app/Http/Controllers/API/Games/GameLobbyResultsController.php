@@ -10,6 +10,10 @@ use App\Events\GameLobby\ResultsProcessedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GameMatchResultsPayloadRequest;
 use App\Models\GameLobby;
+use App\Enums\NotificationType;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ResultsProcessedGameLobbyNotification;
+use App\Notifications\ProcessingGameLobbyResultsNotification;
 
 class GameLobbyResultsController extends Controller
 {
@@ -19,6 +23,9 @@ class GameLobbyResultsController extends Controller
 
     public function __invoke(GameMatchResultsPayloadRequest $request, GameLobby $gameLobby)
     {
+        $users = $gameLobby->users()->get();
+        Notification::sendNow($users, new ProcessingGameLobbyResultsNotification(gameLobby: $gameLobby));
+
         $gameLobby->status = GameLobbyStatus::ProcessingResults;
         $gameLobby->save();
 
@@ -29,6 +36,8 @@ class GameLobbyResultsController extends Controller
         $this->storeGameMatchResultAction->execute(gameLobby: $gameLobby, gameMatchResultData: $gameMatchResultData);
 
         broadcast(new ResultsProcessedEvent(gameLobby: $gameLobby->fresh(['users', 'scores'])));
+
+        Notification::sendNow($users, new ResultsProcessedGameLobbyNotification(gameLobby: $gameLobby));
 
         return response()->noContent();
     }

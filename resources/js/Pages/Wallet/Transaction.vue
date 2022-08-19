@@ -18,7 +18,7 @@ dayjs.extend(relativeTime);
 dayjs.extend(duration);
 
 let props = defineProps({
-    usertransactions: Object,
+    userTransactions: Object,
     assets: Object,
     filters: Object,
     current_url: String,
@@ -26,7 +26,7 @@ let props = defineProps({
 
 let filters = reactive(props.filters);
 let currentUrl = window.location.toString();
-let pagination = reactive(new Pagination(props.usertransactions));
+let pagination = reactive(new Pagination(props.userTransactions));
 
 function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
@@ -280,13 +280,12 @@ function UTCToHumanReadable(u) {
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y divide-gray-200 bg-white ">
-                                        <tr v-for="transaction in usertransactions" :key="transaction.id">
+                                    <tbody class="divide-y divide-gray-200 bg-white">
+                                        <tr v-for="transaction in userTransactions.data" :key="transaction.id">
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
                                                 {{ UTCToHumanReadable(transaction.createdAt) }}
-
                                             </td>
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
@@ -322,7 +321,7 @@ function UTCToHumanReadable(u) {
                 </div>
             </div>
         </BorderedContainer>
-        <!-- <BorderedContainer class="mb-2 bg-wgh-gray-1.5">
+        <BorderedContainer class="mb-2 bg-wgh-gray-1.5">
             <nav
                 class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white bg-white px-4 py-3 sm:px-6"
                 aria-label="Pagination"
@@ -353,6 +352,6 @@ function UTCToHumanReadable(u) {
                     </Link>
                 </div>
             </nav>
-        </BorderedContainer> -->
+        </BorderedContainer>
     </div>
 </template>

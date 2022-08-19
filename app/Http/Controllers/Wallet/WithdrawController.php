@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Wallet;
 
+use Redirect;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Asset;
@@ -9,51 +10,30 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AssetResource;
 use App\Http\Resources\TransactionResource;
-use App\Http\QueryPipelines\UserWithdrawalsPipeline\UserWithdrawalsPipeline;
+use Illuminate\Support\Facades\Http;
+use App\Http\QueryPipelines\UserTransactionsPipeline\UserTransactionsPipeline;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class WithdrawController extends Controller
 {
     public function __invoke(User $user,Request $request) {
+        
         //Todo need to get all transactions and fillter them and get them by type to withdraw
-        $withdrawTransactions = [
+        $response = Http::get(env('TRANSACTION_API'),$request->all());
+
+        $withdrawTransactions =  new LengthAwarePaginator(
+            $response->object()->data, 
+            $response->object()->meta->total, 
+            $response->object()->meta->per_page, 
+            $response->object()->meta->current_page,
             [
-                'id' => "11111",
-                'globalTxId' => "12",
-                'tenantId' => "122",
-                'refId' => "1224",
-                'hash' => "1asdasd224",
-                'type' => "Withdraw",
-                'state' => "SUBMITTED",
-                "asset" => "XNO",
-                'fromAccountId' => "5cf1f635-5359-415f-b940-4bd9601727bb",
-                'toAccountId' => "97e561bf-91ff-466b-93c4-0de6138c08cc",
-                'amount' => 5,
-                'fee' => 1,
-                'scope' => "Internal",
-                'createdAt' => "2022-08-15T07:53:06.001Z",
-                'updatedAt' => "2022-08-15T07:53:06.001Z"
-            ],
-            [
-                'id' => "11211",
-                'globalTxId' => "12",
-                'tenantId' => "122",
-                'refId' => "1224",
-                'hash' => "1asdasd224",
-                'type' => "Withdraw",
-                'state' => "SUBMITTED",
-                "asset" => "XNO",
-                'fromAccountId' => "5cf1f635-5359-415f-b940-4bd9601727bb",
-                'toAccountId' => "97e561bf-91ff-466b-93c4-0de6138c08cc",
-                'amount' => 5,
-                'fee' => 1,
-                'scope' => "Internal",
-                'createdAt' => "2022-08-15T07:53:06.001Z",
-                'updatedAt' => "2022-08-15T07:53:06.001Z"
+                'path' => url()->current(),
             ]
-        ];
+        );
+        
         //Todo need to set up the pipeline
 
-        // $transactions = UserWithdrawalsPipeline::make(
+        // $transactions = UserTransactionPipeline::make(
         //     builder: Transcation::query()->whereBelongsTo($user),
         //     request: $request,
         // );

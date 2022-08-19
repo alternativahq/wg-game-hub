@@ -361,20 +361,17 @@ function timePlayedSecondsToHours(s) {
                 </div>
             </BorderedContainer>
         </section>
-
-        <!-- //Todo need to put this button on top of assets account table in the profile -->
-
-        <Link class="shrink-0" :href="route('user.transactions')">
-            <ButtonShape type="red"> Transactions</ButtonShape>
-        </Link>
-
-        <!-- ***************************************AssetAccounts********************************************* -->
         <section class="overflow-x-auto">
-            <div class="mb-6 flex flex-row items-center justify-between">
+            <div class="mb-6 flex flex-col items-center justify-between space-y-2 md:flex-row md:space-y-0">
                 <h2 class="truncate font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Asset Accounts</h2>
-                <Link class="shrink-0" :href="route('user.assetAccounts', { user: currentUser.username })">
-                    <ButtonShape type="red"> View All</ButtonShape>
-                </Link>
+                <div class="flex flex-row space-x-2">
+                    <Link class="shrink-0" :href="route('user.transactions')">
+                        <ButtonShape type="red">View Transactions</ButtonShape>
+                    </Link>
+                    <Link class="shrink-0" :href="route('user.assetAccounts', { user: currentUser.username })">
+                        <ButtonShape type="red"> View Accounts</ButtonShape>
+                    </Link>
+                </div>
             </div>
             <BorderedContainer class="bg-wgh-gray-1.5">
                 <div class="rounded-lg">
@@ -441,7 +438,5 @@ function timePlayedSecondsToHours(s) {
                 </div>
             </BorderedContainer>
         </section>
-        <!-- ***************************************AssetAccounts********************************************* -->
-
     </div>
 </template>
