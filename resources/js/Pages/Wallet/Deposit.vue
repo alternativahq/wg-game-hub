@@ -21,7 +21,7 @@ dayjs.extend(relativeTime);
 dayjs.extend(duration);
 
 let props = defineProps({
-    userWithdrawTransactions: Object,
+    userDepositTransactions: Object,
     assets: Object,
     filters: Object,
     current_url: String,
@@ -29,7 +29,7 @@ let props = defineProps({
 
 let filters = reactive(props.filters);
 let currentUrl = window.location.toString();
-let pagination = reactive(new Pagination(props.userWithdrawTransactions));
+let pagination = reactive(new Pagination(props.userDepositTransactions));
 
 let withdrawalForm = useForm({
     email: '',
@@ -48,8 +48,8 @@ function UTCToHumanReadable(u) {
 <template>
     <div>
         <section class="flex justify-between items-center">
-            <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Withdraw Crypto</h2>
-            <div class="mb-6 text-lg round mx-5 px-3 py-2 bg-gray-300 font-semibold text-black">Withdrawal Fiat  -></div>
+            <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Deposit Crypto</h2>
+            <div class="mb-6 text-lg round mx-5 px-3 py-2 bg-gray-300 font-semibold text-black">Deposit Fiat  -></div>
         </section>
         <section class=" flex">
             <div class="flex justify-center items-center w-2/3" >
@@ -82,34 +82,7 @@ function UTCToHumanReadable(u) {
                         </div>
                     </div>
                     <div class=" flex items-center py-4 px-4 mb-5">
-                        <div class="w-2/5 text-right mr-20">Withdrawal Information</div>
-                        <div class="w-3/5">
-                            <div class="mb-2">Wallet Address</div>
-                            <BorderedContainer class="bg-wgh-gray-1.5">
-                                <div class="rounded-lg">
-                                    <select
-                                        id="location"
-                                        name="location"
-                                        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                    >
-                                        <!-- v-model="filters.filter_by_asset"
-                                        @change.prevent="byTransactionChanged" -->
-                                        <option :value="undefined">All</option>
-                                        <!-- <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
-                                            {{ asset.name }}
-                                        </option>  -->
-                                    </select>
-                                </div>
-                            </BorderedContainer>
-                            <InputError class="mt-2">
-                                <div v-if="withdrawalForm.errors.email" class="mt-2">
-                                    {{ withdrawalForm.errors.email }}
-                                </div>
-                            </InputError>
-                        </div>
-                    </div>
-                    <div class=" flex items-center py-4 px-4 mb-5">
-                        <div class="w-2/5 text-right mr-20"></div>
+                        <div class="w-2/5 text-right mr-20">Select a Network</div>
                         <div class="w-3/5">
                             <div class="mb-2">Network</div>
                             <BorderedContainer class="bg-wgh-gray-1.5">
@@ -122,9 +95,9 @@ function UTCToHumanReadable(u) {
                                         <!-- v-model="filters.filter_by_asset"
                                         @change.prevent="byTransactionChanged" -->
                                         <option :value="undefined">All</option>
-                                        <!-- <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
+                                        <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
                                             {{ asset.name }}
-                                        </option>  -->
+                                        </option> 
                                     </select>
                                 </div>
                             </BorderedContainer>
@@ -148,39 +121,50 @@ function UTCToHumanReadable(u) {
             </div>
             <div class="w-1/3 ml-8">
                 <div class="text-lg font-bold mb-4">FAQ</div>
-                <Link href="" class="text-gray-500 mb-2 underline block">
-                    How do i withdrawal from my kucoin account?
+                <Link href="" class="text-gray-500 mb-6 underline block">
+                    How do i deposit from my KuCoin account?
                 </Link>
-                <Link href="" class="text-gray-500 mb-2 underline block">
-                    What should i do if i didn't receive my withdrawal or if i made a withdrawal to an incorrect address?
+                <Link href="" class="text-gray-500 mb-6 underline block">
+                    What should i do if i didn't receive my deposit or if i made a withdrawal to an incorrect address?
                 </Link>
-                <Link href="" class="text-gray-500 mb-2 underline block">
-                    is there a limit on 24h withdrawal?
+                <Link href="" class="text-gray-500 mb-6 underline block">
+                    What should i do if i deposit the wrong crypto?
+                </Link>
+                <Link href="" class="text-gray-500 mb-6 underline block">
+                    What should i do if i forget to specif the Memo Tag or Message for my deposit?
+                </Link>
+                <Link href="" class="text-gray-500 mb-6 underline block">
+                    what are the commen deposit crypto?
                 </Link>
             </div>
         </section>
         <section class="mb-10 flex ">
             <div class="w-2/3 flex">
                 <div class="w-2/5 mr-20"></div>
-                <div class="w-3/5 flex items-center">
+                <div class="w-3/5">
+                    <div class="font-semibold">Address</div>
+                    <div class="w-1/2">OJHKUSDHGFKHIUYANEUYWNKJCIPAPYEUYKHDIUYOYSD</div>
+                </div>
+            </div>
+            <div class="w-1/3"></div>
+        </section>
+        <section class="mb-10 flex">
+            <div class="w-2/3 flex">
+                <div class="w-2/5 mr-20"></div>
+                <div class="w-3/5 flex">
                     <div class="w-1/2 ">
-                        <div class="mb-2">
-                            <div>Avalibale Balance</div>
-                            <div>0.00 XNO</div>
+                        <div class="mb-4">
+                            <div class="font-semibold">Recipent Account</div>
+                            <div class="text-sm">Main Account</div>
                         </div>
                         <div class="mb-2">
-                            <div>Fees</div>
-                            <div>0.02 XNO</div>
+                            <div class="font-semibold">Confirm that your network is NANO(NANO)</div>
                         </div>
                     </div>
                     <div class="w-1/2">
-                        <div class="mb-2">
-                            <div>Minimom Withdrawal</div>
-                            <div>1.00 XNO</div>
-                        </div>
-                        <div class="mb-2">
-                            <div>Remaning daily withdrawal amount</div>
-                            <div>1 BTC</div>
+                        <div class="mb-4">
+                            <div class="font-semibold">Deposit Conformation</div>
+                            <div>1 block(s)</div>
                         </div>
                     </div>
                 </div>
@@ -188,8 +172,7 @@ function UTCToHumanReadable(u) {
             <div class="w-1/3"></div>
         </section>
         <div class="flex flex-row justify-between">
-            <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Recent Withdrawals</h2>
-            <div class="font-grota text-sm text-wgh-gray-6">can't find a blockchain record?</div>
+            <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Deposit History</h2>
         </div>
         <BorderedContainer class="mb-2 overflow-hidden bg-wgh-gray-1.5">
             <div class="rounded-lg bg-white px-4 sm:px-0 lg:px-0">
@@ -286,34 +269,6 @@ function UTCToHumanReadable(u) {
                                             </th>
                                             <th
                                                 scope="col"
-                                                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
-                                            >
-                                                <Link
-                                                    class="group inline-flex"
-                                                    :href="currentUrl"
-                                                    :data="{
-                                                        sort_by: 'transaction_amount',
-                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                    }"
-                                                >
-                                                    Withdrawall Adress/Account
-                                                    <span
-                                                        :class="{
-                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'transaction_amount',
-                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'transaction_amount',
-                                                            'rotate-180':
-                                                                filters.sort_by === 'transaction_amount' &&
-                                                                filters.sort_order === 'asc',
-                                                        }"
-                                                    >
-                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
-                                                    </span>
-                                                </Link>
-                                            </th>
-                                            <th
-                                                scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
                                                 <Link
@@ -399,7 +354,7 @@ function UTCToHumanReadable(u) {
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 bg-white ">
-                                        <tr v-for="transaction in userWithdrawTransactions.data" :key="transaction.id">
+                                        <tr v-for="transaction in userDepositTransactions.data" :key="transaction.id">
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
@@ -414,9 +369,6 @@ function UTCToHumanReadable(u) {
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
                                                 {{ transaction.globalTxId }}
-                                            </td>
-                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ transaction.fromAccountId }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                 {{ transaction.state }}
@@ -437,7 +389,6 @@ function UTCToHumanReadable(u) {
             </div>
         </BorderedContainer>
         <BorderedContainer class="mb-2 bg-wgh-gray-1.5">
-
             <nav
                 class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white bg-white px-4 py-3 sm:px-6"
                 aria-label="Pagination"

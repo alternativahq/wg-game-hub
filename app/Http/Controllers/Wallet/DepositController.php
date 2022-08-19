@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Wallet;
 
-use Redirect;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Asset;
@@ -10,18 +9,18 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AssetResource;
 use App\Http\Resources\TransactionResource;
+use App\Http\QueryPipelines\UserDepositsPipeline\UserDepositsPipeline;
 use Illuminate\Support\Facades\Http;
-use App\Http\QueryPipelines\UserTransactionsPipeline\UserTransactionsPipeline;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class WithdrawController extends Controller
+class DepositController extends Controller
 {
     public function __invoke(User $user,Request $request) {
-        
-        //Todo need to get all transactions and fillter them and get them by type to withdraw
+                
+        //Todo need to get all transactions and fillter them and get them by type to deposit
         $response = Http::get(env('TRANSACTION_API'),$request->all());
 
-        $withdrawTransactions =  new LengthAwarePaginator(
+        $depositTransactions =  new LengthAwarePaginator(
             $response->object()->data, 
             $response->object()->meta->total, 
             $response->object()->meta->per_page, 
@@ -30,18 +29,17 @@ class WithdrawController extends Controller
                 'path' => url()->current(),
             ]
         );
-        
-        //Todo need to set up the pipeline
 
-        // $transactions = UserTransactionPipeline::make(
+        //Todo need to set up the pipeline
+        // $transactions = UserDepositsPipeline::make(
         //     builder: Transcation::query()->whereBelongsTo($user),
         //     request: $request,
         // );
-        
+
         $assets = Asset::get(['id','name']);
-        return Inertia::render('Wallet/Withdraw', [
-            'userWithdrawTransactions' => $withdrawTransactions,
-            // 'usertransactions' => TransactionResource::collection($withdrawTransactions->paginate()->withQueryString()),
+
+        return Inertia::render('Wallet/Deposit', [
+            'userDepositTransactions' => TransactionResource::collection($depositTransactions),
             'assets' => AssetResource::collection($assets),
             'filters' => $request->only('sort_by', 'sort_order', 'filter_by_game'),
         ]);

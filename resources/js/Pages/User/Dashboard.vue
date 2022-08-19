@@ -438,9 +438,5 @@ function timePlayedSecondsToHours(s) {
                 </div>
             </BorderedContainer>
         </section>
-        <<<<<<< HEAD
-        <!-- ***************************************AssetAccounts********************************************* -->
-
-        ======= >>>>>>> main
     </div>
 </template>
