@@ -47,15 +47,15 @@ function UTCToHumanReadable(u) {
 </script>
 <template>
     <div>
-        <section class="flex justify-between items-center">
+        <section class="flex items-center justify-between">
             <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Deposit Crypto</h2>
-            <div class="mb-6 text-lg round mx-5 px-3 py-2 bg-gray-300 font-semibold text-black">Deposit Fiat  -></div>
+            <div class="round mx-5 mb-6 bg-gray-300 px-3 py-2 text-lg font-semibold text-black">Deposit Fiat -></div>
         </section>
-        <section class=" flex">
-            <div class="flex justify-center items-center w-2/3" >
-                <form @submit.prevent="" class="w-full mb-10" > 
-                    <div class=" flex items-center py-4 px-4 mb-5">
-                        <div class="w-2/5 text-right mr-20">Select a Coin</div>
+        <section class="flex">
+            <div class="flex w-2/3 items-center justify-center">
+                <form @submit.prevent="" class="mb-10 w-full">
+                    <div class="mb-5 flex items-center py-4 px-4">
+                        <div class="mr-20 w-2/5 text-right">Select a Coin</div>
                         <div class="w-3/5">
                             <div class="mb-2">coin</div>
                             <BorderedContainer class="bg-wgh-gray-1.5">
@@ -81,8 +81,8 @@ function UTCToHumanReadable(u) {
                             </InputError>
                         </div>
                     </div>
-                    <div class=" flex items-center py-4 px-4 mb-5">
-                        <div class="w-2/5 text-right mr-20">Select a Network</div>
+                    <div class="mb-5 flex items-center py-4 px-4">
+                        <div class="mr-20 w-2/5 text-right">Select a Network</div>
                         <div class="w-3/5">
                             <div class="mb-2">Network</div>
                             <BorderedContainer class="bg-wgh-gray-1.5">
@@ -97,7 +97,7 @@ function UTCToHumanReadable(u) {
                                         <option :value="undefined">All</option>
                                         <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
                                             {{ asset.name }}
-                                        </option> 
+                                        </option>
                                     </select>
                                 </div>
                             </BorderedContainer>
@@ -119,28 +119,26 @@ function UTCToHumanReadable(u) {
                     </button> -->
                 </form>
             </div>
-            <div class="w-1/3 ml-8">
-                <div class="text-lg font-bold mb-4">FAQ</div>
-                <Link href="" class="text-gray-500 mb-6 underline block">
+            <div class="ml-8 w-1/3">
+                <div class="mb-4 text-lg font-bold">FAQ</div>
+                <Link href="" class="mb-6 block text-gray-500 underline">
                     How do i deposit from my KuCoin account?
                 </Link>
-                <Link href="" class="text-gray-500 mb-6 underline block">
+                <Link href="" class="mb-6 block text-gray-500 underline">
                     What should i do if i didn't receive my deposit or if i made a withdrawal to an incorrect address?
                 </Link>
-                <Link href="" class="text-gray-500 mb-6 underline block">
+                <Link href="" class="mb-6 block text-gray-500 underline">
                     What should i do if i deposit the wrong crypto?
                 </Link>
-                <Link href="" class="text-gray-500 mb-6 underline block">
+                <Link href="" class="mb-6 block text-gray-500 underline">
                     What should i do if i forget to specif the Memo Tag or Message for my deposit?
                 </Link>
-                <Link href="" class="text-gray-500 mb-6 underline block">
-                    what are the commen deposit crypto?
-                </Link>
+                <Link href="" class="mb-6 block text-gray-500 underline"> what are the commen deposit crypto? </Link>
             </div>
         </section>
-        <section class="mb-10 flex ">
-            <div class="w-2/3 flex">
-                <div class="w-2/5 mr-20"></div>
+        <section class="mb-10 flex">
+            <div class="flex w-2/3">
+                <div class="mr-20 w-2/5"></div>
                 <div class="w-3/5">
                     <div class="font-semibold">Address</div>
                     <div class="w-1/2">OJHKUSDHGFKHIUYANEUYWNKJCIPAPYEUYKHDIUYOYSD</div>
@@ -149,10 +147,10 @@ function UTCToHumanReadable(u) {
             <div class="w-1/3"></div>
         </section>
         <section class="mb-10 flex">
-            <div class="w-2/3 flex">
-                <div class="w-2/5 mr-20"></div>
-                <div class="w-3/5 flex">
-                    <div class="w-1/2 ">
+            <div class="flex w-2/3">
+                <div class="mr-20 w-2/5"></div>
+                <div class="flex w-3/5">
+                    <div class="w-1/2">
                         <div class="mb-4">
                             <div class="font-semibold">Recipent Account</div>
                             <div class="text-sm">Main Account</div>
@@ -353,7 +351,7 @@ function UTCToHumanReadable(u) {
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y divide-gray-200 bg-white ">
+                                    <tbody class="divide-y divide-gray-200 bg-white">
                                         <tr v-for="transaction in userDepositTransactions.data" :key="transaction.id">
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
@@ -411,10 +409,10 @@ function UTCToHumanReadable(u) {
                     </p>
                 </div>
                 <div class="flex flex-1 justify-between space-x-4 sm:justify-end">
-                    <Link :href="pagination.links.prev">
+                    <Link :href="pagination.links.prev" preserve-scroll>
                         <ButtonShape v-if="pagination.links.prev" type="gray"> Previous</ButtonShape>
                     </Link>
-                    <Link :href="pagination.links.next">
+                    <Link :href="pagination.links.next" preserve-scroll>
                         <ButtonShape v-if="pagination.links.next" type="gray"> Next</ButtonShape>
                     </Link>
                 </div>

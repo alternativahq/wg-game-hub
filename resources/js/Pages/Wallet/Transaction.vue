@@ -38,8 +38,8 @@ function UTCToHumanReadable(u) {
 </script>
 <template>
     <div>
-        <div class="flex justify-end items-center mb-5">
-            <Link class="shrink-0 mr-4" :href="route('user.deposit')">
+        <div class="mb-5 flex items-center justify-end">
+            <Link class="mr-4 shrink-0" :href="route('user.deposit')">
                 <ButtonShape type="red">Deposit</ButtonShape>
             </Link>
             <Link class="shrink-0" :href="route('user.withdraw')">
@@ -61,7 +61,7 @@ function UTCToHumanReadable(u) {
                             <option :value="undefined">All</option>
                             <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
                                 {{ asset.name }}
-                            </option> 
+                            </option>
                         </select>
                     </div>
                 </BorderedContainer>
@@ -129,7 +129,7 @@ function UTCToHumanReadable(u) {
                                                         }"
                                                     >
                                                         <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
-                                                    </span> 
+                                                    </span>
                                                 </Link>
                                             </th>
                                             <th
@@ -149,7 +149,7 @@ function UTCToHumanReadable(u) {
                                                         sort_by: 'transaction_asset',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
-                                                > 
+                                                >
                                                     Asset
                                                     <span
                                                         :class="{
@@ -344,10 +344,10 @@ function UTCToHumanReadable(u) {
                     </p>
                 </div>
                 <div class="flex flex-1 justify-between space-x-4 sm:justify-end">
-                    <Link :href="pagination.links.prev">
+                    <Link :href="pagination.links.prev" preserve-scroll>
                         <ButtonShape v-if="pagination.links.prev" type="gray"> Previous</ButtonShape>
                     </Link>
-                    <Link :href="pagination.links.next">
+                    <Link :href="pagination.links.next" preserve-scroll>
                         <ButtonShape v-if="pagination.links.next" type="gray"> Next</ButtonShape>
                     </Link>
                 </div>

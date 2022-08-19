@@ -40,8 +40,7 @@ class WithdrawController extends Controller
 
         $assets = Asset::get(['id', 'name']);
         return Inertia::render('Wallet/Withdraw', [
-            'userWithdrawTransactions' => $withdrawTransactions,
-            // 'usertransactions' => TransactionResource::collection($withdrawTransactions->paginate()->withQueryString()),
+            'userWithdrawTransactions' => TransactionResource::collection($withdrawTransactions->withQueryString()),
             'assets' => AssetResource::collection($assets),
             'filters' => $request->only('sort_by', 'sort_order', 'filter_by_game'),
         ]);
