@@ -16,29 +16,29 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class WithdrawController extends Controller
 {
-    public function __invoke(User $user,Request $request) {
-        
-        //Todo need to get all transactions and fillter them and get them by type to withdraw
-        $response = Http::get(env('TRANSACTION_API'),$request->all());
+    public function __invoke(User $user, Request $request)
+    {
+        //Todo need to get all transactions and filter them and get them by type to withdraw
+        $response = Http::get(config('wodo.wallet-transactions-api'), $request->all());
 
-        $withdrawTransactions =  new LengthAwarePaginator(
-            $response->object()->data, 
-            $response->object()->meta->total, 
-            $response->object()->meta->per_page, 
+        $withdrawTransactions = new LengthAwarePaginator(
+            $response->object()->data,
+            $response->object()->meta->total,
+            $response->object()->meta->per_page,
             $response->object()->meta->current_page,
             [
                 'path' => url()->current(),
-            ]
+            ],
         );
-        
+
         //Todo need to set up the pipeline
 
         // $transactions = UserTransactionPipeline::make(
         //     builder: Transcation::query()->whereBelongsTo($user),
         //     request: $request,
         // );
-        
-        $assets = Asset::get(['id','name']);
+
+        $assets = Asset::get(['id', 'name']);
         return Inertia::render('Wallet/Withdraw', [
             'userWithdrawTransactions' => $withdrawTransactions,
             // 'usertransactions' => TransactionResource::collection($withdrawTransactions->paginate()->withQueryString()),
