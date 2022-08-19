@@ -139,7 +139,10 @@ export default {
         <div class="col-span-full h-full space-y-10 lg:col-span-9">
             <!--          Content -->
             <div class="mx-auto max-w-4xl rounded-lg bg-white p-2 shadow-2xl">
-                <img src="/images/agar-io.png" alt="Hello" />
+                <img
+                    src="https://s3.eu-central-1.amazonaws.com/static.wodo.io/game_intro_in_lobby.png"
+                    alt="lobby image"
+                />
             </div>
             <div class="grid grid-cols-12 place-items-start gap-y-8 lg:gap-x-8">
                 <BorderedContainer class="col-span-full w-full bg-wgh-gray-1.5 lg:col-span-3">
