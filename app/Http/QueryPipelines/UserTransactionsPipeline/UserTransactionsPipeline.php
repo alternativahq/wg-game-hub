@@ -2,9 +2,11 @@
 
 namespace App\Http\QueryPipelines\UserAchievementsPipeline;
 
+use App\Http\QueryPipelines\UserAchievementsPipeline\Filters\ByGameFilter;
+use App\Http\QueryPipelines\UserAchievementsPipeline\Filters\Sort;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Pipeline;
-use Illuminate\Database\Eloquent\Builder;
 use App\Http\QueryPipelines\UserTransactionsPipeline\Filters\SortByTime;
 use App\Http\QueryPipelines\UserTransactionsPipeline\Filters\SortByTxid;
 use App\Http\QueryPipelines\UserTransactionsPipeline\Filters\SortByType;
@@ -39,7 +41,16 @@ class UserTransactionsPipeline extends Pipeline
     {
         return app(static::class)
             ->setRequest(request: $request)
-            ->send($builder)
+            ->send(
+                $builder->with([
+                    'game' => function ($query) {
+                        $query->select('id', 'name');
+                    },
+                    'achievement' => function ($query) {
+                        $query->select('id', 'name', 'description');
+                    },
+                ]),
+            )
             ->thenReturn();
     }
 }
