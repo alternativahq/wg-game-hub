@@ -19,7 +19,12 @@ class WithdrawController extends Controller
     public function __invoke(User $user, Request $request)
     {
         //Todo need to get all transactions and filter them and get them by type to withdraw
-        $response = Http::get(config('wodo.wallet-transactions-api'), $request->all());
+        $response = Http::get(
+            config('wodo.wallet-transactions-api'),
+            array_merge($request->all(), [
+                'type' => 'DEPOSIT',
+            ]),
+        );
 
         $withdrawTransactions = new LengthAwarePaginator(
             $response->object()->data,

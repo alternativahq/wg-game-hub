@@ -18,7 +18,12 @@ class DepositController extends Controller
     public function __invoke(User $user, Request $request)
     {
         //Todo need to get all transactions and fillter them and get them by type to deposit
-        $response = Http::get(config('wodo.wallet-transactions-api'), $request->all());
+        $response = Http::get(
+            config('wodo.wallet-transactions-api'),
+            array_merge($request->all(), [
+                'type' => 'WITHDRAW',
+            ]),
+        );
 
         $depositTransactions = new LengthAwarePaginator(
             $response->object()->data,
