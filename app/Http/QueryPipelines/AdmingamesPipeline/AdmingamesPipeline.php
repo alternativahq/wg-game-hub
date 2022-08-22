@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\QueryPipelines\AdmingamesPipeline;
+namespace App\Http\QueryPipelines\AdminGamesPipeline;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Pipeline;
 use Illuminate\Database\Eloquent\Builder;
-use App\Http\QueryPipelines\AdmingamesPipeline\Filters\SortByName;
-use App\Http\QueryPipelines\AdmingamesPipeline\Filters\SearchFilter;
-use App\Http\QueryPipelines\AdmingamesPipeline\Filters\SortByStatus;
-use App\Http\QueryPipelines\AdmingamesPipeline\Filters\SortByLobbyCount;
+use App\Http\QueryPipelines\AdminGamesPipeline\Filters\SortByName;
+use App\Http\QueryPipelines\AdminGamesPipeline\Filters\SearchFilter;
+use App\Http\QueryPipelines\AdminGamesPipeline\Filters\SortByStatus;
+use App\Http\QueryPipelines\AdminGamesPipeline\Filters\SortByLobbyCount;
 
-class AdmingamesPipeline extends Pipeline
+class AdminGamesPipeline extends Pipeline
 {
     protected ?Request $request;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\QueryPipelines\AdmingamesPipeline\Filters;
+namespace App\Http\QueryPipelines\AdminGamesPipeline\Filters;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder;

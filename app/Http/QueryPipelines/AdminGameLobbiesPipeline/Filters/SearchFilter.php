@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\QueryPipelines\AdminGamesPipeline\Filters;
+namespace App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters;
 
-use App\Builders\GameBuilder;
+use App\Builders\GameLobbyBuilder;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ class SearchFilter
     {
     }
 
-    public function handle(GameBuilder $builder, Closure $next)
+    public function handle(GameLobbyBuilder $builder, Closure $next)
     {
         $searchTerm = $this->request->get('q', null);
 

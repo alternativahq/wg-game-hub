@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\QueryPipelines\AdminGamesPipeline\Filters;
+namespace App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,14 +20,14 @@ class SortByName
         $sortBy = $this->request->get('sort_by');
         $sortOrder = $this->request->get('sort_order', 'asc');
 
-        if ($sortBy !== 'game_name') {
+        if ($sortBy !== 'game_lobbies_name') {
             return $next($builder);
         }
 
         if (!in_array(strtolower($sortOrder), ['asc', 'desc'])) {
             return $next($builder);
         }
-        $builder->orderBy('games.name', $sortOrder);
+        $builder->orderBy('game_lobbies.name', $sortOrder);
 
         return $next($builder);
     }

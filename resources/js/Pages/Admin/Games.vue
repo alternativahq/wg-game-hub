@@ -1,11 +1,12 @@
 <script setup>
 import { ChevronDownIcon } from '@heroicons/vue/solid';
-import { defineProps, reactive } from 'vue';
+import { defineProps, reactive, watch } from 'vue';
 import BorderedContainer from '@/Shared/BorderedContainer';
 import ButtonShape from '@/Shared/ButtonShape';
 import Pagination from '@/Models/Pagination';
 import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
+import { throttle } from 'lodash';
 
 let props = defineProps({
     games: Object,
@@ -17,6 +18,15 @@ let filters = reactive(props.filters);
 let currentUrl = window.location.toString();
 let pagination = reactive(new Pagination(props.games));
 
+watch(
+    () => filters,
+    throttle(() => {
+        Inertia.get(currentUrl, { filter_by_asset: filters.filter_by_asset, q: filters.q }, { preserveState: true });
+    }, 1000),
+    {
+        deep: true,
+    }
+);
 </script>
 <template>
     <div>

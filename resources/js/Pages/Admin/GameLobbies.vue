@@ -1,6 +1,6 @@
 <script setup>
 import { ChevronDownIcon } from '@heroicons/vue/solid';
-import { defineProps, reactive } from 'vue';
+import { defineProps, reactive, watch } from 'vue';
 import BorderedContainer from '@/Shared/BorderedContainer';
 import ButtonShape from '@/Shared/ButtonShape';
 import Pagination from '@/Models/Pagination';
@@ -11,6 +11,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
+import { throttle } from 'lodash';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -19,6 +20,7 @@ dayjs.extend(duration);
 
 let props = defineProps({
     gameLobbies: Object,
+    game: Object,
     filters: Object,
     current_url: String,
 });
@@ -31,18 +33,47 @@ function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
 }
 
+watch(
+    () => filters,
+    throttle(() => {
+        Inertia.get(currentUrl, { filter_by_asset: filters.filter_by_asset, q: filters.q }, { preserveState: true });
+    }, 1000),
+    {
+        deep: true,
+    }
+);
+
+function deleteLobby(game, gameLobbie) {
+    Inertia.delete(route('admin-game.gameLobies.destroy',[game.id, gameLobbie.id]));
+}
+
 </script>
 <template>
     <div>
+        <div v-if="$page.props.flash.success" class="my-4 py-4 px-4 text-white bg-green-700">
+            {{ $page.props.flash.success }}
+        </div>
         <div class="flex flex-row justify-between">
             <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Lobbies</h2>
-            <Link >
-                <ButtonShape type="purple" class="mx-2">
-                    <span class="flex flex-row space-x-2.5">
-                        <span class="font-bold uppercase">Add</span>
-                    </span>
-                </ButtonShape>
-            </Link>
+            <div class="filters flex">
+                <div class="mt-1">
+                    <input
+                        type="text"
+                        name="search"
+                        id="search"
+                        class="block w-full rounded-md border border-wgh-gray-1.5 border-gray-300 py-3 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        placeholder="Search"
+                        v-model="filters.q"
+                    />
+                </div>
+                <Link :href="route('admin-game.gameLobies.create',game.id)">
+                    <ButtonShape type="purple" class="mx-2">
+                        <span class="flex flex-row space-x-2.5">
+                            <span class="font-bold uppercase">Add</span>
+                        </span>
+                    </ButtonShape>
+                </Link>
+            </div>
         </div>
         <BorderedContainer class="mb-2 overflow-hidden bg-wgh-gray-1.5">
             <div class="rounded-lg bg-white px-4 sm:px-0 lg:px-0">
@@ -61,7 +92,7 @@ function UTCToHumanReadable(u) {
                                                     class="group inline-flex"
                                                     :href="currentUrl"
                                                     :data="{
-                                                        sort_by: 'gameLobbies_name',
+                                                        sort_by: 'game_lobbies_name',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
                                                 >
@@ -69,11 +100,11 @@ function UTCToHumanReadable(u) {
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'gameLobbies_name',
+                                                                filters.sort_by !== 'game_lobbies_name',
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'gameLobbies_name',
+                                                                filters.sort_by === 'game_lobbies_name',
                                                             'rotate-180':
-                                                                filters.sort_by === 'gameLobbies_name' &&
+                                                                filters.sort_by === 'game_lobbies_name' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
@@ -89,7 +120,7 @@ function UTCToHumanReadable(u) {
                                                     class="group inline-flex"
                                                     :href="currentUrl"
                                                     :data="{
-                                                        sort_by: 'gameLobbies_type',
+                                                        sort_by: 'game_lobbies_type',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
                                                 >
@@ -97,11 +128,11 @@ function UTCToHumanReadable(u) {
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'gameLobbies_type',
+                                                                filters.sort_by !== 'game_lobbies_type',
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'gameLobbies_type',
+                                                                filters.sort_by === 'game_lobbies_type',
                                                             'rotate-180':
-                                                                filters.sort_by === 'gameLobbies_type' &&
+                                                                filters.sort_by === 'game_lobbies_type' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
@@ -117,7 +148,7 @@ function UTCToHumanReadable(u) {
                                                     class="group inline-flex"
                                                     :href="currentUrl"
                                                     :data="{
-                                                        sort_by: 'gameLobbies_status',
+                                                        sort_by: 'game_lobbies_status',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
                                                 >
@@ -125,11 +156,11 @@ function UTCToHumanReadable(u) {
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'gameLobbies_status',
+                                                                filters.sort_by !== 'game_lobbies_status',
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'gameLobbies_status',
+                                                                filters.sort_by === 'game_lobbies_status',
                                                             'rotate-180':
-                                                                filters.sort_by === 'gameLobbies_status' &&
+                                                                filters.sort_by === 'game_lobbies_status' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
@@ -145,7 +176,7 @@ function UTCToHumanReadable(u) {
                                                     class="group inline-flex"
                                                     :href="currentUrl"
                                                     :data="{
-                                                        sort_by: 'gameLobbies_asset_symbol',
+                                                        sort_by: 'game_lobbies_asset_symbol',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
                                                 >
@@ -153,11 +184,11 @@ function UTCToHumanReadable(u) {
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'gameLobbies_asset_symbol',
+                                                                filters.sort_by !== 'game_lobbies_asset_symbol',
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'gameLobbies_asset_symbol',
+                                                                filters.sort_by === 'game_lobbies_asset_symbol',
                                                             'rotate-180':
-                                                                filters.sort_by === 'gameLobbies_asset_symbol' &&
+                                                                filters.sort_by === 'game_lobbies_asset_symbol' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
@@ -173,7 +204,7 @@ function UTCToHumanReadable(u) {
                                                     class="group inline-flex"
                                                     :href="currentUrl"
                                                     :data="{
-                                                        sort_by: 'gameLobbies_entrance_fee',
+                                                        sort_by: 'game_lobbies_base_entrance_fee',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
                                                 >
@@ -181,11 +212,11 @@ function UTCToHumanReadable(u) {
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'gameLobbies_entrance_fee',
+                                                                filters.sort_by !== 'game_lobbies_base_entrance_fee',
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'gameLobbies_entrance_fee',
+                                                                filters.sort_by === 'game_lobbies_base_entrance_fee',
                                                             'rotate-180':
-                                                                filters.sort_by === 'gameLobbies_entrance_fee' &&
+                                                                filters.sort_by === 'game_lobbies_base_entrance_fee' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
@@ -201,7 +232,7 @@ function UTCToHumanReadable(u) {
                                                     class="group inline-flex"
                                                     :href="currentUrl"
                                                     :data="{
-                                                        sort_by: 'gameLobbies_min_players',
+                                                        sort_by: 'game_lobbies_min_players',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
                                                 >
@@ -209,11 +240,11 @@ function UTCToHumanReadable(u) {
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'gameLobbies_min_players',
+                                                                filters.sort_by !== 'game_lobbies_min_players',
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'gameLobbies_min_players',
+                                                                filters.sort_by === 'game_lobbies_min_players',
                                                             'rotate-180':
-                                                                filters.sort_by === 'gameLobbies_min_players' &&
+                                                                filters.sort_by === 'game_lobbies_min_players' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
@@ -229,7 +260,7 @@ function UTCToHumanReadable(u) {
                                                     class="group inline-flex"
                                                     :href="currentUrl"
                                                     :data="{
-                                                        sort_by: 'gameLobbies_min_players',
+                                                        sort_by: 'game_lobbies_max_players',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
                                                 >
@@ -237,11 +268,11 @@ function UTCToHumanReadable(u) {
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'gameLobbies_max_players',
+                                                                filters.sort_by !== 'game_lobbies_max_players',
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'gameLobbies_max_players',
+                                                                filters.sort_by === 'game_lobbies_max_players',
                                                             'rotate-180':
-                                                                filters.sort_by === 'gameLobbies_max_players' &&
+                                                                filters.sort_by === 'game_lobbies_max_players' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
@@ -257,7 +288,7 @@ function UTCToHumanReadable(u) {
                                                     class="group inline-flex"
                                                     :href="currentUrl"
                                                     :data="{
-                                                        sort_by: 'gameLobbies_min_players',
+                                                        sort_by: 'game_lobbies_scheduled_at',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
                                                 >
@@ -265,11 +296,11 @@ function UTCToHumanReadable(u) {
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'gameLobbies_max_players',
+                                                                filters.sort_by !== 'game_lobbies_scheduled_at',
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'gameLobbies_max_players',
+                                                                filters.sort_by === 'game_lobbies_scheduled_at',
                                                             'rotate-180':
-                                                                filters.sort_by === 'gameLobbies_max_players' &&
+                                                                filters.sort_by === 'game_lobbies_scheduled_at' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
@@ -321,13 +352,13 @@ function UTCToHumanReadable(u) {
                                                         </span>
                                                     </ButtonShape>
                                                 </Link>
-                                                <Link >
+                                                <button  @click.prevent="deleteLobby(game, gameLobbie)">
                                                     <ButtonShape type="purple" class="mx-2">
                                                         <span class="flex flex-row space-x-2.5">
                                                             <span class="font-bold uppercase">Delete</span>
                                                         </span>
                                                     </ButtonShape>
-                                                </Link>
+                                                </button>
                                             </td>
                                         </tr>
                                     </tbody>

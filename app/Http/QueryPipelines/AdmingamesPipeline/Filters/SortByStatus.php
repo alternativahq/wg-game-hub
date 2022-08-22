@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\QueryPipelines\AdmingamesPipeline\Filters;
+namespace App\Http\QueryPipelines\AdminGamesPipeline\Filters;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
@@ -27,7 +27,7 @@ class SortByStatus
         if (!in_array(strtolower($sortOrder), ['asc', 'desc'])) {
             return $next($builder);
         }
-        $builder->orderBy('games.state', $sortOrder);
+        $builder->orderBy('games.status', $sortOrder);
 
         return $next($builder);
     }

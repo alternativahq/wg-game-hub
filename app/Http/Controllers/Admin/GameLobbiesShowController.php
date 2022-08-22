@@ -10,21 +10,16 @@ use App\Enums\GameLobbyStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\GameResource;
 use App\Http\Resources\AdminGameLobbyResource;
-use App\Http\QueryPipelines\GameLobbyPipeline\GameLobbyPipeline;
+use App\Http\QueryPipelines\AdminGameLobbiesPipeline\AdminGameLobbiesPipeline;
 
 
-class AdminGameLobbiesController extends Controller
+class GameLobbiesShowController extends Controller
 {
     public function __invoke(Request $request, Game $game)
     {
-        $gameLobbies = GameLobbyPipeline::make(
+        $gameLobbies = AdminGameLobbiesPipeline::make(
             builder: $game
                 ->gameLobbies()
-                ->whereIn('status', [
-                    GameLobbyStatus::Scheduled,
-                    GameLobbyStatus::InLobby,
-                    GameLobbyStatus::InGame,
-                ])
                 ->getQuery(),
             request: $request,
         )
@@ -33,6 +28,7 @@ class AdminGameLobbiesController extends Controller
 
         return Inertia::render('Admin/GameLobbies', [
             'gameLobbies' => AdminGameLobbyResource::collection($gameLobbies),
+            'game' => $game,
             'filters' => $request->only('sort_by', 'sort_order'),
         ]);
     }

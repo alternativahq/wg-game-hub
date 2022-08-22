@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Enums;
+use Illuminate\Support\Collection;
 
 enum GameLobbyStatus: int
 {
@@ -35,6 +36,13 @@ enum GameLobbyStatus: int
             GameLobbyStatus::GameEnded,
             GameLobbyStatus::ProcessingResults,
         ]);
+    }
+    
+    public static function toSelect(): Collection
+    {
+        return collect(GameLobbyStatus::cases())->map(function($item){
+            return ['label' => $item->name, 'value' => $item->value];
+        });
     }
     
     public function toLabel(): string
