@@ -1,5 +1,6 @@
 <script setup>
 import LogoRed from '@/Shared/SVG/LogoRed';
+import Logo from '@/Shared/SVG/Logo';
 
 import NavigationItem from '@/Shared/Navigation/NavigationItem';
 import RocketIcon from '@/Shared/SVG/RocketIcon';
@@ -139,7 +140,7 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
             <nav class="container mx-auto flex hidden flex-row justify-between px-4 lg:flex">
                 <div class="flex flex-row items-center space-x-14 py-5">
                     <Link :href="route('landing')">
-                        <LogoRed class="w-32" />
+                        <Logo class="w-32" />
                     </Link>
                     <div class="flex flex-row space-x-6">
                         <NavigationItem :href="link.href" as="link" v-for="link in navigation" :key="link.name">
@@ -190,7 +191,7 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                 class="container mx-auto flex w-full flex-shrink-0 flex-row items-center justify-between bg-white px-4 lg:hidden"
             >
                 <Link :href="route('landing')">
-                    <LogoRed class="w-32 py-5" />
+                    <Logo class="w-32 py-5" />
                 </Link>
 
                 <!-- Mobile menu button -->
@@ -240,7 +241,7 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                                             <div class="flex items-center justify-between px-4">
                                                 <div>
                                                     <Link :href="route('landing')">
-                                                        <LogoRed class="h-8 w-auto" />
+                                                        <Logo class="h-8 w-auto" />
                                                     </Link>
                                                     <!--                                                    <img-->
                                                     <!--                                                        class="h-8 w-auto"-->
