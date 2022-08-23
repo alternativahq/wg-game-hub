@@ -69,6 +69,9 @@ Route::middleware('auth')->group(function () {
         // CRAD opretion  game llobies 
         Route::get('/games', AdminGamesController::class)->name('games');
         Route::get('/games/{game}/lobbies', AdminGameLobbiesShowController::class)->name('game-lobbies');
-        Route::resource('game.gameLobies', AdminGameLobbiesController::class)->except('index','show');
+        Route::resource('game.gameLobbies', AdminGameLobbiesController::class)
+        ->except('index','show')
+        ->shallow()
+        ->scoped();
     });
 });

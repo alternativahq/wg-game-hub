@@ -14,7 +14,7 @@ let props = defineProps({
     current_url: String,
 });
 
-let filters = reactive(props.filters);
+let filters = reactive({ ...props.filters });
 let currentUrl = window.location.toString();
 let pagination = reactive(new Pagination(props.games));
 

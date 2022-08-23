@@ -30,13 +30,13 @@ let AddLobbyForm = useForm({
     asset_id:'',
 });
 
-function addGameLobby(game) {
-    AddLobbyForm.post(route('admin-game.gameLobies.store',game.id));
+function addGameLobby() {
+    AddLobbyForm.post(route('admin-game.gameLobbies.store',props.game.id));
 }
 </script>
 <template>
     <div class="w-96 mx-auto">
-        <form @submit.prevent="addGameLobby(game)" >
+        <form @submit.prevent="addGameLobby()" >
             <div class="font-semibold">name</div>
             <TextInput
                 v-model="AddLobbyForm.name"

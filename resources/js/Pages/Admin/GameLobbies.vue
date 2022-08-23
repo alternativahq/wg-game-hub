@@ -25,7 +25,7 @@ let props = defineProps({
     current_url: String,
 });
 
-let filters = reactive(props.filters);
+let filters = reactive({ ...props.filters });
 let currentUrl = window.location.toString();
 let pagination = reactive(new Pagination(props.gameLobbies));
 
@@ -43,16 +43,12 @@ watch(
     }
 );
 
-function deleteLobby(game, gameLobbie) {
-    Inertia.delete(route('admin-game.gameLobies.destroy',[game.id, gameLobbie.id]));
+function deleteLobby(gameLobbie) {
+    Inertia.delete(route('admin-gameLobbies.destroy', gameLobbie.id));
 }
-
 </script>
 <template>
     <div>
-        <div v-if="$page.props.flash.success" class="my-4 py-4 px-4 text-white bg-green-700">
-            {{ $page.props.flash.success }}
-        </div>
         <div class="flex flex-row justify-between">
             <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Lobbies</h2>
             <div class="filters flex">
@@ -66,7 +62,7 @@ function deleteLobby(game, gameLobbie) {
                         v-model="filters.q"
                     />
                 </div>
-                <Link :href="route('admin-game.gameLobies.create',game.id)">
+                <Link :href="route('admin-game.gameLobbies.create',props.game.id)">
                     <ButtonShape type="purple" class="mx-2">
                         <span class="flex flex-row space-x-2.5">
                             <span class="font-bold uppercase">Add</span>
@@ -345,15 +341,15 @@ function deleteLobby(game, gameLobbie) {
                                                 {{ UTCToHumanReadable(gameLobbie.scheduled_at) }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 flex items-center py-4 text-sm text-gray-500">
-                                                <Link >
-                                                    <ButtonShape type="red">
+                                                <Link :href="route('admin-gameLobbies.edit', gameLobbie.id)">
+                                                    <ButtonShape type="purple">
                                                         <span class="flex flex-row space-x-2.5">
                                                             <span class="font-bold uppercase">Update</span>
                                                         </span>
                                                     </ButtonShape>
                                                 </Link>
-                                                <button  @click.prevent="deleteLobby(game, gameLobbie)">
-                                                    <ButtonShape type="purple" class="mx-2">
+                                                <button  @click="deleteLobby(gameLobbie)">
+                                                    <ButtonShape type="red" class="mx-2">
                                                         <span class="flex flex-row space-x-2.5">
                                                             <span class="font-bold uppercase">Delete</span>
                                                         </span>

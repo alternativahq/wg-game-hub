@@ -24,14 +24,14 @@ class GameLobbiesController extends Controller
         $gameStatuss = GameLobbyStatus::toSelect();
 
         return Inertia::render('Admin/AddGameLobby',[
-            'assets' => $assets, 
             'game' => $game, 
+            'assets' => $assets, 
             'gameTypes' => $gameTypes,
             'gameStatuss' => $gameStatuss
         ]);
     }
 
-    public function store(StoreLobbyRequest $request,Game $game)
+    public function store(StoreLobbyRequest $request, Game $game)
     {
         $game->gameLobbies()->create(array_merge($request->validated(),['available_spots'=>$request->max_players]));
         session()->flash('success', 'new lobby got added successfully!');
@@ -40,23 +40,29 @@ class GameLobbiesController extends Controller
 
     public function edit(GameLobby $gameLobby)
     {
+        $assets = Asset::get(['id', 'name']);
+        $gameTypes = GameLobbyType::toSelect();
+        $gameStatuss = GameLobbyStatus::toSelect();
+
         return Inertia::render('Admin/EditGameLobby', [
-            'gameLobby' => new GameLobbyResource($gameLobby),
+            'gameLobby' => new GameLobbyResource($gameLobby), 
+            'assets' => $assets, 
+            'gameTypes' => $gameTypes,
+            'gameStatuss' => $gameStatuss
         ]);
     }
 
-    public function update(UpdateLobbyRequest $request, Game $game, GameLobby $gameLobby)
+    public function update(UpdateLobbyRequest $request, GameLobby $gameLobby)
     {
         $gameLobby->update($request->validated());
         session()->flash('success', 'lobby updated successfully!');
-        return redirect()->route('admin-game-lobbies',$game->id);
+        return redirect()->route('admin-game-lobbies',$gameLobby->game->id);
     }
 
-    public function destroy(Game $game, GameLobby $gameLobby)
+    public function destroy(GameLobby $gameLobby)
     {
-        // dd($game->id);
         $gameLobby->delete();
         session()->flash('success', 'lobby deleted successfully!');
-        return redirect()->route('admin-game-lobbies', $game->id);
+        return redirect()->route('admin-game-lobbies', $gameLobby->game->id);
     }
 }
