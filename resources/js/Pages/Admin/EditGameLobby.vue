@@ -8,14 +8,12 @@ import { useForm } from '@inertiajs/inertia-vue3';
 import { intersectionTypeAnnotation } from '@babel/types';
 import { Inertia } from '@inertiajs/inertia';
 
-
 let props = defineProps({
     gameLobby:Object,
     assets:Object,
     gameTypes:Object,
     gameStatuss:Object,
 });
-
 
 let updateLobbyForm = useForm({
     name: props.gameLobby.data.name,
@@ -47,7 +45,6 @@ function updateGameLobby(){
 </script>
 <template>
     <div class="w-96 mx-auto">
-        {{gameLobby}}
         <form @submit.prevent="updateGameLobby" >
             <div class="font-semibold">name</div>
             <TextInput
