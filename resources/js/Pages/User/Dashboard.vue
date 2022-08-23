@@ -23,7 +23,7 @@ dayjs.extend(relativeTime);
 dayjs.extend(duration);
 
 let props = defineProps({
-    assetAccounts: Object,
+    user: Object,
     totalPlayed: Number,
     lastGamePlayed: Object,
     latestGamesPlayedHistory: Object,
@@ -50,7 +50,7 @@ function timePlayedSecondsToHours(s) {
                         <BorderedContainer class="shrink-0 bg-wgh-purple-3">
                             <div class="rounded-lg bg-white">
                                 <img
-                                    :src="currentUser.image_url"
+                                    :src="user.image_url"
                                     alt="user profile image"
                                     class="h-12 w-12 object-cover md:h-24 md:w-24"
                                 />
@@ -59,7 +59,7 @@ function timePlayedSecondsToHours(s) {
                         <div class="flex flex-col space-y-2">
                             <div class="flex flex-row items-start justify-between">
                                 <h1 class="font-grota text-base font-extrabold capitalize text-wgh-gray-6 md:text-lg">
-                                    {{ currentUser.full_name }}
+                                    {{ user.full_name }}
                                 </h1>
                                 <Link class="space-x-2 font-inter text-xs font-normal text-wgh-gray-4 md:hidden">
                                     <SettingsIcon class="h-4 w-4" />
@@ -226,7 +226,7 @@ function timePlayedSecondsToHours(s) {
                 <h2 class="truncate font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">
                     Latest Games Played History
                 </h2>
-                <Link class="shrink-0" :href="route('user.games-played-history', { user: currentUser.username })">
+                <Link class="shrink-0" :href="route('user.games-played-history', { user: user.username })">
                     <ButtonShape type="red"> View All</ButtonShape>
                 </Link>
             </div>
@@ -296,7 +296,7 @@ function timePlayedSecondsToHours(s) {
                 <h2 class="truncate font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">
                     Latest Achievements
                 </h2>
-                <Link class="shrink-0" :href="route('user.achievements', { user: currentUser.username })">
+                <Link class="shrink-0" :href="route('user.achievements', { user: user.username })">
                     <ButtonShape type="red"> View All</ButtonShape>
                 </Link>
             </div>
@@ -350,83 +350,6 @@ function timePlayedSecondsToHours(s) {
                                                 </td>
                                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                     {{ userAchievement.achievement.description }}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </BorderedContainer>
-        </section>
-        <section class="overflow-x-auto">
-            <div class="mb-6 flex flex-col items-center justify-between space-y-2 md:flex-row md:space-y-0">
-                <h2 class="truncate font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Asset Accounts</h2>
-                <div class="flex flex-row space-x-2">
-                    <Link class="shrink-0" :href="route('user.transactions')">
-                        <ButtonShape type="red">View Transactions</ButtonShape>
-                    </Link>
-                    <Link class="shrink-0" :href="route('user.assetAccounts', { user: currentUser.username })">
-                        <ButtonShape type="red"> View Accounts</ButtonShape>
-                    </Link>
-                </div>
-            </div>
-            <BorderedContainer class="bg-wgh-gray-1.5">
-                <div class="rounded-lg">
-                    <div class="flex flex-col">
-                        <div class="overflow-x-auto">
-                            <div class="inline-block min-w-full align-middle">
-                                <div class="overflow-hidden rounded-lg shadow-sm ring-1 ring-black ring-opacity-5">
-                                    <table class="min-w-full divide-y divide-gray-300">
-                                        <thead class="bg-gray-50">
-                                            <tr>
-                                                <th
-                                                    scope="col"
-                                                    class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8"
-                                                >
-                                                    Name
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                                >
-                                                    Symbol
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                                >
-                                                    Balance
-                                                </th>
-
-                                                <th
-                                                    scope="col"
-                                                    class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                                >
-                                                    Description
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="divide-y divide-gray-200 bg-white">
-                                            <tr v-for="assetAccount in assetAccounts" :key="assetAccount.id">
-                                                <td
-                                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
-                                                >
-                                                    {{ assetAccount.name }}
-                                                </td>
-                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                    {{ assetAccount.symbol }}
-                                                </td>
-                                                <td
-                                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
-                                                >
-                                                    {{ assetAccount.pivot.balance }}
-                                                </td>
-
-                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                    {{ assetAccount.description }}
                                                 </td>
                                             </tr>
                                         </tbody>
