@@ -40,19 +40,14 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        $assetAccounts = $user
-            ->assets()
-            ->take(5)
-            ->get(['user_asset_account.id', 'name', 'description', 'symbol']);
-
         return Inertia::render('User/Dashboard', [
+            'user' => $user->only('image_url', 'status', 'full_name', 'username'),
             'totalPlayed' => GameLobbyUser::whereBelongsTo($user)->count(),
             'totalTimePlayed' => (int) $totalTimePlayed,
             'topPlayedGamesTimeSpent' => $topThreePlayedGamesAndTotalTimePlayed,
             'lastGamePlayed' => $lastLobbyPlayedIn?->game,
             'latestAchievements' => $achievements,
             'latestGamesPlayedHistory' => $gamePlayedHistory,
-            'assetAccounts' => $assetAccounts,
         ]);
     }
 }

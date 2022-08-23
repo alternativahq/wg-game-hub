@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Enums;
+namespace App\Enums\Wallet;
 
-use App\Enums\Wallet\TransactionState;
 use Illuminate\Support\Collection;
 
 enum TransactionType: string
