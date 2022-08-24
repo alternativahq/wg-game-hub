@@ -230,6 +230,18 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                                         </Link>
                                     </MenuItem>
                                 </div>
+                                <div class="py-1">
+                                    <MenuItem v-slot="{ active }">
+                                        <Link
+                                            :href="route('admin-games')"
+                                            :class="[
+                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                'block px-4 py-2 text-sm',
+                                            ]"
+                                            >Admin Dashboard</Link
+                                        >
+                                    </MenuItem>
+                                </div>
                             </MenuItems>
                         </transition>
                     </Menu>
@@ -249,7 +261,7 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                     </Link>
                 </div>
             </nav>
-            <FlashMessage/>
+            <FlashMessage />
             <div
                 class="container mx-auto flex w-full flex-shrink-0 flex-row items-center justify-between bg-white px-4 lg:hidden"
             >
