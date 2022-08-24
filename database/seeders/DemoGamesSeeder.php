@@ -62,7 +62,7 @@ class DemoGamesSeeder extends Seeder
                 'description' =>
                     'Agar.io is a Massively-multiplayer top-down strategy browser game. In Agar.io, the player manipulates a circular cell using the mouse and keyboard buttons.',
                 'status' => GameStatus::Online,
-                'image' => null,
+                'image' => 'agario/agario_cover.jpg',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -72,7 +72,7 @@ class DemoGamesSeeder extends Seeder
                 'description' =>
                     'Slither.io is a massively multiplayer browser game where players control a snake-like avatar, which consumes multicolored pellets from other players, and ones that naturally spawn on the map in the game to grow in size. The objective of the game is to grow the longest snake in the server.',
                 'status' => GameStatus::Online,
-                'image' => null,
+                'image' => 'shilterio/slitherio_4.jpg',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

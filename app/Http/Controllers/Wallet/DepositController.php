@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\Wallet;
 
+use App\Enums\TransactionType;
+use App\Enums\Wallet\TransactionAsset;
+use App\Enums\Wallet\TransactionScope;
+use App\Enums\Wallet\TransactionState;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Asset;
@@ -12,13 +16,24 @@ use App\Http\Resources\TransactionResource;
 use App\Http\QueryPipelines\UserDepositsPipeline\UserDepositsPipeline;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Str;
 
 class DepositController extends Controller
 {
     public function __invoke(User $user, Request $request)
     {
-        //Todo need to get all transactions and fillter them and get them by type to deposit
-        $response = Http::get(config('wodo.wallet-transactions-api'), $request->all());
+        $payload = $request
+            ->collect()
+            ->merge([
+                'type' => 'DEPOSIT',
+            ])
+            ->keyBy(fn($value, $key) => Str::camel($key))
+            ->all();
+        $response = Http::get(config('wodo.wallet-transactions-api'), $payload);
+        if (!$response->ok()) {
+            // TODO: Put session here
+            return redirect()->back();
+        }
 
         $depositTransactions = new LengthAwarePaginator(
             $response->object()->data,
@@ -41,7 +56,17 @@ class DepositController extends Controller
         return Inertia::render('Wallet/Deposit', [
             'userDepositTransactions' => TransactionResource::collection($depositTransactions),
             'assets' => AssetResource::collection($assets),
-            'filters' => $request->only('sort_by', 'sort_order', 'filter_by_game'),
+            '_filters' => $request
+                ->collect()
+                ->only('sort_by', 'sort_order', 'filter_by_game', 'hash', 'scope', 'asset', 'state')
+                ->filter()
+                ->toArray(),
+            '_filtersOptions' => [
+                'transactionScopeOptions' => TransactionScope::toSelect()->toArray(),
+                'transactionAssetOptions' => TransactionAsset::toSelect()->toArray(),
+                'transactionStateOptions' => TransactionState::toSelect()->toArray(),
+                'transactionTypeOptions' => TransactionType::toSelect()->toArray(),
+            ],
         ]);
     }
 }

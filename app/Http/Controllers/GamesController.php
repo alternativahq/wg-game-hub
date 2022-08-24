@@ -18,11 +18,7 @@ class GamesController extends Controller
         $gameLobbies = GameLobbyPipeline::make(
             builder: $game
                 ->gameLobbies()
-                ->whereIn('status', [
-                    GameLobbyStatus::Scheduled,
-                    GameLobbyStatus::InLobby,
-                    GameLobbyStatus::InGame,
-                ])
+                ->whereIn('status', [GameLobbyStatus::Scheduled, GameLobbyStatus::InLobby, GameLobbyStatus::InGame])
                 ->getQuery(),
             request: $request,
         )

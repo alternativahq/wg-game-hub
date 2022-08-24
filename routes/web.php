@@ -13,6 +13,7 @@ use App\Http\Controllers\{
     User\DashboardController as UserDashboardController,
     User\GamePlayedHistoryController as UserGamePlayedHistoryController,
     Wallet\TransactionController as UserTransactionController,
+    Wallet\WalletController as UserWalletController,
     Wallet\WithdrawController as UserWithdrawController,
     Wallet\DepositController as UserDepositController,
     Notifications\DeleteNotificationsController,
@@ -53,10 +54,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/w/{user:username}/games-played-history', UserGamePlayedHistoryController::class)->name(
         'user.games-played-history',
     );
-    // User Transactions
-    Route::get('/wallet/transactions', UserTransactionController::class)->name('user.transactions');
-    Route::get('/wallet/withdraw', UserWithdrawController::class)->name('user.withdraw');
-    Route::get('/wallet/deposit', UserDepositController::class)->name('user.deposit');
+    // User Wallet
+    Route::get('wallet', UserWalletController::class)->name('user.wallet');
+    Route::get('wallet/transactions', UserTransactionController::class)->name('user.transactions');
+    Route::get('wallet/withdraw', UserWithdrawController::class)->name('user.withdraw');
+    Route::get('wallet/deposit', UserDepositController::class)->name('user.deposit');
     // Notifications
     Route::put('notifications/{notification}/read', MarkNotificationAsReadController::class)->name(
         'notifications.read',
