@@ -6,10 +6,10 @@ use Illuminate\Support\Collection;
 
 enum TransactionState: string
 {
-    case Submitted = 'SUBMITTED';
-    case Processing = 'PROCESSING';
-    case Completed = 'COMPLETED';
-    case Failed = 'FAILED';
+    case Submitted = 'submitted';
+    case Processing = 'processing';
+    case Completed = 'completed';
+    case Failed = 'failed';
 
     public static function toSelect(): Collection
     {
