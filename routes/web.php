@@ -13,10 +13,14 @@ use App\Http\Controllers\{
     User\DashboardController as UserDashboardController,
     User\GamePlayedHistoryController as UserGamePlayedHistoryController,
     Wallet\TransactionController as UserTransactionController,
+    Wallet\WalletController as UserWalletController,
     Wallet\WithdrawController as UserWithdrawController,
     Wallet\DepositController as UserDepositController,
     Notifications\DeleteNotificationsController,
     Notifications\MarkNotificationAsReadController,
+    Admin\GamesController as AdminGamesController,
+    Admin\GameLobbiesController as AdminGameLobbiesController,
+    Admin\GameLobbiesShowController as AdminGameLobbiesShowController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -50,14 +54,26 @@ Route::middleware('auth')->group(function () {
     Route::get('/w/{user:username}/games-played-history', UserGamePlayedHistoryController::class)->name(
         'user.games-played-history',
     );
-    // User Transactions
-    Route::get('/wallet/transactions', UserTransactionController::class)->name('user.transactions');
-    Route::get('/wallet/withdraw', UserWithdrawController::class)->name('user.withdraw');
-    Route::get('/wallet/deposit', UserDepositController::class)->name('user.deposit');
+    // User Wallet
+    Route::get('wallet', UserWalletController::class)->name('user.wallet');
+    Route::get('wallet/transactions', UserTransactionController::class)->name('user.transactions');
+    Route::get('wallet/withdraw', UserWithdrawController::class)->name('user.withdraw');
+    Route::get('wallet/deposit', UserDepositController::class)->name('user.deposit');
     // Notifications
     Route::put('notifications/{notification}/read', MarkNotificationAsReadController::class)->name(
         'notifications.read',
     );
 
     Route::delete('notifications', DeleteNotificationsController::class)->name('notifications.delete');
+
+    // Admin Routes
+    Route::middleware('isAdmin')->prefix('/admin')->as('admin-')->group(function () {
+        // CRAD opretion  game llobies 
+        Route::get('/games', AdminGamesController::class)->name('games');
+        Route::get('/games/{game}/lobbies', AdminGameLobbiesShowController::class)->name('game-lobbies');
+        Route::resource('game.gameLobbies', AdminGameLobbiesController::class)
+        ->except('index','show')
+        ->shallow()
+        ->scoped();
+    });
 });

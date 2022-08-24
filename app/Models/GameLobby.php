@@ -68,6 +68,15 @@ class GameLobby extends Model
         );
     }
 
+    public function scheduledAtToDateTime(): Attribute
+    {
+        return new Attribute(
+            get: function () {
+                return date('Y-m-d\TH:i', strtotime($this->scheduled_at));
+            },
+        );
+    }
+
     public function playersInLobbyCount(): Attribute
     {
         return new Attribute(

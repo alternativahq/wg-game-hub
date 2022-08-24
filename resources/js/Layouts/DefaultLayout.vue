@@ -1,5 +1,8 @@
 <script setup>
 import LogoRed from '@/Shared/SVG/LogoRed';
+import Logo from '@/Shared/SVG/Logo';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
+import { ChevronDownIcon } from '@heroicons/vue/solid';
 
 import NavigationItem from '@/Shared/Navigation/NavigationItem';
 import RocketIcon from '@/Shared/SVG/RocketIcon';
@@ -22,6 +25,7 @@ import {
 import { MenuIcon, XIcon, BellIcon } from '@heroicons/vue/outline';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
 import { inject, reactive } from 'vue';
+import FlashMessage from '../Shared/FlashMessage.vue';
 
 let props = defineProps({
     config: Object,
@@ -139,7 +143,7 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
             <nav class="container mx-auto flex hidden flex-row justify-between px-4 lg:flex">
                 <div class="flex flex-row items-center space-x-14 py-5">
                     <Link :href="route('landing')">
-                        <LogoRed class="w-32" />
+                        <Logo class="w-32" />
                     </Link>
                     <div class="flex flex-row space-x-6">
                         <NavigationItem :href="link.href" as="link" v-for="link in navigation" :key="link.name">
@@ -162,14 +166,73 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                             }}</span
                         >
                     </button>
-                    <Link v-if="currentUser" :href="route('user.profile', { user: currentUser.username })">
-                        <ButtonShape type="purple">
-                            <span class="flex flex-row space-x-2.5">
-                                <AccountIcon class="h-6 w-6" />
-                                <span class="font-bold uppercase">{{ currentUser.name }}</span>
-                            </span>
-                        </ButtonShape>
-                    </Link>
+                    <Menu v-if="currentUser" as="div" class="relative inline-block text-left">
+                        <div>
+                            <MenuButton>
+                                <ButtonShape type="purple">
+                                    <span class="flex flex-row space-x-2.5">
+                                        <AccountIcon class="h-6 w-6" />
+                                        <span class="font-bold uppercase">{{ currentUser.name }}</span>
+                                    </span>
+                                </ButtonShape>
+                            </MenuButton>
+                        </div>
+
+                        <transition
+                            enter-active-class="transition ease-out duration-100"
+                            enter-from-class="transform opacity-0 scale-95"
+                            enter-to-class="transform opacity-100 scale-100"
+                            leave-active-class="transition ease-in duration-75"
+                            leave-from-class="transform opacity-100 scale-100"
+                            leave-to-class="transform opacity-0 scale-95"
+                        >
+                            <MenuItems
+                                class="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                            >
+                                <div class="px-4 py-3">
+                                    <p class="text-sm">Signed in as</p>
+                                    <p class="truncate text-sm font-medium text-gray-900">
+                                        {{ currentUser.email }}
+                                    </p>
+                                </div>
+                                <div class="py-1">
+                                    <MenuItem v-slot="{ active }">
+                                        <Link
+                                            :href="route('user.profile', { user: currentUser.username })"
+                                            :class="[
+                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                'block px-4 py-2 text-sm',
+                                            ]"
+                                        >
+                                            Dashboard
+                                        </Link>
+                                    </MenuItem>
+                                    <MenuItem v-slot="{ active }">
+                                        <Link
+                                            :href="route('user.wallet')"
+                                            :class="[
+                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                'block px-4 py-2 text-sm',
+                                            ]"
+                                        >
+                                            Wallet
+                                        </Link>
+                                    </MenuItem>
+                                    <MenuItem v-slot="{ active }">
+                                        <Link
+                                            :href="route('user.transactions')"
+                                            :class="[
+                                                active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                'block px-4 py-2 text-sm',
+                                            ]"
+                                        >
+                                            Transactions
+                                        </Link>
+                                    </MenuItem>
+                                </div>
+                            </MenuItems>
+                        </transition>
+                    </Menu>
                     <Link as="button" method="POST" v-if="currentUser" :href="route('logout')">
                         <ButtonShape type="red">
                             <span class="flex flex-row space-x-2.5">
@@ -186,11 +249,12 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                     </Link>
                 </div>
             </nav>
+            <FlashMessage/>
             <div
                 class="container mx-auto flex w-full flex-shrink-0 flex-row items-center justify-between bg-white px-4 lg:hidden"
             >
                 <Link :href="route('landing')">
-                    <LogoRed class="w-32 py-5" />
+                    <Logo class="w-32 py-5" />
                 </Link>
 
                 <!-- Mobile menu button -->
@@ -240,7 +304,7 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                                             <div class="flex items-center justify-between px-4">
                                                 <div>
                                                     <Link :href="route('landing')">
-                                                        <LogoRed class="h-8 w-auto" />
+                                                        <Logo class="h-8 w-auto" />
                                                     </Link>
                                                     <!--                                                    <img-->
                                                     <!--                                                        class="h-8 w-auto"-->

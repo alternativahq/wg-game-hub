@@ -18,7 +18,7 @@ class User extends Authenticatable
     use Notifiable;
     use HasUUID;
 
-    protected $fillable = ['name', 'last_name', 'email', 'password', 'username', 'cooldown_end_at'];
+    protected $fillable = ['name', 'last_name', 'email', 'password', 'username', 'is_admin', 'cooldown_end_at'];
 
     protected $hidden = ['password', 'remember_token'];
 
