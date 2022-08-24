@@ -18,6 +18,9 @@ use App\Http\Controllers\{
     Wallet\DepositController as UserDepositController,
     Notifications\DeleteNotificationsController,
     Notifications\MarkNotificationAsReadController,
+    Admin\GamesController as AdminGamesController,
+    Admin\GameLobbiesController as AdminGameLobbiesController,
+    Admin\GameLobbiesShowController as AdminGameLobbiesShowController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -62,4 +65,15 @@ Route::middleware('auth')->group(function () {
     );
 
     Route::delete('notifications', DeleteNotificationsController::class)->name('notifications.delete');
+
+    // Admin Routes
+    Route::middleware('isAdmin')->prefix('/admin')->as('admin-')->group(function () {
+        // CRAD opretion  game llobies 
+        Route::get('/games', AdminGamesController::class)->name('games');
+        Route::get('/games/{game}/lobbies', AdminGameLobbiesShowController::class)->name('game-lobbies');
+        Route::resource('game.gameLobbies', AdminGameLobbiesController::class)
+        ->except('index','show')
+        ->shallow()
+        ->scoped();
+    });
 });

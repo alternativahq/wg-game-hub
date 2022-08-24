@@ -25,6 +25,7 @@ import {
 import { MenuIcon, XIcon, BellIcon } from '@heroicons/vue/outline';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
 import { inject, reactive } from 'vue';
+import FlashMessage from '../Shared/FlashMessage.vue';
 
 let props = defineProps({
     config: Object,
@@ -165,7 +166,6 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                             }}</span
                         >
                     </button>
-
                     <Menu v-if="currentUser" as="div" class="relative inline-block text-left">
                         <div>
                             <MenuButton>
@@ -249,6 +249,7 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                     </Link>
                 </div>
             </nav>
+            <FlashMessage/>
             <div
                 class="container mx-auto flex w-full flex-shrink-0 flex-row items-center justify-between bg-white px-4 lg:hidden"
             >

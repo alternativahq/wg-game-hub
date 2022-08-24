@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin \App\Models\GameLobby */
-class GameLobbyResource extends JsonResource
+class AdminGameLobbyResource extends JsonResource
 {
     /**
      * @param  Request  $request
@@ -20,8 +20,8 @@ class GameLobbyResource extends JsonResource
             'image' => $this->whenNotNull($this->image),
             'image_url' => $this->whenNotNull($this->image_url),
             'theme_color' => $this->whenNotNull($this->theme_color),
-            'type' => $this->whenNotNull($this->type),
-            'status' => $this->whenNotNull($this->status),
+            'type' => $this->whenNotNull($this->type->toLabel()),
+            'status' => $this->whenNotNull($this->status->toLabel()),
             'rules' => $this->whenNotNull($this->rules),
             'base_entrance_fee' => $this->whenNotNull($this->base_entrance_fee),
             'created_at' => $this->whenNotNull($this->created_at),
@@ -34,7 +34,6 @@ class GameLobbyResource extends JsonResource
             'players_in_lobby_count' => $this->whenNotNull($this->players_in_lobby_count),
             'scheduled_at_utc_string' => $this->whenNotNull($this->scheduled_at_utc_string),
             'scheduled_at' => $this->whenNotNull($this->scheduled_at),
-            'scheduled_at_date_time' => $this->whenNotNull($this->scheduled_at_to_date_time),
             'users_count' => $this->whenNotNull($this->users_count),
             'game_id' => $this->whenNotNull($this->game_id),
             'asset_id' => $this->whenNotNull($this->asset_id),
