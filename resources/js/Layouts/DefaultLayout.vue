@@ -230,7 +230,7 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                                         </Link>
                                     </MenuItem>
                                 </div>
-                                <div class="py-1">
+                                <div class="py-1" v-if="currentUser.is_admin">
                                     <MenuItem v-slot="{ active }">
                                         <Link
                                             :href="route('admin-games')"
