@@ -13,7 +13,6 @@ use App\Http\Controllers\{
     User\DashboardController as UserDashboardController,
     User\GamePlayedHistoryController as UserGamePlayedHistoryController,
     Wallet\TransactionController as UserTransactionController,
-    Wallet\TransactionShowController as UserTransactionShowController,
     Wallet\WalletController as UserWalletController,
     Wallet\WithdrawController as UserWithdrawController,
     Wallet\DepositController as UserDepositController,
