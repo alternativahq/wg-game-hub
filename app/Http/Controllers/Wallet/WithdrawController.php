@@ -6,7 +6,6 @@ use App\Enums\TransactionType;
 use App\Enums\Wallet\TransactionAsset;
 use App\Enums\Wallet\TransactionScope;
 use App\Enums\Wallet\TransactionState;
-use Redirect;
 use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Asset;
@@ -26,7 +25,7 @@ class WithdrawController extends Controller
         $payload = $request
             ->collect()
             ->merge([
-                'type' => 'WITHDRAW',
+                'type' => TransactionType::Withdraw->value,
             ])
             ->keyBy(fn($value, $key) => Str::camel($key))
             ->all();
@@ -58,7 +57,20 @@ class WithdrawController extends Controller
             'assets' => AssetResource::collection($assets),
             '_filters' => $request
                 ->collect()
-                ->only('sort_by', 'sort_order', 'filter_by_game', 'hash', 'scope', 'asset', 'type', 'state')
+                ->only(
+                    'sort_by',
+                    'sort_order',
+                    'hash',
+                    'scope',
+                    'asset',
+                    'type',
+                    'state',
+                    'global_tx_id',
+                    'ref_id',
+                    'hash',
+                    'to_account_id',
+                    'from_account_id',
+                )
                 ->filter()
                 ->toArray(),
             '_filtersOptions' => [
