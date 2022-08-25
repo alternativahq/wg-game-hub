@@ -53,7 +53,6 @@ watch(
         <div class="w-full lg:w-3/4">
             <ActiveSessionBanner />
             <CooldownBanner />
-
             <BorderedContainer class="mb-8 bg-wgh-red-3">
                 <div class="flex flex-col space-y-6 rounded-lg bg-wgh-red-2 p-6 md:flex-row md:space-x-6 md:space-y-0">
                     <div class="w-full md:w-1/2">

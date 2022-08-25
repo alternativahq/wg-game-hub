@@ -42,9 +42,9 @@ class DemoAssetsSeeder extends Seeder
             ],
             [
                 'id' => '165aa799-bf3e-432f-bf20-32fac4ca7eb9',
-                'name' => 'Ethereum',
-                'description' => 'Ethereum Coin',
-                'symbol' => 'ETH',
+                'name' => 'Wodo Game Token',
+                'description' => 'Wodo Game Token',
+                'symbol' => 'XWGT',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

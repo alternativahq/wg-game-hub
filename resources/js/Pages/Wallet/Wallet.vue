@@ -14,7 +14,15 @@ let props = defineProps({
     <section class="overflow-x-auto">
         <div class="mb-6 flex flex-col items-center justify-between space-y-2 md:flex-row md:space-y-0">
             <h2 class="truncate font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Asset Accounts</h2>
-            <div class="flex flex-row space-x-2">
+            <div class="mb-5 flex flex-row items-center space-x-4">
+                <div class="flex flex-row items-center justify-end space-x-4">
+                    <Link class="shrink-0" :href="route('user.deposit')">
+                        <ButtonShape type="red">Deposit</ButtonShape>
+                    </Link>
+                    <Link class="shrink-0" :href="route('user.withdraw')">
+                        <ButtonShape type="red">Withdraw</ButtonShape>
+                    </Link>
+                </div>
                 <Link class="shrink-0" :href="route('user.transactions')">
                     <ButtonShape type="red">View Transactions</ButtonShape>
                 </Link>
