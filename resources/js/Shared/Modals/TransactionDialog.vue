@@ -6,6 +6,7 @@ import {
     TransitionRoot,
 } from '@headlessui/vue';
 import { Inertia } from '@inertiajs/inertia';
+import Steps from '../Steps.vue';
 
 defineProps({
     open: Boolean,
@@ -53,9 +54,10 @@ defineProps({
                                             <div class="text-2xl hover:cursor-pointer" @click="$emit('close')">&times;</div>
                                         </div>
                                     </div>
+                                    <Steps class="mb-5"/>
                                     <div class="border-b-2 border-b-gray-400 mb-4">
                                         <div class="mx-4">
-                                            <div class="mb-5">
+                                            <!-- <div class="mb-5">
                                                 <div class="font-medium">Withdraw Odrder submited</div>
                                                 <div class="text-sm text-gray-500">2022-8-5 13:42</div>
                                             </div>
@@ -66,7 +68,7 @@ defineProps({
                                             <div class="mb-5">
                                                 <div class="font-medium">completed</div>
                                                 <div class="text-sm text-gray-500">2022-8-5 13:42</div>
-                                            </div>
+                                            </div> -->
                                             <div class="mb-5">
                                                 <div class="text-sm text-gray-500 mb-1">please note that you will receive a email once it is completed.</div>
                                                 <div class="text-sm text-gray-500 underline">why hasn't my withdrawal arrived yet?</div>

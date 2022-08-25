@@ -47,7 +47,7 @@ let state = reactive({
 function show(transaction) {
     state.transactionShow = transaction;
     
-    state.transactionSteps = Inertia.visit(route('user.transactions.show',transaction.globalTxId),{
+    state.transactionSteps = Inertia.visit(route('user.transactions.show',transaction.id),{
         method: 'get',
     });
     console.log(state.transactionSteps)

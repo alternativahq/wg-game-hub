@@ -11,11 +11,12 @@ class TransactionShowController extends Controller
 {
     public function __invoke($id, Request $request)
     {
-        // return 'SADASDAS';
-        // return $response = Http::get();
+        
+        $response = Http::get(config('wodo.wallet-transactions-show-api').$id);
+        return $response;
         // if (!$response->ok()) {
-        //     // TODO: Put session here
-        //     return redirect()->back();
+        //     session()->flash('erorr', 'there is no response!');
+        //     return redirect()->route('admin-game-lobbies',$gameLobby->game->id);
         // }
     }
 }
