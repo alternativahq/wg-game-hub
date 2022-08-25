@@ -36,23 +36,22 @@ function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
 }
 
-
-
 let state = reactive({
     open: false,
     transactionShow:null,
     transactionSteps:null,
 });
 
+async function api(){
+    state.transactionSteps = await axios.get('http://wg-game-hub.test/api/wallet/transaction/09e227da-2f4b-452c-9afb-ed1f10cf8c83/log')
+    .then(r => r.data.data);
+    console.log(state.transactionSteps.data.data)
+};
+
 function show(transaction) {
     state.transactionShow = transaction;
-    
-    state.transactionSteps = Inertia.visit(route('user.transactions.show',transaction.id),{
-        method: 'get',
-    });
-    console.log(state.transactionSteps)
-    
-    state.open = true;
+    api();
+    // state.open = true;
 }
 
 watch(
@@ -67,8 +66,8 @@ watch(
 </script>
 <template>
     <div>
-        <TransactionDialog :transactionSteps="transactionSteps" :transaction="state.transactionShow" :open="state.open" @close="state.open = false"/>
-            
+        <TransactionDialog  :transaction="state.transactionShow" :transactionSteps="state.transactionSteps" :open="state.open" @close="state.open = false"/>
+            {{state.transactionSteps}}
         <div class="mb-5 flex items-center justify-end">
             <Link class="mr-4 shrink-0" :href="route('user.deposit')">
                 <ButtonShape type="red">Deposit</ButtonShape>
