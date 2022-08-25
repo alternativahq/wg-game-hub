@@ -13,7 +13,7 @@ import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import TextInput from '@/Shared/Inputs/TextInput';
 import { debounce } from 'lodash';
-import Dialog from '../../Shared/Modals/Dialog.vue';
+import TransactionDialog from '../../Shared/Modals/TransactionDialog.vue';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -36,12 +36,23 @@ function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
 }
 
+
+
 let state = reactive({
-    open: true,
+    open: false,
+    transactionShow:null,
+    transactionSteps:null,
 });
 
-function closeDialog(value) {
-    state.open = value;
+function show(transaction) {
+    state.transactionShow = transaction;
+    
+    state.transactionSteps = Inertia.visit(route('user.transactions.show',transaction.globalTxId),{
+        method: 'get',
+    });
+    console.log(state.transactionSteps)
+    
+    state.open = true;
 }
 
 watch(
@@ -56,30 +67,8 @@ watch(
 </script>
 <template>
     <div>
-        <Dialog :open="state.open" @close="closeDialog" >
-            <div class="mb-4">
-                <div class="mb-8 flex justify-between items-center text-2xl font-semibold">
-                    <div>Withdraw Details</div>
-                    <div class="text-2xl">&times;</div>
-                </div>
-                <div class="mx-4">
-                    <div class="mb-5">
-                        <div class="font-medium">Withdraw Order submited</div>
-                        <div class="text-sm text-gray-500">2022-8-5 13:42</div>
-                    </div>
-                    <div class="mb-5">
-                        <div class="font-medium">system prosessing</div>
-                        <div class="text-sm text-gray-500">2022-8-5 13:42</div>
-                    </div>
-                    <div class="mb-5">
-                        <div class="font-medium">completed</div>
-                        <div class="text-sm text-gray-500">2022-8-5 13:42</div>
-                    </div>
-                    <div class="text-sm text-gray-500 mb-1">please note that you will receive a email once it is completed.</div>
-                    <div class="text-sm text-gray-500 underline">why hasn't my withdrawal arrived yet?</div>
-                </div>
-            </div>
-        </Dialog>
+        <TransactionDialog :transactionSteps="transactionSteps" :transaction="state.transactionShow" :open="state.open" @close="state.open = false"/>
+            
         <div class="mb-5 flex items-center justify-end">
             <Link class="mr-4 shrink-0" :href="route('user.deposit')">
                 <ButtonShape type="red">Deposit</ButtonShape>
@@ -291,7 +280,7 @@ watch(
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
-                                                <ButtonShape type="purple" @click="state.open = true">
+                                                <ButtonShape type="purple" @click="show(transaction)">
                                                     <span class="flex flex-row space-x-2.5">
                                                         <span class="font-bold uppercase">Show</span>
                                                     </span>
