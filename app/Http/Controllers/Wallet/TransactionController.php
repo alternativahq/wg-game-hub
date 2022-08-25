@@ -55,7 +55,20 @@ class TransactionController extends Controller
             'assets' => AssetResource::collection($assets),
             '_filters' => $request
                 ->collect()
-                ->only('sort_by', 'sort_order', 'filter_by_game', 'hash', 'scope', 'asset', 'type', 'state')
+                ->only(
+                    'sort_by',
+                    'sort_order',
+                    'hash',
+                    'scope',
+                    'asset',
+                    'type',
+                    'state',
+                    'global_tx_id',
+                    'ref_id',
+                    'hash',
+                    'to_account_id',
+                    'from_account_id',
+                )
                 ->filter()
                 ->toArray(),
             '_filtersOptions' => [

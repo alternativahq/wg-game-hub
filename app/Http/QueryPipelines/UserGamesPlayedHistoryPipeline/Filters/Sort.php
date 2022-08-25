@@ -67,9 +67,9 @@ class Sort
             );
 
         $builder
-            ->select('user_scores.*', 'games.name as game_name')
-            ->join('games', 'user_scores.game_id', '=', 'games.id')
-            ->join('game_lobbies', 'user_scores.game_lobby_id', '=', 'game_lobbies.id')
+            ->select('game_lobby_user_score.*', 'games.name as game_name')
+            ->join('games', 'game_lobby_user_score.game_id', '=', 'games.id')
+            ->join('game_lobbies', 'game_lobby_user_score.game_lobby_id', '=', 'game_lobbies.id')
             ->orderBy(
                 $this->allowedSortFields()
                     ->where('key', $sortBy)
