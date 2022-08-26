@@ -159,14 +159,23 @@ watch(
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                 {{ game.game_lobbies_count }}
                                             </td>
-                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                <Link :href="route('admin-game-lobbies',game.id)">
-                                                    <ButtonShape type="purple">
-                                                        <span class="flex flex-row space-x-2.5">
-                                                            <span class="font-bold uppercase">Show Lobbies</span>
-                                                        </span>
-                                                    </ButtonShape>
-                                                </Link>
+                                            <td class=" whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                <div class="flex ">
+                                                    <Link :href="route('admin-game-templates',game.id)" class="mr-4">
+                                                        <ButtonShape type="red">
+                                                            <span class="flex flex-row space-x-2.5">
+                                                                <span class="font-bold uppercase">Show Templates</span>
+                                                            </span>
+                                                        </ButtonShape>
+                                                    </Link>
+                                                    <Link :href="route('admin-game-lobbies',game.id)">
+                                                        <ButtonShape type="purple">
+                                                            <span class="flex flex-row space-x-2.5">
+                                                                <span class="font-bold uppercase">Show Lobbies</span>
+                                                            </span>
+                                                        </ButtonShape>
+                                                    </Link>
+                                                </div>
                                             </td>
                                         </tr>
                                     </tbody>
