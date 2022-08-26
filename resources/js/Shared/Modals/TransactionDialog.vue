@@ -8,9 +8,9 @@ import {
 import { Inertia } from '@inertiajs/inertia';
 import Steps from '../Steps.vue';
 
-defineProps({
+let props = defineProps({
     open: Boolean,
-    transaction: String,
+    transaction: Object,
     transactionSteps: Object,
 });
 
@@ -43,7 +43,6 @@ defineProps({
                         leave-from="opacity-100 translate-y-0 sm:scale-100"
                         leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
-                    {{transactionSteps}}
                         <DialogPanel
                             class="relative transform rounded-2xl border-t-4 border-r-4 border-l-4 border-b-10 border-wgh-red-2 bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
                         >
@@ -55,21 +54,9 @@ defineProps({
                                             <div class="text-2xl hover:cursor-pointer" @click="$emit('close')">&times;</div>
                                         </div>
                                     </div>
-                                    <Steps class="mb-5"/>
+                                    <Steps :steps="transactionSteps" class="mb-5"/>
                                     <div class="border-b-2 border-b-gray-400 mb-4">
                                         <div class="mx-4">
-                                            <!-- <div class="mb-5">
-                                                <div class="font-medium">Withdraw Odrder submited</div>
-                                                <div class="text-sm text-gray-500">2022-8-5 13:42</div>
-                                            </div>
-                                            <div class="mb-5">
-                                                <div class="font-medium">system prosessing</div>
-                                                <div class="text-sm text-gray-500">2022-8-5 13:42</div>
-                                            </div>
-                                            <div class="mb-5">
-                                                <div class="font-medium">completed</div>
-                                                <div class="text-sm text-gray-500">2022-8-5 13:42</div>
-                                            </div> -->
                                             <div class="mb-5">
                                                 <div class="text-sm text-gray-500 mb-1">please note that you will receive a email once it is completed.</div>
                                                 <div class="text-sm text-gray-500 underline">why hasn't my withdrawal arrived yet?</div>

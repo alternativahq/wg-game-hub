@@ -42,17 +42,14 @@ let state = reactive({
     transactionSteps:null,
 });
 
-async function api(){
-    state.transactionSteps = await axios.get('http://wg-game-hub.test/api/wallet/transaction/09e227da-2f4b-452c-9afb-ed1f10cf8c83/log')
-    .then(r => r.data.data);
-    console.log(state.transactionSteps.data.data)
-};
-
-function show(transaction) {
+async function show(transaction){
     state.transactionShow = transaction;
-    api();
-    // state.open = true;
-}
+
+    state.transactionSteps = await axios.get('http://wg-game-hub.test/api/wallet/transaction/'+transaction.id+'/log')
+    .then(r => r.data.data);
+
+    state.open = true;
+};
 
 watch(
     () => filters,
@@ -66,8 +63,7 @@ watch(
 </script>
 <template>
     <div>
-        <TransactionDialog  :transaction="state.transactionShow" :transactionSteps="state.transactionSteps" :open="state.open" @close="state.open = false"/>
-            {{state.transactionSteps}}
+        <TransactionDialog :transaction="state.transactionShow" :transactionSteps="state.transactionSteps"  :open="state.open" @close="state.open = false"/>
         <div class="mb-5 flex items-center justify-end">
             <Link class="mr-4 shrink-0" :href="route('user.deposit')">
                 <ButtonShape type="red">Deposit</ButtonShape>
