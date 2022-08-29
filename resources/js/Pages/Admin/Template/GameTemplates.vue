@@ -90,6 +90,7 @@ function deleteLobby(gameTemplate) {
                                                     :data="{
                                                         sort_by: 'game_templates_name',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Name
@@ -118,6 +119,7 @@ function deleteLobby(gameTemplate) {
                                                     :data="{
                                                         sort_by: 'game_templates_asset_symbol',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Symbol
@@ -146,6 +148,7 @@ function deleteLobby(gameTemplate) {
                                                     :data="{
                                                         sort_by: 'game_templates_base_entrance_fee',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Entrance Fee
@@ -174,6 +177,7 @@ function deleteLobby(gameTemplate) {
                                                     :data="{
                                                         sort_by: 'game_templates_min_players',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Min Players
@@ -202,6 +206,7 @@ function deleteLobby(gameTemplate) {
                                                     :data="{
                                                         sort_by: 'game_templates_max_players',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Max Players

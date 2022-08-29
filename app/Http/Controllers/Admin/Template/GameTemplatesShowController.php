@@ -27,7 +27,7 @@ class GameTemplatesShowController extends Controller
             ->paginate();
 
         return Inertia::render('Admin/Template/GameTemplates', [
-            'gameTemplates' => AdminGameLobbyTemplateResource::collection($gameTemplates),
+            'gameTemplates' => AdminGameLobbyTemplateResource::collection($gameTemplates->withQueryString()),
             'game' => $game,
             'filters' => $request->only('sort_by', 'sort_order','q'),
         ]);

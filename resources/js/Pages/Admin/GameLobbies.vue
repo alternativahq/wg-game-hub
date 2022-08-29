@@ -90,6 +90,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_name',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Name
@@ -118,6 +119,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_type',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Type
@@ -146,6 +148,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_status',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Status
@@ -174,6 +177,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_asset_symbol',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Symbol
@@ -202,6 +206,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_base_entrance_fee',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Entrance Fee
@@ -230,6 +235,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_min_players',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Min Players
@@ -258,6 +264,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_max_players',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Max Players
@@ -286,6 +293,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_scheduled_at',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Scheduled At

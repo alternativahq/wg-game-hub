@@ -64,6 +64,7 @@ watch(
                                                     :data="{
                                                         sort_by: 'game_name',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Name
@@ -92,6 +93,7 @@ watch(
                                                     :data="{
                                                         sort_by: 'game_status',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Status
@@ -120,6 +122,7 @@ watch(
                                                     :data="{
                                                         sort_by: 'game_lobbies_count',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Lobbies
