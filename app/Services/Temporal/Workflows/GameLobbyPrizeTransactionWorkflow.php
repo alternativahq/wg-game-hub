@@ -3,7 +3,6 @@
 namespace App\Services\Temporal\Workflows;
 
 use App\Enums\Wallet\TransactionAsset;
-use App\Services\Temporal\Activities\GameLobbyPrizeTransactionActivity;
 use App\Services\Temporal\Contracts\GameLobbyPrizeTransactionActivityContract;
 use App\Services\Temporal\Contracts\GameLobbyPrizeTransactionWorkflowContract;
 use Carbon\CarbonInterval;
@@ -13,6 +12,7 @@ use Temporal\Workflow;
 class GameLobbyPrizeTransactionWorkflow implements GameLobbyPrizeTransactionWorkflowContract
 {
     private $gameLobbyPrizeTransactionWorkflow;
+
     public function __construct()
     {
         $this->gameLobbyPrizeTransactionWorkflow = Workflow::newActivityStub(

@@ -82,7 +82,7 @@ watch(
             <DashboardBalanceCard v-if="currentUser" :balance="balance" :asset_accounts="currentUser.asset_accounts" />
             <DashboardBalanceCardCreateAccount v-if="!currentUser" />
             <BorderedContainer class="h-[30rem] grow bg-wgh-purple-3">
-                <div class="flex h-full h-full w-full w-full grow flex-col justify-between rounded-lg bg-white p-4">
+                <div class="flex h-full w-full grow flex-col justify-between rounded-lg bg-white p-4">
                     <img
                         v-if="state.chatMessages.length === 0"
                         class="mx-auto w-40 grow"
@@ -95,7 +95,8 @@ watch(
                         ref="chatBox"
                     >
                         <ChatMessage
-                            v-for="chatMessage in state.chatMessages"
+                            v-for="(chatMessage, index) in state.chatMessages"
+                            :key="index"
                             :from-me="chatMessage.sender.id === currentUser.id"
                             :user-image-url="chatMessage.sender.image_url"
                             :time="chatMessage.created_at_human_readable"

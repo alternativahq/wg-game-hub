@@ -17,7 +17,7 @@ class GameLobbyPrizeTransactionActivity implements GameLobbyPrizeTransactionActi
         float $amount,
         string $fromAccount,
     ): string {
-        $url = config('wodo.wallet-transactions-api') . 'withdraw';
+        $url = config('wodo.wallet-transactions-api') . 'prize';
         $response = Http::post(
             url: $url,
             data: [
