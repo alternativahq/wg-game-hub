@@ -6,8 +6,8 @@ use Illuminate\Support\Collection;
 
 enum TransactionType: string
 {
-    case Deposit = 'DEPOSIT';
-    case Withdraw = 'WITHDRAW';
+    case Deposit = 'deposite';
+    case Withdraw = 'withdraw';
 
     public static function toSelect(): Collection
     {

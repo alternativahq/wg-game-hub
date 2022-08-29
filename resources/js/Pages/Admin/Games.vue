@@ -38,7 +38,7 @@ watch(
                         type="text"
                         name="search"
                         id="search"
-                        class="block w-full rounded-md border border-wgh-gray-1.5 border-gray-300 py-3 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        class="block w-full rounded-md border border-wgh-gray-1.5 py-3 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         placeholder="Search"
                         v-model="filters.q"
                     />
@@ -64,6 +64,7 @@ watch(
                                                     :data="{
                                                         sort_by: 'game_name',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Name
@@ -92,6 +93,7 @@ watch(
                                                     :data="{
                                                         sort_by: 'game_status',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Status
@@ -120,6 +122,7 @@ watch(
                                                     :data="{
                                                         sort_by: 'game_lobbies_count',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Lobbies
@@ -159,14 +162,23 @@ watch(
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                 {{ game.game_lobbies_count }}
                                             </td>
-                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                <Link :href="route('admin-game-lobbies',game.id)">
-                                                    <ButtonShape type="purple">
-                                                        <span class="flex flex-row space-x-2.5">
-                                                            <span class="font-bold uppercase">Show Lobbies</span>
-                                                        </span>
-                                                    </ButtonShape>
-                                                </Link>
+                                            <td class=" whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                <div class="flex ">
+                                                    <Link :href="route('admin-game-templates',game.id)" class="mr-4">
+                                                        <ButtonShape type="red">
+                                                            <span class="flex flex-row space-x-2.5">
+                                                                <span class="font-bold uppercase">Show Templates</span>
+                                                            </span>
+                                                        </ButtonShape>
+                                                    </Link>
+                                                    <Link :href="route('admin-game-lobbies',game.id)">
+                                                        <ButtonShape type="purple">
+                                                            <span class="flex flex-row space-x-2.5">
+                                                                <span class="font-bold uppercase">Show Lobbies</span>
+                                                            </span>
+                                                        </ButtonShape>
+                                                    </Link>
+                                                </div>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -179,7 +191,7 @@ watch(
         </BorderedContainer>
         <BorderedContainer class="mb-2 bg-wgh-gray-1.5">
             <nav
-                class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white bg-white px-4 py-3 sm:px-6"
+                class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
                 aria-label="Pagination"
             >
                 <div class="hidden sm:block">

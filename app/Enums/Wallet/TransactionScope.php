@@ -6,8 +6,8 @@ use Illuminate\Support\Collection;
 
 enum TransactionScope: string
 {
-    case Internal = 'Internal';
-    case External = 'External';
+    case Internal = 'internal';
+    case External = 'external';
 
     public static function toSelect(): Collection
     {

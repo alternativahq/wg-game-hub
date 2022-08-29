@@ -25,7 +25,7 @@ class DepositController extends Controller
         $payload = $request
             ->collect()
             ->merge([
-                'type' => 'DEPOSIT',
+                'type' => TransactionType::Deposit->value,
             ])
             ->keyBy(fn($value, $key) => Str::camel($key))
             ->all();
@@ -58,7 +58,19 @@ class DepositController extends Controller
             'assets' => AssetResource::collection($assets),
             '_filters' => $request
                 ->collect()
-                ->only('sort_by', 'sort_order', 'filter_by_game', 'hash', 'scope', 'asset', 'state')
+                ->only(
+                    'sort_by',
+                    'sort_order',
+                    'hash',
+                    'scope',
+                    'asset',
+                    'state',
+                    'global_tx_id',
+                    'ref_id',
+                    'hash',
+                    'to_account_id',
+                    'from_account_id',
+                )
                 ->filter()
                 ->toArray(),
             '_filtersOptions' => [
