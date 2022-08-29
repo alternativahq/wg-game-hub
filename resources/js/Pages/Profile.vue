@@ -306,7 +306,7 @@ let currentUser = useCurrentUser();
                         <div
                             class="flex flex-row items-center justify-between space-x-8 overflow-x-scroll rounded-lg bg-wgh-gray-0.5 p-2.5"
                         >
-                            <p ref="walletAddress" class="font-inter text-xs text-base font-normal text-wgh-gray-2">
+                            <p ref="walletAddress" class="font-inter text-xs font-normal text-wgh-gray-2">
                                 1PQi1jwKr4cnfFYKgeHAAZZZZZZZZZZZZZZZZZZZZZZZ
                             </p>
                             <button @click.prevent="">
@@ -320,68 +320,68 @@ let currentUser = useCurrentUser();
                                         <tbody class="divide-y divide-gray-200 whitespace-nowrap">
                                             <tr>
                                                 <td
-                                                    class="py-4 pl-4 pr-3 font-inter text-sm text-base font-normal text-wgh-gray-6 sm:pl-6 md:pl-0"
+                                                    class="py-4 pl-4 pr-3 font-inter text-sm font-normal text-wgh-gray-6 sm:pl-6 md:pl-0"
                                                 >
                                                     No #2137642
                                                 </td>
                                                 <td
-                                                    class="py-4 pl-4 pr-3 font-inter text-sm text-base font-normal text-wgh-gray-6 sm:pl-6 md:pl-0"
+                                                    class="py-4 pl-4 pr-3 font-inter text-sm font-normal text-wgh-gray-6 sm:pl-6 md:pl-0"
                                                 >
                                                     28/08/21, 18:30
                                                 </td>
                                                 <td
-                                                    class="py-4 pl-4 pr-3 font-inter text-sm text-base font-bold text-wgh-gray-6 sm:pl-6 md:pl-0"
+                                                    class="py-4 pl-4 pr-3 font-inter text-sm font-bold text-wgh-gray-6 sm:pl-6 md:pl-0"
                                                 >
                                                     +882
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td
-                                                    class="py-4 pl-4 pr-3 font-inter text-sm text-base font-normal text-wgh-gray-6 sm:pl-6 md:pl-0"
+                                                    class="py-4 pl-4 pr-3 font-inter text-sm font-normal text-wgh-gray-6 sm:pl-6 md:pl-0"
                                                 >
                                                     No #2137642
                                                 </td>
                                                 <td
-                                                    class="py-4 pl-4 pr-3 font-inter text-sm text-base font-normal text-wgh-gray-6 sm:pl-6 md:pl-0"
+                                                    class="py-4 pl-4 pr-3 font-inter text-sm font-normal text-wgh-gray-6 sm:pl-6 md:pl-0"
                                                 >
                                                     28/08/21, 18:30
                                                 </td>
                                                 <td
-                                                    class="py-4 pl-4 pr-3 font-inter text-sm text-base font-bold text-wgh-gray-6 sm:pl-6 md:pl-0"
+                                                    class="py-4 pl-4 pr-3 font-inter text-sm font-bold text-wgh-gray-6 sm:pl-6 md:pl-0"
                                                 >
                                                     +882
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td
-                                                    class="py-4 pl-4 pr-3 font-inter text-sm text-base font-normal text-wgh-gray-6 sm:pl-6 md:pl-0"
+                                                    class="py-4 pl-4 pr-3 font-inter text-sm font-normal text-wgh-gray-6 sm:pl-6 md:pl-0"
                                                 >
                                                     No #2137642
                                                 </td>
                                                 <td
-                                                    class="py-4 pl-4 pr-3 font-inter text-sm text-base font-normal text-wgh-gray-6 sm:pl-6 md:pl-0"
+                                                    class="py-4 pl-4 pr-3 font-inter text-sm font-normal text-wgh-gray-6 sm:pl-6 md:pl-0"
                                                 >
                                                     28/08/21, 18:30
                                                 </td>
                                                 <td
-                                                    class="py-4 pl-4 pr-3 font-inter text-sm text-base font-bold text-wgh-gray-6 sm:pl-6 md:pl-0"
+                                                    class="py-4 pl-4 pr-3 font-inter text-sm font-bold text-wgh-gray-6 sm:pl-6 md:pl-0"
                                                 >
                                                     +882
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td
-                                                    class="py-4 pl-4 pr-3 font-inter text-sm text-base font-normal text-wgh-gray-6 sm:pl-6 md:pl-0"
+                                                    class="py-4 pl-4 pr-3 font-inter text-sm font-normal text-wgh-gray-6 sm:pl-6 md:pl-0"
                                                 >
                                                     No #2137642
                                                 </td>
                                                 <td
-                                                    class="py-4 pl-4 pr-3 font-inter text-sm text-base font-normal text-wgh-gray-6 sm:pl-6 md:pl-0"
+                                                    class="py-4 pl-4 pr-3 font-inter text-sm font-normal text-wgh-gray-6 sm:pl-6 md:pl-0"
                                                 >
                                                     28/08/21, 18:30
                                                 </td>
                                                 <td
-                                                    class="py-4 pl-4 pr-3 font-inter text-sm text-base font-bold text-wgh-gray-6 sm:pl-6 md:pl-0"
+                                                    class="py-4 pl-4 pr-3 font-inter text-sm font-bold text-wgh-gray-6 sm:pl-6 md:pl-0"
                                                 >
                                                     +882
                                                 </td>
