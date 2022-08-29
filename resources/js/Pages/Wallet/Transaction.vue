@@ -13,6 +13,7 @@ import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import TextInput from '@/Shared/Inputs/TextInput';
 import { debounce } from 'lodash';
+import TransactionDialog from '../../Shared/Modals/TransactionDialog.vue';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -35,6 +36,21 @@ function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
 }
 
+let state = reactive({
+    open: false,
+    transactionShow:null,
+    transactionSteps:null,
+});
+
+async function show(transaction){
+    state.transactionShow = transaction;
+
+    state.transactionSteps = await axios.get('http://wg-game-hub.test/api/wallet/transaction/'+transaction.id+'/log')
+    .then(r => r.data.data);
+
+    state.open = true;
+};
+
 watch(
     () => filters,
     debounce(() => {
@@ -47,6 +63,7 @@ watch(
 </script>
 <template>
     <div>
+        <TransactionDialog :transaction="state.transactionShow" :transactionSteps="state.transactionSteps"  :open="state.open" @close="state.open = false"/>
         <div class="mb-5 flex items-center justify-end">
             <Link class="mr-4 shrink-0" :href="route('user.deposit')">
                 <ButtonShape type="red">Deposit</ButtonShape>
@@ -81,6 +98,7 @@ watch(
                 >
                     <option :value="undefined">All Scopes</option>
                     <option :key="index" v-for="(item, index) in _filtersOptions.transactionScopeOptions" :value="item.value">
+
                         {{ item.label }}
                     </option>
                 </select>
@@ -200,6 +218,12 @@ watch(
                                             >
                                                 Created At
                                             </th>
+                                            <th
+                                                scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            >
+                                                Controles
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 bg-white">
@@ -248,6 +272,15 @@ watch(
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
                                                 {{ UTCToHumanReadable(transaction.createdAt) }}
+                                            </td>
+                                            <td
+                                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                                            >
+                                                <ButtonShape type="purple" @click="show(transaction)">
+                                                    <span class="flex flex-row space-x-2.5">
+                                                        <span class="font-bold uppercase">Show</span>
+                                                    </span>
+                                                </ButtonShape>
                                             </td>
                                         </tr>
                                     </tbody>

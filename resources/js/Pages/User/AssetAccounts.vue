@@ -64,6 +64,7 @@ watch(
                                                     :data="{
                                                         sort_by: 'asset_name',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q: filters.q
                                                     }"
                                                 >
                                                     Name
@@ -92,6 +93,7 @@ watch(
                                                     :data="{
                                                         sort_by: 'asset_symbol',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q: filters.q
                                                     }"
                                                 >
                                                     <span class="group inline-flex">Symbol</span>
@@ -120,6 +122,7 @@ watch(
                                                     :data="{
                                                         sort_by: 'user_asset_balance',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q: filters.q
                                                     }"
                                                 >
                                                     Balance

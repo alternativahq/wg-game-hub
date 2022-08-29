@@ -21,6 +21,8 @@ use App\Http\Controllers\{
     Admin\GamesController as AdminGamesController,
     Admin\GameLobbiesController as AdminGameLobbiesController,
     Admin\GameLobbiesShowController as AdminGameLobbiesShowController,
+    Admin\Template\GameTemplatesController as AdminGameTemplatesController,
+    Admin\Template\GameTemplatesShowController as AdminGameTemplatesShowController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -68,10 +70,18 @@ Route::middleware('auth')->group(function () {
 
     // Admin Routes
     Route::middleware('isAdmin')->prefix('/admin')->as('admin-')->group(function () {
-        // CRAD opretion  game llobies 
+        // CRAD opretion  game lobbies 
         Route::get('/games', AdminGamesController::class)->name('games');
         Route::get('/games/{game}/lobbies', AdminGameLobbiesShowController::class)->name('game-lobbies');
         Route::resource('game.gameLobbies', AdminGameLobbiesController::class)
+        ->except('index','show')
+        ->shallow()
+        ->scoped();
+        // CRAD opretion game lobby templates
+        Route::get('/games/{game}/templates', AdminGameTemplatesShowController::class)->name('game-templates');
+        Route::get('/game/{game}/gameTemplates/{gameTemplate}/lobby/create', [AdminGameTemplatesController::class, 'createLobby'])->name('gameTemplates-lobby-create');
+        Route::post('/game/{game}/gameTemplates/lobby', [AdminGameTemplatesController::class, 'storeLobby'])->name('gameTemplates-lobby-store');
+        Route::resource('game.gameTemplates', AdminGameTemplatesController::class)
         ->except('index','show')
         ->shallow()
         ->scoped();
