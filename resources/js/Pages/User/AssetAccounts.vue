@@ -38,7 +38,7 @@ watch(
                         type="text"
                         name="search"
                         id="search"
-                        class="block w-full rounded-md border border-wgh-gray-1.5 border-gray-300 py-3 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        class="block w-full rounded-md border border-wgh-gray-1.5  py-3 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         placeholder="Search"
                         v-model="filters.q"
                     />
@@ -177,7 +177,7 @@ watch(
         </BorderedContainer>
         <BorderedContainer class="mb-2 bg-wgh-gray-1.5" v-if="props.userAssetAccounts.meta.from">
             <nav
-                class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white bg-white px-4 py-3 sm:px-6"
+                class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white  px-4 py-3 sm:px-6"
                 aria-label="Pagination"
             >
                 <div class="hidden sm:block">

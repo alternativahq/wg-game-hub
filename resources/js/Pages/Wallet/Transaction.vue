@@ -97,7 +97,8 @@ watch(
                     v-model="filters.scope"
                 >
                     <option :value="undefined">All Scopes</option>
-                    <option :key="item.value" v-for="item in _filtersOptions.transactionScopeOptions" :value="item.value">
+                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionScopeOptions" :value="item.value">
+
                         {{ item.label }}
                     </option>
                 </select>
@@ -106,7 +107,7 @@ watch(
                     v-model="filters.asset"
                 >
                     <option :value="undefined">All Assets</option>
-                    <option :key="item.value" v-for="item in _filtersOptions.transactionAssetOptions" :value="item.value">
+                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionAssetOptions" :value="item.value">
                         {{ item.label }}
                     </option>
                 </select>
@@ -115,7 +116,7 @@ watch(
                     v-model="filters.state"
                 >
                     <option :value="undefined">All States</option>
-                    <option :key="item.value" v-for="item in _filtersOptions.transactionStateOptions" :value="item.value">
+                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionStateOptions" :value="item.value">
                         {{ item.label }}
                     </option>
                 </select>
@@ -124,7 +125,7 @@ watch(
                     v-model="filters.type"
                 >
                     <option :value="undefined">All Types</option>
-                    <option :key="item.value" v-for="item in _filtersOptions.transactionTypeOptions" :value="item.value">
+                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionTypeOptions" :value="item.value">
                         {{ item.label }}
                     </option>
                 </select>
