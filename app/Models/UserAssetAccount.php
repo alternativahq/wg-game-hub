@@ -14,6 +14,8 @@ class UserAssetAccount extends Pivot
     use HasUUID;
     use HasFactory;
 
+    protected $guarded = [];
+
     protected $casts = [
         'status' => UserAssetAccountStatus::class,
     ];

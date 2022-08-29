@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Games;
 
+use App\Actions\Games\GameLobbies\DistributePrizesAction;
 use App\Actions\Games\GameMatchResults\StoreGameMatchResultAction;
 use App\DataTransferObjects\GameMatchResultData;
 use App\Enums\GameLobbyStatus;
@@ -17,8 +18,10 @@ use App\Notifications\ProcessingGameLobbyResultsNotification;
 
 class GameLobbyResultsController extends Controller
 {
-    public function __construct(public StoreGameMatchResultAction $storeGameMatchResultAction)
-    {
+    public function __construct(
+        protected StoreGameMatchResultAction $storeGameMatchResultAction,
+        protected DistributePrizesAction $distributePrizesAction,
+    ) {
     }
 
     public function __invoke(GameMatchResultsPayloadRequest $request, GameLobby $gameLobby)
@@ -39,6 +42,8 @@ class GameLobbyResultsController extends Controller
 
         Notification::sendNow($users, new ResultsProcessedGameLobbyNotification(gameLobby: $gameLobby));
 
+        $this->distributePrizesAction->execute(gameMatchResultData: $gameMatchResultData);
+        // Send transactions
         return response()->noContent();
     }
 }
