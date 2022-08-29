@@ -7,6 +7,7 @@ use App\Http\Controllers\API\{
     Games\GameLobbyLeaveController,
     Games\GameLobbyResultsController,
     Games\GamesController,
+    Wallet\TransactionShowController as UserTransactionShowController,
     Notifications\NotificationController,
     Notifications\SendNotificationController,
     Notifications\MarkNotificationAsReadController,
@@ -37,6 +38,9 @@ Route::post('game-lobbies/{gameLobby}/results', GameLobbyResultsController::clas
 
 // Chatroom message
 Route::post('chat-rooms/{chatRoom}/message', ChatRoomMessageController::class)->name('chat-rooms.message');
+
+//transaction show
+Route::get('wallet/transaction/{id}/log', UserTransactionShowController::class)->name('user.transactions.show');
 
 // Notifications
 Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');

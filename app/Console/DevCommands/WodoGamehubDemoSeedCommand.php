@@ -2,36 +2,37 @@
 
 namespace App\Console\DevCommands;
 
-use App\Enums\ChatRoomType;
-use App\Enums\GameLobbyStatus;
-use App\Enums\GameLobbyType;
-use App\Enums\GameStatus;
-use App\Enums\UserAssetAccountStatus;
-use App\Models\Achievement;
-use App\Models\Asset;
-use App\Models\UserAchievement;
-use App\Models\UserAssetAccount;
-use App\Models\ChatRoom;
 use App\Models\Game;
-use App\Models\GameLobby;
 use App\Models\User;
-use App\Models\GameLobbyUserScore;
+use App\Models\Asset;
+use App\Models\ChatRoom;
+use App\Enums\GameStatus;
+use App\Models\GameLobby;
+use App\Enums\ChatRoomType;
+use App\Models\Achievement;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use App\Enums\GameLobbyType;
+use App\Enums\GameLobbyStatus;
+use App\Models\UserAchievement;
+use Illuminate\Console\Command;
+use App\Models\UserAssetAccount;
 use App\Models\WodoAssetAccount;
-use Database\Factories\AchievementFactory;
+use App\Models\GameLobbyTemplate;
+use App\Models\GameLobbyUserScore;
+use Illuminate\Support\Collection;
 use Database\Factories\GameFactory;
 use Database\Factories\UserFactory;
-use Database\Seeders\DemoAssetsSeeder;
-use Database\Seeders\DemoGameAchievementsSeeder;
+use App\Enums\UserAssetAccountStatus;
 use Database\Seeders\DemoGamesSeeder;
-use Database\Seeders\DemoUserAssetAccountsSeeder;
 use Database\Seeders\DemoUsersSeeder;
-use Database\Seeders\DemoWodoAssetAccountsSeeder;
+use Database\Seeders\DemoAssetsSeeder;
+use Database\Factories\AchievementFactory;
 use Database\Seeders\GeneralChatRoomSeeder;
-use Illuminate\Console\Command;
+use Database\Seeders\DemoGameAchievementsSeeder;
+use Database\Seeders\DemoUserAssetAccountsSeeder;
+use Database\Seeders\DemoWodoAssetAccountsSeeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 class WodoGamehubDemoSeedCommand extends Command
 {
@@ -160,6 +161,12 @@ class WodoGamehubDemoSeedCommand extends Command
                         }),
                 )
                 ->create();
+
+                // Seeding data to GameLobbyTemplate
+                GameLobbyTemplate::factory()
+                ->count(count: 30)
+                ->for($game)
+                ->create();   
 
             // decrease the fee for each user joined this lobby
             $lobbies = GameLobby::factory()

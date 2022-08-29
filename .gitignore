@@ -21,3 +21,5 @@ mysqldata/*
 redisdata/*
 http-client/*
 public/vendor/
+rr
+.rr.yaml

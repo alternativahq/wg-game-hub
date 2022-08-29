@@ -213,7 +213,7 @@ function byGameFilterChanged() {
         </BorderedContainer>
         <BorderedContainer class="mb-2 bg-wgh-gray-1.5">
             <nav
-                class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white bg-white px-4 py-3 sm:px-6"
+                class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
                 aria-label="Pagination"
             >
                 <div class="hidden sm:block">

@@ -27,9 +27,9 @@ class GameLobbiesShowController extends Controller
             ->paginate();
 
         return Inertia::render('Admin/GameLobbies', [
-            'gameLobbies' => AdminGameLobbyResource::collection($gameLobbies),
+            'gameLobbies' => AdminGameLobbyResource::collection($gameLobbies->withQueryString()),
             'game' => $game,
-            'filters' => $request->only('sort_by', 'sort_order'),
+            'filters' => $request->only('sort_by', 'sort_order','q'),
         ]);
     }
 }

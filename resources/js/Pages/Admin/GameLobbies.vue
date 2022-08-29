@@ -57,7 +57,7 @@ function deleteLobby(gameLobbie) {
                         type="text"
                         name="search"
                         id="search"
-                        class="block w-full rounded-md border border-wgh-gray-1.5 border-gray-300 py-3 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        class="block w-full rounded-md border border-wgh-gray-1.5 py-3 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         placeholder="Search"
                         v-model="filters.q"
                     />
@@ -90,6 +90,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_name',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Name
@@ -118,6 +119,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_type',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Type
@@ -146,6 +148,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_status',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Status
@@ -174,6 +177,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_asset_symbol',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Symbol
@@ -202,6 +206,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_base_entrance_fee',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Entrance Fee
@@ -230,6 +235,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_min_players',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Min Players
@@ -258,6 +264,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_max_players',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Max Players
@@ -286,6 +293,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_scheduled_at',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                        q :filters.q
                                                     }"
                                                 >
                                                     Scheduled At
@@ -367,7 +375,7 @@ function deleteLobby(gameLobbie) {
         </BorderedContainer>
         <BorderedContainer class="mb-2 bg-wgh-gray-1.5">
             <nav
-                class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white bg-white px-4 py-3 sm:px-6"
+                class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
                 aria-label="Pagination"
             >
                 <div class="hidden sm:block">

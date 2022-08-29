@@ -34,6 +34,11 @@ class Game extends Model
         return $this->hasMany(GameLobby::class);
     }
 
+    public function gameTemplates(): HasMany
+    {
+        return $this->hasMany(GameLobbyTemplate::class);
+    }
+
     public function achievements(): HasMany
     {
         return $this->hasMany(Achievement::class, 'game_id');

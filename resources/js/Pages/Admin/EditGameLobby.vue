@@ -17,14 +17,6 @@ let props = defineProps({
 
 let updateLobbyForm = useForm({
     name: props.gameLobby.data.name,
-    image:props.gameLobby.data.image_url,
-    theme_color:props.gameLobby.data.theme_color,
-    type:props.gameLobby.data.type,
-    rules:props.gameLobby.data.rules,
-    base_entrance_fee:props.gameLobby.data.base_entrance_fee,
-    description:props.gameLobby.data.description,
-    available_spots:props.gameLobby.data.available_spots,
-    name: props.gameLobby.data.name,
     description: props.gameLobby.data.description,
     image: props.gameLobby.data.image_url,
     theme_color: props.gameLobby.data.theme_color,
