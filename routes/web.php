@@ -56,11 +56,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/w/{user:username}/games-played-history', UserGamePlayedHistoryController::class)->name(
         'user.games-played-history',
     );
+
     // User Wallet
     Route::get('wallet', UserWalletController::class)->name('user.wallet');
     Route::get('wallet/transactions', UserTransactionController::class)->name('user.transactions');
     Route::get('wallet/withdraw', UserWithdrawController::class)->name('user.withdraw');
     Route::get('wallet/deposit', UserDepositController::class)->name('user.deposit');
+
     // Notifications
     Route::put('notifications/{notification}/read', MarkNotificationAsReadController::class)->name(
         'notifications.read',

@@ -72,11 +72,20 @@ function timePlayedSecondsToHours(s) {
                         </div>
                     </div>
                     <div class="mt-4 flex flex-col justify-between lg:mt-0">
-                        <Link
-                            class="hidden flex-row justify-end space-x-2 font-inter text-xs font-normal text-wgh-gray-4 md:flex"
-                            ><span>settings</span>
-                            <SettingsIcon class="h-4 w-4" />
-                        </Link>
+                        <div class="flex justify-between items-center">
+                            <Link :href="route('profile')">
+                                <button class="flex-row justify-end text-xs text-wgh-gray-8 bg-green-500 rounded mx-4 py-1 px-2 " >
+                                    <span class="flex flex-row">
+                                        <span class="font-bold uppercase">profile</span>
+                                    </span>
+                                </button>
+                            </Link>
+                            <Link
+                                class="hidden flex-row justify-end space-x-2 font-inter text-xs font-normal text-wgh-gray-4 md:flex"
+                                ><span>settings</span>
+                                <SettingsIcon class="h-4 w-4" />
+                            </Link>
+                        </div> 
                         <div class="flex flex-row justify-between md:space-x-8">
                             <div class="flex flex-col items-center space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
                                 <div class="rounded-full bg-wgh-pink-1 p-3">
