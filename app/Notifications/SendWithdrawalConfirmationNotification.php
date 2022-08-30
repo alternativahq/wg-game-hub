@@ -18,22 +18,12 @@ class SendWithdrawalConfirmationNotification extends Notification
 
     public function via($notifiable): array
     {
-        return ['database'];
-        // return ['mail', 'database'];
+        return ['mail'];
     }
 
     public function toMail($notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-    }
-
-    public function toArray($notifiable): array
-    {
-        return [
-            'this is your code : ' . $this->code
-        ];
+                    ->line('The confirmation code is : ' . $this->code);
     }
 }
