@@ -13,7 +13,8 @@ class CompleteWithdrawController extends Controller
 {
     public function __invoke(CompleteWithdrawControllerRequest $request)
     {
-        return $request->code;
-        return auth()->user()->withdrawalConfirmations;
+        auth()->user()->withdrawalConfirmations()->delete();
+        session()->flash('success', 'withdrawal confiremd!');
+        return redirect()->route('user.withdraw');
     }
 }

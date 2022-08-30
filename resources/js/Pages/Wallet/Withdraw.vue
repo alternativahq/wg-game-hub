@@ -65,7 +65,7 @@ watch(
 </script>
 <template>
     <div>
-        <WithdrawalDialog :open="state.open" @close="state.open = false" />
+        <WithdrawalDialog :open="state.open" @close="state.open=false" />
         <section class="flex items-center justify-between">
             <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Withdraw Crypto</h2>
             <div class="round mx-5 mb-6 bg-gray-300 px-3 py-2 text-lg font-semibold text-black">Withdrawal Fiat -></div>

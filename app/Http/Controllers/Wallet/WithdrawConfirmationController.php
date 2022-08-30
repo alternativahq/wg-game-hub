@@ -17,7 +17,7 @@ class WithdrawConfirmationController extends Controller
         WithdrawalConfirmation::create([
             'user_id' => $user->id,
             'code' => $code,
-            'valid_for' => now()->addMinutes(5),
+            'valid_until' => now()->addMinutes(5),
         ]);
         Notification::send($user, new SendWithdrawalConfirmationNotification($code));
     }

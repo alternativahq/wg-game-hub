@@ -10,24 +10,29 @@ import { Inertia } from '@inertiajs/inertia';
 import TextInput from '@/Shared/Inputs/TextInput';
 import InputError from '@/Shared/InputError';
 import ButtonShape from '@/Shared/ButtonShape';
+import { defineEmits } from 'vue';
 
 let props = defineProps({
     open: Boolean,
 });
+
+const emit = defineEmits(['close'])
 
 let WithdrawalConfirmationForm = useForm({
     code: '',
 });
 
 function WithdrawalConfirmationFormSubmit(){
-    WithdrawalConfirmationForm.post(route('user.wallet.complete.withdrawal'));
+    WithdrawalConfirmationForm.post(route('user.wallet.complete.withdrawal'),{onSuccess: () => emit('close'),});
+    WithdrawalConfirmationForm.clearErrors();
+    WithdrawalConfirmationForm.reset();
+    // emit('close');
 }
-
 </script>
 <template>
     <TransitionRoot as="template" :show="open">
         <Dialog as="div" class="relative z-10">
-            <TransitionChild
+            <TransitionChild 
                 as="template"
                 enter="ease-out duration-300"
                 enter-from="opacity-0"
@@ -41,8 +46,8 @@ function WithdrawalConfirmationFormSubmit(){
                 />
             </TransitionChild>
 
-            <div class="fixed inset-0 z-10 overflow-y-auto">
-                <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div class="fixed inset-0 z-10 overflow-y-auto" >
+                <div  class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
                     <TransitionChild
                         as="template"
                         enter="ease-out duration-300"

@@ -21,7 +21,7 @@ return new class extends Migration
                 ->constrained('users')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->timestamp('valid_for');
+            $table->timestamp('valid_until');
             $table->timestamps();
         });
     }

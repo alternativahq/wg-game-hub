@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\WithdrawalCodeExistAndValid;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CompleteWithdrawControllerRequest extends FormRequest
@@ -9,7 +10,10 @@ class CompleteWithdrawControllerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => ['required'],
+            'code' => [
+                'required',
+                new WithdrawalCodeExistAndValid(),
+            ],
         ];
     }
 
