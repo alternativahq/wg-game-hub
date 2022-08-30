@@ -32,15 +32,15 @@ let filters = reactive({ ...props._filters });
 let currentUrl = window.location.toString();
 let pagination = reactive(new Pagination(props.userTransactions));
 
-function UTCToHumanReadable(u) {
-    return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
-}
-
 let state = reactive({
     open: false,
     transactionShow:null,
     transactionSteps:null,
 });
+
+function UTCToHumanReadable(u) {
+    return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
+}
 
 async function show(transaction){
     state.transactionShow = transaction;

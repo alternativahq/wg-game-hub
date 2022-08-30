@@ -1,6 +1,6 @@
 <script setup>
 import { ChevronDownIcon } from '@heroicons/vue/solid';
-import { defineProps, reactive, watch } from 'vue';
+import { defineProps, reactive } from 'vue';
 import BorderedContainer from '@/Shared/BorderedContainer';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -25,9 +25,9 @@ let props = defineProps({
 });
 
 let filters = reactive(props.filters);
+let pagination = reactive(new Pagination(props.userGamesPlayedHistory));
 let currentUrl = window.location.toString();
 let availableGames = props.games.data;
-let pagination = reactive(new Pagination(props.userGamesPlayedHistory));
 
 function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');

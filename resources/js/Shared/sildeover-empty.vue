@@ -1,18 +1,16 @@
 <script setup>
 import { defineProps } from 'vue';
 import { Link } from '@inertiajs/inertia-vue3';
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import { XIcon } from '@heroicons/vue/outline';
 import { Inertia } from '@inertiajs/inertia';
-import { useCurrentUser } from '@/Composables/useCurrentUser';
 import Navigation from './navigation.vue';
 
-let currentUser = useCurrentUser();
+let currentUser = inject('currentUser');
 
 function deleteAllNotifications() {
     Inertia.delete('/notifications');
-    // currentUser.notifications ='';
 }
 
 function markNotificationAsRead(notification) {

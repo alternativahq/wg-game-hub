@@ -13,7 +13,6 @@ let props = defineProps({
     transaction: Object,
     transactionSteps: Object,
 });
-
 </script>
 <template>
     <TransitionRoot as="template" :show="open">

@@ -16,9 +16,7 @@ let props = defineProps({
         }"
     >
         <div class="container mx-auto flex h-full flex-1 flex-grow flex-col px-4 lg:mt-0" scroll-region>
-            <!--            <transition name="page">-->
             <slot />
-            <!--            </transition>-->
         </div>
         <div class="mx-auto mt-8 w-full bg-white py-2">
             <Footer />

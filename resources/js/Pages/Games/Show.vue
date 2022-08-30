@@ -26,7 +26,6 @@ let props = defineProps({
     flash: Object,
 });
 
-
 let pagination = reactive(new Pagination(props.gameLobbies));
 
 onMounted(() => {

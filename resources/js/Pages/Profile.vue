@@ -5,15 +5,8 @@ import SettingsIcon from '@/Shared/SVG/SettingsIcon';
 import MedalIcon from '@/Shared/SVG/MedalIcon';
 import RocketIcon from '@/Shared/SVG/RocketIcon';
 import WatchIcon from '@/Shared/SVG/WatchIcon';
-import BananoIcon from '@/Shared/SVG/BananoIcon';
-import CopyIcon from '@/Shared/SVG/CopyIcon';
 import ButtonShape from '@/Shared/ButtonShape';
 import { inject, ref } from 'vue';
-import { useCurrentUser } from '@/Composables/useCurrentUser';
-import BananoCoinIcon from '@/Shared/SVG/BananoCoinIcon';
-import EthereumCoinIcon from '@/Shared/SVG/EthereiumCoinIcon';
-import BinanceCoinIcon from '@/Shared/SVG/BinanceCoinIcon';
-import NanoCoinIcon from '@/Shared/SVG/NanoCoinIcon';
 
 let activeTransactionNetwork = ref('banano');
 let currentUser = inject('currentUser');

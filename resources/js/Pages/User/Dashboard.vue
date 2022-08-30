@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, onMounted } from 'vue';
+import { defineProps, inject } from 'vue';
 import BorderedContainer from '@/Shared/BorderedContainer';
 import GameCard from '@/Shared/GameCard';
 import dayjs from 'dayjs';
@@ -8,15 +8,15 @@ import RocketIcon from '@/Shared/SVG/RocketIcon';
 import SettingsIcon from '@/Shared/SVG/SettingsIcon';
 import MedalIcon from '@/Shared/SVG/MedalIcon';
 import WatchIcon from '@/Shared/SVG/WatchIcon';
+import { Link } from '@inertiajs/inertia-vue3';
 
 let utc = require('dayjs/plugin/utc');
 let timezone = require('dayjs/plugin/timezone');
 let relativeTime = require('dayjs/plugin/relativeTime');
 let duration = require('dayjs/plugin/duration');
-import { Link } from '@inertiajs/inertia-vue3';
-import { useCurrentUser } from '@/Composables/useCurrentUser';
 
-let currentUser = useCurrentUser();
+let currentUser = inject('currentUser');
+
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(relativeTime);
@@ -40,7 +40,6 @@ function timePlayedSecondsToHours(s) {
     return dayjs.duration({ seconds: s }).asHours().toPrecision(2) + 'H';
 }
 </script>
-
 <template>
     <div class="grid grid-flow-row gap-y-8">
         <section class="overflow-x-auto">

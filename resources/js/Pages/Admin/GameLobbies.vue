@@ -33,6 +33,10 @@ function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
 }
 
+function deleteLobby(gameLobbie) {
+    Inertia.delete(route('admin-gameLobbies.destroy', gameLobbie.id));
+}
+
 watch(
     () => filters,
     throttle(() => {
@@ -42,10 +46,6 @@ watch(
         deep: true,
     }
 );
-
-function deleteLobby(gameLobbie) {
-    Inertia.delete(route('admin-gameLobbies.destroy', gameLobbie.id));
-}
 </script>
 <template>
     <div>

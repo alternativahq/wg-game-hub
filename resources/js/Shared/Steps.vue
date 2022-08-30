@@ -1,4 +1,3 @@
-
 <script setup>
 import { CheckIcon } from '@heroicons/vue/solid'
 
@@ -6,7 +5,6 @@ let props = defineProps({
     steps: Object,
 });
 </script>
-
 <template>
   <nav aria-label="Progress" class="ml-8 my-10">
     <ol role="list" class="overflow-hidden">

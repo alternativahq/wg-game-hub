@@ -34,9 +34,7 @@ let currentUrl = window.location.toString();
 let pagination = reactive(new Pagination(props.userDepositTransactions));
 
 let withdrawalForm = useForm({
-    email: '',
-    password: '',
-    remember_me: false,
+    test: '',
 });
 
 function UTCToHumanReadable(u) {

@@ -1,14 +1,11 @@
 <script setup>
 import Pagination from '@/Models/Pagination';
-import { useCurrentUser } from '@/Composables/useCurrentUser';
-import { reactive } from 'vue';
+import { reactive, inject } from 'vue';
 import { Link } from '@inertiajs/inertia-vue3';
 
-let currentUser = useCurrentUser();
+let currentUser = inject('currentUser');
 let pagination = reactive(new Pagination(currentUser.notifications));
-console.log(pagination)
 </script>
-
 <template>
   <nav class="border-t border-gray-200 px-4 flex items-center justify-between sm:px-0">
     <div class="-mt-px w-0 flex-1 flex">

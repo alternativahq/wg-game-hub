@@ -1,10 +1,10 @@
 <script setup>
 import { onBeforeUnmount, onMounted, provide } from 'vue';
-import { useCurrentUser } from '@/Composables/useCurrentUser';
 import SnackService from '@/Services/Snack';
 import Snack from '@/Shared/Snack';
+import { inject } from 'vue';
 
-let currentUser = useCurrentUser();
+let currentUser = inject('currentUser');
 
 let snack = new SnackService();
 provide('currentUser', currentUser);
@@ -26,6 +26,8 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-    <Snack />
-    <slot />
+    <div>
+        <Snack />
+        <slot />
+    </div>
 </template>

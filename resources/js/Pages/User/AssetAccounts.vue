@@ -1,6 +1,6 @@
 <script setup>
 import { ChevronDownIcon } from '@heroicons/vue/solid';
-import { defineProps, reactive, ref, watch } from 'vue';
+import { defineProps, reactive, watch } from 'vue';
 import BorderedContainer from '@/Shared/BorderedContainer';
 import ButtonShape from '@/Shared/ButtonShape';
 import Pagination from '@/Models/Pagination';

@@ -1,7 +1,5 @@
 <script setup>
-
 </script>
-
 <template>
     <div>
         <div v-if="$page.props.flash.success" class="my-4 py-4 px-4 text-white bg-green-700">
