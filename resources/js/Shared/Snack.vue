@@ -3,7 +3,6 @@ import { inject } from 'vue';
 
 let snack = inject('snack');
 </script>
-
 <template>
     <div class="fixed top-0 left-0 flex w-full justify-center">
         <transition name="snack">

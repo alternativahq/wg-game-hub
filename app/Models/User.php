@@ -80,6 +80,11 @@ class User extends Authenticatable
         return $this->hasMany(GameLobbyUserScore::class);
     }
 
+    public function withdrawalConfirmations(): HasMany
+    {
+        return $this->hasMany(WithdrawalConfirmation::class);
+    }
+
     public function achievements(): BelongsToMany
     {
         return $this->belongsToMany(Achievement::class, 'user_achievements')->withPivot(

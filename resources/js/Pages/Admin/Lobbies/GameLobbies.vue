@@ -6,17 +6,7 @@ import ButtonShape from '@/Shared/ButtonShape';
 import Pagination from '@/Models/Pagination';
 import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import duration from 'dayjs/plugin/duration';
 import { throttle } from 'lodash';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.extend(relativeTime);
-dayjs.extend(duration);
 
 let props = defineProps({
     gameLobbies: Object,
@@ -44,7 +34,7 @@ watch(
 );
 
 function deleteLobby(gameLobbie) {
-    Inertia.delete("/admin/gameLobbies/"+gameLobbie.id);
+    Inertia.delete('/admin/gameLobbies/' + gameLobbie.id);
 }
 </script>
 <template>
@@ -90,7 +80,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_name',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Name
@@ -119,7 +109,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_type',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Type
@@ -148,7 +138,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_status',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Status
@@ -177,7 +167,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_asset_symbol',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Symbol
@@ -206,7 +196,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_base_entrance_fee',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Entrance Fee
@@ -235,7 +225,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_min_players',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Min Players
@@ -264,7 +254,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_max_players',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Max Players
@@ -293,7 +283,7 @@ function deleteLobby(gameLobbie) {
                                                     :data="{
                                                         sort_by: 'game_lobbies_scheduled_at',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Scheduled At
@@ -348,7 +338,9 @@ function deleteLobby(gameLobbie) {
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                 {{ UTCToHumanReadable(gameLobbie.scheduled_at) }}
                                             </td>
-                                            <td class="whitespace-nowrap px-3 flex items-center py-4 text-sm text-gray-500">
+                                            <td
+                                                class="flex items-center whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                                            >
                                                 <Link :href="`/admin/gameLobbies/${gameLobbie.id}/edit`">
                                                     <ButtonShape type="purple">
                                                         <span class="flex flex-row space-x-2.5">
@@ -356,7 +348,7 @@ function deleteLobby(gameLobbie) {
                                                         </span>
                                                     </ButtonShape>
                                                 </Link>
-                                                <button  @click="deleteLobby(gameLobbie)">
+                                                <button @click="deleteLobby(gameLobbie)">
                                                     <ButtonShape type="red" class="mx-2">
                                                         <span class="flex flex-row space-x-2.5">
                                                             <span class="font-bold uppercase">Delete</span>
@@ -407,4 +399,3 @@ function deleteLobby(gameLobbie) {
         </BorderedContainer>
     </div>
 </template>
-

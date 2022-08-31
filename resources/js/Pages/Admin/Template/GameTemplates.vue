@@ -6,17 +6,7 @@ import ButtonShape from '@/Shared/ButtonShape';
 import Pagination from '@/Models/Pagination';
 import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import duration from 'dayjs/plugin/duration';
 import { throttle } from 'lodash';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.extend(relativeTime);
-dayjs.extend(duration);
 
 let props = defineProps({
     gameTemplates: Object,
@@ -26,8 +16,8 @@ let props = defineProps({
 });
 
 let filters = reactive({ ...props.filters });
-let currentUrl = window.location.toString();
 let pagination = reactive(new Pagination(props.gameTemplates));
+let currentUrl = window.location.toString();
 
 function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
@@ -44,7 +34,7 @@ watch(
 );
 
 function deleteLobby(gameTemplate) {
-    Inertia.delete("/admin/gameTemplates/"+ gameTemplate.id);
+    Inertia.delete('/admin/gameTemplates/' + gameTemplate.id);
 }
 </script>
 <template>
@@ -90,7 +80,7 @@ function deleteLobby(gameTemplate) {
                                                     :data="{
                                                         sort_by: 'game_templates_name',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Name
@@ -119,7 +109,7 @@ function deleteLobby(gameTemplate) {
                                                     :data="{
                                                         sort_by: 'game_templates_asset_symbol',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Symbol
@@ -148,7 +138,7 @@ function deleteLobby(gameTemplate) {
                                                     :data="{
                                                         sort_by: 'game_templates_base_entrance_fee',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Entrance Fee
@@ -159,7 +149,8 @@ function deleteLobby(gameTemplate) {
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
                                                                 filters.sort_by === 'game_templates_base_entrance_fee',
                                                             'rotate-180':
-                                                                filters.sort_by === 'game_templates_base_entrance_fee' &&
+                                                                filters.sort_by ===
+                                                                    'game_templates_base_entrance_fee' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
@@ -177,7 +168,7 @@ function deleteLobby(gameTemplate) {
                                                     :data="{
                                                         sort_by: 'game_templates_min_players',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Min Players
@@ -206,7 +197,7 @@ function deleteLobby(gameTemplate) {
                                                     :data="{
                                                         sort_by: 'game_templates_max_players',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Max Players
@@ -261,8 +252,12 @@ function deleteLobby(gameTemplate) {
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                 {{ gameTemplate.description }}
                                             </td>
-                                            <td class="whitespace-nowrap px-3 flex items-center py-4 text-sm text-gray-500">
-                                                <Link :href="`/admin/game/${game.id}/gameTemplates/${gameTemplate.id}/lobby/create`">
+                                            <td
+                                                class="flex items-center whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                                            >
+                                                <Link
+                                                    :href="`/admin/game/gameTemplates/${gameTemplate.id}/lobby/create`"
+                                                >
                                                     <ButtonShape type="purple">
                                                         <span class="flex flex-row space-x-2.5">
                                                             <span class="font-bold uppercase">Make Lobby</span>
@@ -276,7 +271,7 @@ function deleteLobby(gameTemplate) {
                                                         </span>
                                                     </ButtonShape>
                                                 </Link>
-                                                <button  @click="deleteLobby(gameTemplate)">
+                                                <button @click="deleteLobby(gameTemplate)">
                                                     <ButtonShape type="red" class="mx-2">
                                                         <span class="flex flex-row space-x-2.5">
                                                             <span class="font-bold uppercase">Delete</span>
@@ -295,7 +290,7 @@ function deleteLobby(gameTemplate) {
         </BorderedContainer>
         <BorderedContainer class="mb-2 bg-wgh-gray-1.5">
             <nav
-                class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white bg-white px-4 py-3 sm:px-6"
+                class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
                 aria-label="Pagination"
             >
                 <div class="hidden sm:block">
@@ -327,4 +322,3 @@ function deleteLobby(gameTemplate) {
         </BorderedContainer>
     </div>
 </template>
-

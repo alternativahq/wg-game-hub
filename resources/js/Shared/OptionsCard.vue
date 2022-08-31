@@ -15,7 +15,6 @@ let props = defineProps({
                 class="w-full md:max-h-[10.25rem]"
             />
         </div>
-
         <div class="flex flex-row">
             <div
                 class="w-3/6 font-grota text-sm font-extrabold uppercase text-wgh-gray-6"
@@ -34,13 +33,7 @@ let props = defineProps({
                     <span>START PLAYING</span>
                 </ButtonShape>
             </button>
-            <!--            <WGHButton-->
-            <!--                type="red"-->
-            <!--                class="justify-center p-4 font-grota uppercase"-->
-            <!--                >START PLAYING</WGHButton-->
-            <!--            >-->
         </div>
-
         <div class="flex flex-col">
             <div class="font-inter text-sm uppercase text-wgh-gray-6">
                 game rules

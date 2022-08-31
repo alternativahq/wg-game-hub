@@ -11,6 +11,7 @@ import { debounce } from 'lodash';
 import TransactionDialog from '../../Shared/Modals/TransactionDialog.vue';
 
 let dayjs = inject('dayjs');
+
 let props = defineProps({
     userTransactions: Object,
     assets: Object,
@@ -28,6 +29,10 @@ let state = reactive({
     transactionShow: null,
     transactionSteps: null,
 });
+
+function UTCToHumanReadable(u) {
+    return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
+}
 
 async function show(transaction) {
     state.transactionShow = transaction;
@@ -56,10 +61,10 @@ watch(
             @close="state.open = false"
         />
         <div class="mb-5 flex items-center justify-end">
-            <Link class="mr-4 shrink-0" :href="route('user.deposit')">
+            <Link class="mr-4 shrink-0" href="/wallet/deposit">
                 <ButtonShape type="red">Deposit</ButtonShape>
             </Link>
-            <Link class="shrink-0" :href="route('user.withdraw')">
+            <Link class="shrink-0" href="/wallet/withdraw">
                 <ButtonShape type="red">Withdraw</ButtonShape>
             </Link>
         </div>
@@ -289,19 +294,10 @@ watch(
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
                                                 <ButtonShape
-                                                    type="purple"
                                                     class="cursor-pointer"
-                                                    @click.prevent="show(transaction)"
+                                                    type="purple"
+                                                    @click="show(transaction)"
                                                 >
-                                                    <span class="flex flex-row space-x-2.5">
-                                                        <span class="font-bold uppercase">Show</span>
-                                                    </span>
-                                                </ButtonShape>
-                                            </td>
-                                            <td
-                                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
-                                            >
-                                                <ButtonShape type="purple" @click="show(transaction)">
                                                     <span class="flex flex-row space-x-2.5">
                                                         <span class="font-bold uppercase">Show</span>
                                                     </span>

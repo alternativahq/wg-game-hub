@@ -1,6 +1,5 @@
 <script setup>
 import BananoBalanceIcon from '@/Shared/SVG/BananoBalanceIcon';
-import CopyIcon from '@/Shared/SVG/CopyIcon';
 let props = defineProps({
     account: Object,
 });
@@ -18,15 +17,7 @@ let props = defineProps({
                 <p class="font-grota text-lg font-extrabold text-wgh-gray-6">
                     {{ account.pivot.balance.toLocaleString('US') }}
                 </p>
-                <!--                <p-->
-                <!--                    class="overflow-hidden text-ellipsis font-inter text-xs font-normal text-wgh-gray-2"-->
-                <!--                >-->
-                <!--                    {{ account.address }}-->
-                <!--                </p>-->
             </div>
-            <!--            <button class="shrink-0 grow-0">-->
-            <!--                <CopyIcon />-->
-            <!--            </button>-->
         </div>
     </div>
 </template>

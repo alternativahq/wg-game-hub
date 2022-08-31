@@ -1,7 +1,6 @@
 <script setup>
 import { defineProps } from 'vue';
 import { Link } from '@inertiajs/inertia-vue3';
-
 import GameOptionsIcon from '@/Shared/SVG/GameOptionsIcon';
 import GameLiveIcon from '@/Shared/SVG/GameLiveIcon';
 import ButtonShape from '@/Shared/ButtonShape';
@@ -11,7 +10,6 @@ let props = defineProps({
     game: Object,
 });
 </script>
-
 <template>
     <BorderedContainer class="mb-5 bg-wgh-gray-1.5">
         <div class="flex w-full flex-col rounded-lg bg-white p-6 md:flex-row">

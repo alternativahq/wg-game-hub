@@ -13,7 +13,8 @@ let props = defineProps({
         <div class="rounded-lg bg-white p-6">
             <div class="mb-4 flex flex-col space-y-4">
                 <DashboardBalanceCardCoin
-                    v-for="account in props.asset_accounts"
+                    :key="index"
+                    v-for="(account, index) in props.asset_accounts"
                     :account="account"
                 />
             </div>

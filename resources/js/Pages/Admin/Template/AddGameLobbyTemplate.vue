@@ -1,16 +1,12 @@
 <script setup>
-import Logo from '@/Shared/SVG/Logo';
 import TextInput from '@/Shared/Inputs/TextInput';
-import { ref, onMounted } from 'vue';
 import InputError from '@/Shared/InputError';
 import ButtonShape from '@/Shared/ButtonShape';
 import { useForm } from '@inertiajs/inertia-vue3';
-import { intersectionTypeAnnotation } from '@babel/types';
-import { Inertia } from '@inertiajs/inertia';
 
 let props = defineProps({
-    assets:Object,
-    game:Object,
+    assets: Object,
+    game: Object,
 });
 
 let AddTemplateForm = useForm({
@@ -22,16 +18,16 @@ let AddTemplateForm = useForm({
     base_entrance_fee: '',
     min_players: '',
     max_players: '',
-    asset_id:'',
+    asset_id: '',
 });
 
 function addGameLobbyTemplate() {
-    AddTemplateForm.post(route('admin-game.gameTemplates.store',props.game.id));
+    AddTemplateForm.post(`/admin/game/${props.game.id}/gameTemplates`);
 }
 </script>
 <template>
-    <div class="w-96 mx-auto">
-        <form @submit.prevent="addGameLobbyTemplate()" >
+    <div class="mx-auto w-96">
+        <form @submit.prevent="addGameLobbyTemplate()">
             <div class="font-semibold">name</div>
             <TextInput
                 v-model="AddTemplateForm.name"
@@ -46,16 +42,17 @@ function addGameLobbyTemplate() {
                     {{ AddTemplateForm.errors.name }}
                 </div>
             </InputError>
-             <div>
+            <div>
                 <label for="description" class="font-semibold">description</label>
                 <div class="mt-1">
-                <textarea 
-                    placeholder="description"
-                    v-model="AddTemplateForm.description"
-                    rows="4" 
-                    name="description" 
-                    id="description" 
-                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" />
+                    <textarea
+                        placeholder="description"
+                        v-model="AddTemplateForm.description"
+                        rows="4"
+                        name="description"
+                        id="description"
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    />
                 </div>
             </div>
             <InputError class="mt-2">
@@ -152,19 +149,14 @@ function addGameLobbyTemplate() {
             <select
                 id="asset_name"
                 name="asset_name"
-                class="flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal
-                text-wgh-gray-6 placeholder-wgh-gray-3 outline-none mb-5"
+                class="mb-5 flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
                 v-model="AddTemplateForm.asset_id"
-                >
+            >
                 <option :key="asset.id" v-for="asset in assets" :value="asset.id">
                     {{ asset.name }}
                 </option>
             </select>
-            <button
-                type="submit"
-                class="w-full"
-                :disabled="AddTemplateForm.processing"
-            >
+            <button type="submit" class="w-full" :disabled="AddTemplateForm.processing">
                 <ButtonShape type="purple">
                     <span class="w-full uppercase">Add</span>
                 </ButtonShape>
@@ -172,4 +164,3 @@ function addGameLobbyTemplate() {
         </form>
     </div>
 </template>
-

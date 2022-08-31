@@ -1,16 +1,12 @@
 <script setup>
-import Logo from '@/Shared/SVG/Logo';
 import TextInput from '@/Shared/Inputs/TextInput';
-import { ref, onMounted } from 'vue';
 import InputError from '@/Shared/InputError';
 import ButtonShape from '@/Shared/ButtonShape';
 import { useForm } from '@inertiajs/inertia-vue3';
-import { intersectionTypeAnnotation } from '@babel/types';
-import { Inertia } from '@inertiajs/inertia';
 
 let props = defineProps({
-    gameTemplate:Object,
-    assets:Object,
+    gameTemplate: Object,
+    assets: Object,
 });
 
 let updateTemplateForm = useForm({
@@ -22,18 +18,17 @@ let updateTemplateForm = useForm({
     base_entrance_fee: props.gameTemplate.data.base_entrance_fee,
     min_players: props.gameTemplate.data.min_players,
     max_players: props.gameTemplate.data.max_players,
-    asset_id:props.gameTemplate.data.asset_id,
-    game_id:props.gameTemplate.data.game_id,
+    asset_id: props.gameTemplate.data.asset_id,
+    game_id: props.gameTemplate.data.game_id,
 });
 
-function updateGameLobbyTemplate(){
-    // updateTemplateForm.put("/admin/gameTemplates/"+ props.gameTemplate.data.id, { preserveScroll: true });
-    updateTemplateForm.put(route('admin-gameTemplates.update',{gameTemplate: props.gameTemplate.data.id}), { preserveScroll: true });
+function updateGameLobbyTemplate() {
+    updateTemplateForm.put(`/admin/gameTemplates/${props.gameTemplate.data.id}`, { preserveScroll: true });
 }
 </script>
 <template>
-    <div class="w-96 mx-auto">
-        <form @submit.prevent="updateGameLobbyTemplate" >
+    <div class="mx-auto w-96">
+        <form @submit.prevent="updateGameLobbyTemplate">
             <div class="font-semibold">name</div>
             <TextInput
                 v-model="updateTemplateForm.name"
@@ -48,16 +43,17 @@ function updateGameLobbyTemplate(){
                     {{ updateTemplateForm.errors.name }}
                 </div>
             </InputError>
-             <div>
+            <div>
                 <label for="description" class="font-semibold">description</label>
                 <div class="mt-1">
-                <textarea 
-                    placeholder="description"
-                    v-model="updateTemplateForm.description"
-                    rows="4" 
-                    name="description" 
-                    id="description" 
-                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" />
+                    <textarea
+                        placeholder="description"
+                        v-model="updateTemplateForm.description"
+                        rows="4"
+                        name="description"
+                        id="description"
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    />
                 </div>
             </div>
             <InputError class="mt-2">
@@ -154,19 +150,14 @@ function updateGameLobbyTemplate(){
             <select
                 id="asset_name"
                 name="asset_name"
-                class="flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal
-                text-wgh-gray-6 placeholder-wgh-gray-3 outline-none mb-5"
+                class="mb-5 flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
                 v-model="updateTemplateForm.asset_id"
-                >
+            >
                 <option :key="asset.id" v-for="asset in assets" :value="asset.id">
                     {{ asset.name }}
                 </option>
             </select>
-            <button
-                type="submit"
-                class="w-full"
-                :disabled="updateTemplateForm.processing"
-            >
+            <button type="submit" class="w-full" :disabled="updateTemplateForm.processing">
                 <ButtonShape type="purple">
                     <span class="w-full uppercase">Update</span>
                 </ButtonShape>
@@ -174,4 +165,3 @@ function updateGameLobbyTemplate(){
         </form>
     </div>
 </template>
-
