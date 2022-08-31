@@ -13,7 +13,7 @@ class GameLobbyPrizeTransactionActivity implements GameLobbyPrizeTransactionActi
     public function sendTransaction(
         string $refId,
         string $toAccount,
-        TransactionAsset $asset,
+        string $asset,
         float $amount,
         string $fromAccount,
     ): string {
@@ -23,13 +23,13 @@ class GameLobbyPrizeTransactionActivity implements GameLobbyPrizeTransactionActi
             data: [
                 'fromAccountId' => $fromAccount,
                 'toAccountId' => $toAccount,
-                'asset' => $asset->value,
+                'asset' => $asset,
                 'amount' => $amount,
                 'refId' => $refId,
             ],
         );
 
-        if (!$response->ok()) {
+        if ($response->failed()) {
             return $response->toException();
         }
 

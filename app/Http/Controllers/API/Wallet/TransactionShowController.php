@@ -11,7 +11,7 @@ class TransactionShowController extends Controller
 {
     public function __invoke($id, Request $request)
     {
-        $response = Http::get(config('wodo.wallet-transactions-show-api').$id);
+        $response = Http::get(config('wodo.wallet-transactions-show-api') . $id);
         return $response;
         // if (!$response->ok()) {
         //     session()->flash('erorr', 'there is no response!');

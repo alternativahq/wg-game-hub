@@ -11,7 +11,7 @@ interface GameLobbyPrizeTransactionActivityContract
     public function sendTransaction(
         string $refId,
         string $toAccount,
-        TransactionAsset $asset,
+        string $asset,
         float $amount,
         string $fromAccount,
     ): string;

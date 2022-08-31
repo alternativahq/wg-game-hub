@@ -1,10 +1,5 @@
 <script setup>
-import {
-    Dialog,
-    DialogPanel,
-    TransitionChild,
-    TransitionRoot,
-} from '@headlessui/vue';
+import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import { Inertia } from '@inertiajs/inertia';
 import Steps from '../Steps.vue';
 
@@ -26,9 +21,7 @@ let props = defineProps({
                 leave-from="opacity-100"
                 leave-to="opacity-0"
             >
-                <div
-                    class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-                />
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
             </TransitionChild>
 
             <div class="fixed inset-0 z-10 overflow-y-auto">
@@ -47,57 +40,79 @@ let props = defineProps({
                         >
                             <div>
                                 <div class="mb-4">
-                                    <div class="border-b-2 border-b-gray-400 mb-4">
-                                        <div class="mb-3 flex justify-between items-center text-2xl font-semibold">
+                                    <div class="mb-4 border-b-2 border-b-gray-400">
+                                        <div class="mb-3 flex items-center justify-between text-2xl font-semibold">
                                             <div>Withdraw Details</div>
-                                            <div class="text-2xl hover:cursor-pointer" @click="$emit('close')">&times;</div>
+                                            <div class="text-2xl hover:cursor-pointer" @click="$emit('close')">
+                                                &times;
+                                            </div>
                                         </div>
                                     </div>
-                                    <Steps :steps="transactionSteps" class="mb-5"/>
-                                    <div class="border-b-2 border-b-gray-400 mb-4">
+                                    <Steps :steps="transactionSteps" class="mb-5" />
+                                    <div class="mb-4 border-b-2 border-b-gray-400">
                                         <div class="mx-4">
                                             <div class="mb-5">
-                                                <div class="text-sm text-gray-500 mb-1">please note that you will receive a email once it is completed.</div>
-                                                <div class="text-sm text-gray-500 underline">why hasn't my withdrawal arrived yet?</div>
+                                                <div class="mb-1 text-sm text-gray-500">
+                                                    please note that you will receive a email once it is completed.
+                                                </div>
+                                                <div class="text-sm text-gray-500 underline">
+                                                    why hasn't my withdrawal arrived yet?
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="mx-2">
-                                        <div class="mb-4 flex justify-between items-center">
-                                            <div class="text-md text-gray-500 font-normal">Status</div>
-                                            <div class="text-md text-gray-900 font-semibold">{{transaction.state}}</div>
+                                        <div class="mb-4 flex items-center justify-between space-x-4">
+                                            <div class="text-md shrink-0 font-normal text-gray-500">Status</div>
+                                            <div class="text-md font-semibold text-gray-900">
+                                                {{ transaction.state }}
+                                            </div>
                                         </div>
-                                        <div class="mb-4 flex justify-between items-center">
-                                            <div class="text-md text-gray-500 font-normal">Date</div>
-                                            <div class="text-md text-gray-900 font-semibold">{{transaction.createdAt}}</div>
+                                        <div class="mb-4 flex items-center justify-between space-x-4">
+                                            <div class="text-md font-normal text-gray-500">Date</div>
+                                            <div class="text-md font-semibold text-gray-900">
+                                                {{ transaction.createdAt }}
+                                            </div>
                                         </div>
-                                        <div class="mb-4 flex justify-between items-center">
-                                            <div class="text-md text-gray-500 font-normal">Withdraw wallet</div>
-                                            <div class="text-md text-gray-900 font-semibold">{{transaction.fromAccountId}}</div>
+                                        <div class="mb-4 flex items-center justify-between space-x-4">
+                                            <div class="text-md shrink-0 font-normal text-gray-500">
+                                                Withdraw wallet
+                                            </div>
+                                            <div class="text-md truncate font-semibold text-gray-900">
+                                                {{ transaction.fromAccountId }}
+                                            </div>
                                         </div>
-                                        <div class="mb-4 flex justify-between items-center">
-                                            <div class="text-md text-gray-500 font-normal">Coin</div>
-                                            <div class="text-md text-gray-900 font-semibold">{{transaction.asset}}</div>
+                                        <div class="mb-4 flex items-center justify-between space-x-4">
+                                            <div class="text-md font-normal text-gray-500">Coin</div>
+                                            <div class="text-md font-semibold text-gray-900">
+                                                {{ transaction.asset }}
+                                            </div>
                                         </div>
-                                        <div class="mb-4 flex justify-between items-center">
-                                            <div class="text-md text-gray-500 font-normal">Withdraw amount</div>
-                                            <div class="text-md text-gray-900 font-semibold">{{transaction.amount}}</div>
+                                        <div class="mb-4 flex items-center justify-between space-x-4">
+                                            <div class="text-md font-normal text-gray-500">Withdraw amount</div>
+                                            <div class="text-md font-semibold text-gray-900">
+                                                {{ transaction.amount }}
+                                            </div>
                                         </div>
-                                        <div class="mb-4 flex justify-between items-center">
-                                            <div class="text-md text-gray-500 font-normal">Network Fee</div>
-                                            <div class="text-md text-gray-900 font-semibold">{{transaction.fee}}</div>
+                                        <div class="mb-4 flex items-center justify-between space-x-4">
+                                            <div class="text-md font-normal text-gray-500">Network Fee</div>
+                                            <div class="text-md font-semibold text-gray-900">{{ transaction.fee }}</div>
                                         </div>
-                                        <div class="mb-4 flex justify-between items-center">
-                                            <div class="text-md text-gray-500 font-normal">Network</div>
-                                            <div class="text-md text-gray-900 font-semibold">TRX</div>
+                                        <div class="mb-4 flex items-center justify-between space-x-4">
+                                            <div class="text-md font-normal text-gray-500">Network</div>
+                                            <div class="text-md font-semibold text-gray-900">TRX</div>
                                         </div>
-                                        <div class="mb-4 flex justify-between items-center">
-                                            <div class="text-md text-gray-500 font-normal">Address</div>
-                                            <div class="text-md text-gray-900 font-semibold">{{transaction.toAccountId}}</div>
+                                        <div class="mb-4 flex items-center justify-between space-x-4">
+                                            <div class="text-md font-normal text-gray-500">Address</div>
+                                            <div class="text-md font-semibold text-gray-900">
+                                                {{ transaction.toAccountId }}
+                                            </div>
                                         </div>
-                                        <div class="mb-4 flex justify-between items-center">
-                                            <div class="text-md text-gray-500 font-normal">TxID</div>
-                                            <div class="text-md text-gray-900 font-semibold">{{transaction.globalTxId}}</div>
+                                        <div class="mb-4 flex items-center justify-between space-x-4">
+                                            <div class="text-md font-normal text-gray-500">TxID</div>
+                                            <div class="text-md font-semibold text-gray-900">
+                                                {{ transaction.globalTxId }}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

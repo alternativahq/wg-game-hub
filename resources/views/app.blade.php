@@ -6,6 +6,9 @@
     <link href="{{ mix('/css/app.css') }}" rel="stylesheet"/>
     @routes
     <script src="{{ mix('/js/app.js') }}" defer></script>
+    <script>
+        Ziggy.url = '{{ config('app.url') }}'
+    </script>
     @inertiaHead
 </head>
 <body >

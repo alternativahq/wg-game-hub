@@ -13,6 +13,7 @@ enum TransactionAsset: string
     case BSC = 'BSC';
     case SOL = 'SOL';
     case TRY = 'TRY';
+    case XWGT = 'XWGT';
 
     public static function toSelect(): Collection
     {

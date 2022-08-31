@@ -1,12 +1,7 @@
 <script setup>
 import { ChevronDownIcon } from '@heroicons/vue/solid';
-import { defineProps, reactive, watch } from 'vue';
+import { defineProps, inject, provide, reactive, watch } from 'vue';
 import BorderedContainer from '@/Shared/BorderedContainer';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import duration from 'dayjs/plugin/duration';
 import ButtonShape from '@/Shared/ButtonShape';
 import Pagination from '@/Models/Pagination';
 import { Link } from '@inertiajs/inertia-vue3';
@@ -15,11 +10,7 @@ import TextInput from '@/Shared/Inputs/TextInput';
 import { debounce } from 'lodash';
 import TransactionDialog from '../../Shared/Modals/TransactionDialog.vue';
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.extend(relativeTime);
-dayjs.extend(duration);
-
+let dayjs = inject('dayjs');
 let props = defineProps({
     userTransactions: Object,
     assets: Object,
@@ -34,8 +25,8 @@ let pagination = reactive(new Pagination(props.userTransactions));
 
 let state = reactive({
     open: false,
-    transactionShow:null,
-    transactionSteps:null,
+    transactionShow: null,
+    transactionSteps: null,
 });
 
 function UTCToHumanReadable(u) {
@@ -44,12 +35,11 @@ function UTCToHumanReadable(u) {
 
 async function show(transaction){
     state.transactionShow = transaction;
-
-    state.transactionSteps = await axios.get('http://wg-game-hub.test/api/wallet/transaction/'+transaction.id+'/log')
-    .then(r => r.data.data);
+    let response = await axios.get('/api/wallet/transaction/' + transaction.id + '/log').then((r) => r.data.data);
+    state.transactionSteps = response;
 
     state.open = true;
-};
+}
 
 watch(
     () => filters,
@@ -63,7 +53,12 @@ watch(
 </script>
 <template>
     <div>
-        <TransactionDialog :transaction="state.transactionShow" :transactionSteps="state.transactionSteps"  :open="state.open" @close="state.open = false"/>
+        <TransactionDialog
+            :transaction="state.transactionShow"
+            :transactionSteps="state.transactionSteps"
+            :open="state.open"
+            @close="state.open = false"
+        />
         <div class="mb-5 flex items-center justify-end">
             <Link class="mr-4 shrink-0" :href="route('user.deposit')">
                 <ButtonShape type="red">Deposit</ButtonShape>
@@ -97,8 +92,11 @@ watch(
                     v-model="filters.scope"
                 >
                     <option :value="undefined">All Scopes</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionScopeOptions" :value="item.value">
-
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionScopeOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>
@@ -107,7 +105,11 @@ watch(
                     v-model="filters.asset"
                 >
                     <option :value="undefined">All Assets</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionAssetOptions" :value="item.value">
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionAssetOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>
@@ -116,7 +118,11 @@ watch(
                     v-model="filters.state"
                 >
                     <option :value="undefined">All States</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionStateOptions" :value="item.value">
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionStateOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>
@@ -125,7 +131,11 @@ watch(
                     v-model="filters.type"
                 >
                     <option :value="undefined">All Types</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionTypeOptions" :value="item.value">
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionTypeOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>
@@ -271,7 +281,26 @@ watch(
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
-                                                {{ UTCToHumanReadable(transaction.createdAt) }}
+                                                {{
+                                                    dayjs(transaction.createdAt)
+                                                        .utc()
+                                                        .local()
+                                                        .tz(dayjs.tz.guess())
+                                                        .format('MMMM DD, YYYY hh:mm A')
+                                                }}
+                                            </td>
+                                            <td
+                                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                                            >
+                                                <ButtonShape
+                                                    type="purple"
+                                                    class="cursor-pointer"
+                                                    @click.prevent="show(transaction)"
+                                                >
+                                                    <span class="flex flex-row space-x-2.5">
+                                                        <span class="font-bold uppercase">Show</span>
+                                                    </span>
+                                                </ButtonShape>
                                             </td>
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"

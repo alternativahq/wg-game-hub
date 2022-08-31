@@ -11,6 +11,7 @@ let currentUser = useCurrentUser();
 let snack = new SnackService();
 provide('currentUser', currentUser);
 provide('snack', snack);
+provide('dayjs', dayjs);
 
 onMounted(() => {
     if (currentUser) {
