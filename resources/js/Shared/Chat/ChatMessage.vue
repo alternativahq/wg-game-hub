@@ -24,7 +24,6 @@ defineProps({
     },
 });
 </script>
-
 <template>
     <div
         id="me"

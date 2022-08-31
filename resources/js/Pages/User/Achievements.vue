@@ -2,19 +2,10 @@
 import { ChevronDownIcon } from '@heroicons/vue/solid';
 import { defineProps, reactive, watch } from 'vue';
 import BorderedContainer from '@/Shared/BorderedContainer';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import duration from 'dayjs/plugin/duration';
 import ButtonShape from '@/Shared/ButtonShape';
 import Pagination from '@/Models/Pagination';
 import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.extend(relativeTime);
-dayjs.extend(duration);
 
 let props = defineProps({
     games: Object,
@@ -24,9 +15,9 @@ let props = defineProps({
 });
 
 let filters = reactive(props.filters);
+let pagination = reactive(new Pagination(props.userAchievements));
 let currentUrl = window.location.toString();
 let availableGames = props.games.data;
-let pagination = reactive(new Pagination(props.userAchievements));
 
 function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');

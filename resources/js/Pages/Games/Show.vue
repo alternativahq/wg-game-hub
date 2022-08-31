@@ -17,7 +17,6 @@ import { onBeforeMount, onMounted } from 'vue';
 import GameLobbyCollection from '@/Models/GameLobbyCollection';
 import Pagination from '@/Models/Pagination';
 
-
 let currentUser = inject('currentUser');
 
 let props = defineProps({
@@ -25,7 +24,6 @@ let props = defineProps({
     gameLobbies: Object,
     flash: Object,
 });
-
 
 let pagination = reactive(new Pagination(props.gameLobbies));
 
@@ -116,7 +114,7 @@ function modalCancelGameButtonClicked() {
             <BorderedContainer class="mb-10 bg-wgh-purple-3">
                 <div class="flex flex-col justify-between rounded-lg bg-wgh-purple-2 p-7 md:flex-row">
                     <div class="mb-4 flex flex-row space-x-6 lg:mb-0">
-                        <Link :href="route('landing')">
+                        <Link href="/">
                             <ButtonShape type="whiteBorderPurple">
                                 <ChevronLeft class="text-white" />
                             </ButtonShape>
@@ -187,7 +185,6 @@ function modalCancelGameButtonClicked() {
                             </h2>
                             <div class="text-bold shrink-0 font-grota text-base text-wgh-gray-6">
                                 <span>{{ gameLobby.base_entrance_fee }} {{ gameLobby.asset?.symbol }}</span>
-
                             </div>
                         </div>
                         <button
@@ -223,7 +220,7 @@ function modalCancelGameButtonClicked() {
                     </div>
                 </borderedContainer>
             </div>
-                <BorderedContainer class="my-4 bg-wgh-gray-1.5" v-if="pagination.meta.from">
+            <BorderedContainer class="my-4 bg-wgh-gray-1.5" v-if="pagination.meta.from">
                 <nav
                     class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
                     aria-label="Pagination"

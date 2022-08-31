@@ -36,7 +36,7 @@ export default class User extends Model {
         });
 
         Inertia.put(
-            route('notifications.read', { notification: notificationId }),
+            `/notifications/${notificationId}`,
             {},
             {
                 preserveState: true,
@@ -51,10 +51,9 @@ export default class User extends Model {
 
     deleteAllNotifications() {
         this.unread_notifications = [];
-        Inertia.delete(route('notifications.delete'), {
+        Inertia.delete('/notifications', {
             preserveState: true,
             preserveScroll: true,
         });
     }
-
 }

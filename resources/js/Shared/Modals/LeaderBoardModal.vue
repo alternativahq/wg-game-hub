@@ -20,7 +20,6 @@ let orderedPlayers = _.flatten(
 );
 let currentUserScoreRecord = _.find(orderedPlayers, ['user_id', currentUser.id]);
 </script>
-
 <template>
     <TransitionRoot as="template" :show="isOpen">
         <Dialog as="div" class="relative z-10">
@@ -59,7 +58,7 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['user_id', currentUser.id])
                                         class="h-3 w-full rounded-2xl rounded-tl-full rounded-tr-full border-r-4 border-l-4 border-wgh-red-2 bg-white"
                                     ></div>
                                     <svg
-                                        class="absolute top-1/2 left-1/2 -z-40 -z-20 -mt-[14rem] w-full -translate-x-1/2 -translate-y-1/2 transform lg:-mt-[14.5rem] lg:w-[107.5%]"
+                                        class="absolute top-1/2 left-1/2 -z-40 -mt-[14rem] w-full -translate-x-1/2 -translate-y-1/2 transform lg:-mt-[14.5rem] lg:w-[107.5%]"
                                         width="585"
                                         height="273"
                                         viewBox="0 0 585 273"
@@ -409,10 +408,10 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['user_id', currentUser.id])
                                         </defs>
                                     </svg>
                                     <DialogPanel
-                                        class="relative transform rounded-2xl border-r-4 border-l-4 border-b-10 border-wgh-red-2 bg-white px-4 pt-14 pt-5 pb-4 text-left shadow-xl transition-all sm:w-full sm:p-6 sm:pt-14"
+                                        class="relative transform rounded-2xl border-r-4 border-l-4 border-b-10 border-wgh-red-2 bg-white px-4 pt-14 pb-4 text-left shadow-xl transition-all sm:w-full sm:p-6 sm:pt-14"
                                     >
                                         <svg
-                                            class="fixed top-1/2 left-1/2 z-40 -z-30 -mt-52 w-[110%] -translate-x-1/2 -translate-y-1/2 transform"
+                                            class="fixed top-1/2 left-1/2 z-40  -mt-52 w-[110%] -translate-x-1/2 -translate-y-1/2 transform"
                                             width="543"
                                             height="89"
                                             viewBox="0 0 543 89"
@@ -437,7 +436,8 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['user_id', currentUser.id])
                                             <div class="mx-auto mb-10 flex w-full flex-row items-stretch space-x-4">
                                                 <div
                                                     class="flex flex-1 flex-col items-center"
-                                                    v-for="player in orderedPlayers"
+                                                    v-for="(player, index) in orderedPlayers"
+                                                    :key="index"
                                                 >
                                                     <span class="mb-2 font-grota text-xs font-bold text-wgh-gray-4">{{
                                                         player.rank
