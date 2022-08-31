@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\QueryPipelines\UserAchievementsPipeline;
+namespace App\Http\QueryPipelines\UserTransactionsPipeline;
 
 use App\Http\QueryPipelines\UserAchievementsPipeline\Filters\ByGameFilter;
 use App\Http\QueryPipelines\UserAchievementsPipeline\Filters\Sort;

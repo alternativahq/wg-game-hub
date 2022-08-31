@@ -37,21 +37,6 @@ async function show(transaction) {
     state.open = true;
 }
 
-let state = reactive({
-    open: false,
-    transactionShow:null,
-    transactionSteps:null,
-});
-
-async function show(transaction){
-    state.transactionShow = transaction;
-
-    state.transactionSteps = await axios.get('http://wg-game-hub.test/api/wallet/transaction/'+transaction.id+'/log')
-    .then(r => r.data.data);
-
-    state.open = true;
-};
-
 watch(
     () => filters,
     debounce(() => {
@@ -103,8 +88,11 @@ watch(
                     v-model="filters.scope"
                 >
                     <option :value="undefined">All Scopes</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionScopeOptions" :value="item.value">
-
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionScopeOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>
@@ -113,7 +101,11 @@ watch(
                     v-model="filters.asset"
                 >
                     <option :value="undefined">All Assets</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionAssetOptions" :value="item.value">
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionAssetOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>
@@ -122,7 +114,11 @@ watch(
                     v-model="filters.state"
                 >
                     <option :value="undefined">All States</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionStateOptions" :value="item.value">
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionStateOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>
@@ -131,7 +127,11 @@ watch(
                     v-model="filters.type"
                 >
                     <option :value="undefined">All Types</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionTypeOptions" :value="item.value">
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionTypeOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>
