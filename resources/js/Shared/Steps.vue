@@ -8,7 +8,6 @@ let props = defineProps({
 
 let dayjs = inject('dayjs');
 </script>
-
 <template>
     <nav aria-label="Progress" class="my-10 ml-8">
         <ol role="list" class="overflow-hidden">

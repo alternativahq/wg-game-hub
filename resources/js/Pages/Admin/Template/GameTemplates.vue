@@ -26,11 +26,15 @@ let props = defineProps({
 });
 
 let filters = reactive({ ...props.filters });
-let currentUrl = window.location.toString();
 let pagination = reactive(new Pagination(props.gameTemplates));
+let currentUrl = window.location.toString();
 
 function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
+}
+
+function deleteLobby(gameTemplate) {
+    Inertia.delete(route('admin-gameTemplates.destroy', gameTemplate.id));
 }
 
 watch(
@@ -42,10 +46,6 @@ watch(
         deep: true,
     }
 );
-
-function deleteLobby(gameTemplate) {
-    Inertia.delete(route('admin-gameTemplates.destroy', gameTemplate.id));
-}
 </script>
 <template>
     <div>

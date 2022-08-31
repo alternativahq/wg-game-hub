@@ -24,9 +24,9 @@ let props = defineProps({
 });
 
 let filters = reactive(props.filters);
+let pagination = reactive(new Pagination(props.userAchievements));
 let currentUrl = window.location.toString();
 let availableGames = props.games.data;
-let pagination = reactive(new Pagination(props.userAchievements));
 
 function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');

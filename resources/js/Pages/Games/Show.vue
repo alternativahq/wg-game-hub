@@ -16,16 +16,16 @@ import CooldownBanner from '@/Shared/CooldownBanner';
 import { onBeforeMount, onMounted } from 'vue';
 import GameLobbyCollection from '@/Models/GameLobbyCollection';
 import Pagination from '@/Models/Pagination';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
 
-
-let currentUser = inject('currentUser');
+// let currentUser = inject('currentUser');
+let currentUser = useCurrentUser();
 
 let props = defineProps({
     game: Object,
     gameLobbies: Object,
     flash: Object,
 });
-
 
 let pagination = reactive(new Pagination(props.gameLobbies));
 

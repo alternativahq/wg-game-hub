@@ -10,11 +10,10 @@ import { Link } from '@inertiajs/inertia-vue3';
 import BorderedContainer from '@/Shared/BorderedContainer';
 import { ref, reactive, onMounted, watch, inject } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
-import { useCurrentUser } from '@/Composables/useCurrentUser';
 import ChatRoom from '@/Models/ChatRoom';
 import CooldownBanner from '@/Shared/CooldownBanner';
 
-let currentUser = useCurrentUser();
+let currentUser = inject('currentUser');
 let chatBox = ref();
 let snack = inject('snack');
 
@@ -47,7 +46,6 @@ watch(
     }
 );
 </script>
-
 <template>
     <div class="flex h-full flex-col lg:flex-row lg:space-x-6">
         <div class="w-full lg:w-3/4">

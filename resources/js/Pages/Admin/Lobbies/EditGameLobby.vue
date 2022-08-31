@@ -1,12 +1,8 @@
 <script setup>
-import Logo from '@/Shared/SVG/Logo';
 import TextInput from '@/Shared/Inputs/TextInput';
-import { ref, onMounted } from 'vue';
 import InputError from '@/Shared/InputError';
 import ButtonShape from '@/Shared/ButtonShape';
 import { useForm } from '@inertiajs/inertia-vue3';
-import { intersectionTypeAnnotation } from '@babel/types';
-import { Inertia } from '@inertiajs/inertia';
 
 let props = defineProps({
     gameLobby:Object,

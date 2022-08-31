@@ -72,7 +72,6 @@ function registerSubmit() {
     registerForm.post('/register');
 }
 </script>
-
 <template>
     <div
         class="mx-auto flex min-h-screen max-w-6xl flex-col justify-around px-4"
@@ -283,37 +282,5 @@ import AuthLayout from '@/Layouts/AuthLayout';
 
 export default {
     layout: AuthLayout,
-    //
-    // data() {
-    //     return {
-    //         email: '',
-    //         password: '',
-    //         confirmPassword: '',
-    //     };
-    // },
-    // methods: {
-    //     handleInputChange(data) {
-    //         console.log(data);
-    //         this[data.name] = data.value;
-    //     },
-    //     submit(e) {
-    //         e.preventDefault();
-    //         if (this.isRegister == false) {
-    //             let loginInformation = {};
-    //             loginInformation.email = this.email;
-    //             loginInformation.password = this.password;
-    //             Inertia.post('/login', loginInformation);
-    //         }
-    //         if (this.isRegister == true) {
-    //             let registerInformation = {};
-    //             registerInformation.email = this.email;
-    //             registerInformation.password = this.password;
-    //             registerInformation.password_confirmation =
-    //                 this.confirmPassword;
-    //             registerInformation.username = 'the script';
-    //             Inertia.post('/register', registerInformation);
-    //         }
-    //     },
-    // },
 };
 </script>
