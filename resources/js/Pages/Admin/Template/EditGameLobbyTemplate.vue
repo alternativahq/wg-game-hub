@@ -27,6 +27,7 @@ let updateTemplateForm = useForm({
 });
 
 function updateGameLobbyTemplate(){
+    // updateTemplateForm.put("/admin/gameTemplates/"+ props.gameTemplate.data.id, { preserveScroll: true });
     updateTemplateForm.put(route('admin-gameTemplates.update',{gameTemplate: props.gameTemplate.data.id}), { preserveScroll: true });
 }
 </script>

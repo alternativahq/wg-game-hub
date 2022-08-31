@@ -32,7 +32,7 @@ let updateLobbyForm = useForm({
 });
 
 function updateGameLobby(){
-    updateLobbyForm.put(route('admin-gameLobbies.update',{gameLobby: props.gameLobby.data.id}), { preserveScroll: true });
+    updateLobbyForm.put("/admin/gameLobbies/"+props.gameLobby.data.id, { preserveScroll: true });
 }
 </script>
 <template>

@@ -32,7 +32,7 @@ let AddLobbyFromTemplateForm = useForm({
 });
 
 function addLobbyFromGameTemplate(){
-    AddLobbyFromTemplateForm.post(route('admin-gameTemplates-lobby-store', props.game.id));
+    AddLobbyFromTemplateForm.post("/admin/game/"+props.game.id+"/gameTemplates/lobby");
 }
 </script>
 <template>

@@ -44,7 +44,7 @@ watch(
 );
 
 function deleteLobby(gameTemplate) {
-    Inertia.delete(route('admin-gameTemplates.destroy', gameTemplate.id));
+    Inertia.delete("/admin/gameTemplates/"+ gameTemplate.id);
 }
 </script>
 <template>
@@ -62,7 +62,7 @@ function deleteLobby(gameTemplate) {
                         v-model="filters.q"
                     />
                 </div>
-                <Link :href="route('admin-game.gameTemplates.create',props.game.id)">
+                <Link :href="`/admin/game/${props.game.id}/gameTemplates/create/`">
                     <ButtonShape type="purple" class="mx-2">
                         <span class="flex flex-row space-x-2.5">
                             <span class="font-bold uppercase">Add</span>
@@ -262,14 +262,14 @@ function deleteLobby(gameTemplate) {
                                                 {{ gameTemplate.description }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 flex items-center py-4 text-sm text-gray-500">
-                                                <Link :href="route('admin-gameTemplates-lobby-create', [game.id ,gameTemplate.id])" class="mx-2">
+                                                <Link :href="`/admin/game/${game.id}/gameTemplates/${gameTemplate.id}/lobby/create`">
                                                     <ButtonShape type="purple">
                                                         <span class="flex flex-row space-x-2.5">
                                                             <span class="font-bold uppercase">Make Lobby</span>
                                                         </span>
                                                     </ButtonShape>
                                                 </Link>
-                                                <Link :href="route('admin-gameTemplates.edit',gameTemplate.id)">
+                                                <Link :href="`/admin/gameTemplates/${gameTemplate.id}/edit`">
                                                     <ButtonShape type="purple">
                                                         <span class="flex flex-row space-x-2.5">
                                                             <span class="font-bold uppercase">Update</span>

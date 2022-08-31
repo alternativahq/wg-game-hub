@@ -44,7 +44,7 @@ watch(
 );
 
 function deleteLobby(gameLobbie) {
-    Inertia.delete(route('admin-gameLobbies.destroy', gameLobbie.id));
+    Inertia.delete("/admin/gameLobbies/"+gameLobbie.id);
 }
 </script>
 <template>
@@ -62,7 +62,7 @@ function deleteLobby(gameLobbie) {
                         v-model="filters.q"
                     />
                 </div>
-                <Link :href="route('admin-game.gameLobbies.create',props.game.id)">
+                <Link :href="`/admin/game/${props.game.id}/gameLobbies/create `">
                     <ButtonShape type="purple" class="mx-2">
                         <span class="flex flex-row space-x-2.5">
                             <span class="font-bold uppercase">Add</span>
@@ -349,7 +349,7 @@ function deleteLobby(gameLobbie) {
                                                 {{ UTCToHumanReadable(gameLobbie.scheduled_at) }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 flex items-center py-4 text-sm text-gray-500">
-                                                <Link :href="route('admin-gameLobbies.edit', gameLobbie.id)">
+                                                <Link :href="`/admin/gameLobbies/${gameLobbie.id}/edit`">
                                                     <ButtonShape type="purple">
                                                         <span class="flex flex-row space-x-2.5">
                                                             <span class="font-bold uppercase">Update</span>
