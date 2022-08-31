@@ -15,6 +15,7 @@ import TextInput from '@/Shared/Inputs/TextInput';
 import InputError from '@/Shared/InputError';
 import { useForm } from '@inertiajs/inertia-vue3';
 import { debounce } from 'lodash';
+import WithdrawalDialog from '../../Shared/Modals/WithdrawalDialog.vue';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -43,6 +44,15 @@ function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
 }
 
+let state = reactive({
+    open: false,
+});
+
+function sendConfirmation(){
+    Inertia.get(route('user.wallet.withdrawal.sendConfirmation'), {}, { preserveScroll: true, preserveState: true, replace: true });
+    state.open = true;
+};
+
 watch(
     () => filters,
     debounce(() => {
@@ -55,13 +65,14 @@ watch(
 </script>
 <template>
     <div>
+        <WithdrawalDialog :open="state.open" @close="state.open=false" />
         <section class="flex items-center justify-between">
             <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Withdraw Crypto</h2>
             <div class="round mx-5 mb-6 bg-gray-300 px-3 py-2 text-lg font-semibold text-black">Withdrawal Fiat -></div>
         </section>
         <section class="flex">
             <div class="flex w-2/3 items-center justify-center">
-                <form @submit.prevent="" class="mb-10 w-full">
+                <form @submit.prevent="sendConfirmation" class="mb-10 w-full">
                     <div class="mb-5 flex items-center py-4 px-4">
                         <div class="mr-20 w-2/5 text-right">Select a Coin</div>
                         <div class="w-3/5">
@@ -73,12 +84,10 @@ watch(
                                         name="location"
                                         class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                     >
-                                        <!-- v-model="filters.filter_by_asset"
-                                        @change.prevent="byTransactionChanged" -->
                                         <option :value="undefined">All</option>
-                                        <!-- <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
+                                        <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
                                             {{ asset.name }}
-                                        </option>  -->
+                                        </option> 
                                     </select>
                                 </div>
                             </BorderedContainer>
@@ -143,15 +152,19 @@ watch(
                             </InputError>
                         </div>
                     </div>
-                    <!-- <button
-                        type="submit"
-                        class="w-full"
-                        :disabled="withdrawalForm.processing"
-                    >
-                        <ButtonShape type="purple">
-                            <span class="w-full uppercase">Sign in</span>
-                        </ButtonShape>
-                    </button> -->
+                    <div class="mb-5 flex items-center py-4 px-4">
+                        <div class="mr-20 w-2/5 text-right"></div>
+                        <div class="w-3/5">
+                            <button preserve-scroll
+                                type="submit"
+                                class="w-full"
+                            >
+                                <ButtonShape type="purple">
+                                    <span class="w-full uppercase">withdrawal</span>
+                                </ButtonShape>
+                            </button>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="ml-8 w-1/3">
@@ -215,38 +228,38 @@ watch(
                     v-model="filters.to_account_id"
                 />
                 <select
-                    class="mt-1 block w-full w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
+                    class="mt-1 block w-full  rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
                     v-model="filters.scope"
                 >
                     <option :value="undefined">All Scopes</option>
-                    <option v-for="item in _filtersOptions.transactionScopeOptions" :value="item.value">
+                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionScopeOptions" :value="item.value">
                         {{ item.label }}
                     </option>
                 </select>
                 <select
-                    class="mt-1 block w-full w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
+                    class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
                     v-model="filters.asset"
                 >
                     <option :value="undefined">All Assets</option>
-                    <option v-for="item in _filtersOptions.transactionAssetOptions" :value="item.value">
+                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionAssetOptions" :value="item.value">
                         {{ item.label }}
                     </option>
                 </select>
                 <select
-                    class="mt-1 block w-full w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
+                    class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
                     v-model="filters.state"
                 >
                     <option :value="undefined">All States</option>
-                    <option v-for="item in _filtersOptions.transactionStateOptions" :value="item.value">
+                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionStateOptions" :value="item.value">
                         {{ item.label }}
                     </option>
                 </select>
                 <select
-                    class="mt-1 block w-full w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
+                    class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
                     v-model="filters.type"
                 >
                     <option :value="undefined">All Types</option>
-                    <option v-for="item in _filtersOptions.transactionTypeOptions" :value="item.value">
+                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionTypeOptions" :value="item.value">
                         {{ item.label }}
                     </option>
                 </select>
@@ -399,7 +412,7 @@ watch(
         </BorderedContainer>
         <BorderedContainer class="mb-2 bg-wgh-gray-1.5">
             <nav
-                class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white bg-white px-4 py-3 sm:px-6"
+                class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
                 aria-label="Pagination"
             >
                 <div class="hidden sm:block">

@@ -17,6 +17,8 @@ use App\Http\Controllers\{
     Wallet\TransactionController as UserTransactionController,
     Wallet\WalletController as UserWalletController,
     Wallet\WithdrawController as UserWithdrawController,
+    Wallet\WithdrawConfirmationController as UserWithdrawConfirmationController,
+    Wallet\CompleteWithdrawController as UserCompleteWithdrawController,
     Wallet\DepositController as UserDepositController,
     Notifications\DeleteNotificationsController,
     Notifications\MarkNotificationAsReadController,
@@ -84,6 +86,10 @@ Route::middleware('auth')->group(function () {
     Route::get('wallet/transactions', UserTransactionController::class)->name('user.transactions');
     Route::get('wallet/withdraw', UserWithdrawController::class)->name('user.withdraw');
     Route::get('wallet/deposit', UserDepositController::class)->name('user.deposit');
+    
+    // sendConfirmation mail
+    Route::get('wallet/withdrawal/sendConfirmation', UserWithdrawConfirmationController::class)->name('user.wallet.withdrawal.sendConfirmation');
+    Route::post('wallet/withdrawal/sendConfirmation', UserCompleteWithdrawController::class)->name('user.wallet.complete.withdrawal');
 
     // Notifications
     Route::put('notifications/{notification}/read', MarkNotificationAsReadController::class)->name(
