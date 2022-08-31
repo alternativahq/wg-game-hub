@@ -12,11 +12,5 @@ use Temporal\Workflow\WorkflowMethod;
 interface GameLobbyPrizeTransactionWorkflowContract
 {
     #[WorkflowMethod]
-    public function handle(
-        string $refId,
-        string $toAccount,
-        TransactionAsset $asset,
-        float $amount,
-        string $fromAccount,
-    );
+    public function handle(string $refId, string $toAccount, string $asset, float $amount, string $fromAccount);
 }

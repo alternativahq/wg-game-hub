@@ -27,22 +27,27 @@ class GameLobbyResultsController extends Controller
     public function __invoke(GameMatchResultsPayloadRequest $request, GameLobby $gameLobby)
     {
         $users = $gameLobby->users()->get();
+
         Notification::sendNow($users, new ProcessingGameLobbyResultsNotification(gameLobby: $gameLobby));
 
         $gameLobby->status = GameLobbyStatus::ProcessingResults;
-        $gameLobby->save();
+        if ($gameLobby->save()) {
+            broadcast(new ProcessingResultsEvent(gameLobby: $gameLobby));
 
-        broadcast(new ProcessingResultsEvent(gameLobby: $gameLobby));
+            $gameMatchResultData = GameMatchResultData::fromRequest(request: $request);
 
-        $gameMatchResultData = GameMatchResultData::fromRequest(request: $request);
+            $this->storeGameMatchResultAction->execute(
+                gameLobby: $gameLobby,
+                gameMatchResultData: $gameMatchResultData,
+            );
 
-        $this->storeGameMatchResultAction->execute(gameLobby: $gameLobby, gameMatchResultData: $gameMatchResultData);
+            broadcast(new ResultsProcessedEvent(gameLobby: $gameLobby->fresh(['users', 'scores'])));
 
-        broadcast(new ResultsProcessedEvent(gameLobby: $gameLobby->fresh(['users', 'scores'])));
+            Notification::sendNow($users, new ResultsProcessedGameLobbyNotification(gameLobby: $gameLobby));
 
-        Notification::sendNow($users, new ResultsProcessedGameLobbyNotification(gameLobby: $gameLobby));
+            $this->distributePrizesAction->execute(gameLobby: $gameLobby, gameMatchResultData: $gameMatchResultData);
+        }
 
-        $this->distributePrizesAction->execute(gameMatchResultData: $gameMatchResultData);
         // Send transactions
         return response()->noContent();
     }
