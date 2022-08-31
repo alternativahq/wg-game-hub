@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\Wallet;
+namespace App\Http\Controllers\Wallet;
 
 use Redirect;
 use Illuminate\Http\Request;
@@ -11,6 +11,7 @@ class TransactionShowController extends Controller
 {
     public function __invoke($id, Request $request)
     {
+        
         $response = Http::get(config('wodo.wallet-transactions-show-api').$id);
         return $response;
         // if (!$response->ok()) {

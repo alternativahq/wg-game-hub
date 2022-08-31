@@ -17,7 +17,7 @@ class DemoAssetsSeeder extends Seeder
     {
         return collect([
             [
-                'id' => '8a16414e-9eb9-46d1-a9b0-6a96bafdd653',
+                'id' => '2c5a57a7-c6c2-4dec-993c-fc28df5dfe4d',
                 'name' => 'Banano',
                 'description' => 'Banano Blockchain',
                 'symbol' => 'BAN',
@@ -25,7 +25,7 @@ class DemoAssetsSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
-                'id' => '50d345bd-90da-4fc5-af09-ba190039fb85',
+                'id' => '9f343108-afdc-422e-9d40-9ecd83d4cd67',
                 'name' => 'Nano',
                 'description' => 'Nano Blockchain',
                 'symbol' => 'XNO',
@@ -33,7 +33,7 @@ class DemoAssetsSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
-                'id' => '39019526-5dae-480f-96cb-7cb83882e90f',
+                'id' => '15f89a3a-c8dd-4be7-86df-cf450a7cfc13',
                 'name' => 'Wodo Token',
                 'description' => 'Wodo Platform Token',
                 'symbol' => 'XWGT',
@@ -41,7 +41,7 @@ class DemoAssetsSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
-                'id' => 'e72908fb-11ef-4a5e-95cd-1a85213d86b7',
+                'id' => 'a8745d72-53a7-493e-b207-7b7ebbec0d40',
                 'name' => 'Ethereum',
                 'description' => 'Ethereum blockchain',
                 'symbol' => 'ETH',
@@ -49,7 +49,7 @@ class DemoAssetsSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
-                'id' => 'e63480f5-db85-4bd3-a6b2-ca4cab93b2eb',
+                'id' => 'd3a35442-0a55-46c3-850b-320a90ea9a7b',
                 'name' => 'AVALANCHE',
                 'description' => 'Avalanche blockchain',
                 'symbol' => 'AVAX',
@@ -57,7 +57,7 @@ class DemoAssetsSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
-                'id' => 'ae04bd0e-d955-4053-84d9-4c26c87dc130',
+                'id' => 'a3a5a587-7799-4b47-b72a-ec2eb7d0280f',
                 'name' => 'Binance Smart Chain',
                 'description' => 'Binance Smart blockchain',
                 'symbol' => 'BSC',
@@ -65,7 +65,7 @@ class DemoAssetsSeeder extends Seeder
                 'created_at' => now(),
             ],
             [
-                'id' => 'eda4e9a3-2c5b-4b25-99d0-7e3d83faf56f',
+                'id' => '85e1fe15-fa5d-4f2c-ae45-f9c643d51657',
                 'name' => 'Solano',
                 'description' => 'Solano blockchain',
                 'symbol' => 'SOL',

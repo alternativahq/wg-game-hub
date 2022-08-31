@@ -134,6 +134,48 @@ class WodoGamehubDemoSeedCommand extends Command
         $this->call(DemoUserAssetAccountsSeeder::class);
         $this->call(DemoGameAchievementsSeeder::class);
 
+        $game = Game::inRandomOrder()->first();
+        $allUsers = User::all();
+
+        $lobby = GameLobby::factory()
+            ->scheduledInPast()
+            ->count(1)
+            ->for($game)
+            ->state(
+                new Sequence(function ($sequance) {
+                    return [
+                        'asset_id' => Asset::all()->random(),
+                        'status' => GameLobbyStatus::GameEnded,
+                        'scheduled_at' => now()->subHours(2),
+                        'image' => Arr::random([
+                            'tankx/tankx_1.png',
+                            'tankx/tankx_2.png',
+                            'tankx/tankx_cover.png',
+                            'tankx/tankx_logo.png',
+                        ]),
+                    ];
+                }),
+            )
+            ->hasAttached($allUsers, function ($attributes) {
+                return [
+                    'entrance_fee' => $attributes['base_entrance_fee'],
+                    'joined_at' => now(),
+                ];
+            })
+            ->has(
+                ChatRoom::factory()
+                    ->count(1)
+                    ->hasAttached($allUsers)
+                    ->state(function (array $attributes, GameLobby $gameLobby) {
+                        return [
+                            'id' => $gameLobby->id,
+                            'type' => ChatRoomType::GameLobby,
+                        ];
+                    }),
+            )
+            ->create();
+        $this->info('latest ended game lobby id is: ' . $lobby->first()->id);
+
         $users = User::all();
         /** @var Game $game */
         foreach (Game::cursor() as $game) {
@@ -162,11 +204,11 @@ class WodoGamehubDemoSeedCommand extends Command
                 )
                 ->create();
 
-                // Seeding data to GameLobbyTemplate
-                GameLobbyTemplate::factory()
+            // Seeding data to GameLobbyTemplate
+            GameLobbyTemplate::factory()
                 ->count(count: 30)
                 ->for($game)
-                ->create();   
+                ->create();
 
             // decrease the fee for each user joined this lobby
             $lobbies = GameLobby::factory()

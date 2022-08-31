@@ -21,13 +21,8 @@ class GameLobbyPrizeTransactionWorkflow implements GameLobbyPrizeTransactionWork
         );
     }
 
-    public function handle(
-        string $refId,
-        string $toAccount,
-        TransactionAsset $asset,
-        float $amount,
-        string $fromAccount,
-    ) {
+    public function handle(string $refId, string $toAccount, string $asset, float $amount, string $fromAccount)
+    {
         return $this->gameLobbyPrizeTransactionWorkflow->sendTransaction(
             refId: $refId,
             toAccount: $toAccount,
