@@ -1,6 +1,7 @@
 import Model from '@/Models/Model';
 import { Inertia } from '@inertiajs/inertia';
 import { inject } from 'vue';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
 
 export default class ChatRoom extends Model {
     isMainChannel() {
@@ -8,7 +9,9 @@ export default class ChatRoom extends Model {
     }
 
     sendChatMessage(message) {
-        let currentUser = inject('currentUser');
+        let currentUser = useCurrentUser();
+        // let currentUser = inject('currentUser');
+        
 
         if (!currentUser) {
             return Inertia.get('/login');

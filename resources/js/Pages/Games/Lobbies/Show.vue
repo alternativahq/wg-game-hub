@@ -9,6 +9,7 @@ import LeaderBoardModal from '@/Shared/Modals/LeaderBoardModal';
 import dayjs from 'dayjs';
 import GameLobby from '@/Models/GameLobby';
 import { Link } from '@inertiajs/inertia-vue3';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
 
 let props = defineProps({
     gameLobby: Object,
@@ -19,7 +20,8 @@ let props = defineProps({
 let chatBox = ref();
 let latestUpdateMessage = ref('Updates are on the way...');
 
-let currentUser = inject('currentUser');
+// let currentUser = inject('currentUser');
+let currentUser = useCurrentUser();
 let gameLobby = reactive(new GameLobby(props.gameLobby.data));
 
 let chatMessages = reactive([]);
@@ -61,6 +63,7 @@ function sendChatMessage() {
     if (chatMessageInput.value.length <= 0) {
         return;
     }
+    
     Inertia.post(
         `/chat-rooms/${gameLobby.id}/message`,
         {

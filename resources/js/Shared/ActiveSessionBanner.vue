@@ -2,9 +2,11 @@
 import { inject } from 'vue';
 import BorderedContainer from '@/Shared/BorderedContainer';
 import { Link } from '@inertiajs/inertia-vue3';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
 import GameLobby from '@/Models/GameLobby';
 
-let currentUser = inject('currentUser');
+let currentUser = useCurrentUser();
+// let currentUser = inject('currentUser');
 
 let currentActiveLobby = currentUser.current_lobby_session
     ? new GameLobby(currentUser.current_lobby_session?.data)

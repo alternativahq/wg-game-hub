@@ -3,8 +3,8 @@ import BorderedContainer from '@/Shared/BorderedContainer';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
 import { onBeforeMount, onMounted, inject } from 'vue';
 
-let currentUser = inject('currentUser');
-
+// let currentUser = inject('currentUser');
+let currentUser = useCurrentUser();
 onMounted(() => {
     if (currentUser) {
         currentUser.startCooldownCountdownTimer();

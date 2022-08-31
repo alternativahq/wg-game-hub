@@ -42,10 +42,10 @@ defineProps({
                         leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
                         <DialogPanel
-                            class="relative transform rounded-2xl border-t-4 border-r-4 border-l-4 border-b-10 border-wgh-red-2  px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+                            class="relative transform rounded-2xl border-t-4 border-r-4 border-l-4 border-b-10 border-wgh-red-2 bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
                         >
                             <div
-                                class="fixed -inset-x-4 top-0 z-50 mx-auto -mt-24 w-2/3 rounded-2xl border-t-4 border-r-4 border-l-4 border-b-10 border-wgh-red-3 py-4 text-center font-grota text-2xl font-extrabold text-white"
+                                class="fixed -inset-x-4 top-0 z-50 mx-auto -mt-24 w-2/3 rounded-2xl border-t-4 border-r-4 border-l-4 border-b-10 border-wgh-red-3 bg-wgh-red-2 py-4 text-center font-grota text-2xl font-extrabold text-white"
                             >
                                 <slot name="header" />
                             </div>

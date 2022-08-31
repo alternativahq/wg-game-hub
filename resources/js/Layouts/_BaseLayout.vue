@@ -3,8 +3,10 @@ import { onBeforeUnmount, onMounted, provide } from 'vue';
 import SnackService from '@/Services/Snack';
 import Snack from '@/Shared/Snack';
 import { inject } from 'vue';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
 
-let currentUser = inject('currentUser');
+let currentUser = useCurrentUser();
+// let currentUser = inject('currentUser');
 
 let snack = new SnackService();
 provide('currentUser', currentUser);

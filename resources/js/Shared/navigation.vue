@@ -2,8 +2,10 @@
 import Pagination from '@/Models/Pagination';
 import { reactive, inject } from 'vue';
 import { Link } from '@inertiajs/inertia-vue3';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
 
-let currentUser = inject('currentUser');
+// let currentUser = inject('currentUser');
+let currentUser = useCurrentUser();
 let pagination = reactive(new Pagination(currentUser.notifications));
 </script>
 <template>

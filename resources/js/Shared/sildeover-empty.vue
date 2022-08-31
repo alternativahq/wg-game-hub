@@ -6,8 +6,10 @@ import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } fro
 import { XIcon } from '@heroicons/vue/outline';
 import { Inertia } from '@inertiajs/inertia';
 import Navigation from './navigation.vue';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
 
-let currentUser = inject('currentUser');
+let currentUser = useCurrentUser();
+// let currentUser = inject('currentUser');
 
 function deleteAllNotifications() {
     Inertia.delete('/notifications');
