@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Http\QueryPipelines\UserWithdrawalsPipeline\Filters\SortByState;
 use App\Http\QueryPipelines\UserWithdrawalsPipeline\Filters\SortByAmount;
 
-class UserDepositsPipeline extends Pipeline
+class UserWithdrawalsPipeline extends Pipeline
 {
     protected ?Request $request;
 
@@ -21,10 +21,7 @@ class UserDepositsPipeline extends Pipeline
 
     protected function pipes()
     {
-        return [
-            new SortByAmount(request: $this->request),
-            new SortByState(request: $this->request),
-        ];
+        return [new SortByAmount(request: $this->request), new SortByState(request: $this->request)];
     }
 
     public static function make(Builder $builder, Request $request): Builder
