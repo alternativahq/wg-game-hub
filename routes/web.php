@@ -32,6 +32,24 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', DashboardController::class)->name(name: 'landing');
 
 Route::resource('games', GamesController::class)->only('show');
+Route::get('/temporal', function () {
+    //    /** @var \Temporal\Client\WorkflowClient $temporalClient */
+    //    $temporalClient = app('temporal-client');
+    //
+    //    $workflow = $temporalClient->newWorkflowStub(
+    //        \App\Services\Temporal\Contracts\GameLobbyPrizeTransactionWorkflowContract::class,
+    //        \Temporal\Client\WorkflowOptions::new()->withWorkflowExecutionTimeout(\Carbon\CarbonInterval::minute()),
+    //    );
+    //    $run = $temporalClient->start(
+    //        $workflow,
+    //        'wodoland',
+    //        '06defbcd-92bc-4152-8c2d-eaaa7c205d6d', // BSC
+    //        \App\Enums\Wallet\TransactionAsset::BSC,
+    //        (float) 10,
+    //        'ae04bd0e-d955-4053-84d9-4c26c87dc130', // BSC
+    //    );
+    //    dd($run->getExecution()->getID());
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', ProfileController::class)

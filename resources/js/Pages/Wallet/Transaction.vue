@@ -37,6 +37,21 @@ async function show(transaction) {
     state.open = true;
 }
 
+let state = reactive({
+    open: false,
+    transactionShow:null,
+    transactionSteps:null,
+});
+
+async function show(transaction){
+    state.transactionShow = transaction;
+
+    state.transactionSteps = await axios.get('http://wg-game-hub.test/api/wallet/transaction/'+transaction.id+'/log')
+    .then(r => r.data.data);
+
+    state.open = true;
+};
+
 watch(
     () => filters,
     debounce(() => {
@@ -88,11 +103,8 @@ watch(
                     v-model="filters.scope"
                 >
                     <option :value="undefined">All Scopes</option>
-                    <option
-                        :key="index"
-                        v-for="(item, index) in _filtersOptions.transactionScopeOptions"
-                        :value="item.value"
-                    >
+                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionScopeOptions" :value="item.value">
+
                         {{ item.label }}
                     </option>
                 </select>
@@ -101,11 +113,7 @@ watch(
                     v-model="filters.asset"
                 >
                     <option :value="undefined">All Assets</option>
-                    <option
-                        :key="index"
-                        v-for="(item, index) in _filtersOptions.transactionAssetOptions"
-                        :value="item.value"
-                    >
+                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionAssetOptions" :value="item.value">
                         {{ item.label }}
                     </option>
                 </select>
@@ -114,11 +122,7 @@ watch(
                     v-model="filters.state"
                 >
                     <option :value="undefined">All States</option>
-                    <option
-                        :key="index"
-                        v-for="(item, index) in _filtersOptions.transactionStateOptions"
-                        :value="item.value"
-                    >
+                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionStateOptions" :value="item.value">
                         {{ item.label }}
                     </option>
                 </select>
@@ -127,11 +131,7 @@ watch(
                     v-model="filters.type"
                 >
                     <option :value="undefined">All Types</option>
-                    <option
-                        :key="index"
-                        v-for="(item, index) in _filtersOptions.transactionTypeOptions"
-                        :value="item.value"
-                    >
+                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionTypeOptions" :value="item.value">
                         {{ item.label }}
                     </option>
                 </select>
@@ -293,6 +293,15 @@ watch(
                                                     class="cursor-pointer"
                                                     @click.prevent="show(transaction)"
                                                 >
+                                                    <span class="flex flex-row space-x-2.5">
+                                                        <span class="font-bold uppercase">Show</span>
+                                                    </span>
+                                                </ButtonShape>
+                                            </td>
+                                            <td
+                                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                                            >
+                                                <ButtonShape type="purple" @click="show(transaction)">
                                                     <span class="flex flex-row space-x-2.5">
                                                         <span class="font-bold uppercase">Show</span>
                                                     </span>

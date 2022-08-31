@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\Wallet;
+namespace App\Http\Controllers\Wallet;
 
 use Redirect;
 use Illuminate\Http\Request;
@@ -11,13 +11,12 @@ class TransactionShowController extends Controller
 {
     public function __invoke($id, Request $request)
     {
-        $response = Http::get(config('wodo.wallet-transactions-show-api') . $id);
-
-        session()->flash('error', 'Something went wrong, please try again later');
-        if (!$response->ok()) {
-            return response()->json(['message' => 'Something went wrong please try again later.'], 400);
-        }
-
+        
+        $response = Http::get(config('wodo.wallet-transactions-show-api').$id);
         return $response;
+        // if (!$response->ok()) {
+        //     session()->flash('erorr', 'there is no response!');
+        //     return redirect()->route('admin-game-lobbies',$gameLobby->game->id);
+        // }
     }
 }
