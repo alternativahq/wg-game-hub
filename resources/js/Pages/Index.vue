@@ -125,7 +125,7 @@ watch(
                         </button>
                     </div>
 
-                    <Link :href="route('login')">
+                    <Link href="/login">
                         <ButtonShape v-if="!currentUser" type="purple" class="w-full text-center">
                             <p class="w-full text-center">Click here to register</p>
                         </ButtonShape>

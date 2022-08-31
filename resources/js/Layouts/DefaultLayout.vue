@@ -3,14 +3,12 @@ import LogoRed from '@/Shared/SVG/LogoRed';
 import Logo from '@/Shared/SVG/Logo';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
 import { ChevronDownIcon } from '@heroicons/vue/solid';
-
 import NavigationItem from '@/Shared/Navigation/NavigationItem';
 import RocketIcon from '@/Shared/SVG/RocketIcon';
 import AccountIcon from '@/Shared/SVG/AccountIcon';
 import Footer from '@/Shared/Footer/Footer';
 import ButtonShape from '@/Shared/ButtonShape';
 import { Link } from '@inertiajs/inertia-vue3';
-
 import {
     Popover,
     PopoverButton,
@@ -25,18 +23,14 @@ import {
 import { MenuIcon, XIcon, BellIcon } from '@heroicons/vue/outline';
 import { inject, reactive } from 'vue';
 import FlashMessage from '../Shared/FlashMessage.vue';
-
 let props = defineProps({
     config: Object,
 });
-
 let currentUser = inject('currentUser');
-
 let state = reactive({
     isNotificationSlideOverOn: false,
 });
-
-const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, external: false }];
+const navigation = [{ name: 'Dashboard', href: '/', current: true, external: false }];
 </script>
 <template>
     <div>
@@ -141,7 +135,7 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
             <div class="mb-6 w-full bg-white">
                 <nav class="container mx-auto flex hidden flex-row justify-between px-4 lg:flex">
                     <div class="flex flex-row items-center space-x-14 py-5">
-                        <Link :href="route('landing')">
+                        <Link href="/">
                             <Logo class="w-32" />
                         </Link>
                         <div class="flex flex-row space-x-6">
@@ -153,7 +147,11 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                     </div>
                     <div class="hidden flex-row items-center space-x-8 lg:flex">
                         <!--                                        <SearchIcon class="h-6 w-6 cursor-pointer" />-->
-                        <button @click.prevent="state.isNotificationSlideOverOn = true" class="relative" v-if="currentUser">
+                        <button
+                            @click.prevent="state.isNotificationSlideOverOn = true"
+                            class="relative"
+                            v-if="currentUser"
+                        >
                             <BellIcon class="h-7 w-7 cursor-pointer" />
                             <span
                                 v-if="currentUser.unread_notifications.length > 0"
@@ -197,7 +195,7 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                                     <div class="py-1">
                                         <MenuItem v-slot="{ active }">
                                             <Link
-                                                :href="route('user.profile', { user: currentUser.username })"
+                                                :href="`/w/${currentUser.username}`"
                                                 :class="[
                                                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                                     'block px-4 py-2 text-sm',
@@ -208,7 +206,7 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                                         </MenuItem>
                                         <MenuItem v-slot="{ active }">
                                             <Link
-                                                :href="route('user.wallet')"
+                                                href="/wallet"
                                                 :class="[
                                                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                                     'block px-4 py-2 text-sm',
@@ -219,7 +217,7 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                                         </MenuItem>
                                         <MenuItem v-slot="{ active }">
                                             <Link
-                                                :href="route('user.transactions')"
+                                                href="/wallet/transactions"
                                                 :class="[
                                                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                                     'block px-4 py-2 text-sm',
@@ -232,7 +230,7 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                                     <div class="py-1" v-if="currentUser.is_admin">
                                         <MenuItem v-slot="{ active }">
                                             <Link
-                                                :href="route('admin-games')"
+                                                href="/admin/games"
                                                 :class="[
                                                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                                     'block px-4 py-2 text-sm',
@@ -244,14 +242,14 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                                 </MenuItems>
                             </transition>
                         </Menu>
-                        <Link as="button" method="POST" v-if="currentUser" :href="route('logout')">
+                        <Link as="button">
                             <ButtonShape type="red">
                                 <span class="flex flex-row space-x-2.5">
                                     <span class="font-bold uppercase">Sign out</span>
                                 </span>
                             </ButtonShape>
                         </Link>
-                        <Link v-if="!currentUser" :href="route('login')">
+                        <Link v-if="!currentUser" href="/login">
                             <ButtonShape type="purple">
                                 <span class="flex flex-row space-x-2.5">
                                     <span class="font-bold uppercase">Login / Register</span>
@@ -264,7 +262,7 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                 <div
                     class="container mx-auto flex w-full flex-shrink-0 flex-row items-center justify-between bg-white px-4 lg:hidden"
                 >
-                    <Link :href="route('landing')">
+                    <Link href="/">
                         <Logo class="w-32 py-5" />
                     </Link>
 
@@ -314,7 +312,7 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                                             <div class="pt-3 pb-2">
                                                 <div class="flex items-center justify-between px-4">
                                                     <div>
-                                                        <Link :href="route('landing')">
+                                                        <Link href="/">
                                                             <Logo class="h-8 w-auto" />
                                                         </Link>
                                                         <!--                                                    <img-->
@@ -371,14 +369,14 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
                                                         <BellIcon class="h-6 w-6" aria-hidden="true" />
                                                     </button>
                                                 </div>
-                                                <div class="mt-3 space-y-1 px-2" v-if="useCurrentUser()">
+                                                <div class="mt-3 space-y-1 px-2" v-if="currentUser">
                                                     <a
-                                                        :href="route('user.profile', { user: useCurrentUser().username })"
+                                                        :href="`/w/${currentUser.username}`"
                                                         class="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800"
                                                         >Your Profile</a
                                                     >
                                                     <Link
-                                                        :href="route('logout')"
+                                                        href="/"
                                                         method="post"
                                                         as="button"
                                                         replace
@@ -410,7 +408,6 @@ const navigation = [{ name: 'Dashboard', href: route('landing'), current: true, 
 .page-leave-active {
     transition: all 0.3s;
 }
-
 .page-enter,
 .page-leave-active {
     opacity: 0;

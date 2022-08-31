@@ -164,14 +164,14 @@ watch(
                                             </td>
                                             <td class=" whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                 <div class="flex ">
-                                                    <Link :href="route('admin-gameTemplates.show',game.id)" class="mr-4">
+                                                    <Link :href="`/admin/games/${game.id}/templates`" class="mr-4">
                                                         <ButtonShape type="red">
                                                             <span class="flex flex-row space-x-2.5">
                                                                 <span class="font-bold uppercase">Show Templates</span>
                                                             </span>
                                                         </ButtonShape>
                                                     </Link>
-                                                    <Link :href="route('admin-gameLobbies.show',game.id)">
+                                                    <Link :href="`/admin/games/${game.id}/lobbies`">
                                                         <ButtonShape type="purple">
                                                             <span class="flex flex-row space-x-2.5">
                                                                 <span class="font-bold uppercase">Show Lobbies</span>

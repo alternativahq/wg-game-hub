@@ -6,7 +6,6 @@ import { onBeforeUnmount, onMounted, defineProps, reactive, ref, watch } from 'v
 import { Inertia } from '@inertiajs/inertia';
 import { inject } from 'vue';
 import LeaderBoardModal from '@/Shared/Modals/LeaderBoardModal';
-import dayjs from 'dayjs';
 import GameLobby from '@/Models/GameLobby';
 import { Link } from '@inertiajs/inertia-vue3';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
@@ -28,12 +27,7 @@ let chatMessages = reactive([]);
 let chatMessageInput = ref('');
 let prize = ref(props.prize);
 
-let relativeTime = require('dayjs/plugin/relativeTime');
-let duration = require('dayjs/plugin/duration');
-
 onMounted(() => {
-    dayjs.extend(relativeTime);
-    dayjs.extend(duration);
     gameLobby.startCountDownTimer();
     if (currentUser) {
         window.echo
@@ -63,7 +57,7 @@ function sendChatMessage() {
     if (chatMessageInput.value.length <= 0) {
         return;
     }
-    
+
     Inertia.post(
         `/chat-rooms/${gameLobby.id}/message`,
         {
@@ -151,7 +145,12 @@ export default {
                 <div class="grid grid-cols-12 place-items-start gap-y-8 lg:gap-x-8">
                     <BorderedContainer class="col-span-full w-full bg-wgh-gray-1.5 lg:col-span-3">
                         <div class="flex flex-row items-center space-x-4 rounded-lg bg-white p-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-6 w-6"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                            >
                                 <path
                                     fill-rule="evenodd"
                                     d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
@@ -159,9 +158,7 @@ export default {
                                 />
                             </svg>
                             <div>
-                                <p class="font-grota text-lg font-extrabold uppercase text-wgh-gray-6">
-                                    Prize Pool
-                                </p>
+                                <p class="font-grota text-lg font-extrabold uppercase text-wgh-gray-6">Prize Pool</p>
                                 <p class="font-inter font-normal uppercase text-wgh-gray-6">
                                     {{ prize }} {{ gameLobby.asset.symbol }}
                                 </p>
@@ -186,7 +183,9 @@ export default {
                             </svg>
                             <div>
                                 <p class="font-grota text-lg font-extrabold uppercase text-wgh-gray-6">Live updates</p>
-                                <p class="font-inter font-normal uppercase text-wgh-gray-6">{{ latestUpdateMessage }}</p>
+                                <p class="font-inter font-normal uppercase text-wgh-gray-6">
+                                    {{ latestUpdateMessage }}
+                                </p>
                             </div>
                         </div>
                     </BorderedContainer>
@@ -207,7 +206,9 @@ export default {
                                 />
                             </svg>
                             <div>
-                                <p class="font-grota text-lg font-extrabold uppercase text-wgh-gray-6">Game Starts In</p>
+                                <p class="font-grota text-lg font-extrabold uppercase text-wgh-gray-6">
+                                    Game Starts In
+                                </p>
                                 <p
                                     v-if="!gameLobby.timeToStartAsString"
                                     class="font-inter font-normal uppercase text-wgh-gray-6"

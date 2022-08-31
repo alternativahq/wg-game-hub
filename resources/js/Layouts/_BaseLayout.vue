@@ -2,13 +2,21 @@
 import { onBeforeUnmount, onMounted, provide } from 'vue';
 import SnackService from '@/Services/Snack';
 import Snack from '@/Shared/Snack';
-import { inject } from 'vue';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import duration from 'dayjs/plugin/duration';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.extend(relativeTime);
+dayjs.extend(duration);
 
 let currentUser = useCurrentUser();
-// let currentUser = inject('currentUser');
-
 let snack = new SnackService();
+
 provide('currentUser', currentUser);
 provide('snack', snack);
 provide('dayjs', dayjs);

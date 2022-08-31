@@ -6,17 +6,7 @@ import ButtonShape from '@/Shared/ButtonShape';
 import Pagination from '@/Models/Pagination';
 import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import duration from 'dayjs/plugin/duration';
 import { throttle } from 'lodash';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.extend(relativeTime);
-dayjs.extend(duration);
 
 let props = defineProps({
     gameTemplates: Object,
@@ -33,10 +23,6 @@ function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
 }
 
-function deleteLobby(gameTemplate) {
-    Inertia.delete(route('admin-gameTemplates.destroy', gameTemplate.id));
-}
-
 watch(
     () => filters,
     throttle(() => {
@@ -46,6 +32,10 @@ watch(
         deep: true,
     }
 );
+
+function deleteLobby(gameTemplate) {
+    Inertia.delete('/admin/gameTemplates/' + gameTemplate.id);
+}
 </script>
 <template>
     <div>
@@ -62,7 +52,7 @@ watch(
                         v-model="filters.q"
                     />
                 </div>
-                <Link :href="route('admin-game.gameTemplates.create',props.game.id)">
+                <Link :href="`/admin/game/${props.game.id}/gameTemplates/create/`">
                     <ButtonShape type="purple" class="mx-2">
                         <span class="flex flex-row space-x-2.5">
                             <span class="font-bold uppercase">Add</span>
@@ -90,7 +80,7 @@ watch(
                                                     :data="{
                                                         sort_by: 'game_templates_name',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Name
@@ -119,7 +109,7 @@ watch(
                                                     :data="{
                                                         sort_by: 'game_templates_asset_symbol',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Symbol
@@ -148,7 +138,7 @@ watch(
                                                     :data="{
                                                         sort_by: 'game_templates_base_entrance_fee',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Entrance Fee
@@ -159,7 +149,8 @@ watch(
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
                                                                 filters.sort_by === 'game_templates_base_entrance_fee',
                                                             'rotate-180':
-                                                                filters.sort_by === 'game_templates_base_entrance_fee' &&
+                                                                filters.sort_by ===
+                                                                    'game_templates_base_entrance_fee' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
@@ -177,7 +168,7 @@ watch(
                                                     :data="{
                                                         sort_by: 'game_templates_min_players',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Min Players
@@ -206,7 +197,7 @@ watch(
                                                     :data="{
                                                         sort_by: 'game_templates_max_players',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q :filters.q
+                                                        q: filters.q,
                                                     }"
                                                 >
                                                     Max Players
@@ -261,22 +252,26 @@ watch(
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                 {{ gameTemplate.description }}
                                             </td>
-                                            <td class="whitespace-nowrap px-3 flex items-center py-4 text-sm text-gray-500">
-                                                <Link :href="route('admin-gameTemplates-lobby-create', gameTemplate.id)" class="mx-2">
+                                            <td
+                                                class="flex items-center whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                                            >
+                                                <Link
+                                                    :href="`/admin/game/gameTemplates/${gameTemplate.id}/lobby/create`"
+                                                >
                                                     <ButtonShape type="purple">
                                                         <span class="flex flex-row space-x-2.5">
                                                             <span class="font-bold uppercase">Make Lobby</span>
                                                         </span>
                                                     </ButtonShape>
                                                 </Link>
-                                                <Link :href="route('admin-gameTemplates.edit',gameTemplate.id)">
+                                                <Link :href="`/admin/gameTemplates/${gameTemplate.id}/edit`">
                                                     <ButtonShape type="purple">
                                                         <span class="flex flex-row space-x-2.5">
                                                             <span class="font-bold uppercase">Update</span>
                                                         </span>
                                                     </ButtonShape>
                                                 </Link>
-                                                <button  @click="deleteLobby(gameTemplate)">
+                                                <button @click="deleteLobby(gameTemplate)">
                                                     <ButtonShape type="red" class="mx-2">
                                                         <span class="flex flex-row space-x-2.5">
                                                             <span class="font-bold uppercase">Delete</span>
@@ -327,4 +322,3 @@ watch(
         </BorderedContainer>
     </div>
 </template>
-

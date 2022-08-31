@@ -16,14 +16,14 @@ let props = defineProps({
             <h2 class="truncate font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Asset Accounts</h2>
             <div class="mb-5 flex flex-row items-center space-x-4">
                 <div class="flex flex-row items-center justify-end space-x-4">
-                    <Link class="shrink-0" :href="route('user.deposit')">
+                    <Link class="shrink-0" href="/wallet/deposit">
                         <ButtonShape type="red">Deposit</ButtonShape>
                     </Link>
-                    <Link class="shrink-0" :href="route('user.withdraw')">
+                    <Link class="shrink-0" href="/wallet/withdraw">
                         <ButtonShape type="red">Withdraw</ButtonShape>
                     </Link>
                 </div>
-                <Link class="shrink-0" :href="route('user.transactions')">
+                <Link class="shrink-0" href="/wallet/transactions">
                     <ButtonShape type="red">View Transactions</ButtonShape>
                 </Link>
             </div>

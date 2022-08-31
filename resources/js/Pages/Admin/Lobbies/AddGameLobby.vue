@@ -27,7 +27,7 @@ let AddLobbyForm = useForm({
 });
 
 function addGameLobby() {
-    AddLobbyForm.post(route('admin-game.gameLobbies.store',props.game.id));
+    AddLobbyForm.post("/admin/game/"+props.game.id+"/gameLobbies");
 }
 </script>
 <template>

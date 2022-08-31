@@ -1,12 +1,14 @@
 import dayjs from 'dayjs';
-
-window._ = require('lodash');
-window.dayjs = require('dayjs');
-let relativeTime = require('dayjs/plugin/relativeTime');
-let duration = require('dayjs/plugin/duration');
-
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import duration from 'dayjs/plugin/duration';
+dayjs.extend(utc);
+dayjs.extend(timezone);
 dayjs.extend(relativeTime);
 dayjs.extend(duration);
+window.dayjs = dayjs;
+window._ = require('lodash');
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

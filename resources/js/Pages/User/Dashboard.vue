@@ -2,7 +2,6 @@
 import { defineProps, inject } from 'vue';
 import BorderedContainer from '@/Shared/BorderedContainer';
 import GameCard from '@/Shared/GameCard';
-import dayjs from 'dayjs';
 import ButtonShape from '@/Shared/ButtonShape';
 import RocketIcon from '@/Shared/SVG/RocketIcon';
 import SettingsIcon from '@/Shared/SVG/SettingsIcon';
@@ -10,17 +9,7 @@ import MedalIcon from '@/Shared/SVG/MedalIcon';
 import WatchIcon from '@/Shared/SVG/WatchIcon';
 import { Link } from '@inertiajs/inertia-vue3';
 
-let utc = require('dayjs/plugin/utc');
-let timezone = require('dayjs/plugin/timezone');
-let relativeTime = require('dayjs/plugin/relativeTime');
-let duration = require('dayjs/plugin/duration');
-
 let currentUser = inject('currentUser');
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.extend(relativeTime);
-dayjs.extend(duration);
 
 let props = defineProps({
     user: Object,
@@ -71,9 +60,11 @@ function timePlayedSecondsToHours(s) {
                         </div>
                     </div>
                     <div class="mt-4 flex flex-col justify-between lg:mt-0">
-                        <div class="flex justify-between items-center">
-                            <Link :href="route('profile')">
-                                <button class="flex-row justify-end text-xs text-wgh-gray-8 bg-green-500 rounded mx-4 py-1 px-2 " >
+                        <div class="flex items-center justify-between">
+                            <Link href="/profile">
+                                <button
+                                    class="text-wgh-gray-8 mx-4 flex-row justify-end rounded bg-green-500 py-1 px-2 text-xs"
+                                >
                                     <span class="flex flex-row">
                                         <span class="font-bold uppercase">profile</span>
                                     </span>
@@ -84,7 +75,7 @@ function timePlayedSecondsToHours(s) {
                                 ><span>settings</span>
                                 <SettingsIcon class="h-4 w-4" />
                             </Link>
-                        </div> 
+                        </div>
                         <div class="flex flex-row justify-between md:space-x-8">
                             <div class="flex flex-col items-center space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
                                 <div class="rounded-full bg-wgh-pink-1 p-3">
@@ -234,7 +225,7 @@ function timePlayedSecondsToHours(s) {
                 <h2 class="truncate font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">
                     Latest Games Played History
                 </h2>
-                <Link class="shrink-0" :href="route('user.games-played-history', { user: user.username })">
+                <Link class="shrink-0" :href="`/w/${user.username}/games-played-history`">
                     <ButtonShape type="red"> View All</ButtonShape>
                 </Link>
             </div>
@@ -304,7 +295,7 @@ function timePlayedSecondsToHours(s) {
                 <h2 class="truncate font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">
                     Latest Achievements
                 </h2>
-                <Link class="shrink-0" :href="route('user.achievements', { user: user.username })">
+                <Link class="shrink-0" :href="`/w/${user.username}/achievements`">
                     <ButtonShape type="red"> View All</ButtonShape>
                 </Link>
             </div>

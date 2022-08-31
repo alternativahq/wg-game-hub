@@ -2,11 +2,6 @@
 import { ChevronDownIcon } from '@heroicons/vue/solid';
 import { defineProps, reactive, watch } from 'vue';
 import BorderedContainer from '@/Shared/BorderedContainer';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import duration from 'dayjs/plugin/duration';
 import ButtonShape from '@/Shared/ButtonShape';
 import Pagination from '@/Models/Pagination';
 import { Link } from '@inertiajs/inertia-vue3';
@@ -16,11 +11,6 @@ import InputError from '@/Shared/InputError';
 import { useForm } from '@inertiajs/inertia-vue3';
 import { debounce } from 'lodash';
 import WithdrawalDialog from '../../Shared/Modals/WithdrawalDialog.vue';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.extend(relativeTime);
-dayjs.extend(duration);
 
 let props = defineProps({
     userWithdrawTransactions: Object,
@@ -48,10 +38,14 @@ let state = reactive({
     open: false,
 });
 
-function sendConfirmation(){
-    Inertia.get(route('user.wallet.withdrawal.sendConfirmation'), {}, { preserveScroll: true, preserveState: true, replace: true });
+function sendConfirmation() {
+    Inertia.get(
+        '/wallet/withdrawal/sendConfirmation',
+        {},
+        { preserveScroll: true, preserveState: true, replace: true }
+    );
     state.open = true;
-};
+}
 
 watch(
     () => filters,
@@ -65,7 +59,7 @@ watch(
 </script>
 <template>
     <div>
-        <WithdrawalDialog :open="state.open" @close="state.open=false" />
+        <WithdrawalDialog :open="state.open" @close="state.open = false" />
         <section class="flex items-center justify-between">
             <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Withdraw Crypto</h2>
             <div class="round mx-5 mb-6 bg-gray-300 px-3 py-2 text-lg font-semibold text-black">Withdrawal Fiat -></div>
@@ -87,7 +81,7 @@ watch(
                                         <option :value="undefined">All</option>
                                         <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
                                             {{ asset.name }}
-                                        </option> 
+                                        </option>
                                     </select>
                                 </div>
                             </BorderedContainer>
@@ -155,10 +149,7 @@ watch(
                     <div class="mb-5 flex items-center py-4 px-4">
                         <div class="mr-20 w-2/5 text-right"></div>
                         <div class="w-3/5">
-                            <button preserve-scroll
-                                type="submit"
-                                class="w-full"
-                            >
+                            <button preserve-scroll type="submit" class="w-full">
                                 <ButtonShape type="purple">
                                     <span class="w-full uppercase">withdrawal</span>
                                 </ButtonShape>
@@ -228,11 +219,15 @@ watch(
                     v-model="filters.to_account_id"
                 />
                 <select
-                    class="mt-1 block w-full  rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
+                    class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
                     v-model="filters.scope"
                 >
                     <option :value="undefined">All Scopes</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionScopeOptions" :value="item.value">
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionScopeOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>
@@ -241,7 +236,11 @@ watch(
                     v-model="filters.asset"
                 >
                     <option :value="undefined">All Assets</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionAssetOptions" :value="item.value">
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionAssetOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>
@@ -250,7 +249,11 @@ watch(
                     v-model="filters.state"
                 >
                     <option :value="undefined">All States</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionStateOptions" :value="item.value">
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionStateOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>
@@ -259,7 +262,11 @@ watch(
                     v-model="filters.type"
                 >
                     <option :value="undefined">All Types</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionTypeOptions" :value="item.value">
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionTypeOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>

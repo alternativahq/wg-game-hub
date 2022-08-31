@@ -1,10 +1,5 @@
 <script setup>
-import {
-    Dialog,
-    DialogPanel,
-    TransitionChild,
-    TransitionRoot,
-} from '@headlessui/vue';
+import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import { useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import TextInput from '@/Shared/Inputs/TextInput';
@@ -16,14 +11,14 @@ let props = defineProps({
     open: Boolean,
 });
 
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close']);
 
 let WithdrawalConfirmationForm = useForm({
     code: '',
 });
 
-function WithdrawalConfirmationFormSubmit(){
-    WithdrawalConfirmationForm.post(route('user.wallet.complete.withdrawal'),{onSuccess: () => emit('close'),});
+function WithdrawalConfirmationFormSubmit() {
+    WithdrawalConfirmationForm.post('/wallet/withdrawal/sendConfirmation', { onSuccess: () => emit('close') });
     WithdrawalConfirmationForm.clearErrors();
     WithdrawalConfirmationForm.reset();
     // emit('close');
@@ -32,7 +27,7 @@ function WithdrawalConfirmationFormSubmit(){
 <template>
     <TransitionRoot as="template" :show="open">
         <Dialog as="div" class="relative z-10">
-            <TransitionChild 
+            <TransitionChild
                 as="template"
                 enter="ease-out duration-300"
                 enter-from="opacity-0"
@@ -41,13 +36,11 @@ function WithdrawalConfirmationFormSubmit(){
                 leave-from="opacity-100"
                 leave-to="opacity-0"
             >
-                <div
-                    class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-                />
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
             </TransitionChild>
 
-            <div class="fixed inset-0 z-10 overflow-y-auto" >
-                <div  class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div class="fixed inset-0 z-10 overflow-y-auto">
+                <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
                     <TransitionChild
                         as="template"
                         enter="ease-out duration-300"
@@ -61,13 +54,13 @@ function WithdrawalConfirmationFormSubmit(){
                             class="relative transform rounded-2xl border-t-4 border-r-4 border-l-4 border-b-10 border-wgh-red-2 bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
                         >
                             <div>
-                                <div class="border-b-2 border-b-gray-400 mb-4">
-                                    <div class="mb-3 flex justify-between items-center text-2xl font-semibold">
+                                <div class="mb-4 border-b-2 border-b-gray-400">
+                                    <div class="mb-3 flex items-center justify-between text-2xl font-semibold">
                                         <div>Withdraw Conformation</div>
                                         <div class="text-2xl hover:cursor-pointer" @click="$emit('close')">&times;</div>
                                     </div>
                                 </div>
-                                <form @submit.prevent="WithdrawalConfirmationFormSubmit()" >
+                                <form @submit.prevent="WithdrawalConfirmationFormSubmit()">
                                     <div class="font-semibold">code</div>
                                     <TextInput
                                         v-model="WithdrawalConfirmationForm.code"

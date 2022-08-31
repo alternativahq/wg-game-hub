@@ -23,7 +23,6 @@ class SendWithdrawalConfirmationNotification extends Notification
 
     public function toMail($notifiable): MailMessage
     {
-        return (new MailMessage)
-                    ->line('The confirmation code is : ' . $this->code);
+        return (new MailMessage())->line('The confirmation code is : ' . $this->code);
     }
 }
