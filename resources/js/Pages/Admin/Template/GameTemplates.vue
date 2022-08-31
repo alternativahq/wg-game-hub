@@ -262,7 +262,7 @@ function deleteLobby(gameTemplate) {
                                                 {{ gameTemplate.description }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 flex items-center py-4 text-sm text-gray-500">
-                                                <Link :href="route('admin-gameTemplates-lobby-create', [game.id ,gameTemplate.id])" class="mx-2">
+                                                <Link :href="route('admin-gameTemplates-lobby-create', gameTemplate.id)" class="mx-2">
                                                     <ButtonShape type="purple">
                                                         <span class="flex flex-row space-x-2.5">
                                                             <span class="font-bold uppercase">Make Lobby</span>
