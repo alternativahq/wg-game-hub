@@ -23,10 +23,8 @@ use App\Http\Controllers\{
     Notifications\DeleteNotificationsController,
     Notifications\MarkNotificationAsReadController,
     Admin\GamesController as AdminGamesController,
-    Admin\GameLobbiesController as AdminGameLobbiesController,
-    Admin\GameLobbiesShowController as AdminGameLobbiesShowController,
+    Admin\Lobbies\GameLobbiesController as AdminGameLobbiesController,
     Admin\Template\GameTemplatesController as AdminGameTemplatesController,
-    Admin\Template\GameTemplatesShowController as AdminGameTemplatesShowController,
 };
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -103,22 +101,25 @@ Route::middleware('auth')->group(function () {
         ->prefix('/admin')
         ->as('admin-')
         ->group(function () {
-            // CRAD opretion  game lobbies
-            Route::get('/games', AdminGamesController::class)->name('games');
-            Route::get('/games/{game}/lobbies', AdminGameLobbiesShowController::class)->name('game-lobbies');
+            // CRAD opretion  game lobbies and template
+            Route::get('/games', [AdminGamesController::class, 'index'])->name('games');
+            Route::get('/games/{game}/lobbies', [AdminGamesController::class, 'showLobbies'])->name('gameLobbies.show');
+            Route::get('/games/{game}/templates', [AdminGamesController::class, 'showTemplates'])->name('gameTemplates.show');
+            
+            // game lobbies
             Route::resource('game.gameLobbies', AdminGameLobbiesController::class)
-                ->except('index', 'show')
-                ->shallow()
-                ->scoped();
-            // CRAD opretion game lobby templates
-            Route::get('/games/{game}/templates', AdminGameTemplatesShowController::class)->name('game-templates');
-            Route::get('/game/{game}/gameTemplates/{gameTemplate}/lobby/create', [
-                AdminGameTemplatesController::class,
-                'createLobby',
+            ->except('index', 'show')
+            ->shallow()
+            ->scoped();
+            
+            // game templates
+            Route::get('/game/gameTemplates/{gameTemplate}/lobby/create', [
+                AdminGameTemplatesController::class, 'createLobby'
             ])->name('gameTemplates-lobby-create');
-            Route::post('/game/{game}/gameTemplates/lobby', [AdminGameTemplatesController::class, 'storeLobby'])->name(
-                'gameTemplates-lobby-store',
-            );
+            
+            Route::post('/game/{game}/gameTemplates/lobby', [AdminGameTemplatesController::class, 'storeLobby'])
+            ->name('gameTemplates-lobby-store');
+            
             Route::resource('game.gameTemplates', AdminGameTemplatesController::class)
                 ->except('index', 'show')
                 ->shallow()
