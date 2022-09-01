@@ -242,7 +242,7 @@ const navigation = [{ name: 'Dashboard', href: '/', current: true, external: fal
                                 </MenuItems>
                             </transition>
                         </Menu>
-                        <Link as="button">
+                        <Link as="button" href="/logout" method="POST" v-if="currentUser">
                             <ButtonShape type="red">
                                 <span class="flex flex-row space-x-2.5">
                                     <span class="font-bold uppercase">Sign out</span>
@@ -376,7 +376,7 @@ const navigation = [{ name: 'Dashboard', href: '/', current: true, external: fal
                                                         >Your Profile</a
                                                     >
                                                     <Link
-                                                        href="/"
+                                                        href="/logout"
                                                         method="post"
                                                         as="button"
                                                         replace
