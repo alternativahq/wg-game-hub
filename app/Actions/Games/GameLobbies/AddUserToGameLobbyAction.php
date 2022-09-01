@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Http;
 
 class AddUserToGameLobbyAction
 {
-    public function execute(User $user, GameLobby $gameLobby): GameLobby|AddUserToGameLobbyReaction
+    public function execute(User $user, GameLobby $gameLobby)
     {
         return DB::transaction(
             callback: function () use ($user, $gameLobby) {
@@ -49,7 +49,7 @@ class AddUserToGameLobbyAction
 
                 //here we should call the api
                 $asset = $gameLobby->asset()->first();
-                $url = config('wodo.wallet-transactions-api') . 'prize';
+                $url = config('wodo.wallet-withdraw-api');
                     $response = Http::post(
                         url: $url,
                         data: [
@@ -64,8 +64,9 @@ class AddUserToGameLobbyAction
                     if ($response->failed()) {
                         return $response->toException();
                     }
+                    return $response;
 
-                return $response->body();
+                // return $response->body();
 
                 // $userAssetAccount->decrement('balance', $fee = $gameLobby->base_entrance_fee);
 
@@ -90,7 +91,7 @@ class AddUserToGameLobbyAction
 
                 $gameLobby->decrement('available_spots');
 
-                broadcast(new UserJoinedGameLobbyEvent(gameLobby: $gameLobby, user: $user, entranceFee: $fee));
+                broadcast(new UserJoinedGameLobbyEvent(gameLobby: $gameLobby, user: $user, entranceFee: $gameLobby->base_entrance_fee));
                 $total = (float) GameLobbyUser::where('game_lobby_id', $gameLobby->id)->sum('entrance_fee');
                 $prize = (float) ($total - ($total * 20.0) / 100.0);
                 Event::dispatch(new PrizeUpdatedEvent(gameLobby: $gameLobby, newPrize: $prize));

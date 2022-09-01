@@ -14,6 +14,7 @@ use Cache;
 use DB;
 use Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class RemoveUserFromGameLobbyAction
 {
@@ -52,7 +53,7 @@ class RemoveUserFromGameLobbyAction
                 // return the amount he paid
                 //here we should call the api
                 $asset = $gameLobby->asset()->first();
-                $url = config('wodo.wallet-transactions-api') . 'prize';
+                $url = config('wodo.wallet-withdraw-api');
                     $response = Http::post(
                         url: $url,
                         data: [
@@ -65,10 +66,10 @@ class RemoveUserFromGameLobbyAction
                     );
 
                     if ($response->failed()) {
-                        return $response->toException();
+                        // return $response->toException();
                     }
 
-                return $response->body();
+                // return $response->body();
 
                 // $userAssetAccount->increment('balance', $gameLobbyUserEntranceFee);
 
