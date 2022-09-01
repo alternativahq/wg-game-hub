@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\WodoAssetAccount;
 use DB;
 use Event;
+use Illuminate\Support\Facades\Http;
 
 class AddUserToGameLobbyAction
 {
@@ -45,12 +46,33 @@ class AddUserToGameLobbyAction
                 if ($userAssetAccount->balance < $gameLobby->base_entrance_fee) {
                     return AddUserToGameLobbyReaction::InsufficientFunds;
                 }
-                $userAssetAccount->decrement('balance', $fee = $gameLobby->base_entrance_fee);
+
+                //here we should call the api
+                $asset = $gameLobby->asset()->first();
+                $url = config('wodo.wallet-transactions-api') . 'prize';
+                    $response = Http::post(
+                        url: $url,
+                        data: [
+                            'fromAccountId' => $userAssetAccount->id,
+                            'toAccountId' => $gameLobby->asset_id,
+                            'asset' => $asset->symbol,
+                            'amount' => $gameLobby->base_entrance_fee,
+                            'refId' => $refId,
+                        ],
+                    );
+
+                    if ($response->failed()) {
+                        return $response->toException();
+                    }
+
+                return $response->body();
+
+                // $userAssetAccount->decrement('balance', $fee = $gameLobby->base_entrance_fee);
 
                 $gameLobby->users()->syncWithPivotValues(
                     ids: $user->id,
                     values: [
-                        'entrance_fee' => $fee,
+                        'entrance_fee' => $gameLobby->base_entrance_fee,
                         'joined_at' => now(),
                     ],
                     detaching: false,
@@ -60,11 +82,11 @@ class AddUserToGameLobbyAction
                     'user_id' => $user->id,
                 ]);
 
-                $wodoAssetAccount = WodoAssetAccount::query()
-                    ->where('asset_id', $gameLobby->asset_id)
-                    ->first();
+                // $wodoAssetAccount = WodoAssetAccount::query()
+                //     ->where('asset_id', $gameLobby->asset_id)
+                //     ->first();
 
-                $wodoAssetAccount->increment('balance', $fee);
+                // $wodoAssetAccount->increment('balance', $fee);
 
                 $gameLobby->decrement('available_spots');
 

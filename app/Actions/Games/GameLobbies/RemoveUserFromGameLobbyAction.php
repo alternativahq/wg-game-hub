@@ -50,15 +50,35 @@ class RemoveUserFromGameLobbyAction
                 $gameLobbyUserEntranceFee = $gameLobbyUser->pivot->entrance_fee;
 
                 // return the amount he paid
-                $userAssetAccount->increment('balance', $gameLobbyUserEntranceFee);
+                //here we should call the api
+                $asset = $gameLobby->asset()->first();
+                $url = config('wodo.wallet-transactions-api') . 'prize';
+                    $response = Http::post(
+                        url: $url,
+                        data: [
+                            'fromAccountId' => $gameLobby->asset_id,
+                            'toAccountId' => $userAssetAccount->id,
+                            'asset' => $asset->symbol,
+                            'amount' => $gameLobbyUserEntranceFee,
+                            'refId' => $refId,
+                        ],
+                    );
 
-                $wodoAccount = WodoAssetAccount::sharedLock()
-                    ->where('asset_id', $gameLobby->asset_id)
-                    ->first();
+                    if ($response->failed()) {
+                        return $response->toException();
+                    }
 
-                $wodoAccount->decrement('balance', $gameLobbyUserEntranceFee);
+                return $response->body();
 
-                $gameLobby->increment('available_spots');
+                // $userAssetAccount->increment('balance', $gameLobbyUserEntranceFee);
+
+                // $wodoAccount = WodoAssetAccount::sharedLock()
+                //     ->where('asset_id', $gameLobby->asset_id)
+                //     ->first();
+
+                // $wodoAccount->decrement('balance', $gameLobbyUserEntranceFee);
+
+                // $gameLobby->increment('available_spots');
 
                 $gameLobby->users()->detach([$user->id]);
 
