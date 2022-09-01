@@ -27,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        URL::forceRootUrl(config('app.url'));
         if ($this->app->environment('production', 'development')) {
             $this->app['request']->server->set('HTTPS', 'on'); // pagination https
             URL::forceScheme('https'); // app https
