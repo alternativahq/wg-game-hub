@@ -60,7 +60,7 @@ class RemoveUserFromGameLobbyAction
                             'toAccountId' => $userAssetAccount->id,
                             'asset' => $asset->symbol,
                             'amount' => $gameLobbyUserEntranceFee,
-                            'refId' => $refId,
+                            'refId' => $gameLobby->id,
                         ],
                     );
 

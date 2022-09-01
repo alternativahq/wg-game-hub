@@ -57,7 +57,7 @@ class AddUserToGameLobbyAction
                             'toAccountId' => $gameLobby->asset_id,
                             'asset' => $asset->symbol,
                             'amount' => $gameLobby->base_entrance_fee,
-                            'refId' => $refId,
+                            'refId' => $gameLobby->id,
                         ],
                     );
 
