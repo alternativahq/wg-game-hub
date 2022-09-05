@@ -49,22 +49,19 @@ class AddUserToGameLobbyAction
 
                 //here we should call the api
                 $asset = $gameLobby->asset()->first();
-                $url = config('wodo.wallet-withdraw-api');
-                    $response = Http::post(
-                        url: $url,
-                        data: [
-                            'fromAccountId' => $userAssetAccount->id,
-                            'toAccountId' => $gameLobby->asset_id,
-                            'asset' => $asset->symbol,
-                            'amount' => $gameLobby->base_entrance_fee,
-                            'refId' => $gameLobby->id,
-                        ],
-                    );
+                $url = config('wodo.wallet-transactions-api') . 'home-deposit';
+                $data = [
+                    'fromAccountId' => $userAssetAccount->id,
+                    'asset' => $asset->symbol,
+                    'amount' => $gameLobby->base_entrance_fee,
+                    'refId' => $gameLobby->id,
+                ];
 
-                    if ($response->failed()) {
-                        return $response->toException();
-                    }
-                    return $response;
+                $response = Http::post(url: $url, data: $data);
+                
+                if ($response->failed()) {
+                    return $response->toException();
+                }
 
                 // return $response->body();
 
