@@ -11,8 +11,11 @@ use App\Models\GameLobbyUser;
 use App\Models\User;
 use App\Models\WodoAssetAccount;
 use DB;
+use Auth;
 use Event;
+use Cache;
 use Illuminate\Support\Facades\Http;
+use App\Actions\Wallet\GetUserAssetAccountAction;
 
 class AddUserToGameLobbyAction
 {
@@ -21,51 +24,55 @@ class AddUserToGameLobbyAction
         return DB::transaction(
             callback: function () use ($user, $gameLobby) {
                 $gameLobby = GameLobby::query()
-                    ->lockForUpdate()
-                    ->findOrFail($gameLobby->id);
-
+                ->lockForUpdate()
+                ->findOrFail($gameLobby->id);
+                
                 if (!$gameLobby->has_available_spots) {
                     return AddUserToGameLobbyReaction::NoAvailableSpots;
                 }
-
+                
                 if (
                     $gameLobby
-                        ->users()
-                        ->where('users.id', $user->id)
-                        ->exists()
-                ) {
-                    return AddUserToGameLobbyReaction::UserAlreadyJoinedTheGameLobby;
-                }
+                    ->users()
+                    ->where('users.id', $user->id)
+                    ->exists()
+                    ) {
+                        return AddUserToGameLobbyReaction::UserAlreadyJoinedTheGameLobby;
+                    }
 
-                $userAssetAccount = $user
-                    ->assetAccounts()
-                    ->lockForUpdate()
-                    ->where('asset_id', $gameLobby->asset_id)
-                    ->first();
-
-                if ($userAssetAccount->balance < $gameLobby->base_entrance_fee) {
-                    return AddUserToGameLobbyReaction::InsufficientFunds;
-                }
-
-                //here we should call the api
-                $asset = $gameLobby->asset()->first();
-                $url = config('wodo.wallet-transactions-api') . 'home-deposit';
-                $data = [
-                    'fromAccountId' => $userAssetAccount->id,
-                    'asset' => $asset->symbol,
-                    'amount' => $gameLobby->base_entrance_fee,
-                    'refId' => $gameLobby->id,
-                ];
-
-                $response = Http::post(url: $url, data: $data);
-                
-                if ($response->failed()) {
-                    return $response->toException();
-                }
-
-                // return $response->body();
-
-                // $userAssetAccount->decrement('balance', $fee = $gameLobby->base_entrance_fee);
+                    //geting the user account from the api end point
+                    $getUserAssetAccountAction = new GetUserAssetAccountAction();
+                    $userAssetAccount = $getUserAssetAccountAction->execute($gameLobby->asset);
+                    
+                    // $userAssetAccount = $user
+                    // ->assetAccounts()
+                    // ->lockForUpdate()
+                    // ->where('asset_id', $gameLobby->asset_id)
+                    // ->first();
+                    
+                    // if ($userAssetAccount->balance < $gameLobby->base_entrance_fee) {
+                    //     return AddUserToGameLobbyReaction::InsufficientFunds;
+                    // }
+                    
+                    //here we should call the api
+                    $asset = $gameLobby->asset()->first();
+                    $url = config('wodo.wallet-transactions-api') . 'home-deposit';
+                    $data = [
+                        'fromAccountId' => $userAssetAccount->id,
+                        'asset' => $asset->symbol,
+                        'amount' => $gameLobby->base_entrance_fee,
+                        'refId' => $gameLobby->id,
+                    ];
+                    
+                    $response = Http::post(url: $url, data: $data);
+                    
+                    if ($response->failed()) {
+                        return $response->toException();
+                    }
+                    
+                    // return $response->body();
+                    
+                    // $userAssetAccount->decrement('balance', $fee = $gameLobby->base_entrance_fee);
 
                 $gameLobby->users()->syncWithPivotValues(
                     ids: $user->id,
@@ -87,6 +94,9 @@ class AddUserToGameLobbyAction
                 // $wodoAssetAccount->increment('balance', $fee);
 
                 $gameLobby->decrement('available_spots');
+
+                //forgeting the user asset account after the balance changed
+                Cache::forget('user.' . Auth::id() . '.account' . $gameLobby->asset->symbol);
 
                 broadcast(new UserJoinedGameLobbyEvent(gameLobby: $gameLobby, user: $user, entranceFee: $gameLobby->base_entrance_fee));
                 $total = (float) GameLobbyUser::where('game_lobby_id', $gameLobby->id)->sum('entrance_fee');

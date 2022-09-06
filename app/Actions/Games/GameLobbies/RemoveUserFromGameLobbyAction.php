@@ -2,19 +2,20 @@
 
 namespace App\Actions\Games\GameLobbies;
 
-use App\Enums\Reactions\RemoveUserFromGameLobbyReaction;
-use App\Events\GameLobby\PrizeUpdatedEvent;
-use App\Events\GameLobby\UserLeftGameLobbyEvent;
-use App\Models\ChatRoomUser;
-use App\Models\GameLobby;
-use App\Models\GameLobbyUser;
-use App\Models\WodoAssetAccount;
+use DB;
 use Auth;
 use Cache;
-use DB;
 use Event;
+use App\Models\GameLobby;
+use App\Models\ChatRoomUser;
 use Illuminate\Http\Request;
+use App\Models\GameLobbyUser;
+use App\Models\WodoAssetAccount;
 use Illuminate\Support\Facades\Http;
+use App\Events\GameLobby\PrizeUpdatedEvent;
+use App\Events\GameLobby\UserLeftGameLobbyEvent;
+use App\Actions\Wallet\GetUserAssetAccountAction;
+use App\Enums\Reactions\RemoveUserFromGameLobbyReaction;
 
 class RemoveUserFromGameLobbyAction
 {
@@ -35,12 +36,17 @@ class RemoveUserFromGameLobbyAction
                 ) {
                     return RemoveUserFromGameLobbyReaction::UserNotInGameLobby;
                 }
+                //geting the user account from the api end point
+                $getUserAssetAccountAction = new GetUserAssetAccountAction();
+                $userAssetAccount = $getUserAssetAccountAction->execute($gameLobby->asset);
 
-                $userAssetAccount = $user
-                    ->assetAccounts()
-                    ->lockForUpdate()
-                    ->where('asset_id', $gameLobby->asset_id)
-                    ->first();
+                // dd($userAssetAccount->balance);
+
+                // $userAssetAccount = $user
+                //     ->assetAccounts()
+                //     ->lockForUpdate()
+                //     ->where('asset_id', $gameLobby->asset_id)
+                //     ->first();
 
                 $gameLobbyUser = $gameLobby
                     ->users()
@@ -82,6 +88,9 @@ class RemoveUserFromGameLobbyAction
                 $gameLobby->users()->detach([$user->id]);
 
                 ChatRoomUser::where([['chat_room_id', '=', $gameLobby->id], ['user_id', '=', $user->id]])->delete();
+
+                //forgeting the user asset account after the balance changed
+                Cache::forget('user.' . Auth::id() . '.account' . $gameLobby->asset->symbol);
 
                 Cache::forget('user.' . Auth::id() . '.current-lobby-session');
 
