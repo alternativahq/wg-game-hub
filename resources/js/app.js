@@ -8,6 +8,7 @@ import BaseLayout from '@/Layouts/_BaseLayout';
 
 InertiaProgress.init({
     color: '#FF3815',
+    showSpinner: true,
 });
 
 createInertiaApp({
