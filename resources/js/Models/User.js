@@ -36,7 +36,7 @@ export default class User extends Model {
         });
 
         Inertia.put(
-            `/notifications/${notificationId}`,
+            `/notifications/${notificationId}/read`,
             {},
             {
                 preserveState: true,
