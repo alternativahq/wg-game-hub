@@ -19,6 +19,10 @@ use App\Actions\Wallet\GetUserAssetAccountAction;
 
 class AddUserToGameLobbyAction
 {
+    public function __construct(public GetUserAssetAccountAction $getUserAssetAccountAction)
+    {
+    }
+
     public function execute(User $user, GameLobby $gameLobby)
     {
         return DB::transaction(
@@ -41,8 +45,7 @@ class AddUserToGameLobbyAction
                     }
 
                     //geting the user account from the api end point
-                    $getUserAssetAccountAction = new GetUserAssetAccountAction();
-                    $userAssetAccount = $getUserAssetAccountAction->execute($gameLobby->asset);
+                    $userAssetAccount = $this->getUserAssetAccountAction->execute($gameLobby->asset);
                     
                     // $userAssetAccount = $user
                     // ->assetAccounts()
@@ -55,11 +58,10 @@ class AddUserToGameLobbyAction
                     // }
                     
                     //here we should call the api
-                    $asset = $gameLobby->asset()->first();
-                    $url = config('wodo.wallet-transactions-api') . 'home-deposit';
+                    $url = config('wodo.wallet-deposit-api');
                     $data = [
                         'fromAccountId' => $userAssetAccount->id,
-                        'asset' => $asset->symbol,
+                        'asset' => $gameLobby->asset->symbol,
                         'amount' => $gameLobby->base_entrance_fee,
                         'refId' => $gameLobby->id,
                     ];
@@ -97,6 +99,7 @@ class AddUserToGameLobbyAction
 
                 //forgeting the user asset account after the balance changed
                 Cache::forget('user.' . Auth::id() . '.account' . $gameLobby->asset->symbol);
+                Cache::forget('user.' . Auth::id() . '.accounts');
 
                 broadcast(new UserJoinedGameLobbyEvent(gameLobby: $gameLobby, user: $user, entranceFee: $gameLobby->base_entrance_fee));
                 $total = (float) GameLobbyUser::where('game_lobby_id', $gameLobby->id)->sum('entrance_fee');

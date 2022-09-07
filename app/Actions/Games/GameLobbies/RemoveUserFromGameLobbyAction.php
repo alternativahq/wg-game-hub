@@ -19,6 +19,10 @@ use App\Enums\Reactions\RemoveUserFromGameLobbyReaction;
 
 class RemoveUserFromGameLobbyAction
 {
+    public function __construct(public GetUserAssetAccountAction $getUserAssetAccountAction)
+    {
+    }
+
     public function execute(Request $request, GameLobby $gameLobby): GameLobby|RemoveUserFromGameLobbyReaction
     {
         $user = $request->user();
@@ -37,10 +41,9 @@ class RemoveUserFromGameLobbyAction
                     return RemoveUserFromGameLobbyReaction::UserNotInGameLobby;
                 }
                 //geting the user account from the api end point
-                $getUserAssetAccountAction = new GetUserAssetAccountAction();
-                $userAssetAccount = $getUserAssetAccountAction->execute($gameLobby->asset);
+                $userAssetAccount = $this->getUserAssetAccountAction->execute($gameLobby->asset);
 
-                // dd($userAssetAccount->balance);
+                // dd($userAssetAccount->id)
 
                 // $userAssetAccount = $user
                 //     ->assetAccounts()
@@ -58,11 +61,10 @@ class RemoveUserFromGameLobbyAction
 
                 // return the amount he paid
                 //here we should call the api
-                $asset = $gameLobby->asset()->first();
                 $url = config('wodo.wallet-transactions-api') . 'home-withdraw';
                 $data = [
                     'toAccountId' => $userAssetAccount->id,
-                    'asset' => $asset->symbol,
+                    'asset' => $gameLobby->asset->symbol,
                     'amount' => $gameLobby->base_entrance_fee,
                     'refId' => $gameLobby->id,
                 ];
@@ -72,6 +74,8 @@ class RemoveUserFromGameLobbyAction
                 if ($response->failed()) {
                     return $response->toException();
                 }
+                // dd($userAssetAccount->balance);
+
 
                 // return $response->body();
 
@@ -91,6 +95,7 @@ class RemoveUserFromGameLobbyAction
 
                 //forgeting the user asset account after the balance changed
                 Cache::forget('user.' . Auth::id() . '.account' . $gameLobby->asset->symbol);
+                Cache::forget('user.' . Auth::id() . '.accounts');
 
                 Cache::forget('user.' . Auth::id() . '.current-lobby-session');
 

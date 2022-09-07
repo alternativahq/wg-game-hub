@@ -11,7 +11,7 @@ class WalletUserAssetAccountResource extends JsonResource
     {
         return [
             'id'         => $this->id,
-            'user_id'    => $this->user_id,
+            'user_id'    => $this->userId,
             'address'    => $this->address,
             'asset'      => $this->asset,
             'balance'    => $this->balance,

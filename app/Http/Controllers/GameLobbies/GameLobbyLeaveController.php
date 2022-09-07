@@ -15,7 +15,8 @@ class GameLobbyLeaveController extends Controller
         RemoveUserFromGameLobbyAction $removeUserFromGameLobbyAction,
     ) {
         $this->authorize('leave', $gameLobby);
-
+        
+        $gameLobby->load('asset');
         $gameLobby = $removeUserFromGameLobbyAction->execute(
             request: $request,
             gameLobby: $gameLobby,
