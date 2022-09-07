@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\NotificationType;
 use App\Models\User;
 use App\Models\WodoAssetAccount;
 use App\Http\Controllers\{

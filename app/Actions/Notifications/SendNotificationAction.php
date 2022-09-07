@@ -10,20 +10,11 @@ use Illuminate\Support\Facades\Notification;
 
 class SendNotificationAction
 {
-    public function execute(SendNotificationRequest $request): void
+    public function execute(SendNotificationRequest $request, NotificationType $notificationType): void
     {
-        $notification = match ($request->type) {
-            NotificationType::UserLeftLobby->value => GameHubNotification::class,
-            NotificationType::UserJoinedLobby->value => GameHubNotification::class,
-            default => null,
-        };
-
-        if (!$notification) {
-            return;
-        }
-
         $users = User::whereIn('id', $request->user_ids)->get(['id']);
-        new $notification($request->dataToObject());
-        Notification::send($users, new $notification($request->dataToObject()));
+        $notification = new $notificationType->value(json_decode($request->dataToObject(), true));
+
+        Notification::send($users, $notification);
     }
 }
