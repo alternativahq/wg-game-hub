@@ -13,7 +13,7 @@ class SendNotificationAction
     public function execute(SendNotificationRequest $request, NotificationType $notificationType): void
     {
         $users = User::whereIn('id', $request->user_ids)->get(['id']);
-        $notification = new $notificationType->value(json_decode($request->dataToObject(), true));
+        $notification = new $notificationType->value($request->data);
 
         Notification::send($users, $notification);
     }

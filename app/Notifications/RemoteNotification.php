@@ -28,6 +28,8 @@ class RemoteNotification extends Notification
 
     public function toBroadcast($notifiable)
     {
-        return new BroadcastMessage($this->data);
+        return new BroadcastMessage([
+            'data' => $this->data,
+        ]);
     }
 }
