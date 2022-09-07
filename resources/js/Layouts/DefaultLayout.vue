@@ -23,6 +23,7 @@ import {
 import { MenuIcon, XIcon, BellIcon } from '@heroicons/vue/outline';
 import { inject, reactive } from 'vue';
 import FlashMessage from '../Shared/FlashMessage.vue';
+import DefaultNotification from '@/Shared/Notifications/DefaultNotification';
 let props = defineProps({
     config: Object,
 });
@@ -94,21 +95,10 @@ const navigation = [{ name: 'Dashboard', href: '/', current: true, external: fal
                                                             v-for="notification in currentUser.unread_notifications"
                                                             :key="notification.id"
                                                         >
-                                                            <div class="flex flex-col justify-between">
-                                                                <div class="text-sm">
-                                                                    <div>
-                                                                        {{ notification.data.message }}
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div
-                                                                @click.prevent="
-                                                                    currentUser.markNotificationAsRead(notification.id)
-                                                                "
-                                                                class="self-baseline rounded bg-blue-200 py-2 px-2 text-xs hover:cursor-pointer hover:bg-blue-300 hover:text-white"
-                                                            >
-                                                                Mark as read
-                                                            </div>
+                                                            <DefaultNotification
+                                                                :notification="notification"
+                                                                :current-user="currentUser"
+                                                            />
                                                         </div>
                                                     </TransitionGroup>
                                                 </div>
