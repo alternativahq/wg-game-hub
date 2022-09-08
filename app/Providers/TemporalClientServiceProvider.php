@@ -13,7 +13,8 @@ class TemporalClientServiceProvider extends ServiceProvider
     {
         $this->app->bind('temporal-client', function () {
             $host = config('temporal.host');
-            $host = $host . config('temporal.port') ? ':' . config('temporal.port') : '';
+            $port = config('temporal.port') ? ':' . config('temporal.port') : '';
+            $host = "{$host}{$port}";
             $serviceClient = ServiceClient::create($host);
             return WorkflowClient::create(serviceClient: $serviceClient);
         });
