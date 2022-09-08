@@ -26,7 +26,7 @@ class DistributePrizesAction
             ])
             ->get()
             ->map(function (User $user) use ($gameLobby, $gameMatchResultData) {
-                $userScore = collect($gameMatchResultData['scores'])
+                $userScore = collect($gameMatchResultData->scores)
                     ->where('user_id', $user->id)
                     ->first();
                 return [
