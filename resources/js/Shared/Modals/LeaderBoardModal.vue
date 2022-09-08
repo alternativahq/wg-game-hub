@@ -2,23 +2,40 @@
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import { defineProps, inject, reactive } from 'vue';
 import ButtonShape from '@/Shared/ButtonShape';
+import merge from 'webpack-merge';
 
 let currentUser = inject('currentUser');
 
 let props = defineProps({
     isOpen: Boolean,
     gameLobby: Object,
+    currentUserScore: Object,
 });
 
 let players = _.merge(_.keyBy(props.gameLobby.users, 'id'), _.keyBy(props.gameLobby.scores, 'user_id'));
-let orderedPlayers = _.flatten(
-    _.merge(
-        _.partition(players, (player) => {
-            return player.rank % 2 === 0;
-        })
-    )
+
+let orderedPlayers =_.flatten(players);
+orderedPlayers = _.concat(
+    _.orderBy(
+        _.filter(players, (player) => {
+            if(player.rank % 2 === 0){
+                return player.rank % 2 === 0;
+            }
+        }),
+        ['rank'], ['desc']
+     ),
+     _.orderBy(
+        _.filter(players, (player) => {
+            if(player.rank % 2 !== 0){
+                return player.rank;
+            }
+        }),
+        ['rank'], ['asc']
+    ),
 );
-let currentUserScoreRecord = _.find(orderedPlayers, ['user_id', currentUser.id]);
+
+// let currentUserScoreRecord = gameLobby.currentUserScore;
+// let currentUserScoreRecord = props.currentUserScore;
 </script>
 <template>
     <TransitionRoot as="template" :show="isOpen">
@@ -465,7 +482,7 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['user_id', currentUser.id])
                                                 </p>
                                                 <p class="text-center font-inter text-base font-normal text-wgh-gray-6">
                                                     You we’re #
-                                                    {{ currentUserScoreRecord.rank }}, next time try a bit harder.
+                                                    <!-- {{ currentUserScoreRecord.rank }}, next time try a bit harder. -->
                                                 </p>
                                             </div>
                                             <div class="flex flex-row justify-center space-x-4">

@@ -14,6 +14,7 @@ let props = defineProps({
     gameLobby: Object,
     config: Object,
     prize: Number,
+    currentUserScore: Object,
 });
 
 let chatBox = ref();
@@ -87,7 +88,9 @@ function channelUserLeft(payload) {
 function channelProcessingResults(payload) {}
 
 function channelResultsProccessed(payload) {
-    gameLobby.scores = payload.scores;
+    console.log(payload)
+    gameLobby.scores = payload.gameLobby.scores;
+    gameLobby.currentUserScore = payload.currentUserScore;
     gameLobby.resultsAreProccessed();
 }
 
@@ -115,7 +118,9 @@ export default {
 </script>
 <template>
     <div>
+        
         <LeaderBoardModal
+            :currentUserScore="currentUserScore"
             v-if="gameLobby.areResultsProcessed"
             :is-open="gameLobby.areResultsProcessed"
             :game-lobby="gameLobby"

@@ -20,11 +20,14 @@ class GameLobbiesController extends Controller
 
         if ($gameLobby->status === GameLobbyStatus::ResultsProcessed) {
             // load the top 6 including the current user.
-            $gameLobby->load('scores');
+            $gameLobby->load(['scores'=> function($q){
+                return $q->orderBy('rank')->limit(5);
+            }]);
         }
 
         return Inertia::render('Games/Lobbies/Show', [
             'gameLobby' => new GameLobbyResource($gameLobby),
+            'currentUserScore' => auth()->user() ? $gameLobby->scores()->where('user_id',auth()->user()->id)->first():null,
             'prize' => $gameLobby->calculateThePrize(),
         ]);
     }
