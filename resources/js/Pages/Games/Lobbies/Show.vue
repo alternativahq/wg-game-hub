@@ -15,6 +15,7 @@ let props = defineProps({
     config: Object,
     prize: Number,
     currentUserScore: Object,
+    current_url: String,
 });
 
 let chatBox = ref();
@@ -87,11 +88,15 @@ function channelUserLeft(payload) {
 
 function channelProcessingResults(payload) {}
 
-function channelResultsProccessed(payload) {
-    console.log(payload)
+async function channelResultsProccessed(payload) {
     gameLobby.scores = payload.gameLobby.scores;
-    gameLobby.currentUserScore = payload.currentUserScore;
-    gameLobby.resultsAreProccessed();
+
+    let response = await axios.get('/api/game-lobbies/' + gameLobby.id + '/current-user-score').then((r) => {
+        console.log(r)
+        gameLobby.currentUserScore = r.data;
+        gameLobby.resultsAreProccessed();
+    });
+    // console.log(gameLobby.currentUserScore)
 }
 
 function channelPrizeUpdated(payload) {

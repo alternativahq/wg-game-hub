@@ -40,15 +40,13 @@ class GameLobbyResultsController extends Controller
                 gameLobby: $gameLobby,
                 gameMatchResultData: $gameMatchResultData,
             );
-            // dd($gameLobby->load(['users', 'scores'=> function($q){
-            //     return $q->orderBy('rank')->limit(5);
-            // }]));
+            
             //the data passed is suposed to be 5 but in the front received 12 and the second problem is that there is no user id because this is api
+            $gameLobby->load('users');
             broadcast(new ResultsProcessedEvent(
-                gameLobby: $gameLobby->load(['users', 'scores'=> function($q){
+                gameLobby: $gameLobby->load(['scores'=> function($q){
                     return $q->orderBy('rank')->limit(5);
                 }]),
-                currentUserScore: auth()->user() ? $gameLobby->scores()->where('user_id',auth()->user()->id)->first(): null    
             ));
 
             Notification::sendNow($users, new ResultsProcessedGameLobbyNotification(gameLobby: $gameLobby));

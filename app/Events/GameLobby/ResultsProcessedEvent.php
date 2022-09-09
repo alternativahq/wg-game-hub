@@ -15,7 +15,7 @@ class ResultsProcessedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public GameLobby $gameLobby, public $currentUserScore)
+    public function __construct(public GameLobby $gameLobby)
     {
     }
 
@@ -33,7 +33,6 @@ class ResultsProcessedEvent implements ShouldBroadcast
     {
         return[ 
             'gameLobby' => (new GameLobbyResource($this->gameLobby))->resolve(),
-            'currentUserScore' => $this->currentUserScore,
         ];
     }
 }

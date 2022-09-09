@@ -12,6 +12,7 @@ let props = defineProps({
     currentUserScore: Object,
 });
 
+// console.log(gameLobby.currentUserScore)
 let players = _.merge(_.keyBy(props.gameLobby.users, 'id'), _.keyBy(props.gameLobby.scores, 'user_id'));
 
 let orderedPlayers =_.flatten(players);
@@ -33,9 +34,6 @@ orderedPlayers = _.concat(
         ['rank'], ['asc']
     ),
 );
-
-// let currentUserScoreRecord = gameLobby.currentUserScore;
-// let currentUserScoreRecord = props.currentUserScore;
 </script>
 <template>
     <TransitionRoot as="template" :show="isOpen">
@@ -482,7 +480,7 @@ orderedPlayers = _.concat(
                                                 </p>
                                                 <p class="text-center font-inter text-base font-normal text-wgh-gray-6">
                                                     You we’re #
-                                                    <!-- {{ currentUserScoreRecord.rank }}, next time try a bit harder. -->
+                                                    {{ gameLobby.currentUserScore.rank }}, next time try a bit harder.
                                                 </p>
                                             </div>
                                             <div class="flex flex-row justify-center space-x-4">
