@@ -23,7 +23,7 @@ let props = defineProps({
                 <button class="w-full outline-none">
                     <ButtonShape type="gray">
                         <span class="w-full text-center font-bold uppercase"
-                            >Top UP</span
+                            >My Wallet</span
                         >
                     </ButtonShape>
                 </button>
