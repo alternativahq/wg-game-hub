@@ -9,9 +9,14 @@ use App\Models\GameLobby;
 use Cache;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use App\Actions\Wallet\GetUserAssetAccountsAction;
 
 class HandleInertiaRequests extends Middleware
 {
+    public function __construct(public GetUserAssetAccountsAction $getUserAssetAccountAction)
+    {
+        // parent::__construct;
+    }
     /**
      * The root template that's loaded on the first page visit.
      *
@@ -49,19 +54,20 @@ class HandleInertiaRequests extends Middleware
             'is_admin' => $request->user()->is_admin,
             'image' => $request->user()->image,
             'image_url' => $request->user()->image_url,
-            'asset_accounts' => Cache::remember(
-                key: 'user.' . $request->user()->id . '.asset_accounts',
-                ttl: 300,
-                callback: function () use ($request) {
-                    return $request
-                        ->user()
-                        ->assets()
-                        ->select('assets.id', 'assets.name', 'assets.symbol')
-                        ->wherePivot('status', UserAssetAccountStatus::Active)
-                        ->withPivot('balance', 'status')
-                        ->get();
-                },
-            ),
+            'asset_accounts' =>  $this->getUserAssetAccountAction->execute(),
+            // 'asset_accounts' => Cache::remember(
+            //     key: 'user.' . $request->user()->id . '.asset_accounts',
+            //     ttl: 300,
+            //     callback: function () use ($request) {
+            //         return $request
+            //             ->user()
+            //             ->assets()
+            //             ->select('assets.id', 'assets.name', 'assets.symbol')
+            //             ->wherePivot('status', UserAssetAccountStatus::Active)
+            //             ->withPivot('balance', 'status')
+            //             ->get();
+            //     },
+            // ),
             'cooldown_end_at' => function () use ($request) {
                 $user = $request->user();
                 if (!$user->is_in_cooldown_period && !is_null($user->cooldown_end_at)) {

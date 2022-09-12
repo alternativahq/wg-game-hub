@@ -12,8 +12,11 @@ import { ref, reactive, onMounted, watch, inject } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import ChatRoom from '@/Models/ChatRoom';
 import CooldownBanner from '@/Shared/CooldownBanner';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
 
-let currentUser = inject('currentUser');
+// let currentUser = inject('currentUser');
+let currentUser = useCurrentUser();
+
 let chatBox = ref();
 let snack = inject('snack');
 

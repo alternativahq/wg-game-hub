@@ -9,6 +9,7 @@ class CompleteWithdrawController extends Controller
 {
     public function __invoke(CompleteWithdrawControllerRequest $request)
     {
+        //TODO: forget the asset account cache to re get it from the end point
         auth()
             ->user()
             ->withdrawalConfirmations()
