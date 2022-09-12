@@ -40,8 +40,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            'throttle:api',
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
@@ -66,5 +65,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'EnsureUserIsNotInCooldownPeriod' => \App\Http\Middleware\EnsureUserIsNotInCooldownPeriodMiddleware::class,
         'isAdmin' => \App\Http\Middleware\IsAdminMiddleware::class,
+        'api.basic-auth' => \App\Http\Middleware\Api\BasicTokenAuthMiddleware::class,
     ];
 }

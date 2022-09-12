@@ -8,17 +8,33 @@ let currentUser = inject('currentUser');
 let props = defineProps({
     isOpen: Boolean,
     gameLobby: Object,
+    currentUserScore: Object,
 });
 
+// console.log(gameLobby.currentUserScore)
 let players = _.merge(_.keyBy(props.gameLobby.users, 'id'), _.keyBy(props.gameLobby.scores, 'user_id'));
-let orderedPlayers = _.flatten(
-    _.merge(
-        _.partition(players, (player) => {
-            return player.rank % 2 === 0;
-        })
+
+let orderedPlayers = _.flatten(players);
+orderedPlayers = _.concat(
+    _.orderBy(
+        _.filter(players, (player) => {
+            if (player.rank % 2 === 0) {
+                return player.rank % 2 === 0;
+            }
+        }),
+        ['rank'],
+        ['desc']
+    ),
+    _.orderBy(
+        _.filter(players, (player) => {
+            if (player.rank % 2 !== 0) {
+                return player.rank;
+            }
+        }),
+        ['rank'],
+        ['asc']
     )
 );
-let currentUserScoreRecord = _.find(orderedPlayers, ['user_id', currentUser.id]);
 </script>
 <template>
     <TransitionRoot as="template" :show="isOpen">
@@ -411,7 +427,7 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['user_id', currentUser.id])
                                         class="relative transform rounded-2xl border-r-4 border-l-4 border-b-10 border-wgh-red-2 bg-white px-4 pt-14 pb-4 text-left shadow-xl transition-all sm:w-full sm:p-6 sm:pt-14"
                                     >
                                         <svg
-                                            class="fixed top-1/2 left-1/2 z-40  -mt-52 w-[110%] -translate-x-1/2 -translate-y-1/2 transform"
+                                            class="fixed top-1/2 left-1/2 z-40 -mt-52 w-[110%] -translate-x-1/2 -translate-y-1/2 transform"
                                             width="543"
                                             height="89"
                                             viewBox="0 0 543 89"
@@ -457,15 +473,18 @@ let currentUserScoreRecord = _.find(orderedPlayers, ['user_id', currentUser.id])
                                                     >
                                                 </div>
                                             </div>
-                                            <div class="mb-6">
+                                            <div
+                                                class="mb-6"
+                                                v-if="currentUserScore && currentUserScore.hasOwnProperty('rank')"
+                                            >
                                                 <p
                                                     class="mb-2 text-center font-grota text-lg font-extrabold text-wgh-gray-6"
                                                 >
-                                                    You were so close!
+                                                    Results
                                                 </p>
                                                 <p class="text-center font-inter text-base font-normal text-wgh-gray-6">
                                                     You we’re #
-                                                    {{ currentUserScoreRecord.rank }}, next time try a bit harder.
+                                                    {{ currentUserScore.rank }}
                                                 </p>
                                             </div>
                                             <div class="flex flex-row justify-center space-x-4">

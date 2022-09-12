@@ -256,7 +256,7 @@ class DemoUsersSeeder extends Seeder
                 ],
             ],
             [
-                'id' => '4c92e9dd-0ad7-4ecb-8b1c-4a2dfd94cb13',
+                'id' => '5a791146-5e90-4102-b7ce-307ad4eaaedd',
                 'name' => 'Burak',
                 'last_name' => 'Bolukbas',
                 'email' => 'burakbolukbas@wodo.io',

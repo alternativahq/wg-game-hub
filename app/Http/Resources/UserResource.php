@@ -36,7 +36,7 @@ class UserResource extends JsonResource
             'entrance_fee' => $this->whenPivotLoaded('game_lobby_user', function () {
                 return $this->pivot->entrance_fee;
             }),
-            'is_admin' => $this->when($request->user()->is_admin, true),
+            'is_admin' => $this->when($request->user() && $request->user()->is_admin, true),
         ];
     }
 }

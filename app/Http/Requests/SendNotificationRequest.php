@@ -25,13 +25,10 @@ class SendNotificationRequest extends FormRequest
     {
         return [
             'type' => ['required'],
-            'data' => ['required', 'json'],
+            'data' => ['required', 'array'],
+            'data.title' => ['required', 'string', 'max:200'],
+            'data.message' => ['required', 'string', 'min:2'],
             'user_ids' => ['required', 'array', 'min:1'],
         ];
-    }
-
-    public function dataToObject()
-    {
-        return json_decode($this->data, true);
     }
 }

@@ -25,7 +25,7 @@ onMounted(() => {
     if (currentUser) {
         window.echo.private(`user.${currentUser.id}`).notification((notification) => {
             currentUser.unread_notifications.unshift(notification);
-            snack.fireSnack(notification.data.message);
+            snack.fireSnack(notification.data.title);
         });
     }
 });

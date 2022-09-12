@@ -31,6 +31,8 @@ class ResultsProcessedEvent implements ShouldBroadcast
 
     public function broadcastWith(): array
     {
-        return (new GameLobbyResource($this->gameLobby))->resolve();
+        return[ 
+            'gameLobby' => (new GameLobbyResource($this->gameLobby))->resolve(),
+        ];
     }
 }
