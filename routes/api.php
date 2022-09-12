@@ -19,17 +19,19 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('throttle:api')->group(function () {
     // Games
     Route::resource('games', GamesController::class)->only('index', 'show');
-    
+
     // Game Lobbies
     Route::resource('games.game-lobbies', GameLobbiesController::class)
-    ->parameters(['game-lobbies' => 'gameLobby'])
-    ->shallow()
-    ->only('show', 'index')
-    ->scoped();
-    
-    //current user
-    Route::get('game-lobbies/{gameLobby}/current-user-score', GameLobbyCurrenUserController::class)->middleware('auth:sanctum')->name('games.game-lobbies.current-user-score');
+        ->parameters(['game-lobbies' => 'gameLobby'])
+        ->shallow()
+        ->only('show', 'index')
+        ->scoped();
 
+    Route::get('game-lobbies/{gameLobby}/current-user-score', GameLobbyCurrenUserController::class)
+        ->middleware('auth:sanctum')
+        ->name('games.game-lobbies.current-user-score');
+
+    //current user
     Route::post('game-lobbies/{gameLobby}/join', GameLobbyJoinController::class)->name('games.game-lobbies.join');
 
     Route::post('game-lobbies/{gameLobby}/leave', GameLobbyLeaveController::class)->name('games.game-lobbies.leave');
@@ -41,8 +43,8 @@ Route::middleware('throttle:api')->group(function () {
     Route::post('chat-rooms/{chatRoom}/message', ChatRoomMessageController::class)->name('chat-rooms.message');
 
     //transaction show
-Route::get('wallet/transaction/{id}/log', UserTransactionShowController::class)->name('user.transactions.show');
-    
+    Route::get('wallet/transaction/{id}/log', UserTransactionShowController::class)->name('user.transactions.show');
+
     // Notifications
     Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
 

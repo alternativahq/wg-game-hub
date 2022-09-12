@@ -9,7 +9,15 @@ class GameLobbyCurrenUserController extends Controller
 {
     public function __invoke(GameLobby $gameLobby)
     {
-        $user = $gameLobby->scores()->where('user_id',request()->user()->id)->first() ?? [];
-        return response()->json($user); 
+        return response()->json(
+            $gameLobby
+                ->scores()
+                ->where('user_id', request()->user()->id)
+                ->firstOr(
+                    callback: function () {
+                        return [];
+                    },
+                ),
+        );
     }
 }

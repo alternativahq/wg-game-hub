@@ -10,6 +10,8 @@ import GameLobby from '@/Models/GameLobby';
 import { Link } from '@inertiajs/inertia-vue3';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
 
+let currentUser = useCurrentUser();
+
 let props = defineProps({
     gameLobby: Object,
     config: Object,
@@ -18,22 +20,22 @@ let props = defineProps({
     current_url: String,
 });
 
+let data = reactive({
+    latestUpdateMessage: 'Updates are on the way...',
+    chatMessages: [],
+    chatMessageInput: '',
+});
 let chatBox = ref();
-let latestUpdateMessage = ref('Updates are on the way...');
 
 // let currentUser = inject('currentUser');
-let currentUser = useCurrentUser();
-let gameLobby = reactive(new GameLobby(props.gameLobby.data));
 
-let chatMessages = reactive([]);
-let chatMessageInput = ref('');
-let prize = ref(props.prize);
+let gameLobbyModel = reactive(new GameLobby(props.gameLobby.data));
 
 onMounted(() => {
-    gameLobby.startCountDownTimer();
+    gameLobbyModel.startCountDownTimer();
     if (currentUser) {
         window.echo
-            .join(`game-lobby.${gameLobby.id}`)
+            .join(`game-lobby.${gameLobbyModel.id}`)
             .error(channelError)
             .listen(GameLobby.socketEvents.chatMessage, channelNewChatMessage)
             .listen(GameLobby.socketEvents.userJoined, channelUserJoined)
@@ -45,9 +47,9 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-    gameLobby.killCountDownTimer();
+    gameLobbyModel.killCountDownTimer();
     if (currentUser) {
-        window.echo.leave(`game-lobby.${gameLobby.id}`);
+        window.echo.leave(`game-lobby.${gameLobbyModel.id}`);
     }
 });
 
@@ -56,55 +58,50 @@ function channelError(error) {
 }
 
 function sendChatMessage() {
-    if (chatMessageInput.value.length <= 0) {
+    if (data.chatMessageInput.length <= 0) {
         return;
     }
 
     Inertia.post(
         `/chat-rooms/${gameLobby.id}/message`,
         {
-            message: chatMessageInput.value,
+            message: data.chatMessageInput,
         },
         {
             preserveScroll: true,
         }
     );
-    chatMessageInput.value = '';
+    data.chatMessageInput.value = '';
 }
 
 function channelNewChatMessage(message) {
-    chatMessages.push(message);
+    data.chatMessages.push(message);
 }
 
 function channelUserJoined(payload) {
-    gameLobby.addUser(payload.user);
-    latestUpdateMessage.value = `${payload.user.name} joined the lobby.`;
+    gameLobbyModel.addUser(payload.user);
+    data.latestUpdateMessage = `${payload.user.name} joined the lobby.`;
 }
 
 function channelUserLeft(payload) {
-    gameLobby.removeUser(payload.user);
-    latestUpdateMessage.value = `${payload.user.name} left the lobby.`;
+    gameLobbyModel.removeUser(payload.user);
+    data.latestUpdateMessage = `${payload.user.name} left the lobby.`;
 }
 
-function channelProcessingResults(payload) {}
+function channelProcessingResults(payload) {
+    console.log('channelProcessingResults');
+}
 
 async function channelResultsProccessed(payload) {
-    gameLobby.scores = payload.gameLobby.scores;
-
-    let response = await axios.get('/api/game-lobbies/' + gameLobby.id + '/current-user-score').then((r) => {
-        console.log(r)
-        gameLobby.currentUserScore = r.data;
-        gameLobby.resultsAreProccessed();
-    });
-    // console.log(gameLobby.currentUserScore)
+    Inertia.reload({ only: ['gameLobby', 'currentUserScore'] });
 }
 
 function channelPrizeUpdated(payload) {
-    prize.value = payload.prize;
+    data.prize = payload.prize;
 }
 
 watch(
-    chatMessages,
+    data.chatMessages,
     () => {
         chatBox.value.scrollTop = chatBox.value.scrollHeight;
     },
@@ -123,12 +120,11 @@ export default {
 </script>
 <template>
     <div>
-        
         <LeaderBoardModal
-            :currentUserScore="currentUserScore"
-            v-if="gameLobby.areResultsProcessed"
-            :is-open="gameLobby.areResultsProcessed"
-            :game-lobby="gameLobby"
+            v-if="gameLobby.data.hasOwnProperty('scores')"
+            :is-open="gameLobby.data.hasOwnProperty('scores')"
+            :game-lobby="gameLobby.data"
+            :currentUserScore="currentUserScore || {}"
         />
         <div class="col-span-12 mt-4 inline-flex lg:col-span-5">
             <Link method="delete" as="button" type="button" :href="`/game-lobbies/${gameLobby.id}/leave`" replace>
@@ -170,7 +166,7 @@ export default {
                             <div>
                                 <p class="font-grota text-lg font-extrabold uppercase text-wgh-gray-6">Prize Pool</p>
                                 <p class="font-inter font-normal uppercase text-wgh-gray-6">
-                                    {{ prize }} {{ gameLobby.asset.symbol }}
+                                    {{ prize }} {{ gameLobbyModel.asset.symbol }}
                                 </p>
                             </div>
                         </div>
@@ -194,7 +190,7 @@ export default {
                             <div>
                                 <p class="font-grota text-lg font-extrabold uppercase text-wgh-gray-6">Live updates</p>
                                 <p class="font-inter font-normal uppercase text-wgh-gray-6">
-                                    {{ latestUpdateMessage }}
+                                    {{ data.latestUpdateMessage }}
                                 </p>
                             </div>
                         </div>
@@ -220,16 +216,16 @@ export default {
                                     Game Starts In
                                 </p>
                                 <p
-                                    v-if="!gameLobby.timeToStartAsString"
+                                    v-if="!gameLobbyModel.timeToStartAsString"
                                     class="font-inter font-normal uppercase text-wgh-gray-6"
                                 >
                                     loading...
                                 </p>
                                 <p
-                                    v-if="gameLobby.timeToStartAsString"
+                                    v-if="gameLobbyModel.timeToStartAsString"
                                     class="font-inter font-normal uppercase text-wgh-gray-6"
                                 >
-                                    {{ gameLobby.timeToStartAsString }}
+                                    {{ gameLobbyModel.timeToStartAsString }}
                                 </p>
                             </div>
                         </div>
@@ -265,14 +261,14 @@ export default {
                                                 </tr>
                                             </thead>
                                             <tbody class="divide-y divide-gray-200 bg-white">
-                                                <tr v-for="user in gameLobby.users" :key="user.id">
+                                                <tr v-for="user in gameLobbyModel.users" :key="user.id">
                                                     <td
                                                         class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
                                                     >
                                                         {{ user.full_name }}
                                                     </td>
                                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                        {{ user.entrance_fee }} {{ gameLobby.asset.symbol }}
+                                                        {{ user.entrance_fee }} {{ gameLobbyModel.asset.symbol }}
                                                     </td>
                                                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                         NOT AVAILABLE
@@ -296,7 +292,7 @@ export default {
                             ref="chatBox"
                         >
                             <ChatMessage
-                                v-for="(chatMessage, index) in chatMessages"
+                                v-for="(chatMessage, index) in data.chatMessages"
                                 :key="index"
                                 :from-me="chatMessage.sender.id === currentUser.id"
                                 :user-image-url="chatMessage.sender.image_url"
@@ -310,11 +306,11 @@ export default {
                                 type="text"
                                 class="shrink grow p-2 outline-none ring-0"
                                 placeholder="Type your message here"
-                                v-model="chatMessageInput"
+                                v-model="data.chatMessageInput"
                                 @keyup.enter="sendChatMessage"
                             />
                             <button
-                                :disabled="chatMessageInput.length <= 0"
+                                :disabled="data.chatMessageInput.length <= 0"
                                 @click.prevent="sendChatMessage"
                                 class="rounded-md bg-wgh-purple-2 py-2 px-4 disabled:cursor-no-drop"
                             >
