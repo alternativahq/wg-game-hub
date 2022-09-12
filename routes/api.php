@@ -7,6 +7,7 @@ use App\Http\Controllers\API\{
     Games\GameLobbyLeaveController,
     Games\GameLobbyResultsController,
     Games\GamesController,
+    Games\GameLobbyCurrenUserController,
     Wallet\TransactionShowController as UserTransactionShowController,
     Notifications\NotificationController,
     Notifications\SendNotificationController,
@@ -26,6 +27,11 @@ Route::middleware('throttle:api')->group(function () {
         ->only('show', 'index')
         ->scoped();
 
+    Route::get('game-lobbies/{gameLobby}/current-user-score', GameLobbyCurrenUserController::class)
+        ->middleware('auth:sanctum')
+        ->name('games.game-lobbies.current-user-score');
+
+    //current user
     Route::post('game-lobbies/{gameLobby}/join', GameLobbyJoinController::class)->name('games.game-lobbies.join');
 
     Route::post('game-lobbies/{gameLobby}/leave', GameLobbyLeaveController::class)->name('games.game-lobbies.leave');

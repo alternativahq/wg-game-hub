@@ -2,21 +2,27 @@
 
 namespace App\Actions\Games\GameLobbies;
 
-use App\Enums\Reactions\RemoveUserFromGameLobbyReaction;
-use App\Events\GameLobby\PrizeUpdatedEvent;
-use App\Events\GameLobby\UserLeftGameLobbyEvent;
-use App\Models\ChatRoomUser;
-use App\Models\GameLobby;
-use App\Models\GameLobbyUser;
-use App\Models\WodoAssetAccount;
+use DB;
 use Auth;
 use Cache;
-use DB;
 use Event;
+use App\Models\GameLobby;
+use App\Models\ChatRoomUser;
 use Illuminate\Http\Request;
+use App\Models\GameLobbyUser;
+use App\Models\WodoAssetAccount;
+use Illuminate\Support\Facades\Http;
+use App\Events\GameLobby\PrizeUpdatedEvent;
+use App\Events\GameLobby\UserLeftGameLobbyEvent;
+use App\Actions\Wallet\GetUserAssetAccountAction;
+use App\Enums\Reactions\RemoveUserFromGameLobbyReaction;
 
 class RemoveUserFromGameLobbyAction
 {
+    public function __construct(public GetUserAssetAccountAction $getUserAssetAccountAction)
+    {
+    }
+
     public function execute(Request $request, GameLobby $gameLobby): GameLobby|RemoveUserFromGameLobbyReaction
     {
         $user = $request->user();
@@ -34,12 +40,16 @@ class RemoveUserFromGameLobbyAction
                 ) {
                     return RemoveUserFromGameLobbyReaction::UserNotInGameLobby;
                 }
+                //geting the user account from the api end point
+                $userAssetAccount = $this->getUserAssetAccountAction->execute($gameLobby->asset);
 
-                $userAssetAccount = $user
-                    ->assetAccounts()
-                    ->lockForUpdate()
-                    ->where('asset_id', $gameLobby->asset_id)
-                    ->first();
+                // dd($userAssetAccount->id)
+
+                // $userAssetAccount = $user
+                //     ->assetAccounts()
+                //     ->lockForUpdate()
+                //     ->where('asset_id', $gameLobby->asset_id)
+                //     ->first();
 
                 $gameLobbyUser = $gameLobby
                     ->users()
@@ -50,19 +60,42 @@ class RemoveUserFromGameLobbyAction
                 $gameLobbyUserEntranceFee = $gameLobbyUser->pivot->entrance_fee;
 
                 // return the amount he paid
-                $userAssetAccount->increment('balance', $gameLobbyUserEntranceFee);
+                //here we should call the api
+                $url = config('wodo.wallet-transactions-api') . 'home-withdraw';
+                $data = [
+                    'toAccountId' => $userAssetAccount->id,
+                    'asset' => $gameLobby->asset->symbol,
+                    'amount' => $gameLobby->base_entrance_fee,
+                    'refId' => $gameLobby->id,
+                ];
+                
+                $response = Http::post(url: $url, data: $data);
+                
+                if ($response->failed()) {
+                    return $response->toException();
+                }
+                // dd($userAssetAccount->balance);
 
-                $wodoAccount = WodoAssetAccount::sharedLock()
-                    ->where('asset_id', $gameLobby->asset_id)
-                    ->first();
 
-                $wodoAccount->decrement('balance', $gameLobbyUserEntranceFee);
+                // return $response->body();
+
+                // $userAssetAccount->increment('balance', $gameLobbyUserEntranceFee);
+
+                // $wodoAccount = WodoAssetAccount::sharedLock()
+                //     ->where('asset_id', $gameLobby->asset_id)
+                //     ->first();
+
+                // $wodoAccount->decrement('balance', $gameLobbyUserEntranceFee);
 
                 $gameLobby->increment('available_spots');
 
                 $gameLobby->users()->detach([$user->id]);
 
                 ChatRoomUser::where([['chat_room_id', '=', $gameLobby->id], ['user_id', '=', $user->id]])->delete();
+
+                //forgeting the user asset account after the balance changed
+                Cache::forget('user.' . Auth::id() . '.account' . $gameLobby->asset->symbol);
+                Cache::forget('user.' . Auth::id() . '.accounts');
 
                 Cache::forget('user.' . Auth::id() . '.current-lobby-session');
 

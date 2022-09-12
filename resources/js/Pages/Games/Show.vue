@@ -6,7 +6,7 @@ import ButtonShape from '@/Shared/ButtonShape';
 import ChevronLeft from '@/Shared/SVG/ChevronLeft';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-vue3';
-import { inject, reactive, ref } from 'vue';
+import { inject, reactive } from 'vue';
 import { isEmpty } from 'lodash';
 import TentModal from '@/Shared/Modals/TentModal';
 import ActiveSessionBanner from '@/Shared/ActiveSessionBanner';
@@ -16,8 +16,11 @@ import CooldownBanner from '@/Shared/CooldownBanner';
 import { onBeforeMount, onMounted } from 'vue';
 import GameLobbyCollection from '@/Models/GameLobbyCollection';
 import Pagination from '@/Models/Pagination';
+import { useCurrentUser } from '@/Composables/useCurrentUser';
 
-let currentUser = inject('currentUser');
+//TODO: useing currentUser insted of inject because inject does not reload
+// let currentUser = inject('currentUser');
+let currentUser = useCurrentUser();
 
 let props = defineProps({
     game: Object,

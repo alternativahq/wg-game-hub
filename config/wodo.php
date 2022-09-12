@@ -1,6 +1,9 @@
 <?php
 return [
     'api-authorization-token' => env('API_AUTHORIZATION_TOKEN'),
-    'wallet-transactions-api' => env('WALLET_TRANSACTION_API'),
-    'wallet-transactions-show-api' => env('WALLET_TRANSACTION_SHOW_API'),
+    'wallet-service' => env('WALLET_SERVICE'),
+    'wallet-deposit-api' => env('WALLET_SERVICE') . 'txs/home-deposit',
+    'wallet-wittdraw-api' => env('WALLET_SERVICE') . 'txs/home-wittdraw',
+    'wallet-transactions-api' => env('WALLET_SERVICE') . 'txs/',
+    'wallet-transactions-show-api' => env('WALLET_SERVICE') . 'txs/logs?txId=',
 ];

@@ -16,15 +16,32 @@ class GameLobbiesController extends Controller
     {
         $this->authorize('view', $gameLobby);
 
-        $gameLobby->load('game:id,name,description', 'users:id,name,last_name,image,username', 'asset:id,name,symbol');
-
-        if ($gameLobby->status === GameLobbyStatus::ResultsProcessed) {
-            // load the top 6 including the current user.
-            $gameLobby->load('scores');
-        }
-
         return Inertia::render('Games/Lobbies/Show', [
-            'gameLobby' => new GameLobbyResource($gameLobby),
+            'gameLobby' => function () use ($gameLobby) {
+                $gameLobby->load(
+                    'game:id,name,description',
+                    'users:id,name,last_name,image,username',
+                    'asset:id,name,symbol',
+                );
+
+                if ($gameLobby->status === GameLobbyStatus::ResultsProcessed) {
+                    // load the top 6 including the current user.
+                    $gameLobby->load([
+                        'scores' => function ($q) {
+                            return $q->orderBy('rank')->limit(5);
+                        },
+                    ]);
+                }
+                return new GameLobbyResource($gameLobby);
+            },
+            'currentUserScore' => function () use ($gameLobby) {
+                return auth()->user()
+                    ? $gameLobby
+                        ->scores()
+                        ->where('user_id', auth()->user()->id)
+                        ->first()
+                    : [];
+            },
             'prize' => $gameLobby->calculateThePrize(),
         ]);
     }
