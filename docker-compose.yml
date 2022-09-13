@@ -5,13 +5,12 @@ networks:
     name: 'wodo'
 
 services:
-  nginx:
+  gamehub:
     build:
-      context: ./docker-dev
-      dockerfile: nginx.dockerfile
-    container_name: nginx
+      context: ./
+      dockerfile: Dockerfile
+    container_name: gamehub
     depends_on:
-      - php
       - mysql
       - redis
     ports:
