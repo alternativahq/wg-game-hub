@@ -1,22 +1,26 @@
 version: '3.8'
 
 networks:
-  wodo_gamehub:
-    name: 'wodo_gamehub'
+  wodo:
+    name: 'wodo'
 
 services:
-  gamehub:
+  nginx:
     build:
-      context: ./
-      dockerfile: Dockerfile
-    container_name: gamehub
+      context: ./docker-dev
+      dockerfile: nginx.dockerfile
+    container_name: nginx
     depends_on:
+      - php
       - mysql
       - redis
     ports:
       - "8091:80"
+    #      - "4433:443"
+    volumes:
+      - ./:/var/www/html
     networks:
-      - wodo_gamehub
+      - wodo
 
   mysql:
     image: mysql:8.0
@@ -31,7 +35,50 @@ services:
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: secret
     networks:
-      - wodo_gamehub
+      - wodo
+
+
+  php:
+    build:
+      context: ./docker-dev
+      dockerfile: php.dockerfile
+    container_name: php
+    volumes:
+      - ./:/var/www/html
+    networks:
+      - wodo
+
+  composer:
+    image: composer:latest
+    container_name: composer
+    volumes:
+      - ./:/var/www/html
+    working_dir: /var/www/html
+    networks:
+      - wodo
+
+
+  artisan:
+    build:
+      context: docker-dev
+      dockerfile: php.dockerfile
+    container_name: artisan
+    volumes:
+      - ./:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ["php", "artisan"]
+    networks:
+      - wodo
+
+  npm:
+    image: node:18-alpine
+    container_name: npm
+    volumes:
+      - ./:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ["npm"]
+    networks:
+      - wodo
 
   redis:
     image: redis:latest
@@ -41,7 +88,19 @@ services:
     volumes:
       - ./redisdata:/data
     networks:
-      - wodo_gamehub
+      - wodo
+
+  scheduler:
+    build:
+      context: ./docker-dev
+      dockerfile: php.dockerfile
+    container_name: scheduler
+    volumes:
+      - ./:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ["php", "artisan", "schedule:work"]
+    networks:
+      - wodo
 
   soketi:
     image: 'quay.io/soketi/soketi:latest-16-distroless'
@@ -52,7 +111,7 @@ services:
     ports:
       - '${SOKETI_METRICS_SERVER_PORT:-9601}:9601'
     networks:
-      - wodo_gamehub
+      - wodo
 
   soketi_nginx:
     build:
@@ -64,6 +123,6 @@ services:
     ports:
       - "2053:6002"
     networks:
-      - wodo_gamehub
+      - wodo
     volumes:
       - ./../keys:/keys
