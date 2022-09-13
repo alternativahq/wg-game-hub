@@ -9,8 +9,15 @@ export default class GameLobby extends Model {
             userJoined: '.user.joined',
             userLeft: '.user.left',
             status: {
+                scheduled: '.status.scheduled',
+                inLobby: '.status.in-lobby',
+                inGame: '.status.in-game',
+                gameEnded: '.status.game-ended',
                 processingResults: '.status.processing-results',
                 resultsProcessed: '.status.results-processed',
+                distributingPrizes: '.status.results-processed',
+                PrizesDistributed: '.status.results-processed',
+                Archived: '.status.archived',
             },
             prizeUpdated: '.prize-updated',
         };
