@@ -40,6 +40,7 @@ onMounted(() => {
             .listen(GameLobby.socketEvents.chatMessage, channelNewChatMessage)
             .listen(GameLobby.socketEvents.userJoined, channelUserJoined)
             .listen(GameLobby.socketEvents.userLeft, channelUserLeft)
+            .listen(GameLobby.socketEvents.status.inGame, channelInGame)
             .listen(GameLobby.socketEvents.status.processingResults, channelProcessingResults)
             .listen(GameLobby.socketEvents.status.resultsProcessed, channelResultsProccessed)
             .listen(GameLobby.socketEvents.prizeUpdated, channelPrizeUpdated);
@@ -81,6 +82,10 @@ function channelNewChatMessage(message) {
 function channelUserJoined(payload) {
     gameLobbyModel.addUser(payload.user);
     data.latestUpdateMessage = `${payload.user.name} joined the lobby.`;
+}
+
+function channelInGame(payload) {
+    // TODO: redirect the user to the game server
 }
 
 function channelUserLeft(payload) {
@@ -127,7 +132,7 @@ export default {
             :currentUserScore="currentUserScore || {}"
         />
         <div class="col-span-12 mt-4 inline-flex lg:col-span-5">
-            <Link method="delete" as="button" type="button" :href="`/game-lobbies/${gameLobby.id}/leave`" replace>
+            <Link method="delete" as="button" type="button" :href="`/game-lobbies/${gameLobby.data.id}/leave`" replace>
                 <div
                     class="cursor-pointer rounded-lg border-b-6 border-wgh-red-3 bg-wgh-red-3 transition-all duration-100 active:mt-1.5 active:border-b-0"
                 >
