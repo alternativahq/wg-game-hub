@@ -11,11 +11,11 @@ return [
     //games status
     'Online' => 'Online',
     'Beta' => 'Beta',
-    
+
     //game lobby type
     'TypeOne' => 'TypeOne',
     'TypeTwo' => 'TypeTwo',
-    
+
     //game lobby status
     'Scheduled' => 'Scheduled',
     'InLobby' => 'InLobby',

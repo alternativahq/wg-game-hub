@@ -5,30 +5,16 @@ networks:
     name: 'wodo_gamehub'
 
 services:
-  nginx:
+  gamehub:
     build:
-      context: ./docker-dev
-      dockerfile: nginx.dockerfile
-    container_name: nginx
+      context: ./
+      dockerfile: Dockerfile
+    container_name: gamehub
     depends_on:
-      - php
       - mysql
       - redis
     ports:
       - "8091:80"
-    #      - "4433:443"
-    volumes:
-      - ./:/var/www/html
-    networks:
-      - wodo_gamehub
-
-  php:
-    build:
-      context: ./docker-dev
-      dockerfile: php.dockerfile
-    container_name: php
-    volumes:
-      - ./:/var/www/html
     networks:
       - wodo_gamehub
 
@@ -47,50 +33,6 @@ services:
     networks:
       - wodo_gamehub
 
-  composer:
-    image: composer:latest
-    container_name: composer
-    volumes:
-      - ./:/var/www/html
-    working_dir: /var/www/html
-    networks:
-      - wodo_gamehub
-
-
-  artisan:
-    build:
-      context: docker-dev
-      dockerfile: php.dockerfile
-    container_name: artisan
-    volumes:
-      - ./:/var/www/html
-    working_dir: /var/www/html
-    entrypoint: ["php", "artisan"]
-    networks:
-      - wodo_gamehub
-
-  npm:
-    image: node:18-alpine
-    container_name: npm
-    volumes:
-      - ./:/var/www/html
-    working_dir: /var/www/html
-    entrypoint: ["npm"]
-    networks:
-      - wodo_gamehub
-
-  phpunit:
-    build:
-      context: ./docker-dev
-      dockerfile: php.dockerfile
-    container_name: phpunit
-    volumes:
-      - ./:/var/www/html
-    working_dir: /var/www/html
-    entrypoint: ["/var/www/html/vendor/bin/phpunit"]
-    networks:
-      - wodo_gamehub
-
   redis:
     image: redis:latest
     container_name: redis
@@ -98,18 +40,6 @@ services:
       - "6379:6379"
     volumes:
       - ./redisdata:/data
-    networks:
-      - wodo_gamehub
-
-  scheduler:
-    build:
-      context: ./docker-dev
-      dockerfile: php.dockerfile
-    container_name: scheduler
-    volumes:
-      - ./:/var/www/html
-    working_dir: /var/www/html
-    entrypoint: ["php", "artisan", "schedule:work"]
     networks:
       - wodo_gamehub
 
@@ -137,17 +67,3 @@ services:
       - wodo_gamehub
     volumes:
       - ./../keys:/keys
-
-  wodo_gamehub_temporal_worker:
-    restart: always
-    build:
-      context: ./docker-dev
-      dockerfile: php.dockerfile
-    container_name: wodo_gamehub_temporal_worker
-    depends_on:
-      - nginx
-    entrypoint: ["./rr", "serve", "-c","./.rr.yaml"]
-    volumes:
-      - ./:/var/www/html
-    networks:
-      - wodo_gamehub

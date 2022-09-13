@@ -44,6 +44,12 @@ ENTRYPOINT ["start-container"]
 
 #CMD mkdir gamehub
 COPY . /var/www/html
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+RUN npm install
+RUN npm run prod
+RUN php artisan migrate --force
+RUN php artisan optimize:clear
+RUN php artisan optimize
 
 RUN chown -R ubuntu:www-data /var/www/html
 
