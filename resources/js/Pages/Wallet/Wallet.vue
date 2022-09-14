@@ -3,12 +3,33 @@ import BorderedContainer from '@/Shared/BorderedContainer';
 import ButtonShape from '@/Shared/ButtonShape';
 import { inject } from 'vue';
 import { Link } from '@inertiajs/inertia-vue3';
+import WodoTokenIcon from '@/Shared/SVG/WodoTokenIcon';
+import BananoCoinIcon from '@/Shared/SVG/BananoCoinIcon';
+import SolanaCoinIcon from '@/Shared/SVG/SolanaCoinIcon';
+import NanoCoinIcon from '@/Shared/SVG/NanoCoinIcon';
+import BNBCoinIcon from '@/Shared/SVG/BNBCoinIcon';
+import EthereiumCoinIcon from '@/Shared/SVG/EthereiumCoinIcon';
+import AvalancheCoinIcon from '@/Shared/SVG/AvalancheCoinIcon';
 
 let currentUser = inject('currentUser');
 
 let props = defineProps({
     assetAccounts: Object,
 });
+
+function component(account) {
+    let assets = {
+        XWGT: WodoTokenIcon,
+        BAN: BananoCoinIcon,
+        SOL: SolanaCoinIcon,
+        XNO: NanoCoinIcon,
+        BSC: BNBCoinIcon,
+        ETH: EthereiumCoinIcon,
+        AVAX: AvalancheCoinIcon,
+    };
+
+    return assets[account.asset] || null;
+}
 </script>
 <template>
     <section class="overflow-x-auto">
@@ -55,33 +76,25 @@ let props = defineProps({
                                             >
                                                 Balance
                                             </th>
-
-                                            <th
-                                                scope="col"
-                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                            >
-                                                Description
-                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 bg-white">
-                                        <tr v-for="assetAccount in assetAccounts" :key="assetAccount.id">
+                                        <tr v-for="assetAccount in assetAccounts.data" :key="assetAccount.id">
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
                                             >
-                                                {{ assetAccount.name }}
+                                                <div class="flex flex-row items-center space-x-2">
+                                                    <component :is="component(assetAccount)" class="h-8 w-8 shrink-0" />
+                                                    <p>{{ assetAccount.asset }}</p>
+                                                </div>
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ assetAccount.symbol }}
+                                                {{ assetAccount.asset }}
                                             </td>
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
                                             >
-                                                {{ assetAccount.pivot.balance }}
-                                            </td>
-
-                                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ assetAccount.description }}
+                                                {{ assetAccount.balance }}
                                             </td>
                                         </tr>
                                     </tbody>

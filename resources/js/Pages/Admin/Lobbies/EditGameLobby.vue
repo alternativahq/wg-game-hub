@@ -5,10 +5,10 @@ import ButtonShape from '@/Shared/ButtonShape';
 import { useForm } from '@inertiajs/inertia-vue3';
 
 let props = defineProps({
-    gameLobby:Object,
-    assets:Object,
-    gameTypes:Object,
-    gameStatuss:Object,
+    gameLobby: Object,
+    assets: Object,
+    gameTypes: Object,
+    gameStatus: Object,
 });
 
 let updateLobbyForm = useForm({
@@ -23,17 +23,17 @@ let updateLobbyForm = useForm({
     min_players: props.gameLobby.data.min_players,
     max_players: props.gameLobby.data.max_players,
     scheduled_at: props.gameLobby.data.scheduled_at_date_time,
-    asset_id:props.gameLobby.data.asset_id,
-    game_id:props.gameLobby.data.game_id,
+    asset_id: props.gameLobby.data.asset_id,
+    game_id: props.gameLobby.data.game_id,
 });
 
-function updateGameLobby(){
-    updateLobbyForm.put("/admin/gameLobbies/"+props.gameLobby.data.id, { preserveScroll: true });
+function updateGameLobby() {
+    updateLobbyForm.put('/admin/gameLobbies/' + props.gameLobby.data.id, { preserveScroll: true });
 }
 </script>
 <template>
-    <div class="w-96 mx-auto">
-        <form @submit.prevent="updateGameLobby" >
+    <div class="mx-auto w-96">
+        <form @submit.prevent="updateGameLobby">
             <div class="font-semibold">name</div>
             <TextInput
                 v-model="updateLobbyForm.name"
@@ -48,16 +48,17 @@ function updateGameLobby(){
                     {{ updateLobbyForm.errors.name }}
                 </div>
             </InputError>
-             <div>
+            <div>
                 <label for="description" class="font-semibold">description</label>
                 <div class="mt-1">
-                <textarea 
-                    placeholder="description"
-                    v-model="updateLobbyForm.description"
-                    rows="4" 
-                    name="description" 
-                    id="description" 
-                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" />
+                    <textarea
+                        placeholder="description"
+                        v-model="updateLobbyForm.description"
+                        rows="4"
+                        name="description"
+                        id="description"
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    />
                 </div>
             </div>
             <InputError class="mt-2">
@@ -98,10 +99,9 @@ function updateGameLobby(){
             <select
                 id="asset_name"
                 name="asset_name"
-                class="flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal
-                text-wgh-gray-6 placeholder-wgh-gray-3 outline-none mb-5"
+                class="mb-5 flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
                 v-model="updateLobbyForm.type"
-                >
+            >
                 <option :key="index" v-for="(gameType, index) in gameTypes" :value="gameType.value">
                     {{ gameType.label }}
                 </option>
@@ -110,15 +110,14 @@ function updateGameLobby(){
             <select
                 id="asset_name"
                 name="asset_name"
-                class="flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal
-                text-wgh-gray-6 placeholder-wgh-gray-3 outline-none mb-5"
+                class="mb-5 flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
                 v-model="updateLobbyForm.status"
-                >
-                <option class="my-2" :key="index" v-for="(gameStatus, index) in gameStatuss" :value="gameStatus.value">
+            >
+                <option class="my-2" :key="index" v-for="(gameStatus, index) in gameStatus" :value="gameStatus.value">
                     {{ gameStatus.label }}
                 </option>
             </select>
-  
+
             <div class="font-semibold">rules</div>
             <TextInput
                 v-model="updateLobbyForm.rules"
@@ -193,19 +192,14 @@ function updateGameLobby(){
             <select
                 id="asset_name"
                 name="asset_name"
-                class="flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal
-                text-wgh-gray-6 placeholder-wgh-gray-3 outline-none mb-5"
+                class="mb-5 flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
                 v-model="updateLobbyForm.asset_id"
-                >
+            >
                 <option :key="asset.id" v-for="asset in assets" :value="asset.id">
                     {{ asset.name }}
                 </option>
             </select>
-            <button
-                type="submit"
-                class="w-full"
-                :disabled="updateLobbyForm.processing"
-            >
+            <button type="submit" class="w-full" :disabled="updateLobbyForm.processing">
                 <ButtonShape type="purple">
                     <span class="w-full uppercase">Update</span>
                 </ButtonShape>
@@ -213,4 +207,3 @@ function updateGameLobby(){
         </form>
     </div>
 </template>
-

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Lobbies;
 
+use App\Actions\GameLobby\GameLobbyStartSignalAction;
 use App\Models\Game;
 use Inertia\Inertia;
 use App\Models\Asset;
@@ -20,34 +21,44 @@ class GameLobbiesController extends Controller
     {
         $assets = Asset::get(['id', 'name']);
         $gameTypes = GameLobbyType::toSelect();
-        $gameStatuss = GameLobbyStatus::toSelect();
+        $gameStatus = GameLobbyStatus::toSelect();
 
-        return Inertia::render('Admin/Lobbies/AddGameLobby',[
-            'game' => $game, 
-            'assets' => $assets, 
+        return Inertia::render('Admin/Lobbies/AddGameLobby', [
+            'game' => $game,
+            'assets' => $assets,
             'gameTypes' => $gameTypes,
-            'gameStatuss' => $gameStatuss
+            'gameStatus' => $gameStatus,
         ]);
     }
 
-    public function store(StoreLobbyRequest $request, Game $game)
+    public function store(StoreLobbyRequest $request, Game $game, GameLobbyStartSignalAction $gameLobbyStartSignal)
     {
-        $game->gameLobbies()->create(array_merge($request->validated(),['available_spots'=>$request->max_players]));
+        $gameLobby = $game->gameLobbies()->create(
+            array_merge($request->validated(), [
+                'available_spots' => $request->max_players,
+                'status' => GameLobbyStatus::Scheduled,
+            ]),
+        );
+
+        $gameLobby->load('asset');
+        $httpResponse = $gameLobbyStartSignal->execute(gameLobby: $gameLobby);
+
         session()->flash('success', 'new lobby got added successfully!');
-        return redirect()->route('admin-gameLobbies.show',$game->id);
+
+        return redirect()->route('admin-gameLobbies.show', $game->id);
     }
 
     public function edit(GameLobby $gameLobby)
     {
         $assets = Asset::get(['id', 'name']);
         $gameTypes = GameLobbyType::toSelect();
-        $gameStatuss = GameLobbyStatus::toSelect();
+        $gameStatus = GameLobbyStatus::toSelect();
 
         return Inertia::render('Admin/Lobbies/EditGameLobby', [
-            'gameLobby' => new GameLobbyResource($gameLobby), 
-            'assets' => $assets, 
+            'gameLobby' => new GameLobbyResource($gameLobby),
+            'assets' => $assets,
             'gameTypes' => $gameTypes,
-            'gameStatuss' => $gameStatuss
+            'gameStatus' => $gameStatus,
         ]);
     }
 
@@ -55,7 +66,7 @@ class GameLobbiesController extends Controller
     {
         $gameLobby->update($request->validated());
         session()->flash('success', 'lobby updated successfully!');
-        return redirect()->route('admin-gameLobbies.show',$gameLobby->game->id);
+        return redirect()->route('admin-gameLobbies.show', $gameLobby->game->id);
     }
 
     public function destroy(GameLobby $gameLobby)
