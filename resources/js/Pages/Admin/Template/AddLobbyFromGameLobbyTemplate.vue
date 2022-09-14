@@ -3,13 +3,16 @@ import TextInput from '@/Shared/Inputs/TextInput';
 import InputError from '@/Shared/InputError';
 import ButtonShape from '@/Shared/ButtonShape';
 import { useForm } from '@inertiajs/inertia-vue3';
+import { computed } from 'vue';
+import { addMonths, getMonth, getYear } from 'date-fns';
+import '@vuepic/vue-datepicker/dist/main.css';
+import Datepicker from '@vuepic/vue-datepicker';
 
 let props = defineProps({
     gameTemplate: Object,
     assets: Object,
     game: Object,
     gameTypes: Object,
-    gameStatuss: Object,
 });
 
 let AddLobbyFromTemplateForm = useForm({
@@ -18,7 +21,6 @@ let AddLobbyFromTemplateForm = useForm({
     image: props.gameTemplate.image,
     theme_color: props.gameTemplate.theme_color,
     type: '',
-    status: '',
     rules: props.gameTemplate.rules,
     base_entrance_fee: props.gameTemplate.base_entrance_fee,
     min_players: props.gameTemplate.min_players,
@@ -30,6 +32,9 @@ let AddLobbyFromTemplateForm = useForm({
 function addLobbyFromGameTemplate() {
     AddLobbyFromTemplateForm.post('/admin/game/' + props.game.id + '/gameTemplates/lobby');
 }
+
+// only 1 month in advance is allowed.
+const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(new Date())), 1));
 </script>
 <template>
     {{ AddLobbyFromTemplateForm.errors }}
@@ -68,7 +73,7 @@ function addLobbyFromGameTemplate() {
                 </div>
             </InputError>
 
-            <div class="font-semibold">image_url</div>
+            <div class="font-semibold">image url</div>
             <TextInput
                 v-model="AddLobbyFromTemplateForm.image"
                 placeholder="image_url"
@@ -82,7 +87,7 @@ function addLobbyFromGameTemplate() {
                     {{ AddLobbyFromTemplateForm.errors.image_url }}
                 </div>
             </InputError>
-            <div class="font-semibold">theme_color</div>
+            <div class="font-semibold">theme color</div>
             <TextInput
                 v-model="AddLobbyFromTemplateForm.theme_color"
                 placeholder="theme_color"
@@ -107,18 +112,6 @@ function addLobbyFromGameTemplate() {
                     {{ gameType.label }}
                 </option>
             </select>
-            <div class="font-semibold">status</div>
-            <select
-                id="asset_name"
-                name="asset_name"
-                class="mb-5 flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
-                v-model="AddLobbyFromTemplateForm.status"
-            >
-                <option class="my-2" :key="index" v-for="(gameStatus, index) in gameStatuss" :value="gameStatus.value">
-                    {{ gameStatus.label }}
-                </option>
-            </select>
-
             <div class="font-semibold">rules</div>
             <TextInput
                 v-model="AddLobbyFromTemplateForm.rules"
@@ -133,7 +126,7 @@ function addLobbyFromGameTemplate() {
                     {{ AddLobbyFromTemplateForm.errors.rules }}
                 </div>
             </InputError>
-            <div class="font-semibold">base_entrance_fee</div>
+            <div class="font-semibold">base entrance fee</div>
             <TextInput
                 v-model="AddLobbyFromTemplateForm.base_entrance_fee"
                 placeholder="base_entrance_fee"
@@ -147,7 +140,7 @@ function addLobbyFromGameTemplate() {
                     {{ AddLobbyFromTemplateForm.errors.base_entrance_fee }}
                 </div>
             </InputError>
-            <div class="font-semibold">min_players</div>
+            <div class="font-semibold">min players</div>
             <TextInput
                 v-model="AddLobbyFromTemplateForm.min_players"
                 placeholder="min_players"
@@ -161,7 +154,7 @@ function addLobbyFromGameTemplate() {
                     {{ AddLobbyFromTemplateForm.errors.min_players }}
                 </div>
             </InputError>
-            <div class="font-semibold">max_players</div>
+            <div class="font-semibold">max players</div>
             <TextInput
                 v-model="AddLobbyFromTemplateForm.max_players"
                 placeholder="max_players"
@@ -175,15 +168,16 @@ function addLobbyFromGameTemplate() {
                     {{ AddLobbyFromTemplateForm.errors.max_players }}
                 </div>
             </InputError>
-            <div class="font-semibold">schedualed_at</div>
-            <TextInput
-                v-model="AddLobbyFromTemplateForm.scheduled_at"
-                placeholder="scheduled_at"
-                type="datetime-local"
-                id="scheduled_at"
-                name="scheduled_at"
+            <div class="font-semibold">schedualed at</div>
+            <Datepicker
+                required
                 class="mt-4"
-            />
+                utc
+                placeholder="Select date and time"
+                v-model="AddLobbyFromTemplateForm.scheduled_at"
+                :min-date="new Date()"
+                :max-date="maxDate"
+            ></Datepicker>
             <InputError class="mt-2">
                 <div v-if="AddLobbyFromTemplateForm.errors.scheduled_at" class="mt-2">
                     {{ AddLobbyFromTemplateForm.errors.scheduled_at }}

@@ -11,11 +11,6 @@ use Illuminate\Support\Facades\Http;
 
 class SendNotificationController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('api.basic-auth');
-    }
-
     public function __invoke(SendNotificationRequest $request, SendNotificationAction $sendNotificationAction)
     {
         abort_if(

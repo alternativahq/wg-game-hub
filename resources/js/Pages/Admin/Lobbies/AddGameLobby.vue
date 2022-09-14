@@ -3,12 +3,16 @@ import TextInput from '@/Shared/Inputs/TextInput';
 import InputError from '@/Shared/InputError';
 import ButtonShape from '@/Shared/ButtonShape';
 import { useForm } from '@inertiajs/inertia-vue3';
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+import { computed } from 'vue';
+import { addMonths, getMonth, getYear, subMonths } from 'date-fns';
 
 let props = defineProps({
-    assets:Object,
-    game:Object,
-    gameTypes:Object,
-    gameStatuss:Object,
+    assets: Object,
+    game: Object,
+    gameTypes: Object,
+    gameStatus: Object,
 });
 
 let AddLobbyForm = useForm({
@@ -22,41 +26,38 @@ let AddLobbyForm = useForm({
     base_entrance_fee: '',
     min_players: '',
     max_players: '',
-    scheduled_at:'',
-    asset_id:'',
+    scheduled_at: '',
+    asset_id: '',
 });
 
 function addGameLobby() {
-    AddLobbyForm.post("/admin/game/"+props.game.id+"/gameLobbies");
+    AddLobbyForm.post('/admin/game/' + props.game.id + '/gameLobbies');
 }
+
+// only 1 month in advance is allowed.
+const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(new Date())), 1));
 </script>
 <template>
-    <div class="w-96 mx-auto">
-        <form @submit.prevent="addGameLobby()" >
+    <div class="mx-auto w-96">
+        <form @submit.prevent="addGameLobby()">
             <div class="font-semibold">name</div>
-            <TextInput
-                v-model="AddLobbyForm.name"
-                placeholder="name"
-                type="text"
-                id="name"
-                name="name"
-                class="mt-4"
-            />
+            <TextInput v-model="AddLobbyForm.name" placeholder="name" type="text" id="name" name="name" class="mt-4" />
             <InputError class="mt-2">
                 <div v-if="AddLobbyForm.errors.name" class="mt-2">
                     {{ AddLobbyForm.errors.name }}
                 </div>
             </InputError>
-             <div>
+            <div>
                 <label for="description" class="font-semibold">description</label>
                 <div class="mt-1">
-                <textarea 
-                    placeholder="description"
-                    v-model="AddLobbyForm.description"
-                    rows="4" 
-                    name="description" 
-                    id="description" 
-                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" />
+                    <textarea
+                        placeholder="description"
+                        v-model="AddLobbyForm.description"
+                        rows="4"
+                        name="description"
+                        id="description"
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    />
                 </div>
             </div>
             <InputError class="mt-2">
@@ -65,7 +66,7 @@ function addGameLobby() {
                 </div>
             </InputError>
 
-            <div class="font-semibold">image_url</div>
+            <div class="font-semibold">image</div>
             <TextInput
                 v-model="AddLobbyForm.image"
                 placeholder="image_url"
@@ -75,11 +76,11 @@ function addGameLobby() {
                 class="mt-4"
             />
             <InputError class="mt-2">
-                <div v-if="AddLobbyForm.errors.image_url" class="mt-2">
-                    {{ AddLobbyForm.errors.image_url }}
+                <div v-if="AddLobbyForm.errors.image" class="mt-2">
+                    {{ AddLobbyForm.errors.image }}
                 </div>
             </InputError>
-            <div class="font-semibold">theme_color</div>
+            <div class="font-semibold">theme color</div>
             <TextInput
                 v-model="AddLobbyForm.theme_color"
                 placeholder="theme_color"
@@ -97,27 +98,13 @@ function addGameLobby() {
             <select
                 id="asset_name"
                 name="asset_name"
-                class="flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal
-                text-wgh-gray-6 placeholder-wgh-gray-3 outline-none mb-5"
+                class="mb-5 flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
                 v-model="AddLobbyForm.type"
-                >
+            >
                 <option :key="index" v-for="(gameType, index) in gameTypes" :value="gameType.value">
                     {{ gameType.label }}
                 </option>
             </select>
-            <div class="font-semibold">status</div>
-            <select
-                id="asset_name"
-                name="asset_name"
-                class="flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal
-                text-wgh-gray-6 placeholder-wgh-gray-3 outline-none mb-5"
-                v-model="AddLobbyForm.status"
-                >
-                <option class="my-2" :key="index" v-for="(gameStatus, index) in gameStatuss" :value="gameStatus.value">
-                    {{ gameStatus.label }}
-                </option>
-            </select>
-  
             <div class="font-semibold">rules</div>
             <TextInput
                 v-model="AddLobbyForm.rules"
@@ -132,7 +119,7 @@ function addGameLobby() {
                     {{ AddLobbyForm.errors.rules }}
                 </div>
             </InputError>
-            <div class="font-semibold">base_entrance_fee</div>
+            <div class="font-semibold">base entrance fee</div>
             <TextInput
                 v-model="AddLobbyForm.base_entrance_fee"
                 placeholder="base_entrance_fee"
@@ -146,10 +133,10 @@ function addGameLobby() {
                     {{ AddLobbyForm.errors.base_entrance_fee }}
                 </div>
             </InputError>
-            <div class="font-semibold">min_players</div>
+            <div class="font-semibold">min players</div>
             <TextInput
                 v-model="AddLobbyForm.min_players"
-                placeholder="min_players"
+                placeholder="min players"
                 type="text"
                 id="min_players"
                 name="min_players"
@@ -160,10 +147,10 @@ function addGameLobby() {
                     {{ AddLobbyForm.errors.min_players }}
                 </div>
             </InputError>
-            <div class="font-semibold">max_players</div>
+            <div class="font-semibold">max players</div>
             <TextInput
                 v-model="AddLobbyForm.max_players"
-                placeholder="max_players"
+                placeholder="max players"
                 type="text"
                 id="max_players"
                 name="max_players"
@@ -174,15 +161,16 @@ function addGameLobby() {
                     {{ AddLobbyForm.errors.max_players }}
                 </div>
             </InputError>
-            <div class="font-semibold">schedualed_at</div>
-            <TextInput
-                v-model="AddLobbyForm.scheduled_at"
-                placeholder="scheduled_at"
-                type="date"
-                id="scheduled_at"
-                name="scheduled_at"
+            <div class="font-semibold">schedualed at</div>
+            <Datepicker
+                required
                 class="mt-4"
-            />
+                utc
+                placeholder="Select date and time"
+                v-model="AddLobbyForm.scheduled_at"
+                :min-date="new Date()"
+                :max-date="maxDate"
+            ></Datepicker>
             <InputError class="mt-2">
                 <div v-if="AddLobbyForm.errors.scheduled_at" class="mt-2">
                     {{ AddLobbyForm.errors.scheduled_at }}
@@ -192,19 +180,14 @@ function addGameLobby() {
             <select
                 id="asset_name"
                 name="asset_name"
-                class="flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal
-                text-wgh-gray-6 placeholder-wgh-gray-3 outline-none mb-5"
+                class="mb-5 flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
                 v-model="AddLobbyForm.asset_id"
-                >
+            >
                 <option :key="asset.id" v-for="asset in assets" :value="asset.id">
                     {{ asset.name }}
                 </option>
             </select>
-            <button
-                type="submit"
-                class="w-full"
-                :disabled="AddLobbyForm.processing"
-            >
+            <button type="submit" class="w-full" :disabled="AddLobbyForm.processing">
                 <ButtonShape type="purple">
                     <span class="w-full uppercase">Add</span>
                 </ButtonShape>
@@ -212,4 +195,3 @@ function addGameLobby() {
         </form>
     </div>
 </template>
-
