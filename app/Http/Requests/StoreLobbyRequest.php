@@ -13,15 +13,13 @@ class StoreLobbyRequest extends FormRequest
         return [
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],
-            //TODO: image need to be changed to image rule
             'image' => ['required', 'string'],
             'theme_color' => ['required', 'string'],
-            'type' => ['required', 'in:'.collect(array_column(GameLobbyType::cases(),'value'))->implode(',')],
-            'status' => ['required', 'in:'.collect(array_column(GameLobbyStatus::cases(),'value'))->implode(',')],
+            'type' => ['required', 'in:' . collect(array_column(GameLobbyType::cases(), 'value'))->implode(',')],
             'rules' => ['required', 'string'],
             'base_entrance_fee' => ['required', 'numeric'],
-            'min_players' => ['required', 'numeric'],
-            'max_players' => ['required', 'numeric'],
+            'min_players' => ['required', 'numeric', 'lte:max_players'],
+            'max_players' => ['required', 'numeric', 'gte:min_players'],
             'scheduled_at' => ['required', 'date'],
             'asset_id' => ['required', 'exists:assets,id'],
         ];
@@ -30,5 +28,19 @@ class StoreLobbyRequest extends FormRequest
     public function authorize()
     {
         return true;
+    }
+
+    protected function prepareForValidation()
+    {
+        if (is_null($this->image)) {
+            $this->merge([
+                'image' => collect([
+                    'tank/homepage_bg.png',
+                    'tankx/tankx_1.png',
+                    'wodoland/wodoland_1.jpg',
+                    'wfps/wffps_7.png',
+                ])->random(),
+            ]);
+        }
     }
 }

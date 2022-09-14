@@ -64,7 +64,7 @@ function sendChatMessage() {
     }
 
     Inertia.post(
-        `/chat-rooms/${gameLobby.id}/message`,
+        `/chat-rooms/${props.gameLobby.data.id}/message`,
         {
             message: data.chatMessageInput,
         },
@@ -72,7 +72,7 @@ function sendChatMessage() {
             preserveScroll: true,
         }
     );
-    data.chatMessageInput.value = '';
+    data.chatMessageInput = '';
 }
 
 function channelNewChatMessage(message) {
@@ -200,7 +200,10 @@ export default {
                             </div>
                         </div>
                     </BorderedContainer>
-                    <BorderedContainer class="col-span-full w-full bg-wgh-gray-1.5 lg:col-span-3">
+                    <BorderedContainer
+                        class="col-span-full w-full bg-wgh-gray-1.5 lg:col-span-3"
+                        v-if="gameLobbyModel.status !== GameLobby.availableStatuses.GameEnded"
+                    >
                         <div class="flex flex-row items-center space-x-4 rounded-lg bg-white p-4">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -227,7 +230,10 @@ export default {
                                     loading...
                                 </p>
                                 <p
-                                    v-if="gameLobbyModel.timeToStartAsString"
+                                    v-if="
+                                        gameLobbyModel.timeToStartAsString ||
+                                        gameLobbyModel.status !== GameLobby.availableStatuses.GameEnded
+                                    "
                                     class="font-inter font-normal uppercase text-wgh-gray-6"
                                 >
                                     {{ gameLobbyModel.timeToStartAsString }}

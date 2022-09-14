@@ -7,8 +7,8 @@ use App\Http\Controllers\API\{
     Games\GameLobbyJoinController,
     Games\GameLobbyLeaveController,
     Games\GameLobbyResultsController,
-    //    Games\GameLobbyStatus\GameLobbyEndedController,
-    //    Games\GameLobbyStatus\GameLobbyStartController,
+    Games\GameLobbyStatus\GameLobbyEndedController,
+    Games\GameLobbyStatus\GameLobbyStartController,
     Games\GamesController,
     Wallet\TransactionShowController as UserTransactionShowController,
     Notifications\DeleteNotificationsController,
@@ -28,13 +28,13 @@ Route::middleware('api.basic-auth')->group(function () {
      *     - status in-game: change game lobby to in-game
      *     - status game-ended: change game to ended
      */
-    //    Route::post('game-lobbies/{gameLobby}/started', GameLobbyStartController::class)->name(
-    //        'games.game-lobbies.started',
-    //    );
+    Route::post('game-lobbies/{gameLobby}/started', GameLobbyStartController::class)->name(
+        'games.game-lobbies.started',
+    );
     Route::post('game-lobbies/{gameLobby}/results', GameLobbyResultsController::class);
-    //    Route::post('game-lobbies/{gameLobby}/archive', GameLobbyEndedController::class)->name(
-    //        'games.game-lobbies.archive',
-    //    );
+    Route::post('game-lobbies/{gameLobby}/archive', GameLobbyEndedController::class)->name(
+        'games.game-lobbies.archive',
+    );
 });
 
 // User URLs

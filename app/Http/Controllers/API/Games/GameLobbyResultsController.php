@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\API\Games;
 
-use App\Actions\Games\GameLobbies\DistributePrizesAction;
+use App\Actions\GameLobby\GameLobbyFinishedSignalAction;
 use App\Actions\Games\GameMatchResults\StoreGameMatchResultAction;
 use App\DataTransferObjects\GameMatchResultData;
 use App\Enums\GameLobbyStatus;
@@ -11,7 +11,6 @@ use App\Events\GameLobby\ResultsProcessedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GameMatchResultsPayloadRequest;
 use App\Models\GameLobby;
-use App\Enums\NotificationType;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\ResultsProcessedGameLobbyNotification;
 use App\Notifications\ProcessingGameLobbyResultsNotification;
@@ -20,7 +19,7 @@ class GameLobbyResultsController extends Controller
 {
     public function __construct(
         protected StoreGameMatchResultAction $storeGameMatchResultAction,
-        protected DistributePrizesAction $distributePrizesAction,
+        protected GameLobbyFinishedSignalAction $gameLobbyFinishedSignal,
     ) {
     }
 
@@ -28,9 +27,9 @@ class GameLobbyResultsController extends Controller
     {
         $users = $gameLobby->users()->get();
 
+        $gameLobby->status = GameLobbyStatus::ProcessingResults;
         Notification::sendNow($users, new ProcessingGameLobbyResultsNotification(gameLobby: $gameLobby));
 
-        $gameLobby->status = GameLobbyStatus::ProcessingResults;
         if ($gameLobby->save()) {
             broadcast(new ProcessingResultsEvent(gameLobby: $gameLobby));
 
@@ -41,7 +40,6 @@ class GameLobbyResultsController extends Controller
                 gameMatchResultData: $gameMatchResultData,
             );
 
-            //the data passed is suposed to be 5 but in the front received 12 and the second problem is that there is no user id because this is api
             $gameLobby->load('users');
             broadcast(
                 new ResultsProcessedEvent(
@@ -52,10 +50,8 @@ class GameLobbyResultsController extends Controller
                     ]),
                 ),
             );
-
+            $this->gameLobbyFinishedSignal->execute(gameLobby: $gameLobby, gameMatchResultData: $gameMatchResultData);
             Notification::sendNow($users, new ResultsProcessedGameLobbyNotification(gameLobby: $gameLobby));
-
-            //             $this->distributePrizesAction->execute(gameLobby: $gameLobby, gameMatchResultData: $gameMatchResultData);
         }
 
         // Send transactions

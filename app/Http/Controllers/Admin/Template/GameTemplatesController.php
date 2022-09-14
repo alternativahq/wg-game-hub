@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin\Template;
+use App\Actions\GameLobby\GameLobbyStartSignalAction;
 use App\Models\Game;
 use Inertia\Inertia;
 use App\Models\Asset;
@@ -23,29 +24,37 @@ class GameTemplatesController extends Controller
         $gameTypes = GameLobbyType::toSelect();
         $gameStatuss = GameLobbyStatus::toSelect();
 
-        return Inertia::render('Admin/Template/AddLobbyFromGameLobbyTemplate',[
-            'gameTemplate' => $gameTemplate, 
-            'assets' => $assets, 
-            'game' => $gameTemplate->game, 
+        return Inertia::render('Admin/Template/AddLobbyFromGameLobbyTemplate', [
+            'gameTemplate' => $gameTemplate,
+            'assets' => $assets,
+            'game' => $gameTemplate->game,
             'gameTypes' => $gameTypes,
-            'gameStatuss' => $gameStatuss
         ]);
     }
-    
-    public function storeLobby(StoreLobbyRequest $request, Game $game)
+
+    public function storeLobby(StoreLobbyRequest $request, Game $game, GameLobbyStartSignalAction $gameLobbyStartSignal)
     {
-        $game->gameLobbies()->create(array_merge($request->validated(),['available_spots'=>$request->max_players]));
+        $gameLobby = $game->gameLobbies()->create(
+            array_merge($request->validated(), [
+                'available_spots' => $request->max_players,
+                'status' => GameLobbyStatus::Scheduled,
+            ]),
+        );
+
+        $gameLobby->load('asset');
+        $gameLobbyStartSignal->execute(gameLobby: $gameLobby);
+
         session()->flash('success', 'new lobby got added successfully!');
-        return redirect()->route('admin-gameLobbies.show',$game->id);
+        return redirect()->route('admin-gameLobbies.show', $game->id);
     }
 
     public function create(Game $game)
     {
         $assets = Asset::get(['id', 'name']);
 
-        return Inertia::render('Admin/Template/AddGameLobbyTemplate',[
-            'game' => $game, 
-            'assets' => $assets, 
+        return Inertia::render('Admin/Template/AddGameLobbyTemplate', [
+            'game' => $game,
+            'assets' => $assets,
         ]);
     }
 
@@ -53,7 +62,7 @@ class GameTemplatesController extends Controller
     {
         $game->gameTemplates()->create($request->validated());
         session()->flash('success', 'new lobby template got added successfully!');
-        return redirect()->route('admin-gameTemplates.show',$game->id);
+        return redirect()->route('admin-gameTemplates.show', $game->id);
     }
 
     public function edit(GameLobbyTemplate $gameTemplate)
@@ -61,8 +70,8 @@ class GameTemplatesController extends Controller
         $assets = Asset::get(['id', 'name']);
 
         return Inertia::render('Admin/Template/EditGameLobbyTemplate', [
-            'gameTemplate' => new GameLobbyTemplateResource($gameTemplate), 
-            'assets' => $assets, 
+            'gameTemplate' => new GameLobbyTemplateResource($gameTemplate),
+            'assets' => $assets,
         ]);
     }
 
@@ -70,7 +79,7 @@ class GameTemplatesController extends Controller
     {
         $gameTemplate->update($request->validated());
         session()->flash('success', 'lobby Template updated successfully!');
-        return redirect()->route('admin-gameTemplates.show',$gameTemplate->game->id);
+        return redirect()->route('admin-gameTemplates.show', $gameTemplate->game->id);
     }
 
     public function destroy(GameLobbyTemplate $gameTemplate)

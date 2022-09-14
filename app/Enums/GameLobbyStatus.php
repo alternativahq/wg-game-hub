@@ -22,10 +22,7 @@ enum GameLobbyStatus: int
 
     public function canJoinLobby(): bool
     {
-        return in_array($this, [
-            GameLobbyStatus::Scheduled,
-            GameLobbyStatus::InLobby,
-        ]);
+        return in_array($this, [GameLobbyStatus::Scheduled, GameLobbyStatus::InLobby]);
     }
 
     public function canWatchLobby(): bool
@@ -37,16 +34,21 @@ enum GameLobbyStatus: int
             GameLobbyStatus::ProcessingResults,
         ]);
     }
-    
+
     public static function toSelect(): Collection
     {
-        return collect(GameLobbyStatus::cases())->map(function($item){
+        return collect(GameLobbyStatus::cases())->map(function ($item) {
             return ['label' => $item->name, 'value' => $item->value];
         });
     }
-    
+
     public function toLabel(): string
     {
         return __('gamehub.' . $this->name);
+    }
+
+    public function is(GameLobbyStatus $gameLobbyStatus): bool
+    {
+        return $this === $gameLobbyStatus;
     }
 }

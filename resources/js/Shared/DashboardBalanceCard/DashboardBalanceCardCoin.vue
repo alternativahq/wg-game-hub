@@ -30,7 +30,7 @@ function component(account) {
     <div>
         <p class="mb-1 font-inter text-xs font-semibold uppercase text-wgh-gray-2">{{ account.asset }} Balance</p>
         <div class="flex flex-row items-center space-x-4">
-            <component :is="component(account)" class="h-12 w-12 shrink-0" />
+            <component :is="component(account)" class="h-10 w-10 shrink-0" />
             <div class="flex shrink grow-0 flex-col truncate">
                 <p class="font-grota text-lg font-extrabold text-wgh-gray-6">
                     {{ account.balance.toLocaleString('US') }}
