@@ -14,10 +14,8 @@ class StoreGameMatchResultAction
     ) {
     }
 
-    public function execute(
-        GameLobby $gameLobby,
-        GameMatchResultData $gameMatchResultData,
-    ): void {
+    public function execute(GameLobby $gameLobby, GameMatchResultData $gameMatchResultData): void
+    {
         $this->storeScoresFromGameMatchResultAction->execute(
             gameLobby: $gameLobby,
             gameMatchResultData: $gameMatchResultData,
@@ -28,7 +26,7 @@ class StoreGameMatchResultAction
             gameMatchResultData: $gameMatchResultData,
         );
 
-        $gameLobby->status = GameLobbyStatus::ResultsProcessed;
+        $gameLobby->state = GameLobbyStatus::GameEnded;
         $gameLobby->save();
 
         // TODO: Dispatch queued task to start distributing the prizes.

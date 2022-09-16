@@ -30,4 +30,17 @@ enum GameLobbyType: int
             ->upper()
             ->value();
     }
+
+    public static function fromGameLobbyServiceEnum($item): ?GameLobbyType
+    {
+        return collect(GameLobbyType::cases())
+            ->where(
+                'name',
+                str($item)
+                    ->lower()
+                    ->studly()
+                    ->value(),
+            )
+            ->first();
+    }
 }

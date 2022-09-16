@@ -54,7 +54,7 @@ class HandleInertiaRequests extends Middleware
             'is_admin' => $request->user()->is_admin,
             'image' => $request->user()->image,
             'image_url' => $request->user()->image_url,
-            'asset_accounts' =>  $this->getUserAssetAccountAction->execute(),
+            'asset_accounts' => $this->getUserAssetAccountAction->execute(),
             // 'asset_accounts' => Cache::remember(
             //     key: 'user.' . $request->user()->id . '.asset_accounts',
             //     ttl: 300,
@@ -85,10 +85,10 @@ class HandleInertiaRequests extends Middleware
                     $session = $request
                         ->user()
                         ->gameLobbies()
-                        ->whereIn('status', [
+                        ->whereIn('state', [
                             GameLobbyStatus::Scheduled,
                             GameLobbyStatus::InGame,
-                            GameLobbyStatus::InLobby,
+                            GameLobbyStatus::AwaitingPlayers,
                         ])
                         ->first();
 

@@ -26,10 +26,10 @@ class GameLobby extends Model
 
     protected $casts = [
         'type' => GameLobbyType::class,
-        'status' => GameLobbyStatus::class,
+        'state' => GameLobbyStatus::class,
     ];
 
-    protected $dates = ['scheduled_at'];
+    protected $dates = ['scheduled_at', 'start_at'];
 
     protected $appends = ['has_available_spots', 'players_in_lobby_count', 'scheduled_at_utc_string', 'image_url'];
 

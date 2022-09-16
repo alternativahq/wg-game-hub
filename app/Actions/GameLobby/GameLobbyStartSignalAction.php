@@ -2,24 +2,45 @@
 
 namespace App\Actions\GameLobby;
 
+use App\Enums\GameLobbyStatus;
+use App\Enums\GameLobbyType;
+use App\Http\Requests\StoreLobbyRequest;
+use App\Models\Asset;
 use App\Models\GameLobby;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
+use Str;
 
 class GameLobbyStartSignalAction
 {
-    public function execute(GameLobby $gameLobby): \Illuminate\Http\Client\Response|\GuzzleHttp\Promise\PromiseInterface
-    {
+    public function execute(
+        StoreLobbyRequest $request,
+    ): \Illuminate\Http\Client\Response|\GuzzleHttp\Promise\PromiseInterface {
+        $asset = Asset::find($request->asset_id);
+
+        $payload = [
+            'id' => Str::uuid()->toString(),
+            'gameId' => $request->game_id,
+            'name' => $request->name,
+            'description' => $request->description,
+            'gameMode' => GameLobbyType::tryFrom($request->type)->toGameLobbyServiceValue(),
+            'rules' => $request->rules,
+            'asset' => $asset->symbol,
+            'state' => GameLobbyStatus::Scheduled->name,
+            'entranceFee' => $request->base_entrance_fee,
+            'scheduledAt' => $request->scheduled_at,
+            'startAt' => $request->start_at,
+            'minPlayers' => $request->min_players,
+            'maxPlayers' => $request->min_players,
+            'scheduleWaitTime' => Carbon::now()
+                ->utc()
+                ->diffInSeconds($request->scheduled_at),
+            'waitTime' => Carbon::now()
+                ->utc()
+                ->diffInSeconds($request->start_at),
+        ];
+
         $url = config('wodo.game-lobby-service-api') . '/lifecycle';
-        return Http::retry(5, 1000)->post($url, [
-            'id' => $gameLobby->id,
-            'gameId' => $gameLobby->game_id,
-            'name' => $gameLobby->name,
-            'description' => $gameLobby->description,
-            'gameMode' => $gameLobby->type->toGameLobbyServiceValue(),
-            'rules' => $gameLobby->rules,
-            'asset' => $gameLobby->asset->symbol,
-            'entranceFee' => $gameLobby->base_entrance_fee,
-            'startsAt' => $gameLobby->scheduled_at->utc(),
-        ]);
+        return Http::retry(5, 1000)->post($url, $payload);
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\GameLobbyResource;
 use App\Models\GameLobby;
 use App\Models\GameLobbyUser;
+use Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Inertia\Inertia;
 
@@ -24,7 +25,11 @@ class GameLobbiesController extends Controller
                     'asset:id,name,symbol',
                 );
 
-                if ($gameLobby->status === GameLobbyStatus::ResultsProcessed) {
+                if (
+                    $gameLobby->state->is(GameLobbyStatus::GameEnded) ||
+                    $gameLobby->state->is(GameLobbyStatus::DistributingPrizes) ||
+                    $gameLobby->state->is(GameLobbyStatus::DistributedPrizes)
+                ) {
                     // load the top 6 including the current user.
                     $gameLobby->load([
                         'scores' => function ($q) {

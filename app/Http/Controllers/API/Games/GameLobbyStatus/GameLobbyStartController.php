@@ -13,18 +13,21 @@ class GameLobbyStartController extends Controller
 {
     public function __invoke(Request $request, GameLobby $gameLobby)
     {
-        if (!$gameLobby->status->is(GameLobbyStatus::InLobby)) {
+        $request->validate([
+            'url' => ['required', 'url'],
+        ]);
+
+        if (!$gameLobby->state->is(GameLobbyStatus::AwaitingPlayers)) {
             return abort(Response::HTTP_UNAUTHORIZED);
         }
 
-        $gameLobby->status = GameLobbyStatus::InGame;
+        $gameLobby->state = GameLobbyStatus::InGame;
 
         if (!$gameLobby->save()) {
             return abort(Response::HTTP_INTERNAL_SERVER_ERROR, 'Could not update game settings');
         }
 
-        // TODO: Request to game server
-        broadcast(new GameLobbyStartedEvent(gameLobby: $gameLobby));
+        broadcast(new GameLobbyStartedEvent(gameLobby: $gameLobby, url: $request->url));
 
         return response()->noContent();
     }

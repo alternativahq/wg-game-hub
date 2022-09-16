@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin\Lobbies;
 
 use App\Actions\GameLobby\GameLobbyStartSignalAction;
+use App\Enums\ChatRoomType;
+use App\Models\ChatRoom;
 use App\Models\Game;
 use Inertia\Inertia;
 use App\Models\Asset;
@@ -33,17 +35,14 @@ class GameLobbiesController extends Controller
 
     public function store(StoreLobbyRequest $request, Game $game, GameLobbyStartSignalAction $gameLobbyStartSignal)
     {
-        $gameLobby = $game->gameLobbies()->create(
-            array_merge($request->validated(), [
-                'available_spots' => $request->max_players,
-                'status' => GameLobbyStatus::Scheduled,
-            ]),
-        );
+        $request->merge(['game_id' => $game->id]);
+        $httpResponse = $gameLobbyStartSignal->execute(request: $request);
 
-        $gameLobby->load('asset');
-        $httpResponse = $gameLobbyStartSignal->execute(gameLobby: $gameLobby);
-
-        session()->flash('success', 'new lobby got added successfully!');
+        if ($httpResponse->successful()) {
+            session()->flash('success', 'new lobby got added successfully!');
+        } else {
+            session()->flash('error', 'Something went wrong, please try again later.');
+        }
 
         return redirect()->route('admin-gameLobbies.show', $game->id);
     }

@@ -32,27 +32,11 @@ class GameLobbyPipeline extends Pipeline
                 request: $this->request,
                 queryParamName: 'available_spots_gt',
             ),
-            new LessThanFilter(
-                column: 'max_players',
-                request: $this->request,
-                queryParamName: 'max_players_lt',
-            ),
-            new GreaterThanFilter(
-                column: 'max_players',
-                request: $this->request,
-                queryParamName: 'max_players_gt',
-            ),
-            new LessThanFilter(
-                column: 'min_players',
-                request: $this->request,
-                queryParamName: 'min_players_lt',
-            ),
-            new GreaterThanFilter(
-                column: 'min_players',
-                request: $this->request,
-                queryParamName: 'min_players_gt',
-            ),
-            new ExactFilter(column: 'status', request: $this->request),
+            new LessThanFilter(column: 'max_players', request: $this->request, queryParamName: 'max_players_lt'),
+            new GreaterThanFilter(column: 'max_players', request: $this->request, queryParamName: 'max_players_gt'),
+            new LessThanFilter(column: 'min_players', request: $this->request, queryParamName: 'min_players_lt'),
+            new GreaterThanFilter(column: 'min_players', request: $this->request, queryParamName: 'min_players_gt'),
+            new ExactFilter(column: 'state', request: $this->request),
             new LessThanFilter(
                 column: 'base_entrance_fee',
                 request: $this->request,

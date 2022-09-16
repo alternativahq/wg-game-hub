@@ -10,14 +10,12 @@ export default class GameLobby extends Model {
             userLeft: '.user.left',
             status: {
                 scheduled: '.status.scheduled',
-                inLobby: '.status.in-lobby',
+                awaitingPlayers: '.status.awaiting-players',
                 inGame: '.status.in-game',
                 gameEnded: '.status.game-ended',
-                processingResults: '.status.processing-results',
-                resultsProcessed: '.status.results-processed',
-                distributingPrizes: '.status.results-processed',
-                PrizesDistributed: '.status.results-processed',
-                Archived: '.status.archived',
+                distributingPrizes: '.status.distributing-prizes',
+                distributedPrizes: '.status.distributed-prizes',
+                archived: '.status.archived',
             },
             prizeUpdated: '.prize-updated',
         };
@@ -26,31 +24,17 @@ export default class GameLobby extends Model {
     static get availableStatuses() {
         return {
             Scheduled: 10,
-            InLobby: 20,
+            AwaitingPlayers: 20,
             InGame: 30,
             GameEnded: 40,
-            ProcessingResults: 50,
-            ResultsProcessed: 60,
-            DistributingPrizes: 70,
-            PrizesDistributed: 80,
-            Archived: 90,
+            DistributingPrizes: 50,
+            DistributedPrizes: 60,
+            Archived: 70,
         };
     }
 
     get timeToStartAsString() {
         return this._timeToStart;
-    }
-
-    get IsProcessingResults() {
-        return this.status === GameLobby.availableStatuses.ProcessingResults;
-    }
-
-    get areResultsProcessed() {
-        return this.status === GameLobby.availableStatuses.ResultsProcessed;
-    }
-
-    resultsAreProccessed() {
-        this.status = GameLobby.availableStatuses.ResultsProcessed;
     }
 
     addUser(user) {

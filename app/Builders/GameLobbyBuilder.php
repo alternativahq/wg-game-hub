@@ -9,7 +9,7 @@ class GameLobbyBuilder extends Builder
 {
     public function whereAvailableForDashboard(): Builder
     {
-        return $this->whereIn('status', [GameLobbyStatus::Scheduled, GameLobbyStatus::InLobby]);
+        return $this->whereIn('state', [GameLobbyStatus::AwaitingPlayers]);
     }
 
     public function search($terms): static
