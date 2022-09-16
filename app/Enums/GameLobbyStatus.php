@@ -39,4 +39,25 @@ enum GameLobbyStatus: int
     {
         return $this !== $gameLobbyStatus;
     }
+
+    public function toGameLobbyServiceValue(): string
+    {
+        return str($this->name)
+            ->snake()
+            ->upper()
+            ->value();
+    }
+
+    public static function fromGameLobbyServiceEnum($item): ?GameLobbyStatus
+    {
+        return collect(GameLobbyType::cases())
+            ->where(
+                'name',
+                str($item)
+                    ->lower()
+                    ->studly()
+                    ->value(),
+            )
+            ->first();
+    }
 }
