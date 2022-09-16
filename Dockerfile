@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-RUN useradd -ms /bin/bash -u 1000 ubuntu
+#RUN useradd -ms /bin/bash -u 1000 ubuntu
 
 WORKDIR /var/www/html
 
@@ -50,10 +50,5 @@ COPY . /var/www/html
 #RUN php artisan optimize:clear
 #RUN php artisan optimize
 
-RUN chown -R ubuntu:www-data /var/www/html
-
-
-
-
-
-
+RUN chown -R root:www-data /var/www/html
+RUN chmod 777 storage/logs/laravel.log

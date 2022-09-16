@@ -26,7 +26,7 @@ class GameLobbyStartSignalAction
             'gameMode' => GameLobbyType::tryFrom($request->type)->toGameLobbyServiceValue(),
             'rules' => $request->rules,
             'asset' => $asset->symbol,
-            'state' => GameLobbyStatus::Scheduled->name,
+            'state' => GameLobbyStatus::Scheduled->toGameLobbyServiceValue(),
             'entranceFee' => $request->base_entrance_fee,
             'scheduledAt' => $request->scheduled_at,
             'startAt' => $request->start_at,
