@@ -21,7 +21,7 @@ class GameLobbyResource extends JsonResource
             'image_url' => $this->whenNotNull($this->image_url),
             'theme_color' => $this->whenNotNull($this->theme_color),
             'type' => $this->whenNotNull($this->type),
-            'status' => $this->whenNotNull($this->status),
+            'state' => $this->whenNotNull($this->state),
             'rules' => $this->whenNotNull($this->rules),
             'base_entrance_fee' => $this->whenNotNull($this->base_entrance_fee),
             'created_at' => $this->whenNotNull($this->created_at),

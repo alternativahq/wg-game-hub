@@ -21,14 +21,38 @@ use Illuminate\Support\Facades\Route;
 // Machine to Machine
 Route::middleware('api.basic-auth')->group(function () {
     Route::post('notifications', SendNotificationController::class)->name('notifications.send');
-    /**
-     * Game Lobby Api:
-     *     - results: receive players results from game server
-     *     - status start: change game lobby to in-lobby
-     *     - status in-game: change game lobby to in-game
-     *     - status game-ended: change game to ended
-     */
-    Route::post('game-lobbies/{gameLobby}/start', GameLobbyStartController::class)->name('games.game-lobbies.start');
+
+    Route::post('game-lobbies', [\App\Http\Controllers\Admin\Lobbies\GameLobbyController::class, 'store']);
+
+    Route::put('game-lobbies/{gameLobby}/awaiting-players', [
+        \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
+        'toAwaitingPlayers',
+    ]);
+    Route::put('game-lobbies/{gameLobby}/in-game', [
+        \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
+        'inGame',
+    ])->name('games.game-lobbies.start');
+
+    Route::put('game-lobbies/{gameLobby}/game-ended', [
+        \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
+        'gameEnded',
+    ]);
+
+    Route::put('game-lobbies/{gameLobby}/distributing-prizes', [
+        \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
+        'distributingPrizes',
+    ]);
+
+    Route::put('game-lobbies/{gameLobby}/distributed-prizes', [
+        \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
+        'distributedPrizes',
+    ]);
+
+    Route::put('game-lobbies/{gameLobby}/archived', [
+        \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
+        'archived',
+    ]);
+
     Route::post('game-lobbies/{gameLobby}/results', GameLobbyResultsController::class);
     Route::post('game-lobbies/{gameLobby}/archive', GameLobbyEndedController::class)->name(
         'games.game-lobbies.archive',

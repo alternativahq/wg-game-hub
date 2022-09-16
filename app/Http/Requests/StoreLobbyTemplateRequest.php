@@ -22,8 +22,22 @@ class StoreLobbyTemplateRequest extends FormRequest
         ];
     }
 
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
+    }
+
+    protected function prepareForValidation()
+    {
+        if (is_null($this->image)) {
+            $this->merge([
+                'image' => collect([
+                    'tank/homepage_bg.png',
+                    'tankx/tankx_1.png',
+                    'wodoland/wodoland_1.jpg',
+                    'wfps/wffps_7.png',
+                ])->random(),
+            ]);
+        }
     }
 }

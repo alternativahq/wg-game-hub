@@ -16,8 +16,8 @@ class UpdateLobbyRequest extends FormRequest
             //TODO: image need to be changed to image rule
             'image' => ['required', 'string'],
             'theme_color' => ['required', 'string'],
-            'type' => ['required', 'in:'.collect(array_column(GameLobbyType::cases(),'value'))->implode(',')],
-            'status' => ['required', 'in:'.collect(array_column(GameLobbyStatus::cases(),'value'))->implode(',')],
+            'type' => ['required', 'in:' . collect(array_column(GameLobbyType::cases(), 'value'))->implode(',')],
+            'state' => ['required', 'in:' . collect(array_column(GameLobbyStatus::cases(), 'value'))->implode(',')],
             'rules' => ['required', 'string'],
             'base_entrance_fee' => ['required', 'numeric'],
             'min_players' => ['required', 'numeric'],

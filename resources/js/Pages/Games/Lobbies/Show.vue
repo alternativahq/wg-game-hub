@@ -41,8 +41,10 @@ onMounted(() => {
             .listen(GameLobby.socketEvents.userJoined, channelUserJoined)
             .listen(GameLobby.socketEvents.userLeft, channelUserLeft)
             .listen(GameLobby.socketEvents.status.inGame, channelInGame)
-            .listen(GameLobby.socketEvents.status.processingResults, channelProcessingResults)
-            .listen(GameLobby.socketEvents.status.resultsProcessed, channelResultsProccessed)
+            .listen(GameLobby.socketEvents.status.gameEnded, channelGameEnded)
+            .listen(GameLobby.socketEvents.status.distributingPrizes, channelDistributingPrizes)
+            .listen(GameLobby.socketEvents.status.distributedPrizes, channelDistributedPrizes)
+            .listen(GameLobby.socketEvents.status.archived, channelArchived)
             .listen(GameLobby.socketEvents.prizeUpdated, channelPrizeUpdated);
     }
 });
@@ -84,21 +86,31 @@ function channelUserJoined(payload) {
     data.latestUpdateMessage = `${payload.user.name} joined the lobby.`;
 }
 
-function channelInGame(payload) {
-    // TODO: redirect the user to the game server
-}
-
 function channelUserLeft(payload) {
     gameLobbyModel.removeUser(payload.user);
     data.latestUpdateMessage = `${payload.user.name} left the lobby.`;
 }
 
-function channelProcessingResults(payload) {
-    console.log('channelProcessingResults');
+function channelInGame(payload) {
+    console.log('redirecting users to game server...');
+    window.open(payload.url, '_blank').focus();
 }
 
-async function channelResultsProccessed(payload) {
+async function channelGameEnded(payload) {
+    console.log('game-ended called');
     Inertia.reload({ only: ['gameLobby', 'currentUserScore'] });
+}
+
+function channelDistributingPrizes() {
+    console.log('distributing prizes..');
+}
+
+function channelDistributedPrizes() {
+    console.log('prizes distributed..');
+}
+
+function channelArchived() {
+    Inertia.replace('/');
 }
 
 function channelPrizeUpdated(payload) {

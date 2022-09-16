@@ -13,14 +13,10 @@ class GameMatchResultsPayloadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'scores' => [
+            'scoreCard' => [
                 'required',
                 'array',
-                new AllExistsInArrayOfObjects(
-                    modelClass: User::class,
-                    column: 'id',
-                    objectAttribute: 'user_id',
-                ),
+                new AllExistsInArrayOfObjects(modelClass: User::class, column: 'id', objectAttribute: 'user_id'),
                 // Todo: All belongs to lobby
             ],
             'achievements' => [
@@ -46,8 +42,6 @@ class GameMatchResultsPayloadRequest extends FormRequest
 
     public function authorize(): bool
     {
-        /** @var \App\Enums\GameLobbyStatus $gameLobbyStatus */
-        $gameLobbyStatus = $this->gameLobby->status;
-        return $gameLobbyStatus->canProcessResult();
+        return true;
     }
 }

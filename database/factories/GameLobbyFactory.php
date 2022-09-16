@@ -22,7 +22,7 @@ class GameLobbyFactory extends Factory
             'image' => null,
             'theme_color' => $this->faker->safeHexColor(),
             'type' => $this->faker->randomElement(GameLobbyType::cases()),
-            'status' => $this->faker->randomElement(GameLobbyStatus::cases()),
+            'state' => $this->faker->randomElement(GameLobbyStatus::cases()),
             'rules' => $this->faker->paragraph(),
             'base_entrance_fee' => rand(5, 10),
             'created_at' => Carbon::now(),

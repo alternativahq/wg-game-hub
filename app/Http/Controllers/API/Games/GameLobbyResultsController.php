@@ -27,7 +27,7 @@ class GameLobbyResultsController extends Controller
     {
         $users = $gameLobby->users()->get();
 
-        $gameLobby->status = GameLobbyStatus::ProcessingResults;
+        $gameLobby->state = GameLobbyStatus::GameEnded;
         Notification::sendNow($users, new ProcessingGameLobbyResultsNotification(gameLobby: $gameLobby));
 
         if ($gameLobby->save()) {

@@ -1,34 +1,36 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Admin;
 
 use App\Enums\GameLobbyType;
-use App\Enums\GameLobbyStatus;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreLobbyRequest extends FormRequest
+class StoreGameLobbyRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
+            'id' => ['required', 'uuid'],
+            'game_id' => ['required', 'uuid', 'exists:games,id'],
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],
             'image' => ['required', 'string'],
             'theme_color' => ['required', 'string'],
-            'type' => ['required', 'in:' . collect(array_column(GameLobbyType::cases(), 'value'))->implode(',')],
+            'type' => [
+                'required',
+                'in:' .
+                collect(GameLobbyType::cases())
+                    ->map(fn(GameLobbyType $item) => $item->toGameLobbyServiceValue())
+                    ->implode(','),
+            ],
+            'asset' => ['required', 'exists:assets,symbol'],
             'rules' => ['required', 'string'],
             'base_entrance_fee' => ['required', 'numeric'],
             'min_players' => ['required', 'numeric', 'lte:max_players'],
             'max_players' => ['required', 'numeric', 'gte:min_players'],
             'scheduled_at' => ['required', 'date'],
             'start_at' => ['required', 'date', 'after:scheduled_at'],
-            'asset_id' => ['required', 'exists:assets,id'],
         ];
-    }
-
-    public function authorize()
-    {
-        return true;
     }
 
     protected function prepareForValidation()
@@ -43,5 +45,10 @@ class StoreLobbyRequest extends FormRequest
                 ])->random(),
             ]);
         }
+    }
+
+    public function authorize(): bool
+    {
+        return true;
     }
 }

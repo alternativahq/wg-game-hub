@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\GameLobbyStatus;
 use App\Models\GameLobby;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -22,6 +23,18 @@ class GameLobbyPolicy
 
     public function view(User $user, GameLobby $gameLobby): bool
     {
+        if ($gameLobby->state->is(GameLobbyStatus::InGame)) {
+            return false;
+        }
+
+        if ($gameLobby->state->is(GameLobbyStatus::Scheduled)) {
+            return false;
+        }
+
+        if ($gameLobby->state->is(GameLobbyStatus::Archived)) {
+            return false;
+        }
+
         return $gameLobby
             ->users()
             ->where('users.id', $user->id)

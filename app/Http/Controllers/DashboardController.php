@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\GameLobbyStatus;
 use App\Enums\GameStatus;
 use App\Http\Resources\ChatRoomResource;
 use App\Http\Resources\GameResource;
@@ -18,7 +19,7 @@ class DashboardController extends Controller
             ->select(['id', 'name', 'description', 'image'])
             ->withCount([
                 'gameLobbies' => function (Builder $builder) {
-                    $builder->whereAvailableForDashboard();
+                    $builder->where('state', GameLobbyStatus::AwaitingPlayers);
                 },
             ])
             ->paginate(pageName: 'games');

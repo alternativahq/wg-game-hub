@@ -15,10 +15,10 @@ class GameLobbyEndedController extends Controller
 {
     public function __invoke(Request $request, GameLobby $gameLobby)
     {
-        if (!$gameLobby->status->is(GameLobbyStatus::DistributingPrizes)) {
+        if (!$gameLobby->state->is(GameLobbyStatus::DistributingPrizes)) {
             return abort(Response::HTTP_UNAUTHORIZED);
         }
-        $gameLobby->status = GameLobbyStatus::Archived;
+        $gameLobby->state = GameLobbyStatus::Archived;
 
         if (!$gameLobby->save()) {
             return abort(Response::HTTP_INTERNAL_SERVER_ERROR, 'Could not update game settings');

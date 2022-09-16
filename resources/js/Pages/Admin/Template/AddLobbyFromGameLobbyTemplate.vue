@@ -26,6 +26,7 @@ let AddLobbyFromTemplateForm = useForm({
     min_players: props.gameTemplate.min_players,
     max_players: props.gameTemplate.max_players,
     scheduled_at: '',
+    start_at: '',
     asset_id: props.gameTemplate.asset_id,
 });
 
@@ -181,6 +182,21 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
             <InputError class="mt-2">
                 <div v-if="AddLobbyFromTemplateForm.errors.scheduled_at" class="mt-2">
                     {{ AddLobbyFromTemplateForm.errors.scheduled_at }}
+                </div>
+            </InputError>
+            <div class="font-semibold">start at</div>
+            <Datepicker
+                required
+                class="mt-4"
+                utc
+                placeholder="Select date and time"
+                v-model="AddLobbyFromTemplateForm.start_at"
+                :min-date="new Date()"
+                :max-date="maxDate"
+            ></Datepicker>
+            <InputError class="mt-2">
+                <div v-if="AddLobbyFromTemplateForm.errors.start_at" class="mt-2">
+                    {{ AddLobbyFromTemplateForm.errors.start_at }}
                 </div>
             </InputError>
             <div class="font-semibold">Asset</div>

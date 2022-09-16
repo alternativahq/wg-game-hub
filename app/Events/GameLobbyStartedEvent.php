@@ -14,7 +14,7 @@ class GameLobbyStartedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public GameLobby $gameLobby)
+    public function __construct(public GameLobby $gameLobby, public string $url)
     {
     }
 
@@ -26,5 +26,12 @@ class GameLobbyStartedEvent implements ShouldBroadcast
     public function broadcastAs(): string
     {
         return 'status.in-game';
+    }
+
+    public function broadcastWith(): array
+    {
+        return [
+            'url' => $this->url,
+        ];
     }
 }

@@ -27,6 +27,7 @@ let AddLobbyForm = useForm({
     min_players: '',
     max_players: '',
     scheduled_at: '',
+    start_at: '',
     asset_id: '',
 });
 
@@ -174,6 +175,21 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
             <InputError class="mt-2">
                 <div v-if="AddLobbyForm.errors.scheduled_at" class="mt-2">
                     {{ AddLobbyForm.errors.scheduled_at }}
+                </div>
+            </InputError>
+            <div class="font-semibold">start at</div>
+            <Datepicker
+                required
+                class="mt-4"
+                utc
+                placeholder="Select date and time"
+                v-model="AddLobbyForm.start_at"
+                :min-date="new Date()"
+                :max-date="maxDate"
+            ></Datepicker>
+            <InputError class="mt-2">
+                <div v-if="AddLobbyForm.errors.start_at" class="mt-2">
+                    {{ AddLobbyForm.errors.start_at }}
                 </div>
             </InputError>
             <div class="font-semibold">Asset</div>

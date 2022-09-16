@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\Admin\Template;
+
 use App\Actions\GameLobby\GameLobbyStartSignalAction;
+use App\Enums\ChatRoomType;
+use App\Models\ChatRoom;
 use App\Models\Game;
 use Inertia\Inertia;
 use App\Models\Asset;
@@ -22,7 +25,6 @@ class GameTemplatesController extends Controller
     {
         $assets = Asset::get(['id', 'name']);
         $gameTypes = GameLobbyType::toSelect();
-        $gameStatuss = GameLobbyStatus::toSelect();
 
         return Inertia::render('Admin/Template/AddLobbyFromGameLobbyTemplate', [
             'gameTemplate' => $gameTemplate,
@@ -34,17 +36,15 @@ class GameTemplatesController extends Controller
 
     public function storeLobby(StoreLobbyRequest $request, Game $game, GameLobbyStartSignalAction $gameLobbyStartSignal)
     {
-        $gameLobby = $game->gameLobbies()->create(
-            array_merge($request->validated(), [
-                'available_spots' => $request->max_players,
-                'status' => GameLobbyStatus::Scheduled,
-            ]),
-        );
+        $request->merge(['game_id' => $game->id]);
+        $httpResponse = $gameLobbyStartSignal->execute(request: $request);
 
-        $gameLobby->load('asset');
-        $gameLobbyStartSignal->execute(gameLobby: $gameLobby);
+        if ($httpResponse->successful()) {
+            session()->flash('success', 'new lobby got added successfully!');
+        } else {
+            session()->flash('error', 'Something went wrong, please try again later.');
+        }
 
-        session()->flash('success', 'new lobby got added successfully!');
         return redirect()->route('admin-gameLobbies.show', $game->id);
     }
 
