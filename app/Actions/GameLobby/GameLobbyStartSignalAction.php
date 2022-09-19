@@ -16,7 +16,7 @@ class GameLobbyStartSignalAction
     public function execute(
         StoreLobbyRequest $request,
     ): \Illuminate\Http\Client\Response|\GuzzleHttp\Promise\PromiseInterface {
-        $asset = Asset::find($request->assetId);
+        $asset = Asset::find($request->asset_id);
 
         $payload = [
             'id' => Str::uuid()->toString(),
