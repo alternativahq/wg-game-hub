@@ -16,28 +16,28 @@ class GameLobbyStartSignalAction
     public function execute(
         StoreLobbyRequest $request,
     ): \Illuminate\Http\Client\Response|\GuzzleHttp\Promise\PromiseInterface {
-        $asset = Asset::find($request->asset_id);
+        $asset = Asset::find($request->assetId);
 
         $payload = [
             'id' => Str::uuid()->toString(),
-            'gameId' => $request->game_id,
+            'gameId' => $request->gameId,
             'name' => $request->name,
             'description' => $request->description,
             'gameMode' => GameLobbyType::tryFrom($request->type)->toGameLobbyServiceValue(),
             'rules' => $request->rules,
             'asset' => $asset->symbol,
             'state' => GameLobbyStatus::Scheduled->toGameLobbyServiceValue(),
-            'entranceFee' => $request->base_entrance_fee,
-            'scheduledAt' => $request->scheduled_at,
-            'startAt' => $request->start_at,
-            'minPlayers' => $request->min_players,
-            'maxPlayers' => $request->min_players,
+            'entranceFee' => $request->baseEntranceFee,
+            'scheduledAt' => $request->scheduledAt,
+            'startAt' => $request->startAt,
+            'minPlayers' => $request->minPlayers,
+            'maxPlayers' => $request->maxPlayers,
             'scheduleWaitTime' => Carbon::now()
                 ->utc()
-                ->diffInSeconds($request->scheduled_at),
+                ->diffInSeconds($request->scheduledAt),
             'waitTime' => Carbon::now()
                 ->utc()
-                ->diffInSeconds($request->start_at),
+                ->diffInSeconds($request->startAt),
         ];
 
         $url = config('wodo.game-lobby-service-api') . '/lifecycle';
