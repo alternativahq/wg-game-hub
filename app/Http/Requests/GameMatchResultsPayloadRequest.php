@@ -30,13 +30,13 @@ class GameMatchResultsPayloadRequest extends FormRequest
                 new AllExistsInArrayOfObjects(User::class, 'id', 'user_id'),
                 // Todo: All belongs to lobby
             ],
-            'scores.*.user_id' => ['required', 'uuid'],
+            'scores.*.userId' => ['required', 'uuid'],
             'scores.*.rank' => ['required', 'numeric'],
             'scores.*.score' => ['required', 'numeric'],
-            'scores.*.time_played' => ['required', 'numeric'],
-            'achievements.*.user_id' => ['required', 'uuid'],
-            'achievements.*.achievement_id' => ['required', 'uuid'],
-            'achievements.*.additional_info' => ['required', 'string'],
+            'scores.*.timePlayed' => ['required', 'numeric'],
+            'achievements.*.userId' => ['required', 'uuid'],
+            'achievements.*.achievementId' => ['required', 'uuid'],
+            'achievements.*.additionalInfo' => ['required', 'string'],
         ];
     }
 

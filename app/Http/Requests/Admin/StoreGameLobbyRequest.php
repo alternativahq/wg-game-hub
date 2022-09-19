@@ -11,11 +11,11 @@ class StoreGameLobbyRequest extends FormRequest
     {
         return [
             'id' => ['required', 'uuid'],
-            'game_id' => ['required', 'uuid', 'exists:games,id'],
+            'gameId' => ['required', 'uuid', 'exists:games,id'],
             'name' => ['required', 'string'],
             'description' => ['required', 'string'],
             'image' => ['required', 'string'],
-            'theme_color' => ['required', 'string'],
+            'themeColor' => ['required', 'string'],
             'type' => [
                 'required',
                 'in:' .
@@ -25,11 +25,11 @@ class StoreGameLobbyRequest extends FormRequest
             ],
             'asset' => ['required', 'exists:assets,symbol'],
             'rules' => ['required', 'string'],
-            'base_entrance_fee' => ['required', 'numeric'],
-            'min_players' => ['required', 'numeric', 'lte:max_players'],
-            'max_players' => ['required', 'numeric', 'gte:min_players'],
-            'scheduled_at' => ['required', 'date'],
-            'start_at' => ['required', 'date', 'after:scheduled_at'],
+            'baseEntranceFee' => ['required', 'numeric'],
+            'minPlayers' => ['required', 'numeric', 'lte:max_players'],
+            'maxPlayers' => ['required', 'numeric', 'gte:min_players'],
+            'scheduledAt' => ['required', 'date'],
+            'startAt' => ['required', 'date', 'after:scheduled_at'],
         ];
     }
 
