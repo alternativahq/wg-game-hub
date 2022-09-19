@@ -52,11 +52,6 @@ Route::middleware('api.basic-auth')->group(function () {
         \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
         'archived',
     ]);
-
-    Route::post('game-lobbies/{gameLobby}/results', GameLobbyResultsController::class);
-    Route::post('game-lobbies/{gameLobby}/archive', GameLobbyEndedController::class)->name(
-        'games.game-lobbies.archive',
-    );
 });
 
 // User URLs

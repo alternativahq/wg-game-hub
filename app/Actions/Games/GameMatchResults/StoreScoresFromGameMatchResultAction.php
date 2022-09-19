@@ -5,6 +5,7 @@ namespace App\Actions\Games\GameMatchResults;
 use App\DataTransferObjects\GameMatchResultData;
 use App\Models\GameLobby;
 use App\Models\GameLobbyUserScore;
+use Str;
 
 class StoreScoresFromGameMatchResultAction
 {
@@ -22,7 +23,10 @@ class StoreScoresFromGameMatchResultAction
     protected function attributes(GameLobby $gameLobby, array $playerScore): array
     {
         $playerScore = collect($playerScore)
-            ->only('user_id', 'rank', 'score', 'time_played')
+            ->only('userId', 'rank', 'score', 'timePlayed')
+            ->keyBy(function ($value, $key) {
+                return Str::snake($key);
+            })
             ->toArray();
         return array_merge($playerScore, [
             'game_id' => $gameLobby->game_id,

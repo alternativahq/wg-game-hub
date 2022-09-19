@@ -34,12 +34,28 @@ class GameLobbyController extends Controller
         $asset = Asset::where('symbol', $request->asset)->first();
         $lobbyType = GameLobbyType::fromGameLobbyServiceEnum($request->type);
         $payload = collect($request->validated())
-            ->except('type')
+            ->except(
+                'type',
+                'gameId',
+                'themeColor',
+                'baseEntranceFee',
+                'minPlayers',
+                'maxPlayers',
+                'scheduledAt',
+                'startAt',
+            )
             ->merge([
-                'available_spots' => $request->max_players,
+                'available_spots' => $request->maxPlayers,
                 'state' => GameLobbyStatus::Scheduled,
                 'asset_id' => $asset->id,
                 'type' => $lobbyType->value,
+                'game_id' => $request->gameId,
+                'theme_color' => $request->themeColor,
+                'base_entrance_fee' => $request->baseEntranceFee,
+                'min_players' => $request->minPlayers,
+                'max_players' => $request->maxPlayers,
+                'scheduled_at' => $request->scheduledAt,
+                'start_at' => $request->startAt,
             ])
             ->except('asset')
             ->toArray();
@@ -101,9 +117,9 @@ class GameLobbyController extends Controller
             'state' => GameLobbyStatus::GameEnded,
         ]);
 
-        //        if ($updated) {
-        //            broadcast(new ProcessingGameLobbyResultsNotification(gameLobby: $gameLobby));
-        //        }
+        // if ($updated) {
+        //     broadcast(new ProcessingGameLobbyResultsNotification(gameLobby: $gameLobby));
+        // }
         $gameMatchResultData = GameMatchResultData::fromRequest(request: $request);
         $storeGameMatchResultAction->execute(gameLobby: $gameLobby, gameMatchResultData: $gameMatchResultData);
 
