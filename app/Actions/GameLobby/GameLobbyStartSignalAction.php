@@ -27,17 +27,17 @@ class GameLobbyStartSignalAction
             'rules' => $request->rules,
             'asset' => $asset->symbol,
             'state' => GameLobbyStatus::Scheduled->toGameLobbyServiceValue(),
-            'entranceFee' => $request->baseEntranceFee,
-            'scheduledAt' => $request->scheduledAt,
-            'startAt' => $request->startAt,
-            'minPlayers' => $request->minPlayers,
-            'maxPlayers' => $request->maxPlayers,
+            'entranceFee' => $request->base_entrance_fee,
+            'scheduledAt' => $request->scheduled_at,
+            'startAt' => $request->start_at,
+            'minPlayers' => $request->min_players,
+            'maxPlayers' => $request->max_players,
             'scheduleWaitTime' => Carbon::now()
                 ->utc()
-                ->diffInSeconds($request->scheduledAt),
+                ->diffInSeconds($request->scheduled_at),
             'waitTime' => Carbon::now()
                 ->utc()
-                ->diffInSeconds($request->startAt),
+                ->diffInSeconds($request->start_at),
         ];
 
         $url = config('wodo.game-lobby-service-api') . '/lifecycle';
