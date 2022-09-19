@@ -16,7 +16,7 @@ class GameMatchResultsPayloadRequest extends FormRequest
             'scoreCard' => [
                 'required',
                 'array',
-                new AllExistsInArrayOfObjects(modelClass: User::class, column: 'id', objectAttribute: 'user_id'),
+                new AllExistsInArrayOfObjects(modelClass: User::class, column: 'id', objectAttribute: 'userId'),
                 // Todo: All belongs to lobby
             ],
             'achievements' => [
@@ -25,9 +25,9 @@ class GameMatchResultsPayloadRequest extends FormRequest
                 new AllExistsInArrayOfObjects(
                     modelClass: Achievement::class,
                     column: 'id',
-                    objectAttribute: 'achievement_id',
+                    objectAttribute: 'achievementId',
                 ),
-                new AllExistsInArrayOfObjects(User::class, 'id', 'user_id'),
+                new AllExistsInArrayOfObjects(User::class, 'id', 'userId'),
                 // Todo: All belongs to lobby
             ],
             'scores.*.userId' => ['required', 'uuid'],

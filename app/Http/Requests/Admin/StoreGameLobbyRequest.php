@@ -26,8 +26,8 @@ class StoreGameLobbyRequest extends FormRequest
             'asset' => ['required', 'exists:assets,symbol'],
             'rules' => ['required', 'string'],
             'baseEntranceFee' => ['required', 'numeric'],
-            'minPlayers' => ['required', 'numeric', 'lte:max_players'],
-            'maxPlayers' => ['required', 'numeric', 'gte:min_players'],
+            'minPlayers' => ['required', 'numeric', 'lte:maxPlayers'],
+            'maxPlayers' => ['required', 'numeric', 'gte:minPlayers'],
             'scheduledAt' => ['required', 'date'],
             'startAt' => ['required', 'date', 'after:scheduled_at'],
         ];
