@@ -20,7 +20,7 @@ class GameLobbyStartSignalAction
 
         $payload = [
             'id' => Str::uuid()->toString(),
-            'gameId' => $request->game_id,
+            'gameId' => $request->gameId,
             'name' => $request->name,
             'description' => $request->description,
             'gameMode' => GameLobbyType::tryFrom($request->type)->toGameLobbyServiceValue(),
@@ -31,7 +31,7 @@ class GameLobbyStartSignalAction
             'scheduledAt' => $request->scheduled_at,
             'startAt' => $request->start_at,
             'minPlayers' => $request->min_players,
-            'maxPlayers' => $request->min_players,
+            'maxPlayers' => $request->max_players,
             'scheduleWaitTime' => Carbon::now()
                 ->utc()
                 ->diffInSeconds($request->scheduled_at),

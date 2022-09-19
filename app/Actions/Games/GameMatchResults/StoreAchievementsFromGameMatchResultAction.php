@@ -5,33 +5,28 @@ namespace App\Actions\Games\GameMatchResults;
 use App\DataTransferObjects\GameMatchResultData;
 use App\Models\GameLobby;
 use App\Models\UserAchievement;
+use Str;
 
 class StoreAchievementsFromGameMatchResultAction
 {
-    public function execute(
-        GameLobby $gameLobby,
-        GameMatchResultData $gameMatchResultData,
-    ): void {
-        $gameMatchAchievementsModels = collect(
-            $gameMatchResultData->achievements,
-        )->map(
+    public function execute(GameLobby $gameLobby, GameMatchResultData $gameMatchResultData): void
+    {
+        $gameMatchAchievementsModels = collect($gameMatchResultData->achievements)->map(
             fn($playerAchievement) => new UserAchievement(
-                $this->attributes(
-                    gameLobby: $gameLobby,
-                    playerAchievements: $playerAchievement,
-                ),
+                $this->attributes(gameLobby: $gameLobby, playerAchievements: $playerAchievement),
             ),
         );
 
         $gameLobby->usersAchievements()->saveMany($gameMatchAchievementsModels);
     }
 
-    protected function attributes(
-        GameLobby $gameLobby,
-        array $playerAchievements,
-    ): array {
+    protected function attributes(GameLobby $gameLobby, array $playerAchievements): array
+    {
         $playerAchievements = collect($playerAchievements)
-            ->only('user_id', 'achievement_id', 'additional_info')
+            ->only('userId', 'achievementId', 'additionalInfo')
+            ->keyBy(function ($value, $key) {
+                return Str::snake($key);
+            })
             ->toArray();
 
         return array_merge($playerAchievements, [
