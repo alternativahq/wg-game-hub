@@ -147,6 +147,7 @@ class WodoGamehubDemoSeedCommand extends Command
                         'asset_id' => Asset::all()->random(),
                         'state' => GameLobbyStatus::GameEnded,
                         'scheduled_at' => now()->subHours(2),
+                        'algorithm_id' => rand(1,3),
                         'image' => Arr::random([
                             'tankx/tankx_1.png',
                             'tankx/tankx_2.png',
@@ -187,6 +188,7 @@ class WodoGamehubDemoSeedCommand extends Command
                         return [
                             'asset_id' => Asset::all()->random(),
                             'state' => GameLobbyStatus::AwaitingPlayers,
+                            'algorithm_id' => rand(1,3),
                             'scheduled_at' => now()->addHours(rand(5, 200)),
                             'image' => $this->getRandomImageForGame($game),
                         ];
@@ -220,6 +222,7 @@ class WodoGamehubDemoSeedCommand extends Command
                         return [
                             'asset_id' => Asset::all()->random(),
                             'state' => GameLobbyStatus::Archived,
+                            'algorithm_id' => rand(1,3),
                             'image' => Arr::random([
                                 'tankx/tankx_1.png',
                                 'tankx/tankx_2.png',

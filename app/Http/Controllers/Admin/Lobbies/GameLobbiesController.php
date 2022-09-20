@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Admin\Lobbies;
 
-use App\Actions\GameLobby\GameLobbyStartSignalAction;
-use App\Enums\ChatRoomType;
-use App\Models\ChatRoom;
 use App\Models\Game;
 use Inertia\Inertia;
 use App\Models\Asset;
+use App\Models\ChatRoom;
 use App\Enums\GameStatus;
 use App\Models\GameLobby;
+use App\Enums\ChatRoomType;
 use App\Enums\GameLobbyType;
 use App\Enums\GameLobbyStatus;
 use App\Http\Controllers\Controller;
+use App\Enums\GameLobbyAlgorithmsType;
 use App\Http\Requests\StoreLobbyRequest;
 use App\Http\Requests\UpdateLobbyRequest;
 use App\Http\Resources\GameLobbyResource;
+use App\Actions\GameLobby\GameLobbyStartSignalAction;
 
 class GameLobbiesController extends Controller
 {
@@ -24,18 +25,20 @@ class GameLobbiesController extends Controller
         $assets = Asset::get(['id', 'name']);
         $gameTypes = GameLobbyType::toSelect();
         $gameStatus = GameLobbyStatus::toSelect();
+        $gameAlgorithms = GameLobbyAlgorithmsType::toSelect();
 
         return Inertia::render('Admin/Lobbies/AddGameLobby', [
             'game' => $game,
             'assets' => $assets,
             'gameTypes' => $gameTypes,
             'gameStatus' => $gameStatus,
+            'gameAlgorithms' => $gameAlgorithms,
         ]);
     }
 
     public function store(StoreLobbyRequest $request, Game $game, GameLobbyStartSignalAction $gameLobbyStartSignal)
     {
-        $request->merge(['gameId' => $game->id]);
+        $request->merge(['game_id' => $game->id]);
         $httpResponse = $gameLobbyStartSignal->execute(request: $request);
 
         if ($httpResponse->successful()) {
@@ -52,12 +55,14 @@ class GameLobbiesController extends Controller
         $assets = Asset::get(['id', 'name']);
         $gameTypes = GameLobbyType::toSelect();
         $gameStatus = GameLobbyStatus::toSelect();
+        $gameAlgorithms = GameLobbyAlgorithmsType::toSelect();
 
         return Inertia::render('Admin/Lobbies/EditGameLobby', [
             'gameLobby' => new GameLobbyResource($gameLobby),
             'assets' => $assets,
             'gameTypes' => $gameTypes,
             'gameStatus' => $gameStatus,
+            'gameAlgorithms' => $gameAlgorithms,
         ]);
     }
 

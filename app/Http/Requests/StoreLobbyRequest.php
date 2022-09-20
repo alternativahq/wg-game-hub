@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\GameLobbyType;
 use App\Enums\GameLobbyStatus;
+use App\Enums\GameLobbyAlgorithmsType;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreLobbyRequest extends FormRequest
@@ -23,6 +24,8 @@ class StoreLobbyRequest extends FormRequest
             'scheduled_at' => ['required', 'date'],
             'start_at' => ['required', 'date', 'after:scheduled_at'],
             'asset_id' => ['required', 'exists:assets,id'],
+             //TODO: need to make sure value or name
+             'algorithm_id' => ['required', 'in:' . collect(array_column(GameLobbyAlgorithmsType::cases(), 'value'))->implode(',')],
         ];
     }
 
