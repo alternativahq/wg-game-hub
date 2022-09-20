@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Admin;
 
 use App\Enums\GameLobbyType;
+use App\Enums\GameLobbyAlgorithmsType;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreGameLobbyRequest extends FormRequest
