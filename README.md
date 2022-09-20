@@ -23,6 +23,8 @@ Plenty of games developed by Wodo Team and other game developers/companies are p
 ## Local development on Mac
 You can install [Laravel Valet](https://laravel.com/docs/9.x/valet) on your machine, By default it will install [Nginx](https://www.nginx.com), [Dnsmasq](https://en.wikipedia.org/wiki/Dnsmasq) using [Homebrew](https://brew.sh)
 
+You can follow [this guide](https://qirolab.com/posts/install-laravel-valet-linux-development-environment-on-ubuntu) for linux installation.
+
 ### Laravel valet usage
 if your application located in `~/Dev/wg-game-hub` then go to `~/Dev` and run `valet park`
 after that you access the web application from the browser `http://wg-game-hub.test`

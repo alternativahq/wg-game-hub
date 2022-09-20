@@ -38,9 +38,9 @@ class DemoGamesSeeder extends Seeder
             ],
             [
                 'id' => 'fdaa08b1-07c4-4d29-aeaf-457285bd1ef5',
-                'name' => 'Tank',
+                'name' => 'Tank Genesis',
                 'description' =>
-                    'Tank is a Massively-multiplayer top-down strategy browser game. In Tank, the player manipulates a tanks using the mouse and keyboard buttons.',
+                    'Your next mission is about to begin!.. You willl be going up against dozens of enemy tanks in the battlefield. Use your resources wisely, play to win, play to earn.',
                 'status' => GameStatus::Online,
                 'image' => 'tank/homepage_bg.png',
                 'created_at' => now(),
