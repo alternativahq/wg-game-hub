@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\GameLobbyAlgorithmsType;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreLobbyTemplateRequest extends FormRequest
@@ -19,6 +20,7 @@ class StoreLobbyTemplateRequest extends FormRequest
             'min_players' => ['required', 'numeric'],
             'max_players' => ['required', 'numeric'],
             'asset_id' => ['required', 'exists:assets,id'],
+            'algorithm_id' => ['required', 'in:' . collect(array_column(GameLobbyAlgorithmsType::cases(), 'value'))->implode(',')],
         ];
     }
 

@@ -18,6 +18,7 @@ class GameLobbyTemplateFactory extends Factory
     {
         return [
             'name' => $this->faker->sentence(),
+            'algorithm_id' => rand(1,3),
             'description' => $this->faker->text(),
             'image' => null,
             'theme_color' => $this->faker->safeHexColor(),

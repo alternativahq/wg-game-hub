@@ -9,6 +9,7 @@ let props = defineProps({
     assets: Object,
     gameTypes: Object,
     gameStatus: Object,
+    gameAlgorithms: Object,
 });
 
 let updateLobbyForm = useForm({
@@ -17,7 +18,7 @@ let updateLobbyForm = useForm({
     image: props.gameLobby.data.image_url,
     theme_color: props.gameLobby.data.theme_color,
     type: props.gameLobby.data.type,
-    status: props.gameLobby.data.status,
+    status: props.gameLobby.data.state,
     rules: props.gameLobby.data.rules,
     base_entrance_fee: props.gameLobby.data.base_entrance_fee,
     min_players: props.gameLobby.data.min_players,
@@ -25,6 +26,7 @@ let updateLobbyForm = useForm({
     scheduled_at: props.gameLobby.data.scheduled_at_date_time,
     asset_id: props.gameLobby.data.asset_id,
     game_id: props.gameLobby.data.game_id,
+    algorithm_id: props.gameLobby.data.algorithm_id,
 });
 
 function updateGameLobby() {
@@ -197,6 +199,17 @@ function updateGameLobby() {
             >
                 <option :key="asset.id" v-for="asset in assets" :value="asset.id">
                     {{ asset.name }}
+                </option>
+            </select>
+            <div class="font-semibold">Algorithm</div>
+            <select
+                id="asset_name"
+                name="asset_name"
+                class="mb-5 flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
+                v-model="updateLobbyForm.algorithm_id"
+            >
+                <option class="my-2" :key="index" v-for="(gameAlgorithm, index) in gameAlgorithms" :value="gameAlgorithm.value">
+                    {{ gameAlgorithm.label }}
                 </option>
             </select>
             <button type="submit" class="w-full" :disabled="updateLobbyForm.processing">

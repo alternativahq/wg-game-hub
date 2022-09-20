@@ -7,6 +7,7 @@ import { useForm } from '@inertiajs/inertia-vue3';
 let props = defineProps({
     gameTemplate: Object,
     assets: Object,
+    gameAlgorithms: Object,
 });
 
 let updateTemplateForm = useForm({
@@ -20,6 +21,7 @@ let updateTemplateForm = useForm({
     max_players: props.gameTemplate.data.max_players,
     asset_id: props.gameTemplate.data.asset_id,
     game_id: props.gameTemplate.data.game_id,
+    algorithm_id: props.gameTemplate.data.algorithm_id,
 });
 
 function updateGameLobbyTemplate() {
@@ -155,6 +157,17 @@ function updateGameLobbyTemplate() {
             >
                 <option :key="asset.id" v-for="asset in assets" :value="asset.id">
                     {{ asset.name }}
+                </option>
+            </select>
+            <div class="font-semibold">Algorithm</div>
+            <select
+                id="asset_name"
+                name="asset_name"
+                class="mb-5 flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
+                v-model="updateTemplateForm.algorithm_id"
+            >
+                <option class="my-2" :key="index" v-for="(gameAlgorithm, index) in gameAlgorithms" :value="gameAlgorithm.value">
+                    {{ gameAlgorithm.label }}
                 </option>
             </select>
             <button type="submit" class="w-full" :disabled="updateTemplateForm.processing">

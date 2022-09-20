@@ -13,6 +13,7 @@ let props = defineProps({
     game: Object,
     gameTypes: Object,
     gameStatus: Object,
+    gameAlgorithms: Object,
 });
 
 let AddLobbyForm = useForm({
@@ -29,6 +30,7 @@ let AddLobbyForm = useForm({
     scheduled_at: '',
     start_at: '',
     asset_id: '',
+    algorithm_id: '',
 });
 
 function addGameLobby() {
@@ -201,6 +203,17 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
             >
                 <option :key="asset.id" v-for="asset in assets" :value="asset.id">
                     {{ asset.name }}
+                </option>
+            </select>
+            <div class="font-semibold">Algorithm</div>
+            <select
+                id="asset_name"
+                name="asset_name"
+                class="mb-5 flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
+                v-model="AddLobbyForm.algorithm_id"
+            >
+                <option :key="index" v-for="(gameAlgorithm, index) in gameAlgorithms" :value="gameAlgorithm.value">
+                    {{ gameAlgorithm.label }}
                 </option>
             </select>
             <button type="submit" class="w-full" :disabled="AddLobbyForm.processing">

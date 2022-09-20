@@ -105,29 +105,24 @@ watch(
                             :message="chatMessage.message.message"
                         />
                     </div>
-                    <div
-                        v-if="currentUser"
-                        class="flex w-full flex-row space-x-2 rounded-md border-2 border-wgh-gray-1 p-px"
-                    >
-                        <input
-                            type="text"
-                            class="shrink grow p-2 outline-none ring-0"
+                    <div class="flex justify-between items-center lg:flex-col xl:flex-row rounded-md">
+                        <input type="text"
+                            class=" p-2 outline-none ring-0"
                             placeholder="Type your message here"
                             v-model="state.chatMessageBody"
                             @keyup.enter="
                                 state.chatRoom.sendChatMessage(state.chatMessageBody);
                                 state.chatMessageBody = '';
                             "
-                        />
+                        >
                         <button
                             :disabled="state.chatMessageBody.length <= 0"
                             @click.prevent="state.chatRoom.sendChatMessage(state.chatMessageBody)"
-                            class="rounded-md bg-wgh-purple-2 py-2 px-4 disabled:cursor-no-drop"
+                            class="rounded-md  bg-wgh-purple-2 py-2 px-4 disabled:cursor-no-drop"
                         >
                             <KiteArrow class="h-4 w-4" />
                         </button>
                     </div>
-
                     <Link href="/login">
                         <ButtonShape v-if="!currentUser" type="purple" class="w-full text-center">
                             <p class="w-full text-center">Click here to register</p>

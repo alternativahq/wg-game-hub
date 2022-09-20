@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers\Admin\Template;
 
-use App\Actions\GameLobby\GameLobbyStartSignalAction;
-use App\Enums\ChatRoomType;
-use App\Models\ChatRoom;
 use App\Models\Game;
 use Inertia\Inertia;
 use App\Models\Asset;
+use App\Models\ChatRoom;
 use App\Enums\GameStatus;
 use App\Models\GameLobby;
+use App\Enums\ChatRoomType;
 use App\Enums\GameLobbyType;
 use App\Enums\GameLobbyStatus;
 use App\Models\GameLobbyTemplate;
 use App\Http\Controllers\Controller;
+use App\Enums\GameLobbyAlgorithmsType;
 use App\Http\Requests\StoreLobbyRequest;
 use App\Http\Requests\StoreLobbyTemplateRequest;
 use App\Http\Requests\UpdateLobbyTemplateRequest;
 use App\Http\Resources\GameLobbyTemplateResource;
+use App\Actions\GameLobby\GameLobbyStartSignalAction;
 
 class GameTemplatesController extends Controller
 {
@@ -25,12 +26,14 @@ class GameTemplatesController extends Controller
     {
         $assets = Asset::get(['id', 'name']);
         $gameTypes = GameLobbyType::toSelect();
+        $gameAlgorithms = GameLobbyAlgorithmsType::toSelect();
 
         return Inertia::render('Admin/Template/AddLobbyFromGameLobbyTemplate', [
             'gameTemplate' => $gameTemplate,
             'assets' => $assets,
             'game' => $gameTemplate->game,
             'gameTypes' => $gameTypes,
+            'gameAlgorithms' => $gameAlgorithms,
         ]);
     }
 
@@ -51,10 +54,12 @@ class GameTemplatesController extends Controller
     public function create(Game $game)
     {
         $assets = Asset::get(['id', 'name']);
+        $gameAlgorithms = GameLobbyAlgorithmsType::toSelect();
 
         return Inertia::render('Admin/Template/AddGameLobbyTemplate', [
             'game' => $game,
             'assets' => $assets,
+            'gameAlgorithms' => $gameAlgorithms,
         ]);
     }
 
@@ -68,10 +73,12 @@ class GameTemplatesController extends Controller
     public function edit(GameLobbyTemplate $gameTemplate)
     {
         $assets = Asset::get(['id', 'name']);
+        $gameAlgorithms = GameLobbyAlgorithmsType::toSelect();
 
         return Inertia::render('Admin/Template/EditGameLobbyTemplate', [
             'gameTemplate' => new GameLobbyTemplateResource($gameTemplate),
             'assets' => $assets,
+            'gameAlgorithms' => $gameAlgorithms,
         ]);
     }
 
