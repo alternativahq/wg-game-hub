@@ -32,17 +32,18 @@ class GameLobbyController extends Controller
     public function store(StoreGameLobbyRequest $request)
     {
         $asset = Asset::where('symbol', $request->asset)->first();
-        $lobbyType = GameLobbyType::fromGameLobbyServiceEnum($request->type);
+        $lobbyType = GameLobbyType::fromGameLobbyServiceEnum($request->gameMode);
         $payload = collect($request->validated())
             ->except(
-                'type',
+                'gameMode',
                 'gameId',
                 'themeColor',
                 'baseEntranceFee',
                 'minPlayers',
                 'maxPlayers',
                 'scheduledAt',
-                'startAt',
+                'algorithmId',
+                'startsAt',
             )
             ->merge([
                 'available_spots' => $request->maxPlayers,
@@ -55,7 +56,8 @@ class GameLobbyController extends Controller
                 'min_players' => $request->minPlayers,
                 'max_players' => $request->maxPlayers,
                 'scheduled_at' => $request->scheduledAt,
-                'start_at' => $request->startAt,
+                'algorithm_id' => $request->algorithmId,
+                'start_at' => $request->startsAt,
             ])
             ->except('asset')
             ->toArray();

@@ -16,7 +16,7 @@ class StoreGameLobbyRequest extends FormRequest
             'description' => ['required', 'string'],
             'image' => ['required', 'string'],
             'themeColor' => ['required', 'string'],
-            'type' => [
+            'gameMode' => [
                 'required',
                 'in:' .
                 collect(GameLobbyType::cases())
@@ -29,7 +29,8 @@ class StoreGameLobbyRequest extends FormRequest
             'minPlayers' => ['required', 'numeric', 'lte:maxPlayers'],
             'maxPlayers' => ['required', 'numeric', 'gte:minPlayers'],
             'scheduledAt' => ['required', 'date'],
-            'startAt' => ['required', 'date', 'after:scheduled_at'],
+            'startsAt' => ['required', 'date', 'after:scheduled_at'],
+            'algorithmId' => ['required', 'in:' . collect(array_column(GameLobbyAlgorithmsType::cases(), 'value'))->implode(',')],
         ];
     }
 

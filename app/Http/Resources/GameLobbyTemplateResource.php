@@ -24,6 +24,7 @@ class GameLobbyTemplateResource extends JsonResource
             'rules' => $this->rules,
             'asset_id' => $this->asset_id,
             'base_entrance_fee' => $this->base_entrance_fee,
+            'algorithm_id' => $this->algorithm_id,
             'min_players' => $this->min_players,
             'max_players' => $this->max_players,
             'created_at' => $this->created_at,
