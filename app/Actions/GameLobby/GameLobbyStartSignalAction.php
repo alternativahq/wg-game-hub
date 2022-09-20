@@ -21,7 +21,7 @@ class GameLobbyStartSignalAction
 
         $payload = [
             'id' => Str::uuid()->toString(),
-            'gameId' => $request->game_id,
+            'gameId' => $request->gameId,
             'name' => $request->name,
             'description' => $request->description,
             'themeColor' => $request->theme_color,

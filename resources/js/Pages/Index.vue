@@ -54,8 +54,8 @@ watch(
         <div class="w-full lg:w-3/4">
             <ActiveSessionBanner />
             <CooldownBanner />
-            <BorderedContainer class="mb-8 bg-wgh-red-3">
-                <div class="flex flex-col space-y-6 rounded-lg bg-wgh-red-2 p-6 md:flex-row md:space-x-6 md:space-y-0">
+            <BorderedContainer class="mb-8 bg-wgh-purple-3">
+                <div class="flex flex-col space-y-6 rounded-lg bg-wgh-purple-2 p-6 md:flex-row md:space-x-6 md:space-y-0">
                     <div class="w-full md:w-1/2">
                         <img :src="props.config.dashboard_art" alt="Dashboard Art" />
                     </div>
@@ -64,7 +64,7 @@ watch(
                             The First Retro Gaming Playground Competitions!
                         </h2>
                         <p class="mt-4 font-inter text-base font-normal text-white">
-                            A small description about the first section explaining about the platform.
+                            Monetize blockchain gaming with the Wodo XWGT Token, available across the Wodo Gaming Hub. Earn, play and win with Wodo!
                         </p>
                     </div>
                 </div>
