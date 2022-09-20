@@ -324,7 +324,7 @@ export default {
                                 :message="chatMessage.message.message"
                             />
                         </div>
-                        <div class="flex w-full flex-row space-x-2 rounded-md border-2 border-wgh-gray-1 p-px">
+                        <div class="flex justify-between items-center lg:flex-col xl:flex-row rounded-md">
                             <input
                                 type="text"
                                 class="shrink grow p-2 outline-none ring-0"
