@@ -7,7 +7,7 @@ use App\Enums\GameLobbyStatus;
 use App\Enums\GameLobbyAlgorithmsType;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreLobbyRequest extends FormRequest
+class StoreGameLobbyRequest extends FormRequest
 {
     public function rules(): array
     {
