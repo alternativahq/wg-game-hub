@@ -3,6 +3,7 @@ import TextInput from '@/Shared/Inputs/TextInput';
 import InputError from '@/Shared/InputError';
 import ButtonShape from '@/Shared/ButtonShape';
 import { useForm } from '@inertiajs/inertia-vue3';
+import { Link } from '@inertiajs/inertia-vue3';
 
 let props = defineProps({
     gameLobby: Object,
@@ -212,11 +213,16 @@ function updateGameLobby() {
                     {{ gameAlgorithm.label }}
                 </option>
             </select>
-            <button type="submit" class="w-full" :disabled="updateLobbyForm.processing">
+            <button type="submit" class="w-full mb-2" :disabled="updateLobbyForm.processing">
                 <ButtonShape type="purple">
                     <span class="w-full uppercase">Update</span>
                 </ButtonShape>
             </button>
+            <Link :href="`/admin/games/${props.gameLobby.data.game_id}/lobbies`">
+                <ButtonShape type="red" class="w-full">
+                    <span class="w-full uppercase">Cancel</span>
+                </ButtonShape>
+            </Link>
         </form>
     </div>
 </template>
