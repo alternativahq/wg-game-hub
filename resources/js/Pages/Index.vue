@@ -54,8 +54,8 @@ watch(
         <div class="w-full lg:w-3/4">
             <ActiveSessionBanner />
             <CooldownBanner />
-            <BorderedContainer class="mb-8 bg-wgh-red-3">
-                <div class="flex flex-col space-y-6 rounded-lg bg-wgh-red-2 p-6 md:flex-row md:space-x-6 md:space-y-0">
+            <BorderedContainer class="mb-8 bg-wgh-purple-3">
+                <div class="flex flex-col space-y-6 rounded-lg bg-wgh-purple-2 p-6 md:flex-row md:space-x-6 md:space-y-0">
                     <div class="w-full md:w-1/2">
                         <img :src="props.config.dashboard_art" alt="Dashboard Art" />
                     </div>
@@ -64,7 +64,7 @@ watch(
                             The First Retro Gaming Playground Competitions!
                         </h2>
                         <p class="mt-4 font-inter text-base font-normal text-white">
-                            A small description about the first section explaining about the platform.
+                            Monetize blockchain gaming with the Wodo XWGT Token, available across the Wodo Gaming Hub. Earn, play and win with Wodo!
                         </p>
                     </div>
                 </div>
@@ -105,29 +105,24 @@ watch(
                             :message="chatMessage.message.message"
                         />
                     </div>
-                    <div
-                        v-if="currentUser"
-                        class="flex w-full flex-row space-x-2 rounded-md border-2 border-wgh-gray-1 p-px"
-                    >
-                        <input
-                            type="text"
-                            class="shrink grow p-2 outline-none ring-0"
+                    <div class="flex justify-between items-center lg:flex-col xl:flex-row rounded-md">
+                        <input type="text"
+                            class=" p-2 outline-none ring-0"
                             placeholder="Type your message here"
                             v-model="state.chatMessageBody"
                             @keyup.enter="
                                 state.chatRoom.sendChatMessage(state.chatMessageBody);
                                 state.chatMessageBody = '';
                             "
-                        />
+                        >
                         <button
                             :disabled="state.chatMessageBody.length <= 0"
                             @click.prevent="state.chatRoom.sendChatMessage(state.chatMessageBody)"
-                            class="rounded-md bg-wgh-purple-2 py-2 px-4 disabled:cursor-no-drop"
+                            class="rounded-md  bg-wgh-purple-2 py-2 px-4 disabled:cursor-no-drop"
                         >
                             <KiteArrow class="h-4 w-4" />
                         </button>
                     </div>
-
                     <Link href="/login">
                         <ButtonShape v-if="!currentUser" type="purple" class="w-full text-center">
                             <p class="w-full text-center">Click here to register</p>

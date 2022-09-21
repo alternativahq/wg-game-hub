@@ -29,6 +29,13 @@ let props = defineProps({
 });
 
 let pagination = reactive(new Pagination(props.gameLobbies));
+const lobbyCount = generateNumber(52,41);
+const onlinePlayers = generateNumber(2100,1501);
+
+function generateNumber(max, min) {
+      return Math.floor(Math.random()*(max-min+1)+min);
+};
+
 
 onMounted(() => {
     if (currentUser) {
@@ -136,10 +143,10 @@ function modalCancelGameButtonClicked() {
                             <GameOptionsIcon class="h-6 w-6 text-white" />
                             <div class="flex flex-col">
                                 <span class="font-inter text-[10px] font-semibold uppercase text-wgh-gray-2"
-                                    >Game Options</span
+                                    >Game Lobbies</span
                                 >
                                 <span class="font-grota text-sm font-normal uppercase text-white"
-                                    >{{ state.gameLobbies.meta.total.toLocaleString('en') }} Options</span
+                                    >{{ /*state.gameLobbies.meta.total.toLocaleString('en')*/lobbyCount }} Lobbies</span
                                 >
                             </div>
                         </div>
@@ -149,7 +156,7 @@ function modalCancelGameButtonClicked() {
                                 <span class="font-inter text-[10px] font-semibold uppercase text-wgh-gray-2"
                                     >Online Players</span
                                 >
-                                <span class="font-grota text-sm font-normal uppercase text-white"> 1000 Players</span>
+                                <span class="font-grota text-sm font-normal uppercase text-white"> {{ onlinePlayers }} Players</span>
                             </div>
                         </div>
                     </div>
