@@ -17,6 +17,8 @@ import { onBeforeMount, onMounted } from 'vue';
 import GameLobbyCollection from '@/Models/GameLobbyCollection';
 import Pagination from '@/Models/Pagination';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
 
 //TODO: useing currentUser insted of inject because inject does not reload
 // let currentUser = inject('currentUser');
@@ -164,6 +166,73 @@ function modalCancelGameButtonClicked() {
             </BorderedContainer>
             <ActiveSessionBanner />
             <CooldownBanner />
+            
+                
+            <BorderedContainer
+                class="mb-8 flex flex-col justify-around space-y-6  p-6 xl:flex-row xl:space-x-6 xl:space-y-0"
+            >
+                <div class="flex items-center gap-2 rounded-lg p-4">
+                    <span>name</span>
+                    <input
+                        type="text"
+                        name="search"
+                        id="search"
+                        class="block w-full rounded-md border border-wgh-gray-1.5 py-3 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        placeholder="Search"
+                    />
+                        <!-- v-model="filters.q" -->
+                </div>
+                <div class="flex items-center gap-2 rounded-lg p-4">
+                    <span>Mode</span>
+                    <select
+                        id="asset_name"
+                        name="asset_name"
+                        class="flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
+                    >
+                        <!-- v-model="AddLobbyForm.algorithm_id" -->
+                        <!-- <option :key="index" v-for="(gameAlgorithm, index) in gameAlgorithms" :value="gameAlgorithm.value">
+                            {{ gameAlgorithm.label }}
+                        </option> -->
+                    </select>
+                        <!-- v-model="filters.q" -->
+                </div>
+                <div class="flex items-center gap-2 rounded-lg p-4">
+                    <span>Prize</span>
+                    <input
+                        type="text"
+                        name="search"
+                        id="search"
+                        class="block w-full rounded-md border border-wgh-gray-1.5 py-3 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        placeholder="Search"
+                    />
+                        <!-- v-model="filters.q" -->
+                </div>
+                <div class="flex items-center gap-2 rounded-lg p-4">
+                    <span>Players</span>
+                    <input
+                        type="text"
+                        name="search"
+                        id="search"
+                        class="block w-full rounded-md border border-wgh-gray-1.5 py-3 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        placeholder="Search"
+                    />
+                        <!-- v-model="filters.q" -->
+                </div>
+                <div class="flex items-center gap-2 rounded-lg p-4">
+                    <span>StartTime</span>
+                    <Datepicker
+                        required
+                        class="w-full"
+                        utc
+                        placeholder="Select date and time"
+                        :min-date="new Date()"
+                        :max-date="maxDate"
+                    ></Datepicker>
+                        <!-- v-model="AddLobbyForm.start_at" -->
+                        <!-- v-model="filters.q" -->
+                </div>
+                
+            </BorderedContainer>
             <BorderedContainer
                 v-if="flash.error"
                 class="mb-8 flex flex-col space-y-6 border-wgh-red-3 bg-wgh-red-2 p-6 md:flex-row md:space-x-6 md:space-y-0"
@@ -174,7 +243,6 @@ function modalCancelGameButtonClicked() {
                     </p>
                 </div>
             </BorderedContainer>
-
             <div class="grid grid-cols-1 flex-row flex-wrap gap-6 md:grid-cols-2 lg:grid-cols-3 lg:px-12">
                 <borderedContainer
                     v-for="gameLobby in state.gameLobbies.data"
