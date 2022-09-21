@@ -38,7 +38,7 @@ class GameLobbiesController extends Controller
 
     public function store(StoreLobbyRequest $request, Game $game, GameLobbyStartSignalAction $gameLobbyStartSignal)
     {
-        $request->merge(['gameId' => $game->id]);
+        $request->merge(['game_id' => $game->id]);
         $httpResponse = $gameLobbyStartSignal->execute(request: $request);
 
         if ($httpResponse->successful()) {
