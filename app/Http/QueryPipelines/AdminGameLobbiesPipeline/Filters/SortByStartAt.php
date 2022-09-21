@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
-class SortByType
+class SortByStartAt
 {
     protected Request $request;
 
@@ -20,14 +20,14 @@ class SortByType
         $sortBy = $this->request->get('sort_by');
         $sortOrder = $this->request->get('sort_order', 'asc');
 
-        if ($sortBy !== 'game_lobbies_type') {
+        if ($sortBy !== 'game_lobbies_start_at') {
             return $next($builder);
         }
 
         if (!in_array(strtolower($sortOrder), ['asc', 'desc'])) {
             return $next($builder);
         }
-        $builder->orderBy('game_lobbies.type', $sortOrder);
+        $builder->orderBy('game_lobbies.start_at', $sortOrder);
 
         return $next($builder);
     }

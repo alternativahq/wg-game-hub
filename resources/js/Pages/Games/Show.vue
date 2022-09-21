@@ -20,6 +20,7 @@ import { useCurrentUser } from '@/Composables/useCurrentUser';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import { throttle } from 'lodash';
+import { ChevronDownIcon } from '@heroicons/vue/solid';
 
 //TODO: useing currentUser insted of inject because inject does not reload
 // let currentUser = inject('currentUser');
@@ -47,7 +48,7 @@ function generateNumber(max, min) {
 watch(
     () => filters,
     throttle(() => {
-        Inertia.get(currentUrl, { filter_by_asset: filters.filter_by_asset, q: filters.q }, { preserveState: true });
+        Inertia.get(currentUrl, { q: filters.q }, { preserveState: true });
     }, 1000),
     {
         deep: true,
@@ -181,8 +182,6 @@ function modalCancelGameButtonClicked() {
             </BorderedContainer>
             <ActiveSessionBanner />
             <CooldownBanner />
-            
-                
             <BorderedContainer
                 class="mb-8 flex flex-col justify-around space-y-6  p-6 xl:flex-row xl:space-x-6 xl:space-y-0"
             >
@@ -193,46 +192,75 @@ function modalCancelGameButtonClicked() {
                         name="search"
                         id="search"
                         class="block w-full rounded-md border border-wgh-gray-1.5 py-3 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        v-model="filters.q"
                         placeholder="Search"
                     />
-                        <!-- v-model="filters.q" -->
                 </div>
                 <div class="flex items-center gap-2 rounded-lg p-4">
                     <span>Mode</span>
                     <select
                         id="asset_name"
                         name="asset_name"
+                        v-model="filters.game_lobbies_type"
                         class="flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
                     >
-                        <!-- v-model="AddLobbyForm.algorithm_id" -->
-                        <option value="all">all</option>
+                        <option :value="undefined">All </option>
                         <option :key="index" v-for="(gameType, index) in gameTypes" :value="gameType.value">
                             {{ gameType.label }}
                         </option>
                     </select>
-                        <!-- v-model="filters.q" -->
                 </div>
                 <div class="flex items-center gap-2 rounded-lg p-4">
-                    <span>Prize</span>
-                    <input
-                        type="text"
-                        name="search"
-                        id="search"
-                        class="block w-full rounded-md border border-wgh-gray-1.5 py-3 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        placeholder="Search"
-                    />
-                        <!-- v-model="filters.q" -->
+                    <Link
+                        class="group inline-flex"
+                        :href="currentUrl"
+                        :data="{
+                            sort_by: 'game_lobbies_base_entrance_fee',
+                            sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                            q: filters.q,
+                        }"
+                    >
+                        BaseEntranceFee
+                        <span
+                            :class="{
+                                'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                    filters.sort_by !== 'game_lobbies_base_entrance_fee',
+                                'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                    filters.sort_by === 'game_lobbies_base_entrance_fee',
+                                'rotate-180':
+                                    filters.sort_by === 'game_lobbies_base_entrance_fee' &&
+                                    filters.sort_order === 'asc',
+                            }"
+                        >
+                            <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                        </span>
+                    </Link>
                 </div>
                 <div class="flex items-center gap-2 rounded-lg p-4">
-                    <span>Players</span>
-                    <input
-                        type="text"
-                        name="search"
-                        id="search"
-                        class="block w-full rounded-md border border-wgh-gray-1.5 py-3 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                        placeholder="Search"
-                    />
-                        <!-- v-model="filters.q" -->
+                    <Link
+                        class="group inline-flex"
+                        :href="currentUrl"
+                        :data="{
+                            sort_by: 'game_lobbies_max_players',
+                            sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                            q: filters.q,
+                        }"
+                    >
+                    Players
+                        <span
+                            :class="{
+                                'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                    filters.sort_by !== 'game_lobbies_max_players',
+                                'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                    filters.sort_by === 'game_lobbies_max_players',
+                                'rotate-180':
+                                    filters.sort_by === 'game_lobbies_max_players' &&
+                                    filters.sort_order === 'asc',
+                            }"
+                        >
+                            <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                        </span>
+                    </Link>
                 </div>
                 <div class="flex items-center gap-2 rounded-lg p-4">
                     <span>StartTime</span>
@@ -244,10 +272,7 @@ function modalCancelGameButtonClicked() {
                         :min-date="new Date()"
                         :max-date="maxDate"
                     ></Datepicker>
-                        <!-- v-model="AddLobbyForm.start_at" -->
-                        <!-- v-model="filters.q" -->
                 </div>
-                
             </BorderedContainer>
             <BorderedContainer
                 v-if="flash.error"

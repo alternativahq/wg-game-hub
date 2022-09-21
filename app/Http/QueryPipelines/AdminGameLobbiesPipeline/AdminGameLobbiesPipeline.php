@@ -7,13 +7,14 @@ use Illuminate\Routing\Pipeline;
 use Illuminate\Database\Eloquent\Builder;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByName;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByType;
+use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SearchFilter;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByStatus;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortBySymbol;
-use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByBaseEntranceFee;
-use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByMinPlayers;
+use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByStartAt;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByMaxPlayers;
+use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByMinPlayers;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByScheduledAt;
-use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SearchFilter;
+use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByBaseEntranceFee;
 
 class AdminGameLobbiesPipeline extends Pipeline
 {
@@ -36,6 +37,7 @@ class AdminGameLobbiesPipeline extends Pipeline
             new SortByMinPlayers(request: $this->request),
             new SortByMaxPlayers(request: $this->request),
             new SortByScheduledAt(request: $this->request),
+            new SortByStartAt(request: $this->request),
             new SearchFilter(request: $this->request),
         ];
     }
