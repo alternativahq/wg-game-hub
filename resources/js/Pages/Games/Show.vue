@@ -6,7 +6,7 @@ import ButtonShape from '@/Shared/ButtonShape';
 import ChevronLeft from '@/Shared/SVG/ChevronLeft';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-vue3';
-import { inject, reactive } from 'vue';
+import { inject, reactive, watch } from 'vue';
 import { isEmpty } from 'lodash';
 import TentModal from '@/Shared/Modals/TentModal';
 import ActiveSessionBanner from '@/Shared/ActiveSessionBanner';
@@ -19,6 +19,7 @@ import Pagination from '@/Models/Pagination';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
+import { throttle } from 'lodash';
 
 //TODO: useing currentUser insted of inject because inject does not reload
 // let currentUser = inject('currentUser');
@@ -27,9 +28,14 @@ let currentUser = useCurrentUser();
 let props = defineProps({
     game: Object,
     gameLobbies: Object,
+    gameTypes: Object,
+    filters: Object,
+    current_url: String,
     flash: Object,
 });
 
+let filters = reactive({ ...props.filters });
+let currentUrl = window.location.toString();
 let pagination = reactive(new Pagination(props.gameLobbies));
 const lobbyCount = generateNumber(52,41);
 const onlinePlayers = generateNumber(2100,1501);
@@ -38,6 +44,15 @@ function generateNumber(max, min) {
       return Math.floor(Math.random()*(max-min+1)+min);
 };
 
+watch(
+    () => filters,
+    throttle(() => {
+        Inertia.get(currentUrl, { filter_by_asset: filters.filter_by_asset, q: filters.q }, { preserveState: true });
+    }, 1000),
+    {
+        deep: true,
+    }
+);
 
 onMounted(() => {
     if (currentUser) {
@@ -190,9 +205,10 @@ function modalCancelGameButtonClicked() {
                         class="flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
                     >
                         <!-- v-model="AddLobbyForm.algorithm_id" -->
-                        <!-- <option :key="index" v-for="(gameAlgorithm, index) in gameAlgorithms" :value="gameAlgorithm.value">
-                            {{ gameAlgorithm.label }}
-                        </option> -->
+                        <option value="all">all</option>
+                        <option :key="index" v-for="(gameType, index) in gameTypes" :value="gameType.value">
+                            {{ gameType.label }}
+                        </option>
                     </select>
                         <!-- v-model="filters.q" -->
                 </div>
