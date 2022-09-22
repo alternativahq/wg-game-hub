@@ -220,7 +220,7 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
                         id="min-base_entrance_fee"
                         class="block w-full rounded-md border border-wgh-gray-1.5 py-1 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         v-model="filters.min_base_entrance_fee"
-                        placeholder="Minimum BaseEntranceFee"
+                        placeholder="Minimum Base Entrance Fee"
                     />
                 </div>
                 <div class="flex flex-col gap-2 rounded-lg p-4 lg:flex-row lg:items-center">
@@ -231,7 +231,7 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
                         id="max-base_entrance_fee"
                         class="block w-full rounded-md border border-wgh-gray-1.5 py-1 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         v-model="filters.max_base_entrance_fee"
-                        placeholder="Maximum BaseEntranceFee"
+                        placeholder="Maximum Base Entrance Fee"
                     />
                 </div>
                 <div class="flex flex-col gap-2 rounded-lg p-4 lg:flex-row lg:items-center">
