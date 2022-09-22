@@ -257,6 +257,7 @@ function deleteLobby(gameTemplate) {
                                             >
                                                 <Link
                                                     :href="`/admin/game/gameTemplates/${gameTemplate.id}/lobby/create`"
+                                                    class="mr-2"
                                                 >
                                                     <ButtonShape type="purple">
                                                         <span class="flex flex-row space-x-2.5">

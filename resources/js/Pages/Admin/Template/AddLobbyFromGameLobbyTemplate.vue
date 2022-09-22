@@ -7,6 +7,7 @@ import { computed } from 'vue';
 import { addMonths, getMonth, getYear } from 'date-fns';
 import '@vuepic/vue-datepicker/dist/main.css';
 import Datepicker from '@vuepic/vue-datepicker';
+import { Link } from '@inertiajs/inertia-vue3';
 
 let props = defineProps({
     gameTemplate: Object,
@@ -222,11 +223,16 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
                     {{ gameAlgorithm.label }}
                 </option>
             </select>
-            <button type="submit" class="w-full" :disabled="AddLobbyFromTemplateForm.processing">
+            <button type="submit" class="w-full mb-2" :disabled="AddLobbyFromTemplateForm.processing">
                 <ButtonShape type="purple">
                     <span class="w-full uppercase">Add Lobby</span>
                 </ButtonShape>
             </button>
+            <Link :href="`/admin/games/${game.id}/templates`">
+                <ButtonShape type="red" class="w-full">
+                    <span class="w-full uppercase">Cancel</span>
+                </ButtonShape>
+            </Link>
         </form>
     </div>
 </template>
