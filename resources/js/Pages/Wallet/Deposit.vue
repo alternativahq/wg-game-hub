@@ -15,6 +15,7 @@ import TextInput from '@/Shared/Inputs/TextInput';
 import InputError from '@/Shared/InputError';
 import { useForm } from '@inertiajs/inertia-vue3';
 import { debounce } from 'lodash';
+import TransactionDialog from '@/Shared/Modals/TransactionDialog.vue';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -33,12 +34,26 @@ let filters = reactive({ ...props._filters });
 let currentUrl = window.location.toString();
 let pagination = reactive(new Pagination(props.userDepositTransactions));
 
+let state = reactive({
+    open: false,
+    transactionShow: null,
+    transactionSteps: null,
+});
+
 let withdrawalForm = useForm({
     test: '',
 });
 
 function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
+}
+
+async function show(transaction) {
+    state.transactionShow = transaction;
+    let response = await axios.get('/api/wallet/transaction/' + transaction.id + '/log').then((r) => r.data.data);
+    state.transactionSteps = response;
+
+    state.open = true;
 }
 
 watch(
@@ -53,6 +68,12 @@ watch(
 </script>
 <template>
     <div>
+        <TransactionDialog
+            :transaction="state.transactionShow"
+            :transactionSteps="state.transactionSteps"
+            :open="state.open"
+            @close="state.open = false"
+        />
         <section class="flex items-center justify-between">
             <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Deposit Crypto</h2>
             <div class="round mx-5 mb-6 bg-gray-300 px-3 py-2 text-lg font-semibold text-black">Deposit Fiat -></div>
@@ -359,6 +380,19 @@ watch(
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
                                                 {{ UTCToHumanReadable(transaction.createdAt) }}
+                                            </td>
+                                            <td
+                                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
+                                            >
+                                                <ButtonShape
+                                                    class="cursor-pointer"
+                                                    type="purple"
+                                                    @click="show(transaction)"
+                                                >
+                                                    <span class="flex flex-row space-x-2.5">
+                                                        <span class="font-bold uppercase">Show</span>
+                                                    </span>
+                                                </ButtonShape>
                                             </td>
                                         </tr>
                                     </tbody>
