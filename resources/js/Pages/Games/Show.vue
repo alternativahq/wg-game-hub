@@ -213,7 +213,7 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
                     />
                 </div>
                 <div class="flex flex-col gap-2 rounded-lg p-4 lg:flex-row lg:items-center">
-                    <span class="shrink-0">Minimum BaseEntranceFee</span>
+                    <span class="shrink-0">Minimum Base Entrance Fee</span>
                     <input
                         type="number"
                         name="min-base_entrance_fee"
@@ -224,7 +224,7 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
                     />
                 </div>
                 <div class="flex flex-col gap-2 rounded-lg p-4 lg:flex-row lg:items-center">
-                    <span class="shrink-0">Maximum BaseEntranceFee</span>
+                    <span class="shrink-0">Maximum Base Entrance Fee</span>
                     <input
                         type="number"
                         name="max-base_entrance_fee"
