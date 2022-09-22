@@ -33,7 +33,15 @@ class GamesController extends Controller
             'gameLobbies' => GameLobbyResource::collection($gameLobbies->withQueryString()),
             'gameTypes' => $gameTypes,
             'game' => new GameResource($game),
-            'filters' => $request->only('sort_by', 'sort_order','q'),
+            'filters' => $request->only(
+                'sort_by',
+                'sort_order',
+                'q',
+                'game_lobbies_type',
+                'min_players',
+                'max_players',
+                'date',
+            ),
         ]);
     }
 }

@@ -2,6 +2,10 @@
 
 namespace App\Http\QueryPipelines\AdminGameLobbiesPipeline;
 
+use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\FilterByDate;
+use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\FilterByGameMode;
+use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\FilterByMaxPlayers;
+use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\FilterByMinPlayers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Pipeline;
 use Illuminate\Database\Eloquent\Builder;
@@ -30,7 +34,7 @@ class AdminGameLobbiesPipeline extends Pipeline
     {
         return [
             new SortByName(request: $this->request),
-            new SortByType(request: $this->request),
+            //            new SortByType(request: $this->request),
             new SortByStatus(request: $this->request),
             // new SortBySymbol(request: $this->request),
             new SortByBaseEntranceFee(request: $this->request),
@@ -39,6 +43,10 @@ class AdminGameLobbiesPipeline extends Pipeline
             new SortByScheduledAt(request: $this->request),
             new SortByStartAt(request: $this->request),
             new SearchFilter(request: $this->request),
+            new FilterByGameMode(request: $this->request),
+            new FilterByMinPlayers(request: $this->request),
+            new FilterByMaxPlayers(request: $this->request),
+            new FilterByDate(request: $this->request),
         ];
     }
 

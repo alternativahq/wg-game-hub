@@ -6,7 +6,7 @@ import ButtonShape from '@/Shared/ButtonShape';
 import ChevronLeft from '@/Shared/SVG/ChevronLeft';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-vue3';
-import { inject, reactive, watch } from 'vue';
+import { computed, inject, reactive, watch } from 'vue';
 import { isEmpty } from 'lodash';
 import TentModal from '@/Shared/Modals/TentModal';
 import ActiveSessionBanner from '@/Shared/ActiveSessionBanner';
@@ -21,6 +21,7 @@ import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import { throttle } from 'lodash';
 import { ChevronDownIcon } from '@heroicons/vue/solid';
+import { addMonths, getMonth, getYear } from 'date-fns';
 
 //TODO: useing currentUser insted of inject because inject does not reload
 // let currentUser = inject('currentUser');
@@ -38,18 +39,28 @@ let props = defineProps({
 let filters = reactive({ ...props.filters });
 let currentUrl = window.location.toString();
 let pagination = reactive(new Pagination(props.gameLobbies));
-const lobbyCount = generateNumber(52,41);
-const onlinePlayers = generateNumber(2100,1501);
+const lobbyCount = generateNumber(52, 41);
+const onlinePlayers = generateNumber(2100, 1501);
 
 function generateNumber(max, min) {
-      return Math.floor(Math.random()*(max-min+1)+min);
-};
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
 watch(
     () => filters,
     throttle(() => {
-        Inertia.get(currentUrl, { q: filters.q }, { preserveState: true });
+        Inertia.get(currentUrl, { ...filters }, { preserveState: true });
     }, 1000),
+    {
+        deep: true,
+    }
+);
+
+watch(
+    () => props.gameLobbies,
+    (value, oldValue) => {
+        state.gameLobbies = new GameLobbyCollection(value);
+    },
     {
         deep: true,
     }
@@ -108,6 +119,8 @@ function modalStartGameButtonClicked() {
 function modalCancelGameButtonClicked() {
     state.settings.startGameConfirmationModalIsOpen = false;
 }
+// only 1 month in advance is allowed.
+const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(new Date())), 10));
 </script>
 
 <template>
@@ -164,7 +177,10 @@ function modalCancelGameButtonClicked() {
                                     >Game Lobbies</span
                                 >
                                 <span class="font-grota text-sm font-normal uppercase text-white"
-                                    >{{ /*state.gameLobbies.meta.total.toLocaleString('en')*/lobbyCount }} Lobbies</span
+                                    >{{
+                                        /*state.gameLobbies.meta.total.toLocaleString('en')*/ lobbyCount
+                                    }}
+                                    Lobbies</span
                                 >
                             </div>
                         </div>
@@ -174,7 +190,9 @@ function modalCancelGameButtonClicked() {
                                 <span class="font-inter text-[10px] font-semibold uppercase text-wgh-gray-2"
                                     >Online Players</span
                                 >
-                                <span class="font-grota text-sm font-normal uppercase text-white"> {{ onlinePlayers }} Players</span>
+                                <span class="font-grota text-sm font-normal uppercase text-white">
+                                    {{ onlinePlayers }} Players</span
+                                >
                             </div>
                         </div>
                     </div>
@@ -182,93 +200,63 @@ function modalCancelGameButtonClicked() {
             </BorderedContainer>
             <ActiveSessionBanner />
             <CooldownBanner />
-            <BorderedContainer
-                class="mb-8 flex flex-col justify-around space-y-6  p-6 xl:flex-row xl:space-x-6 xl:space-y-0"
-            >
-                <div class="flex items-center gap-2 rounded-lg p-4">
+            <BorderedContainer class="mb-8 flex flex-col space-y-6 p-6 xl:flex-row xl:space-x-6 xl:space-y-0">
+                <div class="flex flex-col gap-2 rounded-lg p-4 lg:flex-row lg:items-center">
                     <span>name</span>
                     <input
                         type="text"
                         name="search"
                         id="search"
-                        class="block w-full rounded-md border border-wgh-gray-1.5 py-3 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        class="block w-full rounded-md border border-wgh-gray-1.5 py-1 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         v-model="filters.q"
                         placeholder="Search"
                     />
                 </div>
-                <div class="flex items-center gap-2 rounded-lg p-4">
+                <div class="flex flex-col gap-2 rounded-lg p-4 lg:flex-row lg:items-center">
+                    <span class="shrink-0">Minimum Players</span>
+                    <input
+                        type="number"
+                        name="min-players"
+                        id="min-players"
+                        class="block w-full rounded-md border border-wgh-gray-1.5 py-1 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        v-model="filters.min_players"
+                        placeholder="Minimum Players"
+                    />
+                </div>
+                <div class="flex flex-col gap-2 rounded-lg p-4 lg:flex-row lg:items-center">
+                    <span class="shrink-0">Maximum Players</span>
+                    <input
+                        type="number"
+                        name="max-players"
+                        id="max-players"
+                        class="block w-full rounded-md border border-wgh-gray-1.5 py-1 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        v-model="filters.max_players"
+                        placeholder="Maximum Players"
+                    />
+                </div>
+                <div class="flex flex-col gap-2 rounded-lg p-4 lg:flex-row lg:items-center">
                     <span>Mode</span>
                     <select
                         id="asset_name"
                         name="asset_name"
                         v-model="filters.game_lobbies_type"
-                        class="flex w-full flex-none rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
+                        class="flex w-full rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
                     >
-                        <option :value="undefined">All </option>
+                        <option :value="undefined">All</option>
                         <option :key="index" v-for="(gameType, index) in gameTypes" :value="gameType.value">
                             {{ gameType.label }}
                         </option>
                     </select>
                 </div>
-                <div class="flex items-center gap-2 rounded-lg p-4">
-                    <Link
-                        class="group inline-flex"
-                        :href="currentUrl"
-                        :data="{
-                            sort_by: 'game_lobbies_base_entrance_fee',
-                            sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                            q: filters.q,
-                        }"
-                    >
-                        BaseEntranceFee
-                        <span
-                            :class="{
-                                'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                    filters.sort_by !== 'game_lobbies_base_entrance_fee',
-                                'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                    filters.sort_by === 'game_lobbies_base_entrance_fee',
-                                'rotate-180':
-                                    filters.sort_by === 'game_lobbies_base_entrance_fee' &&
-                                    filters.sort_order === 'asc',
-                            }"
-                        >
-                            <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
-                        </span>
-                    </Link>
-                </div>
-                <div class="flex items-center gap-2 rounded-lg p-4">
-                    <Link
-                        class="group inline-flex"
-                        :href="currentUrl"
-                        :data="{
-                            sort_by: 'game_lobbies_max_players',
-                            sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                            q: filters.q,
-                        }"
-                    >
-                    Players
-                        <span
-                            :class="{
-                                'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                    filters.sort_by !== 'game_lobbies_max_players',
-                                'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                    filters.sort_by === 'game_lobbies_max_players',
-                                'rotate-180':
-                                    filters.sort_by === 'game_lobbies_max_players' &&
-                                    filters.sort_order === 'asc',
-                            }"
-                        >
-                            <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
-                        </span>
-                    </Link>
-                </div>
-                <div class="flex items-center gap-2 rounded-lg p-4">
-                    <span>StartTime</span>
+                <div class="flex flex-col gap-2 rounded-lg p-4 lg:flex-row lg:items-center">
+                    <span class="shrink-0">Date</span>
                     <Datepicker
+                        range
                         required
-                        class="w-full"
+                        class="block w-full rounded-md border border-wgh-gray-1.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         utc
                         placeholder="Select date and time"
+                        v-model="filters.date"
                         :min-date="new Date()"
                         :max-date="maxDate"
                     ></Datepicker>
@@ -339,7 +327,7 @@ function modalCancelGameButtonClicked() {
                     </div>
                 </borderedContainer>
             </div>
-            <BorderedContainer class="my-4 bg-wgh-gray-1.5" v-if="pagination.meta.from">
+            <BorderedContainer class="my-4 bg-wgh-gray-1.5" v-if="gameLobbies.meta.from">
                 <nav
                     class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
                     aria-label="Pagination"
@@ -348,25 +336,25 @@ function modalCancelGameButtonClicked() {
                         <p class="font-inter text-sm text-gray-700">
                             Showing
                             {{ ' ' }}
-                            <span class="font-medium">{{ pagination.meta.from }}</span>
+                            <span class="font-medium">{{ gameLobbies.meta.from }}</span>
                             {{ ' ' }}
                             to
                             {{ ' ' }}
-                            <span class="font-medium">{{ pagination.meta.to }}</span>
+                            <span class="font-medium">{{ gameLobbies.meta.to }}</span>
                             {{ ' ' }}
                             of
                             {{ ' ' }}
-                            <span class="font-medium">{{ pagination.meta.total }}</span>
+                            <span class="font-medium">{{ gameLobbies.meta.total }}</span>
                             {{ ' ' }}
                             results
                         </p>
                     </div>
                     <div class="flex flex-1 justify-between space-x-4 sm:justify-end">
-                        <Link :href="pagination.links.prev">
-                            <ButtonShape v-if="pagination.links.prev" type="gray"> Previous</ButtonShape>
+                        <Link :href="gameLobbies.links.prev">
+                            <ButtonShape v-if="gameLobbies.links.prev" type="gray"> Previous</ButtonShape>
                         </Link>
-                        <Link :href="pagination.links.next">
-                            <ButtonShape v-if="pagination.links.next" type="gray"> Next</ButtonShape>
+                        <Link :href="gameLobbies.links.next">
+                            <ButtonShape v-if="gameLobbies.links.next" type="gray"> Next</ButtonShape>
                         </Link>
                     </div>
                 </nav>
