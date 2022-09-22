@@ -19,7 +19,7 @@ class GamesController extends Controller
 {
     public function show(Request $request, Game $game)
     {
-        $assets = Asset::get(['id', 'name']);
+        $assets = Asset::get(['id', 'name', 'symbol']);
         $gameTypes = GameLobbyType::toSelect();
         $gameLobbies = AdminGameLobbiesPipeline::make(
             builder: $game

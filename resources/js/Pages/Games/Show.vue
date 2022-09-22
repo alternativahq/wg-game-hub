@@ -201,7 +201,9 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
             </BorderedContainer>
             <ActiveSessionBanner />
             <CooldownBanner />
-            <BorderedContainer class="mb-8 flex flex-col space-y-6 p-6 xl:flex-row xl:flex-wrap xl:space-x-6 xl:space-y-0">
+            <BorderedContainer
+                class="mb-8 flex flex-col space-y-6 p-6 xl:flex-row xl:flex-wrap xl:space-x-6 xl:space-y-0"
+            >
                 <div class="flex flex-col gap-2 rounded-lg p-4 lg:flex-row lg:items-center">
                     <span>Name</span>
                     <input
@@ -236,7 +238,7 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
                     />
                 </div>
                 <div class="flex flex-col gap-2 rounded-lg p-4 lg:flex-row lg:items-center">
-                    <span>Coin</span>
+                    <span>Asset</span>
                     <select
                         id="asset_symbol"
                         name="asset_symbol"
