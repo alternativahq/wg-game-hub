@@ -6,7 +6,7 @@ use App\Builders\GameLobbyBuilder;
 use Closure;
 use Illuminate\Http\Request;
 
-class FilterByMinPlayers
+class FilterByMaxBaseEntranceFee
 {
     public function __construct(protected Request $request)
     {
@@ -14,12 +14,13 @@ class FilterByMinPlayers
 
     public function handle(GameLobbyBuilder $builder, Closure $next)
     {
-        $filterTerm = (int) $this->request->get('min_players', null);
+        $filterTerm = (int) $this->request->get('max_base_entrance_fee', null);
+
         if (!$filterTerm || $filterTerm < 0) {
             return $next($builder);
         }
 
-        $builder->where('min_players','>=', $filterTerm);
+        $builder->where('base_entrance_fee', '<=', $filterTerm);
 
         return $next($builder);
     }

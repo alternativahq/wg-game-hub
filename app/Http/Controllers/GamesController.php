@@ -38,6 +38,8 @@ class GamesController extends Controller
                 'sort_order',
                 'q',
                 'game_lobbies_type',
+                'min_base_entrance_fee',
+                'max_base_entrance_fee',
                 'min_players',
                 'max_players',
                 'date',

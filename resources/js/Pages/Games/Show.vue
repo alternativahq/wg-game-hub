@@ -200,7 +200,7 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
             </BorderedContainer>
             <ActiveSessionBanner />
             <CooldownBanner />
-            <BorderedContainer class="mb-8 flex flex-col space-y-6 p-6 xl:flex-row xl:space-x-6 xl:space-y-0">
+            <BorderedContainer class="mb-8 flex flex-col space-y-6 p-6 xl:flex-row xl:flex-wrap xl:space-x-6 xl:space-y-0">
                 <div class="flex flex-col gap-2 rounded-lg p-4 lg:flex-row lg:items-center">
                     <span>Name</span>
                     <input
@@ -210,6 +210,28 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
                         class="block w-full rounded-md border border-wgh-gray-1.5 py-1 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         v-model="filters.q"
                         placeholder="Search"
+                    />
+                </div>
+                <div class="flex flex-col gap-2 rounded-lg p-4 lg:flex-row lg:items-center">
+                    <span class="shrink-0">Minimum BaseEntranceFee</span>
+                    <input
+                        type="number"
+                        name="min-base_entrance_fee"
+                        id="min-base_entrance_fee"
+                        class="block w-full rounded-md border border-wgh-gray-1.5 py-1 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        v-model="filters.min_base_entrance_fee"
+                        placeholder="Minimum BaseEntranceFee"
+                    />
+                </div>
+                <div class="flex flex-col gap-2 rounded-lg p-4 lg:flex-row lg:items-center">
+                    <span class="shrink-0">Maximum BaseEntranceFee</span>
+                    <input
+                        type="number"
+                        name="max-base_entrance_fee"
+                        id="max-base_entrance_fee"
+                        class="block w-full rounded-md border border-wgh-gray-1.5 py-1 px-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        v-model="filters.max_base_entrance_fee"
+                        placeholder="Maximum BaseEntranceFee"
                     />
                 </div>
                 <div class="flex flex-col gap-2 rounded-lg p-4 lg:flex-row lg:items-center">

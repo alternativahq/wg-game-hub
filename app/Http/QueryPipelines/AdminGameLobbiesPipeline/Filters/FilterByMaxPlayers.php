@@ -20,7 +20,7 @@ class FilterByMaxPlayers
             return $next($builder);
         }
 
-        $builder->where('max_players', '>=', $filterTerm);
+        $builder->where('max_players', '<=', $filterTerm);
 
         return $next($builder);
     }
