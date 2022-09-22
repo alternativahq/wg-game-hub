@@ -30,6 +30,7 @@ let currentUser = useCurrentUser();
 let props = defineProps({
     game: Object,
     gameLobbies: Object,
+    assets: Object,
     gameTypes: Object,
     filters: Object,
     current_url: String,
@@ -233,6 +234,20 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
                         v-model="filters.max_base_entrance_fee"
                         placeholder="Maximum Base Entrance Fee"
                     />
+                </div>
+                <div class="flex flex-col gap-2 rounded-lg p-4 lg:flex-row lg:items-center">
+                    <span>Coin</span>
+                    <select
+                        id="asset_symbol"
+                        name="asset_symbol"
+                        v-model="filters.asset_symbol"
+                        class="flex w-full rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
+                    >
+                        <option :value="undefined">All</option>
+                        <option :key="asset.id" v-for="asset in assets" :value="asset.symbol">
+                            {{ asset.name }}
+                        </option>
+                    </select>
                 </div>
                 <div class="flex flex-col gap-2 rounded-lg p-4 lg:flex-row lg:items-center">
                     <span class="shrink-0">Minimum Players</span>

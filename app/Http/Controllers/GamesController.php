@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Game;
 use Inertia\Inertia;
+use App\Models\Asset;
 use App\Models\GameLobby;
 use App\Enums\GameLobbyType;
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ class GamesController extends Controller
 {
     public function show(Request $request, Game $game)
     {
+        $assets = Asset::get(['id', 'name']);
         $gameTypes = GameLobbyType::toSelect();
         $gameLobbies = AdminGameLobbiesPipeline::make(
             builder: $game
@@ -32,6 +34,7 @@ class GamesController extends Controller
         return Inertia::render('Games/Show', [
             'gameLobbies' => GameLobbyResource::collection($gameLobbies->withQueryString()),
             'gameTypes' => $gameTypes,
+            'assets' => $assets,
             'game' => new GameResource($game),
             'filters' => $request->only(
                 'sort_by',
@@ -40,6 +43,7 @@ class GamesController extends Controller
                 'game_lobbies_type',
                 'min_base_entrance_fee',
                 'max_base_entrance_fee',
+                'asset_symbol',
                 'min_players',
                 'max_players',
                 'date',

@@ -11,6 +11,7 @@ use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\FilterByDate;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SearchFilter;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByStatus;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortBySymbol;
+use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\FilterByAsset;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByStartAt;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\FilterByGameMode;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByMaxPlayers;
@@ -46,6 +47,7 @@ class AdminGameLobbiesPipeline extends Pipeline
             new SortByStartAt(request: $this->request),
             new SearchFilter(request: $this->request),
             new FilterByGameMode(request: $this->request),
+            new FilterByAsset(request: $this->request),
             new FilterByMinPlayers(request: $this->request),
             new FilterByMaxPlayers(request: $this->request),
             new FilterByDate(request: $this->request),
