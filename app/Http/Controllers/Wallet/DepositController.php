@@ -22,6 +22,12 @@ class DepositController extends Controller
 {
     public function __invoke(User $user, Request $request)
     {
+        if($request->coin){
+            $url = config('wodo.wallet-service') . 'accounts?userId='. auth()->user()->id .'&asset='.$request->coin;
+            $response = Http::get(url: $url);
+            $assetInformation =  count($response->json('data')) ? $response->json('data') : [];
+        }
+
         $payload = $request
             ->collect()
             ->merge([
@@ -55,12 +61,12 @@ class DepositController extends Controller
 
         return Inertia::render('Wallet/Deposit', [
             'userDepositTransactions' => TransactionResource::collection($depositTransactions),
+            'assetInformation' => $assetInformation[0] ?? [],
             'assets' => AssetResource::collection($assets),
             '_filters' => $request
                 ->collect()
                 ->only(
                     'sort_by',
-                    'coin',
                     'sort_order',
                     'hash',
                     'scope',

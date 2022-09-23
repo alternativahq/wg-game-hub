@@ -15,6 +15,7 @@ import TransactionDialog from '@/Shared/Modals/TransactionDialog.vue';
 
 let props = defineProps({
     userWithdrawTransactions: Object,
+    assetInformation: Object,
     assets: Object,
     _filters: Object,
     _filtersOptions: Object,
@@ -26,8 +27,8 @@ let currentUrl = window.location.toString();
 let pagination = reactive(new Pagination(props.userWithdrawTransactions));
 
 let withdrawalForm = useForm({
-    coin: props._filters.coin,
-    walletAddress: '',
+    coin: props.assetInformation.asset,
+    walletAddress: props.assetInformation.address,
     network: '',
 });
 
@@ -67,6 +68,13 @@ watch(
     {
         deep: true,
     }
+);
+
+watch(
+    () => withdrawalForm.coin,
+    debounce(() => {
+        Inertia.get(currentUrl, {'coin':withdrawalForm.coin}, { preserveScroll: true, preserveState: true, replace: true });
+    }, 500)
 );
 </script>
 <template>
@@ -112,17 +120,10 @@ watch(
                             <div class="mb-2">Wallet Address</div>
                             <BorderedContainer class="bg-wgh-gray-1.5">
                                 <div class="rounded-lg">
-                                    <select
-                                        id="location"
-                                        name="location"
-                                        v-model="withdrawalForm.walletAddress"
-                                        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                    >
-                                        <option :value="undefined">All</option>
-                                        <!-- <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
-                                            {{ asset.name }}
-                                        </option>  -->
-                                    </select>
+                                <input
+                                class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                type="text" v-model="withdrawalForm.walletAddress" disabled>
+                                   
                                 </div>
                             </BorderedContainer>
                         </div>
@@ -172,28 +173,28 @@ watch(
                 <Link href="" class="mb-2 block text-gray-500 underline"> is there a limit on 24h withdrawal? </Link>
             </div>
         </section>
-        <section class="mb-10 flex">
+        <section class="mb-10 flex" v-if="assetInformation != ''">
             <div class="flex w-2/3">
                 <div class="mr-20 w-2/5"></div>
                 <div class="flex w-3/5 items-center">
                     <div class="w-1/2">
                         <div class="mb-2">
                             <div>Avalibale Balance</div>
-                            <div>0.00 XNO</div>
+                            <div>{{assetInformation.balance}} {{assetInformation.asset}}</div>
                         </div>
                         <div class="mb-2">
                             <div>Fees</div>
-                            <div>0.02 XNO</div>
+                            <div>0.02 {{assetInformation.asset}}</div>
                         </div>
                     </div>
                     <div class="w-1/2">
                         <div class="mb-2">
                             <div>Minimom Withdrawal</div>
-                            <div>1.00 XNO</div>
+                            <div>1.00 {{assetInformation.asset}}</div>
                         </div>
                         <div class="mb-2">
                             <div>Remaning daily withdrawal amount</div>
-                            <div>1 BTC</div>
+                            <div>1 {{assetInformation.asset}}</div>
                         </div>
                     </div>
                 </div>

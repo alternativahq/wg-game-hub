@@ -24,6 +24,7 @@ dayjs.extend(duration);
 
 let props = defineProps({
     userDepositTransactions: Object,
+    assetInformation: Object,
     assets: Object,
     _filters: Object,
     _filtersOptions: Object,
@@ -41,7 +42,7 @@ let state = reactive({
 });
 
 let DepositForm = useForm({
-    coin: props._filters.coin,
+    coin: props.assetInformation.asset,
     network: '',
 });
 
@@ -65,6 +66,13 @@ watch(
     {
         deep: true,
     }
+);
+
+watch(
+    () => DepositForm.coin,
+    debounce(() => {
+        Inertia.get(currentUrl, {'coin':DepositForm.coin}, { preserveScroll: true, preserveState: true, replace: true });
+    }, 500)
 );
 </script>
 <template>
@@ -155,17 +163,17 @@ watch(
                 </Link>
             </div>
         </section>
-        <section class="mb-10 flex">
+        <section class="mb-10 flex" v-if="assetInformation != ''">
             <div class="flex w-2/3">
                 <div class="mr-20 w-2/5"></div>
                 <div class="w-3/5">
                     <div class="font-semibold">Address</div>
-                    <div class="w-1/2">OJHKUSDHGFKHIUYANEUYWNKJCIPAPYEUYKHDIUYOYSD</div>
+                    <div class="w-1/2">{{assetInformation.address}}</div>
                 </div>
             </div>
             <div class="w-1/3"></div>
         </section>
-        <section class="mb-10 flex">
+        <section class="mb-10 flex" v-if="assetInformation != ''">
             <div class="flex w-2/3">
                 <div class="mr-20 w-2/5"></div>
                 <div class="flex w-3/5">
@@ -173,9 +181,6 @@ watch(
                         <div class="mb-4">
                             <div class="font-semibold">Recipent Account</div>
                             <div class="text-sm">Main Account</div>
-                        </div>
-                        <div class="mb-2">
-                            <div class="font-semibold">Confirm that your network is NANO(NANO)</div>
                         </div>
                     </div>
                     <div class="w-1/2">

@@ -22,6 +22,13 @@ class WithdrawController extends Controller
 {
     public function __invoke(User $user, Request $request)
     {
+        // dd($request->coin);
+        if($request->coin){
+            $url = config('wodo.wallet-service') . 'accounts?userId='. auth()->user()->id .'&asset='.$request->coin;
+            $response = Http::get(url: $url);
+            $assetInformation =  count($response->json('data')) ? $response->json('data') : [];
+        }
+
         $payload = $request
             ->collect()
             ->merge([
@@ -54,13 +61,13 @@ class WithdrawController extends Controller
         $assets = Asset::get(['id', 'name','symbol']);
         return Inertia::render('Wallet/Withdraw', [
             'userWithdrawTransactions' => TransactionResource::collection($withdrawTransactions->withQueryString()),
+            'assetInformation' => $assetInformation[0] ?? [],
             'assets' => AssetResource::collection($assets),
             '_filters' => $request
                 ->collect()
                 ->only(
                     'sort_by',
                     'sort_order',
-                    'coin',
                     'hash',
                     'scope',
                     'asset',
