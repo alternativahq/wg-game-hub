@@ -51,7 +51,7 @@ class DepositController extends Controller
         //     request: $request,
         // );
 
-        $assets = Asset::get(['id', 'name']);
+        $assets = Asset::get(['id', 'name','symbol']);
 
         return Inertia::render('Wallet/Deposit', [
             'userDepositTransactions' => TransactionResource::collection($depositTransactions),
@@ -60,6 +60,7 @@ class DepositController extends Controller
                 ->collect()
                 ->only(
                     'sort_by',
+                    'coin',
                     'sort_order',
                     'hash',
                     'scope',

@@ -26,9 +26,9 @@ let currentUrl = window.location.toString();
 let pagination = reactive(new Pagination(props.userWithdrawTransactions));
 
 let withdrawalForm = useForm({
-    email: '',
-    password: '',
-    remember_me: false,
+    coin: props._filters.coin,
+    walletAddress: '',
+    network: '',
 });
 
 function UTCToHumanReadable(u) {
@@ -94,20 +94,16 @@ watch(
                                     <select
                                         id="location"
                                         name="location"
+                                        v-model="withdrawalForm.coin"
                                         class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                     >
                                         <option :value="undefined">All</option>
-                                        <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
+                                        <option :key="asset.symbol" v-for="asset in assets.data" :value="asset.symbol">
                                             {{ asset.name }}
                                         </option>
                                     </select>
                                 </div>
                             </BorderedContainer>
-                            <InputError class="mt-2">
-                                <div v-if="withdrawalForm.errors.email" class="mt-2">
-                                    {{ withdrawalForm.errors.email }}
-                                </div>
-                            </InputError>
                         </div>
                     </div>
                     <div class="mb-5 flex items-center py-4 px-4">
@@ -119,10 +115,9 @@ watch(
                                     <select
                                         id="location"
                                         name="location"
+                                        v-model="withdrawalForm.walletAddress"
                                         class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                     >
-                                        <!-- v-model="filters.filter_by_asset"
-                                        @change.prevent="byTransactionChanged" -->
                                         <option :value="undefined">All</option>
                                         <!-- <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
                                             {{ asset.name }}
@@ -130,11 +125,6 @@ watch(
                                     </select>
                                 </div>
                             </BorderedContainer>
-                            <InputError class="mt-2">
-                                <div v-if="withdrawalForm.errors.email" class="mt-2">
-                                    {{ withdrawalForm.errors.email }}
-                                </div>
-                            </InputError>
                         </div>
                     </div>
                     <div class="mb-5 flex items-center py-4 px-4">
@@ -146,22 +136,16 @@ watch(
                                     <select
                                         id="location"
                                         name="location"
+                                        v-model="withdrawalForm.network"
                                         class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                     >
-                                        <!-- v-model="filters.filter_by_asset"
-                                        @change.prevent="byTransactionChanged" -->
                                         <option :value="undefined">All</option>
-                                        <!-- <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
+                                        <!-- <option :key="asset.symbol" v-for="asset in assets.data" :value="asset.symbol">
                                             {{ asset.name }}
-                                        </option>  -->
+                                        </option> -->
                                     </select>
                                 </div>
                             </BorderedContainer>
-                            <InputError class="mt-2">
-                                <div v-if="withdrawalForm.errors.email" class="mt-2">
-                                    {{ withdrawalForm.errors.email }}
-                                </div>
-                            </InputError>
                         </div>
                     </div>
                     <div class="mb-5 flex items-center py-4 px-4">

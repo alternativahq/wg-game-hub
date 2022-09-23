@@ -106,10 +106,10 @@ function component(account) {
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
                                             >
                                                 <div class="flex items-center space-x-4">
-                                                    <Link class="shrink-0" href="/wallet/deposit">
+                                                    <Link class="shrink-0" href="/wallet/deposit" :data="{coin:assetAccount.asset}">
                                                         <ButtonShape type="purple">Deposit</ButtonShape>
                                                     </Link>
-                                                    <Link class="shrink-0" href="/wallet/withdraw">
+                                                    <Link class="shrink-0" href="/wallet/withdraw" :data="{coin:assetAccount.asset}">
                                                         <ButtonShape type="purple">Withdraw</ButtonShape>
                                                     </Link>
                                                 </div>

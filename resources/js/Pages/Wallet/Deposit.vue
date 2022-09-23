@@ -40,8 +40,9 @@ let state = reactive({
     transactionSteps: null,
 });
 
-let withdrawalForm = useForm({
-    test: '',
+let DepositForm = useForm({
+    coin: props._filters.coin,
+    network: '',
 });
 
 function UTCToHumanReadable(u) {
@@ -90,22 +91,16 @@ watch(
                                     <select
                                         id="location"
                                         name="location"
+                                        v-model="DepositForm.coin"
                                         class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                     >
-                                        <!-- v-model="filters.filter_by_asset"
-                                        @change.prevent="byTransactionChanged" -->
                                         <option :value="undefined">All</option>
-                                        <!-- <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
+                                        <option :key="asset.symbol" v-for="asset in assets.data" :value="asset.symbol">
                                             {{ asset.name }}
-                                        </option>  -->
+                                        </option>
                                     </select>
                                 </div>
                             </BorderedContainer>
-                            <InputError class="mt-2">
-                                <div v-if="withdrawalForm.errors.email" class="mt-2">
-                                    {{ withdrawalForm.errors.email }}
-                                </div>
-                            </InputError>
                         </div>
                     </div>
                     <div class="mb-5 flex items-center py-4 px-4">
@@ -117,33 +112,28 @@ watch(
                                     <select
                                         id="location"
                                         name="location"
+                                        v-model="DepositForm.network"
                                         class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                     >
-                                        <!-- v-model="filters.filter_by_asset"
-                                        @change.prevent="byTransactionChanged" -->
                                         <option :value="undefined">All</option>
-                                        <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
+                                        <!-- <option :key="asset.symbol" v-for="asset in assets.data" :value="asset.symbol">
                                             {{ asset.name }}
-                                        </option>
+                                        </option> -->
                                     </select>
                                 </div>
                             </BorderedContainer>
-                            <InputError class="mt-2">
-                                <div v-if="withdrawalForm.errors.email" class="mt-2">
-                                    {{ withdrawalForm.errors.email }}
-                                </div>
-                            </InputError>
                         </div>
                     </div>
-                    <!-- <button
-                        type="submit"
-                        class="w-full"
-                        :disabled="withdrawalForm.processing"
-                    >
-                        <ButtonShape type="purple">
-                            <span class="w-full uppercase">Sign in</span>
-                        </ButtonShape>
-                    </button> -->
+                    <div class="mb-5 flex items-center py-4 px-4">
+                        <div class="mr-20 w-2/5 text-right"></div>
+                        <div class="w-3/5">
+                            <button preserve-scroll type="submit" class="w-full">
+                                <ButtonShape type="purple">
+                                    <span class="w-full uppercase">Deposit</span>
+                                </ButtonShape>
+                            </button>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="ml-8 w-1/3">
@@ -152,7 +142,7 @@ watch(
                     How do i deposit from my KuCoin account?
                 </Link>
                 <Link href="" class="mb-6 block text-gray-500 underline">
-                    What should i do if i didn't receive my deposit or if i made a withdrawal to an incorrect address?
+                    What should i do if i didn't receive my deposit or if i made a Deposit to an incorrect address?
                 </Link>
                 <Link href="" class="mb-6 block text-gray-500 underline">
                     What should i do if i deposit the wrong crypto?
@@ -160,7 +150,9 @@ watch(
                 <Link href="" class="mb-6 block text-gray-500 underline">
                     What should i do if i forget to specif the Memo Tag or Message for my deposit?
                 </Link>
-                <Link href="" class="mb-6 block text-gray-500 underline"> what are the commen deposit crypto? </Link>
+                <Link href="" class="mb-6 block text-gray-500 underline">
+                     what are the commen deposit crypto? 
+                </Link>
             </div>
         </section>
         <section class="mb-10 flex">
