@@ -31,7 +31,8 @@ class GameLobbyFactory extends Factory
             'min_players' => rand(1, 2),
             'max_players' => ($mp = rand(4, 5)),
             'available_spots' => $mp,
-            'scheduled_at' => now()->addHours(rand(5, 200)),
+            'scheduled_at' => ($scheduledAt = now()->addHours(rand(5, 200))),
+            'start_at' => $scheduledAt->addMinutes(15),
         ];
     }
 
@@ -40,7 +41,8 @@ class GameLobbyFactory extends Factory
         return $this->state(function (array $attributes) {
             $d = rand(5, 100);
             return [
-                'scheduled_at' => now()->subDays($d),
+                'scheduled_at' => ($scheduledAt = now()->subDays($d)),
+                'start_at' => $scheduledAt->addMinutes(15),
             ];
         });
     }

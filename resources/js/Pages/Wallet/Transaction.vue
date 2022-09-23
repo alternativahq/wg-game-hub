@@ -8,7 +8,7 @@ import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import TextInput from '@/Shared/Inputs/TextInput';
 import { debounce } from 'lodash';
-import TransactionDialog from '../../Shared/Modals/TransactionDialog.vue';
+import TransactionDialog from '@/Shared/Modals/TransactionDialog.vue';
 
 let dayjs = inject('dayjs');
 
