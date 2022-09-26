@@ -13,6 +13,8 @@ class GameMatchResultsPayloadRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'lobbyId' => ['required', 'string', 'exists:game_lobbies,id'],
+            'gameId' => ['required', 'string', 'exists:games,id'],
             'scoreCard' => [
                 'required',
                 'array',
