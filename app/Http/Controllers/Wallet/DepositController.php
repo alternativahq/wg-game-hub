@@ -22,12 +22,6 @@ class DepositController extends Controller
 {
     public function __invoke(User $user, Request $request)
     {
-        if($request->coin){
-            $url = config('wodo.wallet-service') . 'accounts?userId='. auth()->user()->id .'&asset='.$request->coin;
-            $response = Http::get(url: $url);
-            $assetInformation =  count($response->json('data')) ? $response->json('data') : [];
-        }
-
         $payload = $request
             ->collect()
             ->merge([
@@ -57,11 +51,27 @@ class DepositController extends Controller
         //     request: $request,
         // );
 
-        $assets = Asset::get(['id', 'name','symbol']);
+        $assets = Asset::get(['id', 'name', 'symbol']);
 
         return Inertia::render('Wallet/Deposit', [
             'userDepositTransactions' => TransactionResource::collection($depositTransactions),
-            'assetInformation' => $assetInformation[0] ?? [],
+            'assetInformation' => function () use ($request) {
+                if (!$request->exists('coin')) {
+                    return [];
+                }
+                $url =
+                    config('wodo.wallet-service') .
+                    'accounts?userId=' .
+                    auth()->user()->id .
+                    '&asset=' .
+                    $request->coin;
+                $response = Http::get(url: $url);
+                if ($response->failed()) {
+                    session()->flash('error', 'Something went wrong, please try again later');
+                    return redirect()->back();
+                }
+                return count($response->json('data')) ? $response->json('data')[0] : [];
+            },
             'assets' => AssetResource::collection($assets),
             '_filters' => $request
                 ->collect()

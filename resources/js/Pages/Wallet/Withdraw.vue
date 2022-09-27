@@ -1,6 +1,6 @@
 <script setup>
 import { ChevronDownIcon } from '@heroicons/vue/solid';
-import { defineProps, reactive, watch } from 'vue';
+import { defineProps, onMounted, reactive, watch } from 'vue';
 import BorderedContainer from '@/Shared/BorderedContainer';
 import ButtonShape from '@/Shared/ButtonShape';
 import Pagination from '@/Models/Pagination';
@@ -30,6 +30,12 @@ let withdrawalForm = useForm({
     coin: props.assetInformation.asset,
     walletAddress: props.assetInformation.address,
     network: '',
+});
+
+onMounted(() => {
+    if (props.assetInformation) {
+        withdrawalForm.network = props.assetInformation.asset;
+    }
 });
 
 function UTCToHumanReadable(u) {
@@ -73,8 +79,27 @@ watch(
 watch(
     () => withdrawalForm.coin,
     debounce(() => {
-        Inertia.get(currentUrl, {'coin':withdrawalForm.coin}, { preserveScroll: true, preserveState: true, replace: true });
+        Inertia.reload({
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
+            only: ['assetInformation'],
+            data: { coin: withdrawalForm.coin },
+        });
+        // Inertia.get(
+        //     currentUrl,
+        //     { coin: withdrawalForm.coin },
+        //     { preserveScroll: true, preserveState: true, replace: true }
+        // );
     }, 500)
+);
+
+watch(
+    () => props.assetInformation,
+    () => {
+        withdrawalForm.walletAddress = props.assetInformation.address;
+        withdrawalForm.network = props.assetInformation.asset;
+    }
 );
 </script>
 <template>
@@ -114,49 +139,49 @@ watch(
                             </BorderedContainer>
                         </div>
                     </div>
-                    <div class="mb-5 flex items-center py-4 px-4">
-                        <div class="mr-20 w-2/5 text-right">Withdrawal Information</div>
-                        <div class="w-3/5">
-                            <div class="mb-2">Wallet Address</div>
-                            <BorderedContainer class="bg-wgh-gray-1.5">
-                                <div class="rounded-lg">
-                                <input
-                                class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                type="text" v-model="withdrawalForm.walletAddress" disabled>
-                                   
-                                </div>
-                            </BorderedContainer>
+
+                    <div v-if="assetInformation.id">
+                        <div class="mb-5 flex items-center py-4 px-4">
+                            <div class="mr-20 w-2/5 text-right">Withdrawal Information</div>
+                            <div class="w-3/5">
+                                <div class="mb-2">Wallet Address</div>
+                                <BorderedContainer class="bg-wgh-gray-1.5">
+                                    <div class="rounded-lg">
+                                        <input
+                                            class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                            type="text"
+                                            v-model="withdrawalForm.walletAddress"
+                                            disabled
+                                        />
+                                    </div>
+                                </BorderedContainer>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mb-5 flex items-center py-4 px-4">
-                        <div class="mr-20 w-2/5 text-right"></div>
-                        <div class="w-3/5">
-                            <div class="mb-2">Network</div>
-                            <BorderedContainer class="bg-wgh-gray-1.5">
-                                <div class="rounded-lg">
-                                    <select
-                                        id="location"
-                                        name="location"
-                                        v-model="withdrawalForm.network"
-                                        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                    >
-                                        <option :value="undefined">All</option>
-                                        <!-- <option :key="asset.symbol" v-for="asset in assets.data" :value="asset.symbol">
-                                            {{ asset.name }}
-                                        </option> -->
-                                    </select>
-                                </div>
-                            </BorderedContainer>
+                        <div class="mb-5 flex items-center py-4 px-4">
+                            <div class="mr-20 w-2/5 text-right"></div>
+                            <div class="w-3/5">
+                                <div class="mb-2">Network</div>
+                                <BorderedContainer class="bg-wgh-gray-1.5">
+                                    <div class="rounded-lg">
+                                        <input
+                                            class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                            type="text"
+                                            v-model="withdrawalForm.network"
+                                            disabled
+                                        />
+                                    </div>
+                                </BorderedContainer>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mb-5 flex items-center py-4 px-4">
-                        <div class="mr-20 w-2/5 text-right"></div>
-                        <div class="w-3/5">
-                            <button preserve-scroll type="submit" class="w-full">
-                                <ButtonShape type="purple">
-                                    <span class="w-full uppercase">withdrawal</span>
-                                </ButtonShape>
-                            </button>
+                        <div class="mb-5 flex items-center py-4 px-4">
+                            <div class="mr-20 w-2/5 text-right"></div>
+                            <div class="w-3/5">
+                                <button preserve-scroll type="submit" class="w-full">
+                                    <ButtonShape type="purple">
+                                        <span class="w-full uppercase">withdrawal</span>
+                                    </ButtonShape>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -180,21 +205,21 @@ watch(
                     <div class="w-1/2">
                         <div class="mb-2">
                             <div>Avalibale Balance</div>
-                            <div>{{assetInformation.balance}} {{assetInformation.asset}}</div>
+                            <div>{{ assetInformation.balance }} {{ assetInformation.asset }}</div>
                         </div>
                         <div class="mb-2">
                             <div>Fees</div>
-                            <div>0.02 {{assetInformation.asset}}</div>
+                            <div>0.02 {{ assetInformation.asset }}</div>
                         </div>
                     </div>
                     <div class="w-1/2">
                         <div class="mb-2">
                             <div>Minimom Withdrawal</div>
-                            <div>1.00 {{assetInformation.asset}}</div>
+                            <div>1.00 {{ assetInformation.asset }}</div>
                         </div>
                         <div class="mb-2">
                             <div>Remaning daily withdrawal amount</div>
-                            <div>1 {{assetInformation.asset}}</div>
+                            <div>1 {{ assetInformation.asset }}</div>
                         </div>
                     </div>
                 </div>

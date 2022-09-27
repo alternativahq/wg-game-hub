@@ -1,6 +1,6 @@
 <script setup>
 import { ChevronDownIcon } from '@heroicons/vue/solid';
-import { defineProps, reactive, watch } from 'vue';
+import { defineProps, onMounted, reactive, watch } from 'vue';
 import BorderedContainer from '@/Shared/BorderedContainer';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -12,7 +12,6 @@ import Pagination from '@/Models/Pagination';
 import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import TextInput from '@/Shared/Inputs/TextInput';
-import InputError from '@/Shared/InputError';
 import { useForm } from '@inertiajs/inertia-vue3';
 import { debounce } from 'lodash';
 import TransactionDialog from '@/Shared/Modals/TransactionDialog.vue';
@@ -29,6 +28,12 @@ let props = defineProps({
     _filters: Object,
     _filtersOptions: Object,
     current_url: String,
+});
+
+onMounted(() => {
+    if (props.assetInformation) {
+        DepositForm.network = props.assetInformation.asset;
+    }
 });
 
 let filters = reactive({ ...props._filters });
@@ -70,9 +75,22 @@ watch(
 
 watch(
     () => DepositForm.coin,
-    debounce(() => {
-        Inertia.get(currentUrl, {'coin':DepositForm.coin}, { preserveScroll: true, preserveState: true, replace: true });
-    }, 500)
+    () => {
+        Inertia.reload({
+            preserveScroll: true,
+            preserveState: true,
+            replace: true,
+            only: ['assetInformation'],
+            data: { coin: DepositForm.coin },
+        });
+    }
+);
+
+watch(
+    () => props.assetInformation,
+    () => {
+        DepositForm.network = props.assetInformation.asset;
+    }
 );
 </script>
 <template>
@@ -111,35 +129,32 @@ watch(
                             </BorderedContainer>
                         </div>
                     </div>
-                    <div class="mb-5 flex items-center py-4 px-4">
-                        <div class="mr-20 w-2/5 text-right">Select a Network</div>
-                        <div class="w-3/5">
-                            <div class="mb-2">Network</div>
-                            <BorderedContainer class="bg-wgh-gray-1.5">
-                                <div class="rounded-lg">
-                                    <select
-                                        id="location"
-                                        name="location"
-                                        v-model="DepositForm.network"
-                                        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                    >
-                                        <option :value="undefined">All</option>
-                                        <!-- <option :key="asset.symbol" v-for="asset in assets.data" :value="asset.symbol">
-                                            {{ asset.name }}
-                                        </option> -->
-                                    </select>
-                                </div>
-                            </BorderedContainer>
+                    <div v-if="assetInformation.id">
+                        <div class="mb-5 flex items-center py-4 px-4">
+                            <div class="mr-20 w-2/5 text-right">Select a Network</div>
+                            <div class="w-3/5">
+                                <div class="mb-2">Network</div>
+                                <BorderedContainer class="bg-wgh-gray-1.5">
+                                    <div class="rounded-lg">
+                                        <input
+                                            class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                            type="text"
+                                            v-model="DepositForm.network"
+                                            disabled
+                                        />
+                                    </div>
+                                </BorderedContainer>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mb-5 flex items-center py-4 px-4">
-                        <div class="mr-20 w-2/5 text-right"></div>
-                        <div class="w-3/5">
-                            <button preserve-scroll type="submit" class="w-full">
-                                <ButtonShape type="purple">
-                                    <span class="w-full uppercase">Deposit</span>
-                                </ButtonShape>
-                            </button>
+                        <div class="mb-5 flex items-center py-4 px-4">
+                            <div class="mr-20 w-2/5 text-right"></div>
+                            <div class="w-3/5">
+                                <button preserve-scroll type="submit" class="w-full">
+                                    <ButtonShape type="purple">
+                                        <span class="w-full uppercase">Deposit</span>
+                                    </ButtonShape>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -158,9 +173,7 @@ watch(
                 <Link href="" class="mb-6 block text-gray-500 underline">
                     What should i do if i forget to specif the Memo Tag or Message for my deposit?
                 </Link>
-                <Link href="" class="mb-6 block text-gray-500 underline">
-                     what are the commen deposit crypto? 
-                </Link>
+                <Link href="" class="mb-6 block text-gray-500 underline"> what are the commen deposit crypto? </Link>
             </div>
         </section>
         <section class="mb-10 flex" v-if="assetInformation != ''">
@@ -168,7 +181,7 @@ watch(
                 <div class="mr-20 w-2/5"></div>
                 <div class="w-3/5">
                     <div class="font-semibold">Address</div>
-                    <div class="w-1/2">{{assetInformation.address}}</div>
+                    <div class="w-1/2">{{ assetInformation.address }}</div>
                 </div>
             </div>
             <div class="w-1/3"></div>
@@ -214,29 +227,41 @@ watch(
                     v-model="filters.to_account_id"
                 />
                 <select
-                    class="mt-1 block  w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
+                    class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
                     v-model="filters.scope"
                 >
                     <option :value="undefined">All Scopes</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionScopeOptions" :value="item.value">
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionScopeOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>
                 <select
-                    class="mt-1 block  w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
+                    class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
                     v-model="filters.asset"
                 >
                     <option :value="undefined">All Assets</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionAssetOptions" :value="item.value">
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionAssetOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>
                 <select
-                    class="mt-1 block  w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
+                    class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
                     v-model="filters.state"
                 >
                     <option :value="undefined">All States</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionStateOptions" :value="item.value">
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionStateOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>
