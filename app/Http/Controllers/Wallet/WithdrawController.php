@@ -29,7 +29,13 @@ class WithdrawController extends Controller
             ])
             ->keyBy(fn($value, $key) => Str::camel($key))
             ->all();
-        $response = Http::get(config('wodo.wallet-transactions-api'), $payload);
+
+
+        $url = config('wodo.wallet-transactions-api') . 
+        '?sort_by='.$request->sort_by . 
+        '&sort_order=' . $request->sort_order;
+
+        $response = Http::get($url, $payload);
         if (!$response->ok()) {
             // TODO: Put session here
             return redirect()->back();

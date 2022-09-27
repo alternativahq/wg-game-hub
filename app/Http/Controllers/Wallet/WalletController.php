@@ -9,6 +9,7 @@ use Auth;
 use Http;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class WalletController extends Controller
 {
@@ -16,9 +17,13 @@ class WalletController extends Controller
     {
     }
 
-    public function __invoke()
+    public function __invoke(Request $request)
     {
-        $url = config('wodo.wallet-service') . 'accounts?userId=' . auth()->user()->id;
+        $url = config('wodo.wallet-service') . 
+        'accounts?userId=' . auth()->user()->id . 
+        '&sort_by='.$request->sort_by . 
+        '&sort_order=' . $request->sort_order;
+        
         $response = \Illuminate\Support\Facades\Http::get(url: $url);
         if ($response->failed()) {
             session()->flash('error', 'Something went wrong, please try again later');
@@ -35,6 +40,7 @@ class WalletController extends Controller
         );
         return Inertia::render('Wallet/Wallet', [
             'assetAccounts' => $assetAccounts,
+            'filters' => $request->only('sort_by', 'sort_order'),
         ]);
     }
 }
