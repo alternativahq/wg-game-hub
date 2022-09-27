@@ -1,6 +1,6 @@
 <script setup>
 import { ChevronDownIcon } from '@heroicons/vue/solid';
-import { defineProps, reactive, watch } from 'vue';
+import { defineProps, onMounted, reactive, watch } from 'vue';
 import BorderedContainer from '@/Shared/BorderedContainer';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -12,7 +12,6 @@ import Pagination from '@/Models/Pagination';
 import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import TextInput from '@/Shared/Inputs/TextInput';
-import InputError from '@/Shared/InputError';
 import { useForm } from '@inertiajs/inertia-vue3';
 import { debounce } from 'lodash';
 import TransactionDialog from '@/Shared/Modals/TransactionDialog.vue';
@@ -24,10 +23,17 @@ dayjs.extend(duration);
 
 let props = defineProps({
     userDepositTransactions: Object,
+    assetInformation: Object,
     assets: Object,
     _filters: Object,
     _filtersOptions: Object,
     current_url: String,
+});
+
+onMounted(() => {
+    if (props.assetInformation) {
+        DepositForm.network = props.assetInformation.asset;
+    }
 });
 
 let filters = reactive({ ...props._filters });
@@ -40,8 +46,9 @@ let state = reactive({
     transactionSteps: null,
 });
 
-let withdrawalForm = useForm({
-    test: '',
+let DepositForm = useForm({
+    coin: props.assetInformation.asset,
+    network: '',
 });
 
 function UTCToHumanReadable(u) {
@@ -63,6 +70,26 @@ watch(
     }, 500),
     {
         deep: true,
+    }
+);
+
+watch(
+    () => DepositForm.coin,
+    () => {
+        Inertia.reload({
+            preserveScroll: true,
+            preserveState: true,
+            replace: true,
+            only: ['assetInformation'],
+            data: { coin: DepositForm.coin },
+        });
+    }
+);
+
+watch(
+    () => props.assetInformation,
+    () => {
+        DepositForm.network = props.assetInformation.asset;
     }
 );
 </script>
@@ -90,60 +117,46 @@ watch(
                                     <select
                                         id="location"
                                         name="location"
+                                        v-model="DepositForm.coin"
                                         class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                     >
-                                        <!-- v-model="filters.filter_by_asset"
-                                        @change.prevent="byTransactionChanged" -->
                                         <option :value="undefined">All</option>
-                                        <!-- <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
-                                            {{ asset.name }}
-                                        </option>  -->
-                                    </select>
-                                </div>
-                            </BorderedContainer>
-                            <InputError class="mt-2">
-                                <div v-if="withdrawalForm.errors.email" class="mt-2">
-                                    {{ withdrawalForm.errors.email }}
-                                </div>
-                            </InputError>
-                        </div>
-                    </div>
-                    <div class="mb-5 flex items-center py-4 px-4">
-                        <div class="mr-20 w-2/5 text-right">Select a Network</div>
-                        <div class="w-3/5">
-                            <div class="mb-2">Network</div>
-                            <BorderedContainer class="bg-wgh-gray-1.5">
-                                <div class="rounded-lg">
-                                    <select
-                                        id="location"
-                                        name="location"
-                                        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                    >
-                                        <!-- v-model="filters.filter_by_asset"
-                                        @change.prevent="byTransactionChanged" -->
-                                        <option :value="undefined">All</option>
-                                        <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
+                                        <option :key="asset.symbol" v-for="asset in assets.data" :value="asset.symbol">
                                             {{ asset.name }}
                                         </option>
                                     </select>
                                 </div>
                             </BorderedContainer>
-                            <InputError class="mt-2">
-                                <div v-if="withdrawalForm.errors.email" class="mt-2">
-                                    {{ withdrawalForm.errors.email }}
-                                </div>
-                            </InputError>
                         </div>
                     </div>
-                    <!-- <button
-                        type="submit"
-                        class="w-full"
-                        :disabled="withdrawalForm.processing"
-                    >
-                        <ButtonShape type="purple">
-                            <span class="w-full uppercase">Sign in</span>
-                        </ButtonShape>
-                    </button> -->
+                    <div v-if="assetInformation.id">
+                        <div class="mb-5 flex items-center py-4 px-4">
+                            <div class="mr-20 w-2/5 text-right">Select a Network</div>
+                            <div class="w-3/5">
+                                <div class="mb-2">Network</div>
+                                <BorderedContainer class="bg-wgh-gray-1.5">
+                                    <div class="rounded-lg">
+                                        <input
+                                            class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                            type="text"
+                                            v-model="DepositForm.network"
+                                            disabled
+                                        />
+                                    </div>
+                                </BorderedContainer>
+                            </div>
+                        </div>
+                        <div class="mb-5 flex items-center py-4 px-4">
+                            <div class="mr-20 w-2/5 text-right"></div>
+                            <div class="w-3/5">
+                                <button preserve-scroll type="submit" class="w-full">
+                                    <ButtonShape type="purple">
+                                        <span class="w-full uppercase">Deposit</span>
+                                    </ButtonShape>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="ml-8 w-1/3">
@@ -152,7 +165,7 @@ watch(
                     How do i deposit from my KuCoin account?
                 </Link>
                 <Link href="" class="mb-6 block text-gray-500 underline">
-                    What should i do if i didn't receive my deposit or if i made a withdrawal to an incorrect address?
+                    What should i do if i didn't receive my deposit or if i made a Deposit to an incorrect address?
                 </Link>
                 <Link href="" class="mb-6 block text-gray-500 underline">
                     What should i do if i deposit the wrong crypto?
@@ -163,17 +176,17 @@ watch(
                 <Link href="" class="mb-6 block text-gray-500 underline"> what are the commen deposit crypto? </Link>
             </div>
         </section>
-        <section class="mb-10 flex">
+        <section class="mb-10 flex" v-if="assetInformation != ''">
             <div class="flex w-2/3">
                 <div class="mr-20 w-2/5"></div>
                 <div class="w-3/5">
                     <div class="font-semibold">Address</div>
-                    <div class="w-1/2">OJHKUSDHGFKHIUYANEUYWNKJCIPAPYEUYKHDIUYOYSD</div>
+                    <div class="w-1/2">{{ assetInformation.address }}</div>
                 </div>
             </div>
             <div class="w-1/3"></div>
         </section>
-        <section class="mb-10 flex">
+        <section class="mb-10 flex" v-if="assetInformation != ''">
             <div class="flex w-2/3">
                 <div class="mr-20 w-2/5"></div>
                 <div class="flex w-3/5">
@@ -181,9 +194,6 @@ watch(
                         <div class="mb-4">
                             <div class="font-semibold">Recipent Account</div>
                             <div class="text-sm">Main Account</div>
-                        </div>
-                        <div class="mb-2">
-                            <div class="font-semibold">Confirm that your network is NANO(NANO)</div>
                         </div>
                     </div>
                     <div class="w-1/2">
@@ -217,29 +227,41 @@ watch(
                     v-model="filters.to_account_id"
                 />
                 <select
-                    class="mt-1 block  w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
+                    class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
                     v-model="filters.scope"
                 >
                     <option :value="undefined">All Scopes</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionScopeOptions" :value="item.value">
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionScopeOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>
                 <select
-                    class="mt-1 block  w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
+                    class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
                     v-model="filters.asset"
                 >
                     <option :value="undefined">All Assets</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionAssetOptions" :value="item.value">
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionAssetOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>
                 <select
-                    class="mt-1 block  w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
+                    class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm lg:w-auto"
                     v-model="filters.state"
                 >
                     <option :value="undefined">All States</option>
-                    <option :key="index" v-for="(item, index) in _filtersOptions.transactionStateOptions" :value="item.value">
+                    <option
+                        :key="index"
+                        v-for="(item, index) in _filtersOptions.transactionStateOptions"
+                        :value="item.value"
+                    >
                         {{ item.label }}
                     </option>
                 </select>
