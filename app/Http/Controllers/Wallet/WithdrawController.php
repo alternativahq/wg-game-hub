@@ -7,6 +7,7 @@ use App\Enums\Wallet\TransactionAsset;
 use App\Enums\Wallet\TransactionScope;
 use App\Enums\Wallet\TransactionState;
 use App\Models\User;
+use App\Services\Internal\WalletAPI;
 use Inertia\Inertia;
 use App\Models\Asset;
 use Illuminate\Http\Request;
@@ -20,6 +21,10 @@ use Str;
 
 class WithdrawController extends Controller
 {
+    public function __construct(protected WalletAPI $walletAPI)
+    {
+    }
+
     public function __invoke(User $user, Request $request)
     {
         $payload = $request
@@ -30,12 +35,8 @@ class WithdrawController extends Controller
             ->keyBy(fn($value, $key) => Str::camel($key))
             ->all();
 
+        $response = $this->walletAPI->listTransactions($payload);
 
-        $url = config('wodo.wallet-transactions-api') . 
-        '?sort_by='.$request->sort_by . 
-        '&sort_order=' . $request->sort_order;
-
-        $response = Http::get($url, $payload);
         if (!$response->ok()) {
             // TODO: Put session here
             return redirect()->back();
@@ -64,14 +65,14 @@ class WithdrawController extends Controller
                 if (!$request->exists('coin')) {
                     return [];
                 }
-                $url =
-                    config('wodo.wallet-service') .
-                    'accounts?userId=' .
-                    auth()->user()->id .
-                    '&asset=' .
-                    $request->coin;
-                $response = Http::get(url: $url);
+
+                $response = $this->walletAPI->accounts([
+                    'userId' => auth()->user()->id,
+                    'asset' => $request->coin,
+                ]);
+
                 if ($response->failed()) {
+                    //TODO: Logging should be done here
                     session()->flash('error', 'Something went wrong, please try again later');
                     return redirect()->back();
                 }

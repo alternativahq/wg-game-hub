@@ -2,6 +2,7 @@
 
 namespace App\Actions\Games\GameLobbies;
 
+use App\Services\Internal\WalletAPI;
 use DB;
 use Auth;
 use Cache;
@@ -19,8 +20,10 @@ use App\Enums\Reactions\RemoveUserFromGameLobbyReaction;
 
 class RemoveUserFromGameLobbyAction
 {
-    public function __construct(public GetUserAssetAccountAction $getUserAssetAccountAction)
-    {
+    public function __construct(
+        public GetUserAssetAccountAction $getUserAssetAccountAction,
+        protected WalletAPI $walletAPI,
+    ) {
     }
 
     public function execute(Request $request, GameLobby $gameLobby): GameLobby|RemoveUserFromGameLobbyReaction
@@ -59,23 +62,17 @@ class RemoveUserFromGameLobbyAction
 
                 $gameLobbyUserEntranceFee = $gameLobbyUser->pivot->entrance_fee;
 
-                // return the amount he paid
-                //here we should call the api
-                $url = config('wodo.wallet-transactions-api') . 'home-withdraw';
-                $data = [
+                $response = $this->walletAPI->withdrawFromHomeAccount([
                     'toAccountId' => $userAssetAccount->id,
                     'asset' => $gameLobby->asset->symbol,
                     'amount' => $gameLobby->base_entrance_fee,
                     'refId' => $gameLobby->id,
-                ];
-                
-                $response = Http::post(url: $url, data: $data);
-                
+                ]);
+
                 if ($response->failed()) {
                     return $response->toException();
                 }
                 // dd($userAssetAccount->balance);
-
 
                 // return $response->body();
 

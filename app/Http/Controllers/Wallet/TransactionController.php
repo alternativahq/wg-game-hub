@@ -6,6 +6,7 @@ use App\Enums\TransactionType;
 use App\Enums\Wallet\TransactionAsset;
 use App\Enums\Wallet\TransactionScope;
 use App\Enums\Wallet\TransactionState;
+use App\Services\Internal\WalletAPI;
 use Redirect;
 use App\Models\User;
 use Inertia\Inertia;
@@ -21,18 +22,19 @@ use Str;
 
 class TransactionController extends Controller
 {
+    public function __construct(protected WalletAPI $walletAPI)
+    {
+    }
+
     public function __invoke(User $user, Request $request)
     {
         $payload = $request
             ->collect()
             ->keyBy(fn($value, $key) => Str::camel($key))
             ->all();
-            
-        $url = config('wodo.wallet-transactions-api') . 
-        '?sort_by='.$request->sort_by . 
-        '&sort_order=' . $request->sort_order;
 
-        $response = Http::get($url, $payload);
+        $response = $this->walletAPI->listTransactions($payload);
+
         if (!$response->ok()) {
             // TODO: Put session here
             return redirect()->back();
