@@ -1,7 +1,7 @@
 <script setup>
 import BorderedContainer from '@/Shared/BorderedContainer';
 import ButtonShape from '@/Shared/ButtonShape';
-import { inject } from 'vue';
+import { inject, reactive } from 'vue';
 import { Link } from '@inertiajs/inertia-vue3';
 import WodoTokenIcon from '@/Shared/SVG/WodoTokenIcon';
 import BananoCoinIcon from '@/Shared/SVG/BananoCoinIcon';
@@ -10,12 +10,18 @@ import NanoCoinIcon from '@/Shared/SVG/NanoCoinIcon';
 import BNBCoinIcon from '@/Shared/SVG/BNBCoinIcon';
 import EthereiumCoinIcon from '@/Shared/SVG/EthereiumCoinIcon';
 import AvalancheCoinIcon from '@/Shared/SVG/AvalancheCoinIcon';
+import { ChevronDownIcon } from '@heroicons/vue/solid';
 
 let currentUser = inject('currentUser');
 
 let props = defineProps({
     assetAccounts: Object,
+    filters: Object,
+    current_url: String,
 });
+
+let filters = reactive({ ...props.filters });
+let currentUrl = window.location.toString();
 
 function component(account) {
     let assets = {
@@ -60,21 +66,93 @@ function component(account) {
                                         <tr>
                                             <th
                                                 scope="col"
-                                                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
-                                                Name
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'name',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                >
+                                                    Name
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'name',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'name',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'name' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
                                             </th>
                                             <th
                                                 scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
-                                                Symbol
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'symbol',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                >
+                                                    Symbol
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'symbol',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'symbol',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'symbol' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
                                             </th>
                                             <th
                                                 scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
-                                                Balance
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'balance',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                >
+                                                    Balance
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'balance',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'balance',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'balance' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            >
+                                                Controles
                                             </th>
                                         </tr>
                                     </thead>
@@ -95,6 +173,18 @@ function component(account) {
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
                                             >
                                                 {{ assetAccount.balance }}
+                                            </td>
+                                            <td
+                                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8"
+                                            >
+                                                <div class="flex items-center space-x-4">
+                                                    <Link class="shrink-0" href="/wallet/deposit" :data="{coin:assetAccount.asset}">
+                                                        <ButtonShape type="purple">Deposit</ButtonShape>
+                                                    </Link>
+                                                    <Link class="shrink-0" href="/wallet/withdraw" :data="{coin:assetAccount.asset}">
+                                                        <ButtonShape type="purple">Withdraw</ButtonShape>
+                                                    </Link>
+                                                </div>
                                             </td>
                                         </tr>
                                     </tbody>

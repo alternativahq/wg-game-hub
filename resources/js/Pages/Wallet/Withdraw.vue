@@ -1,6 +1,6 @@
 <script setup>
 import { ChevronDownIcon } from '@heroicons/vue/solid';
-import { defineProps, reactive, watch } from 'vue';
+import { defineProps, onMounted, reactive, watch } from 'vue';
 import BorderedContainer from '@/Shared/BorderedContainer';
 import ButtonShape from '@/Shared/ButtonShape';
 import Pagination from '@/Models/Pagination';
@@ -15,6 +15,7 @@ import TransactionDialog from '@/Shared/Modals/TransactionDialog.vue';
 
 let props = defineProps({
     userWithdrawTransactions: Object,
+    assetInformation: Object,
     assets: Object,
     _filters: Object,
     _filtersOptions: Object,
@@ -26,9 +27,15 @@ let currentUrl = window.location.toString();
 let pagination = reactive(new Pagination(props.userWithdrawTransactions));
 
 let withdrawalForm = useForm({
-    email: '',
-    password: '',
-    remember_me: false,
+    coin: props.assetInformation.asset,
+    walletAddress: props.assetInformation.address,
+    network: '',
+});
+
+onMounted(() => {
+    if (props.assetInformation) {
+        withdrawalForm.network = props.assetInformation.asset;
+    }
 });
 
 function UTCToHumanReadable(u) {
@@ -68,6 +75,32 @@ watch(
         deep: true,
     }
 );
+
+watch(
+    () => withdrawalForm.coin,
+    debounce(() => {
+        Inertia.reload({
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
+            only: ['assetInformation'],
+            data: { coin: withdrawalForm.coin },
+        });
+        // Inertia.get(
+        //     currentUrl,
+        //     { coin: withdrawalForm.coin },
+        //     { preserveScroll: true, preserveState: true, replace: true }
+        // );
+    }, 500)
+);
+
+watch(
+    () => props.assetInformation,
+    () => {
+        withdrawalForm.walletAddress = props.assetInformation.address;
+        withdrawalForm.network = props.assetInformation.asset;
+    }
+);
 </script>
 <template>
     <div>
@@ -94,84 +127,61 @@ watch(
                                     <select
                                         id="location"
                                         name="location"
+                                        v-model="withdrawalForm.coin"
                                         class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                     >
                                         <option :value="undefined">All</option>
-                                        <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
+                                        <option :key="asset.symbol" v-for="asset in assets.data" :value="asset.symbol">
                                             {{ asset.name }}
                                         </option>
                                     </select>
                                 </div>
                             </BorderedContainer>
-                            <InputError class="mt-2">
-                                <div v-if="withdrawalForm.errors.email" class="mt-2">
-                                    {{ withdrawalForm.errors.email }}
-                                </div>
-                            </InputError>
                         </div>
                     </div>
-                    <div class="mb-5 flex items-center py-4 px-4">
-                        <div class="mr-20 w-2/5 text-right">Withdrawal Information</div>
-                        <div class="w-3/5">
-                            <div class="mb-2">Wallet Address</div>
-                            <BorderedContainer class="bg-wgh-gray-1.5">
-                                <div class="rounded-lg">
-                                    <select
-                                        id="location"
-                                        name="location"
-                                        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                    >
-                                        <!-- v-model="filters.filter_by_asset"
-                                        @change.prevent="byTransactionChanged" -->
-                                        <option :value="undefined">All</option>
-                                        <!-- <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
-                                            {{ asset.name }}
-                                        </option>  -->
-                                    </select>
-                                </div>
-                            </BorderedContainer>
-                            <InputError class="mt-2">
-                                <div v-if="withdrawalForm.errors.email" class="mt-2">
-                                    {{ withdrawalForm.errors.email }}
-                                </div>
-                            </InputError>
+
+                    <div v-if="assetInformation.id">
+                        <div class="mb-5 flex items-center py-4 px-4">
+                            <div class="mr-20 w-2/5 text-right">Withdrawal Information</div>
+                            <div class="w-3/5">
+                                <div class="mb-2">Wallet Address</div>
+                                <BorderedContainer class="bg-wgh-gray-1.5">
+                                    <div class="rounded-lg">
+                                        <input
+                                            class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                            type="text"
+                                            v-model="withdrawalForm.walletAddress"
+                                            disabled
+                                        />
+                                    </div>
+                                </BorderedContainer>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mb-5 flex items-center py-4 px-4">
-                        <div class="mr-20 w-2/5 text-right"></div>
-                        <div class="w-3/5">
-                            <div class="mb-2">Network</div>
-                            <BorderedContainer class="bg-wgh-gray-1.5">
-                                <div class="rounded-lg">
-                                    <select
-                                        id="location"
-                                        name="location"
-                                        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                    >
-                                        <!-- v-model="filters.filter_by_asset"
-                                        @change.prevent="byTransactionChanged" -->
-                                        <option :value="undefined">All</option>
-                                        <!-- <option :key="asset.id" v-for="asset in assets.data" :value="asset.id">
-                                            {{ asset.name }}
-                                        </option>  -->
-                                    </select>
-                                </div>
-                            </BorderedContainer>
-                            <InputError class="mt-2">
-                                <div v-if="withdrawalForm.errors.email" class="mt-2">
-                                    {{ withdrawalForm.errors.email }}
-                                </div>
-                            </InputError>
+                        <div class="mb-5 flex items-center py-4 px-4">
+                            <div class="mr-20 w-2/5 text-right"></div>
+                            <div class="w-3/5">
+                                <div class="mb-2">Network</div>
+                                <BorderedContainer class="bg-wgh-gray-1.5">
+                                    <div class="rounded-lg">
+                                        <input
+                                            class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                            type="text"
+                                            v-model="withdrawalForm.network"
+                                            disabled
+                                        />
+                                    </div>
+                                </BorderedContainer>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mb-5 flex items-center py-4 px-4">
-                        <div class="mr-20 w-2/5 text-right"></div>
-                        <div class="w-3/5">
-                            <button preserve-scroll type="submit" class="w-full">
-                                <ButtonShape type="purple">
-                                    <span class="w-full uppercase">withdrawal</span>
-                                </ButtonShape>
-                            </button>
+                        <div class="mb-5 flex items-center py-4 px-4">
+                            <div class="mr-20 w-2/5 text-right"></div>
+                            <div class="w-3/5">
+                                <button preserve-scroll type="submit" class="w-full">
+                                    <ButtonShape type="purple">
+                                        <span class="w-full uppercase">withdrawal</span>
+                                    </ButtonShape>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -188,28 +198,28 @@ watch(
                 <Link href="" class="mb-2 block text-gray-500 underline"> is there a limit on 24h withdrawal? </Link>
             </div>
         </section>
-        <section class="mb-10 flex">
+        <section class="mb-10 flex" v-if="assetInformation != ''">
             <div class="flex w-2/3">
                 <div class="mr-20 w-2/5"></div>
                 <div class="flex w-3/5 items-center">
                     <div class="w-1/2">
                         <div class="mb-2">
                             <div>Avalibale Balance</div>
-                            <div>0.00 XNO</div>
+                            <div>{{ assetInformation.balance }} {{ assetInformation.asset }}</div>
                         </div>
                         <div class="mb-2">
                             <div>Fees</div>
-                            <div>0.02 XNO</div>
+                            <div>0.02 {{ assetInformation.asset }}</div>
                         </div>
                     </div>
                     <div class="w-1/2">
                         <div class="mb-2">
                             <div>Minimom Withdrawal</div>
-                            <div>1.00 XNO</div>
+                            <div>1.00 {{ assetInformation.asset }}</div>
                         </div>
                         <div class="mb-2">
                             <div>Remaning daily withdrawal amount</div>
-                            <div>1 BTC</div>
+                            <div>1 {{ assetInformation.asset }}</div>
                         </div>
                     </div>
                 </div>
@@ -303,79 +313,384 @@ watch(
                                                 scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
-                                                ID
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'id',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                    :preserve-scroll="true"
+                                                >
+                                                    ID
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'id',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'id',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'id' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
                                             </th>
                                             <th
                                                 scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
-                                                Global TX ID
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'globalTxId',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                    :preserve-scroll="true"
+                                                >
+                                                    Global TX ID
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'globalTxId',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'globalTxId',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'globalTxId' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
                                             </th>
                                             <th
                                                 scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
-                                                Ref ID
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'refId',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                    :preserve-scroll="true"
+                                                >
+                                                    Ref ID
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'refId',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'refId',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'refId' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
                                             </th>
                                             <th
                                                 scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
-                                                Hash
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'hash',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                    :preserve-scroll="true"
+                                                >
+                                                    Hash    
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'hash',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'hash',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'hash' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
                                             </th>
                                             <th
                                                 scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
-                                                Type
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'type',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                    :preserve-scroll="true"
+                                                >
+                                                    Type   
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'type',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'type',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'type' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
                                             </th>
                                             <th
                                                 scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
-                                                State
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'state',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                    :preserve-scroll="true"
+                                                >
+                                                    State   
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'state',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'state',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'state' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
                                             </th>
                                             <th
                                                 scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
-                                                Asset
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'asset',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                    :preserve-scroll="true"
+                                                >
+                                                    Asset   
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'asset',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'asset',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'asset' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
                                             </th>
                                             <th
                                                 scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
-                                                From Account ID
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'fromAccountId',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                    :preserve-scroll="true"
+                                                >
+                                                    From Account ID   
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'fromAccountId',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'fromAccountId',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'fromAccountId' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
                                             </th>
                                             <th
                                                 scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
-                                                To Account ID
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'toAccountId',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                    :preserve-scroll="true"
+                                                >
+                                                    To Account ID
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'toAccountId',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'toAccountId',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'toAccountId' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
                                             </th>
                                             <th
                                                 scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
-                                                Amount
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'amount',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                    :preserve-scroll="true"
+                                                >
+                                                    Amount
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'amount',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'amount',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'amount' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
                                             </th>
                                             <th
                                                 scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
-                                                Fee
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'fee',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                    :preserve-scroll="true"
+                                                >
+                                                    Fee
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'fee',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'fee',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'fee' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
                                             </th>
                                             <th
                                                 scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
-                                                Scope
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'scope',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                    :preserve-scroll="true"
+                                                >
+                                                    Scope
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'scope',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'scope',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'scope' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
                                             </th>
                                             <th
                                                 scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
-                                                Created At
+                                                <Link
+                                                    class="group inline-flex"
+                                                    :href="currentUrl"
+                                                    :data="{
+                                                        sort_by: 'createdAt',
+                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
+                                                    }"
+                                                    :preserve-scroll="true"
+                                                >
+                                                    Created At
+                                                    <span
+                                                        :class="{
+                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
+                                                                filters.sort_by !== 'createdAt',
+                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
+                                                                filters.sort_by === 'createdAt',
+                                                            'rotate-180':
+                                                                filters.sort_by === 'createdAt' &&
+                                                                filters.sort_order === 'asc',
+                                                        }"
+                                                    >
+                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                </Link>
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            >
+                                                Controlles
                                             </th>
                                         </tr>
                                     </thead>

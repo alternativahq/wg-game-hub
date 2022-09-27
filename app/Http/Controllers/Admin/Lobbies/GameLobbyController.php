@@ -2,30 +2,31 @@
 
 namespace App\Http\Controllers\Admin\Lobbies;
 
-use App\Actions\Games\GameMatchResults\StoreGameMatchResultAction;
-use App\DataTransferObjects\GameMatchResultData;
-use App\Enums\ChatRoomType;
-use App\Enums\GameLobbyStatus;
-use App\Enums\GameLobbyType;
-use App\Events\GameLobby\GameArchivedEvent;
-use App\Events\GameLobby\GameEndedEvent;
-use App\Events\GameLobby\ResultsProcessedEvent;
-use App\Events\GameLobbyStartedEvent;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\StoreGameLobbyRequest;
-use App\Http\Requests\GameMatchResultsPayloadRequest;
-use App\Models\Asset;
-use App\Models\ChatRoom;
-use App\Models\GameLobby;
-use App\Notifications\GameLobbyDistributedPrizesNotification;
-use App\Notifications\GameLobbyDistributingPrizesNotification;
-use App\Notifications\ProcessingGameLobbyResultsNotification;
 use DB;
 use Event;
 use Exception;
+use Notification;
+use App\Models\Asset;
+use App\Models\ChatRoom;
+use App\Models\GameLobby;
+use App\Enums\ChatRoomType;
+use App\Enums\GameLobbyType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Notification;
+use App\Enums\GameLobbyStatus;
+use App\Http\Controllers\Controller;
+use App\Events\GameLobbyStartedEvent;
+use App\Events\GameLobby\GameEndedEvent;
+use App\Events\GameLobby\GameArchivedEvent;
+use App\Http\Resources\GameLobbyUserResource;
+use App\Events\GameLobby\ResultsProcessedEvent;
+use App\DataTransferObjects\GameMatchResultData;
+use App\Http\Requests\Admin\StoreGameLobbyRequest;
+use App\Http\Requests\GameMatchResultsPayloadRequest;
+use App\Notifications\GameLobbyDistributedPrizesNotification;
+use App\Notifications\ProcessingGameLobbyResultsNotification;
+use App\Notifications\GameLobbyDistributingPrizesNotification;
+use App\Actions\Games\GameMatchResults\StoreGameMatchResultAction;
 
 class GameLobbyController extends Controller
 {
@@ -162,5 +163,11 @@ class GameLobbyController extends Controller
         ]);
         broadcast(new GameArchivedEvent(gameLobby: $gameLobby));
         return response()->json();
+    }
+
+    public function users(GameLobby $gameLobby)
+    {
+        $gameLobbyUsers = $gameLobby->users()->get();
+        return GameLobbyUserResource::collection($gameLobbyUsers);
     }
 }
