@@ -9,7 +9,7 @@ use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByName;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByType;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\FilterByDate;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SearchFilter;
-use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByStatus;
+use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByState;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortBySymbol;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\FilterByAsset;
 use App\Http\QueryPipelines\AdminGameLobbiesPipeline\Filters\SortByStartAt;
@@ -37,16 +37,18 @@ class AdminGameLobbiesPipeline extends Pipeline
     {
         return [
             new SortByName(request: $this->request),
-            new SortByStatus(request: $this->request),
+            new SortByType(request: $this->request),
+            new SortByState(request: $this->request),
+            new SortBySymbol(request: $this->request),
             new SortByBaseEntranceFee(request: $this->request),
-            new FilterByMaxBaseEntranceFee(request: $this->request),
-            new FilterByMinBaseEntranceFee(request: $this->request),
             new SortByMinPlayers(request: $this->request),
             new SortByMaxPlayers(request: $this->request),
             new SortByScheduledAt(request: $this->request),
-            new SortByStartAt(request: $this->request),
+            new SortByStartAt(request: $this->request),//should be added to the table in the game lobbies show page
             new SearchFilter(request: $this->request),
-            new FilterByGameMode(request: $this->request),
+            new FilterByMaxBaseEntranceFee(request: $this->request),
+            new FilterByMinBaseEntranceFee(request: $this->request),
+            new FilterByGameMode(request: $this->request),//not found in table
             new FilterByAsset(request: $this->request),
             new FilterByMinPlayers(request: $this->request),
             new FilterByMaxPlayers(request: $this->request),
