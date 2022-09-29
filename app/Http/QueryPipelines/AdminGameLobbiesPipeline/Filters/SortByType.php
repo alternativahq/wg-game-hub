@@ -17,6 +17,9 @@ class SortByType
 
     public function handle(Builder $builder, Closure $next)
     {
+        $sortBy = $this->request->get('sort_by');
+        $sortOrder = $this->request->get('sort_order', 'asc');
+
         if ($sortBy !== 'game_lobbies_type') {
             return $next($builder);
         }

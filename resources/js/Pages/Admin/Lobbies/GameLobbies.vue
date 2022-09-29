@@ -136,7 +136,7 @@ function deleteLobby(gameLobbie) {
                                                     class="group inline-flex"
                                                     :href="currentUrl"
                                                     :data="{
-                                                        sort_by: 'game_lobbies_status',
+                                                        sort_by: 'game_lobbies_state',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                         q: filters.q,
                                                     }"
@@ -145,11 +145,11 @@ function deleteLobby(gameLobbie) {
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'game_lobbies_status',
+                                                                filters.sort_by !== 'game_lobbies_state',
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'game_lobbies_status',
+                                                                filters.sort_by === 'game_lobbies_state',
                                                             'rotate-180':
-                                                                filters.sort_by === 'game_lobbies_status' &&
+                                                                filters.sort_by === 'game_lobbies_state' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
@@ -161,30 +161,7 @@ function deleteLobby(gameLobbie) {
                                                 scope="col"
                                                 class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
-                                                <Link
-                                                    class="group inline-flex"
-                                                    :href="currentUrl"
-                                                    :data="{
-                                                        sort_by: 'game_lobbies_asset_symbol',
-                                                        sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
-                                                        q: filters.q,
-                                                    }"
-                                                >
-                                                    Symbol
-                                                    <span
-                                                        :class="{
-                                                            'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'game_lobbies_asset_symbol',
-                                                            'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'game_lobbies_asset_symbol',
-                                                            'rotate-180':
-                                                                filters.sort_by === 'game_lobbies_asset_symbol' &&
-                                                                filters.sort_order === 'asc',
-                                                        }"
-                                                    >
-                                                        <ChevronDownIcon class="h-5 w-5" aria-hidden="true" />
-                                                    </span>
-                                                </Link>
+                                                Symbol
                                             </th>
                                             <th
                                                 scope="col"
@@ -321,7 +298,7 @@ function deleteLobby(gameLobbie) {
                                                 {{ gameLobbie.type }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ gameLobbie.status }}
+                                                {{ gameLobbie.state }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                 {{ gameLobbie.asset.symbol }}

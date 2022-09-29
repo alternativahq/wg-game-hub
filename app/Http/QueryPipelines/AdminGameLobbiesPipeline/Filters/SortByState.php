@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
-class SortBySymbol
+class SortByState
 {
     protected Request $request;
 
@@ -20,18 +20,14 @@ class SortBySymbol
         $sortBy = $this->request->get('sort_by');
         $sortOrder = $this->request->get('sort_order', 'asc');
 
-        if ($sortBy !== 'game_lobbies_asset_symbol') {
+        if ($sortBy !== 'game_lobbies_state') {
             return $next($builder);
         }
 
         if (!in_array(strtolower($sortOrder), ['asc', 'desc'])) {
             return $next($builder);
         }
-
-        $builder->whereHas('asset', function ($q) use ($sortOrder) {
-            return $q->orderBy('symbol', $sortOrder);
-        });
-        // $builder->orderBy('game_lobbies.asset.symbol', $sortOrder);
+        $builder->orderBy('game_lobbies.state', $sortOrder);
 
         return $next($builder);
     }
