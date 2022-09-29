@@ -22,7 +22,7 @@ class SortByCreatedAt
                 $this->request->get('sort_by') === 'earned_at' &&
                 in_array(strtolower($this->request->get('sort_order', null)), ['asc', 'desc']),
             function () use ($builder, $next) {
-                $builder->orderBy('user_achievements.created_at', $this->request->get('sort_order'))->toSql();
+                $builder->orderBy('user_achievements.created_at', $this->request->get('sort_order'));
             },
         );
 
