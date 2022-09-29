@@ -19,7 +19,7 @@ class SortBySymbol
     {
         $sortBy = $this->request->get('sort_by');
         $sortOrder = $this->request->get('sort_order', 'asc');
-        
+
         if ($sortBy !== 'game_lobbies_asset_symbol') {
             return $next($builder);
         }
@@ -27,8 +27,8 @@ class SortBySymbol
         if (!in_array(strtolower($sortOrder), ['asc', 'desc'])) {
             return $next($builder);
         }
-        
-        $builder->whereHas('asset', function($q) use($sortOrder){
+
+        $builder->whereHas('asset', function ($q) use ($sortOrder) {
             return $q->orderBy('symbol', $sortOrder);
         });
         // $builder->orderBy('game_lobbies.asset.symbol', $sortOrder);

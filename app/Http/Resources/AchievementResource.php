@@ -24,6 +24,7 @@ class AchievementResource extends JsonResource
             'user_count' => $this->user_count,
 
             'users' => UserResource::collection($this->whenLoaded('user')),
+            'game' => new GameResource($this->whenLoaded('game')),
         ];
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\QueryPipelines\UserAchievementsPipeline;
 
+use App\Http\QueryPipelines\UserAchievementsPipeline\Filters\SortByAchievementName;
+use App\Http\QueryPipelines\UserAchievementsPipeline\Filters\SortByCreatedAt;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Pipeline;
 use Illuminate\Database\Eloquent\Builder;
@@ -24,11 +26,9 @@ class UserAchievementsPipeline extends Pipeline
     protected function pipes()
     {
         return [
-            //TODO: need to add earned at sorting
-            // new Sort(request: $this->request),
+            new SortByAchievementName(request: $this->request),
             new ByGameFilter(request: $this->request),
-            new SortByGameName(request: $this->request),
-            new SortByName(request: $this->request)
+            new SortByCreatedAt(request: $this->request),
         ];
     }
 
@@ -36,20 +36,7 @@ class UserAchievementsPipeline extends Pipeline
     {
         return app(static::class)
             ->setRequest(request: $request)
-            ->send(
-                $builder->with([
-                    'game' => function ($query) {
-                        $query->select('id', 'name');
-                    },
-                    'achievement' => function ($query) {
-                        $query->select('id', 'name', 'description');
-                    },
-                ]),
-            )
+            ->send($builder->with(['game:id,name']))
             ->thenReturn();
-        // return app(static::class)
-        //     ->setRequest(request: $request)
-        //     ->send($builder)
-        //     ->thenReturn();
     }
 }

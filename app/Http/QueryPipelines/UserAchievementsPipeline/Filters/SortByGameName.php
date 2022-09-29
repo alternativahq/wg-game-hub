@@ -25,11 +25,13 @@ class SortByGameName
             return $next($builder);
         }
 
+        $builder->orderBy('name', $sortOrder);
+
         // $builder->when($this->request->get('game_name'), function (Builder $builder, $sortOrder) {
         //     $builder->orderBy('user_achievements.game_id', $sortOrder);
         // });
         // $builder->orderBy('name', $sortOrder);
-        $builder->orderBy('name', $sortOrder);
+        //        $builder->orderBy('name', $sortOrder);
 
         return $next($builder);
     }
