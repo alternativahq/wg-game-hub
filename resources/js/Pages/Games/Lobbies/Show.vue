@@ -92,8 +92,15 @@ function channelUserLeft(payload) {
 }
 
 function channelInGame(payload) {
-    console.log('redirecting users to game server...');
-    window.open(payload.url, '_blank').focus();
+    console.log('redirecting user to game server...');
+    try {
+        let gameServerUrl = new URL(payload.url);
+        gameServerUrl.searchParams.set('userId', currentUser.id);
+        gameServerUrl.searchParams.set('username', currentUser.username);
+        window.open(gameServerUrl.toString(), '_blank').focus();
+    } catch (e) {
+        return false;
+    }
 }
 
 async function channelGameEnded(payload) {
@@ -324,7 +331,7 @@ export default {
                                 :message="chatMessage.message.message"
                             />
                         </div>
-                        <div class="flex justify-between items-center lg:flex-col xl:flex-row rounded-md">
+                        <div class="flex items-center justify-between rounded-md lg:flex-col xl:flex-row">
                             <input
                                 type="text"
                                 class="shrink grow p-2 outline-none ring-0"
