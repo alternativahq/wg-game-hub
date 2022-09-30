@@ -10,6 +10,7 @@ use App\Models\GameLobby;
 use App\Models\GameLobbyUser;
 use App\Models\User;
 use App\Models\WodoAssetAccount;
+use App\Services\Internal\WalletAPI;
 use DB;
 use Auth;
 use Event;
@@ -19,8 +20,10 @@ use App\Actions\Wallet\GetUserAssetAccountAction;
 
 class AddUserToGameLobbyAction
 {
-    public function __construct(public GetUserAssetAccountAction $getUserAssetAccountAction)
-    {
+    public function __construct(
+        public GetUserAssetAccountAction $getUserAssetAccountAction,
+        protected WalletAPI $walletAPI,
+    ) {
     }
 
     public function execute(User $user, GameLobby $gameLobby)
@@ -57,16 +60,12 @@ class AddUserToGameLobbyAction
                 //     return AddUserToGameLobbyReaction::InsufficientFunds;
                 // }
 
-                //here we should call the api
-                $url = config('wodo.wallet-deposit-api');
-                $data = [
+                $response = $this->walletAPI->depositToHomeAccount([
                     'fromAccountId' => $userAssetAccount->id,
                     'asset' => $gameLobby->asset->symbol,
                     'amount' => $gameLobby->base_entrance_fee,
                     'refId' => $gameLobby->id,
-                ];
-
-                $response = Http::post(url: $url, data: $data);
+                ]);
 
                 if ($response->failed()) {
                     return $response->toException();

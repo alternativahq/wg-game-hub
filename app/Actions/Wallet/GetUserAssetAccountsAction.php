@@ -4,31 +4,34 @@ namespace App\Actions\Wallet;
 
 use App\Models\Asset;
 use App\Models\UserAssetAccount;
+use App\Services\Internal\WalletAPI;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Resources\WalletUserAssetAccountResource;
 
 class GetUserAssetAccountsAction
 {
-    public function execute()
+    public function __construct(protected WalletAPI $walletAPI)
     {
-        $url = config('wodo.wallet-service') . 'accounts?userId=' . auth()->user()->id;
-        $userAssetAccounts = Cache::remember(
-            'user.' . auth()->user()->id . '.accounts',
-            now()->addHours(2),
-            function () use ($url) {
-                $response = Http::get(url: $url);
-                if ($response->failed()) {
-                    return [];
-                }
-                return count($response->json('data')) ? $response->json('data') : [];
-            },
-        );
+    }
 
-        $userAssetAccounts = collect($userAssetAccounts)->map(function ($val) {
-            return new UserAssetAccount($val);
+    public function execute(): AnonymousResourceCollection
+    {
+        $response = $this->walletAPI->accounts([
+            'userId' => auth()->user()->id,
+        ]);
+
+        if ($response->failed()) {
+            return WalletUserAssetAccountResource::collection([]);
+        }
+
+        $userAssetAccounts = collect($response->json('data', []))->map(function ($assetAccount) {
+            return new UserAssetAccount($assetAccount);
         });
 
+        //TODO: We may change it to pagination
         return WalletUserAssetAccountResource::collection($userAssetAccounts);
     }
 }

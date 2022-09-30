@@ -18,7 +18,7 @@ class ByGameFilter
     public function handle(Builder $builder, Closure $next)
     {
         $builder->when($this->request->get('filter_by_game'), function (Builder $builder, $gameId) {
-            $builder->where('user_achievements.game_id', $gameId);
+            $builder->where('achievements.game_id', $gameId);
         });
 
         return $next($builder);

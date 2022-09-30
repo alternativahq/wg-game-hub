@@ -7,19 +7,23 @@ use App\Enums\Wallet\TransactionAsset;
 use App\Enums\Wallet\TransactionScope;
 use App\Enums\Wallet\TransactionState;
 use App\Models\User;
+use App\Services\Internal\WalletAPI;
 use Inertia\Inertia;
 use App\Models\Asset;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AssetResource;
 use App\Http\Resources\TransactionResource;
-use App\Http\QueryPipelines\UserDepositsPipeline\UserDepositsPipeline;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Str;
 
 class DepositController extends Controller
 {
+    public function __construct(protected WalletAPI $walletAPI)
+    {
+    }
+
     public function __invoke(User $user, Request $request)
     {
         $payload = $request
@@ -30,11 +34,8 @@ class DepositController extends Controller
             ->keyBy(fn($value, $key) => Str::camel($key))
             ->all();
 
-        $url = config('wodo.wallet-transactions-api') . 
-        '?sort_by='.$request->sort_by . 
-        '&sort_order=' . $request->sort_order;
+        $response = $this->walletAPI->listTransactions($payload);
 
-        $response = Http::get($url, $payload);
         if (!$response->ok()) {
             // TODO: Put session here
             return redirect()->back();
@@ -64,18 +65,19 @@ class DepositController extends Controller
                 if (!$request->exists('coin')) {
                     return [];
                 }
-                $url =
-                    config('wodo.wallet-service') .
-                    'accounts?userId=' .
-                    auth()->user()->id .
-                    '&asset=' .
-                    $request->coin;
-                $response = Http::get(url: $url);
+
+                $response = $this->walletAPI->accounts([
+                    'userId' => auth()->user()->id,
+                    'asset' => $request->coin,
+                ]);
+
                 if ($response->failed()) {
+                    //TODO: logging should be done here
                     session()->flash('error', 'Something went wrong, please try again later');
                     return redirect()->back();
                 }
-                return count($response->json('data')) ? $response->json('data')[0] : [];
+
+                return count($response->json('data', [])) ? $response->json('data')[0] : [];
             },
             'assets' => AssetResource::collection($assets),
             '_filters' => $request

@@ -7,16 +7,20 @@ use App\Enums\GameLobbyType;
 use App\Http\Requests\StoreLobbyRequest;
 use App\Models\Asset;
 use App\Models\GameLobby;
+use App\Services\Internal\GameLobbyServiceAPI;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Str;
 
 class GameLobbyStartSignalAction
 {
+    public function __construct(protected GameLobbyServiceAPI $gameLobbyServiceAPI)
+    {
+    }
+
     public function execute(
         StoreLobbyRequest $request,
     ): \Illuminate\Http\Client\Response|\GuzzleHttp\Promise\PromiseInterface {
-
         $asset = Asset::find($request->asset_id);
 
         $payload = [
@@ -43,7 +47,6 @@ class GameLobbyStartSignalAction
             'algorithmId' => $request->algorithm_id,
         ];
 
-        $url = config('wodo.game-lobby-service-api') . '/lifecycle';
-        return Http::retry(5, 1000)->post($url, $payload);
+        return $this->gameLobbyServiceAPI->startLifecycle($payload);
     }
 }

@@ -55,19 +55,6 @@ class HandleInertiaRequests extends Middleware
             'image' => $request->user()->image,
             'image_url' => $request->user()->image_url,
             'asset_accounts' => $this->getUserAssetAccountAction->execute(),
-            // 'asset_accounts' => Cache::remember(
-            //     key: 'user.' . $request->user()->id . '.asset_accounts',
-            //     ttl: 300,
-            //     callback: function () use ($request) {
-            //         return $request
-            //             ->user()
-            //             ->assets()
-            //             ->select('assets.id', 'assets.name', 'assets.symbol')
-            //             ->wherePivot('status', UserAssetAccountStatus::Active)
-            //             ->withPivot('balance', 'status')
-            //             ->get();
-            //     },
-            // ),
             'cooldown_end_at' => function () use ($request) {
                 $user = $request->user();
                 if (!$user->is_in_cooldown_period && !is_null($user->cooldown_end_at)) {
