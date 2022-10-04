@@ -2,10 +2,18 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
+use App\Listeners\GameLobbyCreatedListener;
+use App\Listeners\UserLeftGameLobbyListener;
+use App\Events\GameLobby\StateScheduledEvent;
+use App\Events\GameLobby\AwaitingPlayersEvent;
+use App\Listeners\UserJoinedGameLobbyListener;
+use App\Events\GameLobby\GameLoobyCreatedEvent;
+use App\Events\GameLobby\UserLeftGameLobbyEvent;
+use App\Events\GameLobby\UserJoinedGameLobbyEvent;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -18,6 +26,28 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        GameLoobyCreatedEvent::class => [
+            GameLobbyCreatedListener::class,
+        ],
+        UserJoinedGameLobbyEvent::class => [
+            UserJoinedGameLobbyListener::class,
+        ],
+        UserLeftGameLobbyEvent::class => [
+            UserLeftGameLobbyListener::class,
+        ],
+        // StateScheduledEvent::class => [
+        //     StateScheduledListener::class,
+        // ],
+        // AwaitingPlayersEvent::class => [
+        //     AwaitingPlayersListener::class,
+        // ],
+        // UserLeftGameLobbyEvent::class => [
+        //     UserLeftGameLobbyListener::class,
+        // ],
+        // UserRejoinedGameLobbyEvent::class => [
+        //     UserRejoinedGameLobbyListener::class,
+        // ],
+
     ];
 
     /**

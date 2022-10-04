@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\GameLobbies;
 
-use App\Actions\Games\GameLobbies\AddUserToGameLobbyAction;
-use App\Enums\Reactions\AddUserToGameLobbyReaction;
-use App\Http\Controllers\Controller;
-use App\Models\GameLobby;
 use Auth;
-use Illuminate\Http\Request;
 use Redirect;
+use App\Models\GameLobby;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Events\GameLobby\UserJoinedGameLobbyEvent;
+use App\Enums\Reactions\AddUserToGameLobbyReaction;
+use App\Actions\Games\GameLobbies\AddUserToGameLobbyAction;
 
 class GameLobbyJoinController extends Controller
 {
@@ -25,6 +26,8 @@ class GameLobbyJoinController extends Controller
                 'game' => $gameLobby->game_id,
             ]);
         }
+        
+        event(new UserJoinedGameLobbyEvent($gameLobby, auth()->user(), 2));
 
         return Redirect::route('game-lobbies.show', [
             'gameLobby' => $gameLobby,
