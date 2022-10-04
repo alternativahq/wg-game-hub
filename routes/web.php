@@ -94,7 +94,7 @@ Route::middleware('auth')->group(function () {
 
             // game lobbies
             Route::resource('game.gameLobbies', AdminGameLobbiesController::class)
-                ->except('index', 'show')
+                ->except('index', 'edit', 'update')
                 ->shallow()
                 ->scoped();
 

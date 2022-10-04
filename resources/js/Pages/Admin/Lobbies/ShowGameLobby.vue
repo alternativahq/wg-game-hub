@@ -38,7 +38,8 @@ function deleteLobby(gameLobbie) {
 }
 </script>
 <template>
-    <div>
+    <div>s</div>
+    <!-- <div>
         <div class="flex flex-row justify-between">
             <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Lobbies</h2>
             <div class="filters flex">
@@ -321,7 +322,7 @@ function deleteLobby(gameLobbie) {
                                                 <Link :href="`/admin/gameLobbies/${gameLobbie.id}`">
                                                     <ButtonShape type="purple">
                                                         <span class="flex flex-row space-x-2.5">
-                                                            <span class="font-bold uppercase">Show</span>
+                                                            <span class="font-bold uppercase">view</span>
                                                         </span>
                                                     </ButtonShape>
                                                 </Link>
@@ -374,5 +375,5 @@ function deleteLobby(gameLobbie) {
                 </div>
             </nav>
         </BorderedContainer>
-    </div>
+    </div> -->
 </template>
