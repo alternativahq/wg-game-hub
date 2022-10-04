@@ -2,16 +2,21 @@
 
 namespace App\Providers;
 
+use App\Events\GameLobbyStartedEvent;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
-use App\Listeners\GameLobbyCreatedListener;
-use App\Listeners\UserLeftGameLobbyListener;
 use App\Events\GameLobby\StateScheduledEvent;
 use App\Events\GameLobby\AwaitingPlayersEvent;
-use App\Listeners\UserJoinedGameLobbyListener;
 use App\Events\GameLobby\GameLoobyCreatedEvent;
 use App\Events\GameLobby\UserLeftGameLobbyEvent;
 use App\Events\GameLobby\UserJoinedGameLobbyEvent;
+use App\Events\GameLobby\UserRejoinedGameLobbyEvent;
+use App\Listeners\GameLobby\User\UserLeftGameLobbyListener;
+use App\Listeners\GameLobby\LifeCycle\StateScheduledListener;
+use App\Listeners\GameLobby\User\UserJoinedGameLobbyListener;
+use App\Listeners\GameLobby\LifeCycle\GameLobbyCreatedListener;
+use App\Listeners\GameLobby\LifeCycle\GameLobbyStartedListener;
+use App\Listeners\GameLobby\User\UserRejoinedGameLobbyListener;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -26,28 +31,29 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        //life cycle
         GameLoobyCreatedEvent::class => [
             GameLobbyCreatedListener::class,
         ],
+        StateScheduledEvent::class => [
+            StateScheduledListener::class,
+        ],
+        AwaitingPlayersEvent::class => [
+            AwaitingPlayersListener::class,
+        ],
+        GameLobbyStartedEvent::class => [
+            GameLobbyStartedListener::class,
+        ],
+        //users
         UserJoinedGameLobbyEvent::class => [
             UserJoinedGameLobbyListener::class,
         ],
         UserLeftGameLobbyEvent::class => [
             UserLeftGameLobbyListener::class,
         ],
-        // StateScheduledEvent::class => [
-        //     StateScheduledListener::class,
-        // ],
-        // AwaitingPlayersEvent::class => [
-        //     AwaitingPlayersListener::class,
-        // ],
-        // UserLeftGameLobbyEvent::class => [
-        //     UserLeftGameLobbyListener::class,
-        // ],
-        // UserRejoinedGameLobbyEvent::class => [
-        //     UserRejoinedGameLobbyListener::class,
-        // ],
-
+        UserRejoinedGameLobbyEvent::class => [
+            UserRejoinedGameLobbyListener::class,
+        ],
     ];
 
     /**

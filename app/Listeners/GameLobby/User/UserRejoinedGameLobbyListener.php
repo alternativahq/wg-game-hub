@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\GameLobby\User;
 
 use App\Models\GameLobbyLog;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Events\GameLobby\UserJoinedGameLobbyEvent;
+use App\Events\GameLobby\UserRejoinedGameLobbyEvent;
 
-class UserJoinedGameLobbyListener
+class UserRejoinedGameLobbyListener
 {
     public function __construct()
     {
         //
     }
 
-    public function handle(UserJoinedGameLobbyEvent $event)
+    public function handle(UserRejoinedGameLobbyEvent $event)
     {
         $gameLobbyLogs = GameLobbyLog::create([
-            'name' => "User joined",
-            'description' => "A specific user joined the lobby",
+            'name' => "User Rejoined",
+            'description' => "A specific user left the lobby",
             'payload' => $event->gameLobby,
             'game_lobby_id' => $event->gameLobby->id,
             'user_id' => auth()->user()->id,

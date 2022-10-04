@@ -1,26 +1,25 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\GameLobby\LifeCycle;
 
 use App\Models\GameLobbyLog;
+use App\Events\GameLobbyStartedEvent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Events\GameLobby\UserLeftGameLobbyEvent;
 
-class UserLeftGameLobbyListener
+class GameLobbyStartedListener
 {
     public function __construct()
     {
         //
     }
 
-    public function handle(UserLeftGameLobbyEvent $event)
+    public function handle(GameLobbyStartedEvent $event)
     {
-        // dd($event);
         $gameLobbyLogs = GameLobbyLog::create([
-            'name' => "User left",
-            'description' => "A specific user left the lobby",
-            'payload' => $event->user,
+            'name' => "Game Lobby State in-game",
+            'description' => "The lobby state changed to IN_GAME State",
+            'payload' => $event->gameLobby,
             'game_lobby_id' => $event->gameLobby->id,
             'user_id' => auth()->user()->id,
         ]);

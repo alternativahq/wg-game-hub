@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\GameLobby\LifeCycle;
 
 use App\Models\GameLobbyLog;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Events\GameLobby\GameLoobyCreatedEvent;
+use App\Events\GameLobby\StateScheduledEvent;
 
-class GameLobbyCreatedListener
+class StateScheduledListener
 {
     public function __construct()
     {
         //
     }
 
-    public function handle(GameLoobyCreatedEvent $event)
+    public function handle(StateScheduledEvent $event)
     {
         $gameLobbyLogs = GameLobbyLog::create([
             'name' => "Game Lobby Created",
-            'description' => "A new game lobby is created by an admin or the system	",
+            'description' => "A new game lobby is created by an admin or the system",
             'payload' => $event->gameLobby,
             'game_lobby_id' => $event->gameLobby->id,
             'user_id' => auth()->user()->id,
