@@ -54,9 +54,8 @@ class Handler extends ExceptionHandler
                 ->toResponse($request)
                 ->setStatusCode($response->status());
         } elseif ($response->status() === 419) {
-            return back()->with([
-                'message' => 'The page expired, please try again.',
-            ]);
+            session()->flash('error', 'The page expired, please try again.');
+            return redirect()->route('landing');
         }
         return $response;
     }
