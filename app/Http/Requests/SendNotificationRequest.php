@@ -24,6 +24,7 @@ class SendNotificationRequest extends FormRequest
     public function rules()
     {
         return [
+            'idempotency_id' => ['required', 'uuid'],
             'type' => ['required'],
             'data' => ['required', 'array'],
             'data.title' => ['required', 'string', 'max:200'],
