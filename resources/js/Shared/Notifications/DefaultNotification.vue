@@ -1,13 +1,20 @@
 <script setup>
+import { inject, provide } from 'vue';
+
 defineProps({
     notification: Object,
     currentUser: Object,
 });
+
+let dayjs = inject('dayjs');
 </script>
 <template>
     <div class="flex flex-col justify-between">
         <div class="">
-            <p class="mb-2 text-base font-bold">{{ notification.data.title }}</p>
+            <div class="mb-2 flex flex-col items-start justify-between lg:flex-row lg:items-center">
+                <p class="mb-0.5 text-base font-bold lg:mb-0">{{ notification.data.title }}</p>
+                <p class="text-xs font-light">{{ dayjs(notification.created_at).fromNow() }}</p>
+            </div>
             <p class="text-sm">{{ notification.data.message }}</p>
         </div>
     </div>
