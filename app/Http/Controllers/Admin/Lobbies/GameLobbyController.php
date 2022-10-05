@@ -16,9 +16,13 @@ use Illuminate\Http\Response;
 use App\Enums\GameLobbyStatus;
 use App\Http\Controllers\Controller;
 use App\Events\GameLobbyStartedEvent;
+use App\Events\GameLobby\AwaitingPlayersEvent as GameLobbyAwaitingPlayersEvent;
+use App\Events\GameLobby\DistributingPrizesEvent as GameLobbyDistributingPrizesEvent;
+use App\Events\GameLobby\DistributedPrizesEvent as GameLobbyDistributedPrizesEvent;
 use App\Events\GameLobby\GameEndedEvent;
 use App\Events\GameLobby\GameArchivedEvent;
 use App\Http\Resources\GameLobbyUserResource;
+use App\Events\GameLobby\GameLobbyCreatedEvent;
 use App\Events\GameLobby\ResultsProcessedEvent;
 use App\DataTransferObjects\GameMatchResultData;
 use App\Http\Requests\Admin\StoreGameLobbyRequest;
@@ -66,6 +70,7 @@ class GameLobbyController extends Controller
         try {
             DB::transaction(function () use ($payload) {
                 $lobby = GameLobby::create($payload);
+                event(new GameLobbyCreatedEvent($lobby, $payload));
                 ChatRoom::create([
                     'id' => $lobby->id,
                     'type' => ChatRoomType::GameLobby,
@@ -74,7 +79,7 @@ class GameLobbyController extends Controller
         } catch (Exception $exception) {
             return abort(Response::HTTP_INTERNAL_SERVER_ERROR, 'Something went wrong while creating game lobby.');
         }
-
+        
         return response()->noContent();
     }
 
@@ -84,7 +89,8 @@ class GameLobbyController extends Controller
         $gameLobby->update([
             'state' => GameLobbyStatus::AwaitingPlayers,
         ]);
-
+        event(new GameLobbyAwaitingPlayersEvent($gameLobby));
+        
         return response()->noContent();
     }
 
@@ -139,6 +145,7 @@ class GameLobbyController extends Controller
         ]);
         $gameLobby->load('users:id');
         Notification::send($gameLobby->users, new GameLobbyDistributingPrizesNotification(gameLobby: $gameLobby));
+        event(new GameLobbyDistributingPrizesEvent($gameLobby));
 
         return response()->json();
     }
@@ -151,6 +158,7 @@ class GameLobbyController extends Controller
         ]);
         $gameLobby->load('users:id');
         Notification::send($gameLobby->users, new GameLobbyDistributedPrizesNotification(gameLobby: $gameLobby));
+        event(new GameLobbyDistributedPrizesEvent($gameLobby));
 
         return response()->json();
     }

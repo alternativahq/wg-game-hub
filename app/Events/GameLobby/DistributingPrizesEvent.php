@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class GameEndedEvent implements ShouldBroadcast
+class DistributingPrizesEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -26,9 +26,9 @@ class GameEndedEvent implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'status.game-ended';
+        return 'state.distributing-prizes';
     }
-        
+    
     public function broadcastWith(): array
     {
         return[ 

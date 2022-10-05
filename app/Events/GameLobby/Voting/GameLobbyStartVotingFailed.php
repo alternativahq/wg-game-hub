@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Events\GameLobby;
+namespace App\Events\GameLobby\Voting;
 
+use App\Models\GameLobby;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use App\Http\Resources\GameLobbyResource;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class GameLoobyCreatedEvent
+class GameLobbyStartVotingFailed
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -21,14 +21,14 @@ class GameLoobyCreatedEvent
 
     public function broadcastOn(): Channel
     {
-        return new PrivateChannel('game-lobby.' . $this->gameLobby->id);
+        return new PresenceChannel('game-lobby.' . $this->gameLobby->id);
     }
 
     public function broadcastAs(): string
     {
-        return 'gameLobby.Created';
+        return 'gameLobby.start-voting-failed';
     }
-
+    
     public function broadcastWith(): array
     {
         return[ 

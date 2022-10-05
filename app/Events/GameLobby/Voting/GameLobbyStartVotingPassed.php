@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events\GameLobby;
+namespace App\Events\GameLobby\Voting;
 
 use App\Models\GameLobby;
 use Illuminate\Broadcasting\Channel;
@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class GameEndedEvent implements ShouldBroadcast
+class GameLobbyStartVotingPassed
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -26,9 +26,9 @@ class GameEndedEvent implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'status.game-ended';
+        return 'gameLobby.start-voting-passed';
     }
-        
+    
     public function broadcastWith(): array
     {
         return[ 

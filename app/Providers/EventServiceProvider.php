@@ -2,23 +2,51 @@
 
 namespace App\Providers;
 
-use App\Events\GameLobbyStartedEvent;
+use App\Events\{
+    GameLobby\GameLobbyStartimeChanged,
+    GameLobby\GameLobbyAborted,
+    //Voting
+    GameLobby\Voting\GameLobbyStartVotingPassed,
+    GameLobby\Voting\GameLobbyStartVotingFailed,
+    //LifeCycle
+    GameLobby\GameLobbyCreatedEvent,
+    GameLobby\StateScheduledEvent as GameLobbyStateScheduledEvent,
+    GameLobby\AwaitingPlayersEvent as GameLobbyAwaitingPlayersEvent,
+    GameLobbyStartedEvent,
+    GameLobby\GameEndedEvent as GameLobbyGameEndedEvent,
+    GameLobby\DistributingPrizesEvent as GameLobbyDistributingPrizesEvent,
+    GameLobby\DistributedPrizesEvent as GameLobbyDistributedPrizesEvent,
+    GameLobby\GameArchivedEvent as GameLobbyArchivedEvent,
+    //user
+    GameLobby\UserLeftGameLobbyEvent,
+    GameLobby\UserJoinedGameLobbyEvent,
+    GameLobby\UserRejoinedGameLobbyEvent,
+};
+use App\Listeners\{
+    GameLobby\StoreGameLobbyStartimeChangedActivityLogListener,
+    GameLobby\StoreGameLobbyAbortedActivityLogListener,
+    //Voting
+    GameLobby\Voting\StoreGameLobbyStartVotingPassedActivityLogListener,
+    GameLobby\Voting\StoreGameLobbyStartVotingFailedActivityLogListener,
+    //LifeCycle
+    GameLobby\LifeCycle\StoreGameLobbyCreatedActivityLogListener,
+    GameLobby\LifeCycle\StoreGameLobbyStateScheduledActivityLogListener,
+    GameLobby\LifeCycle\StoreAwaitingPlayersActivityLogListener,
+    GameLobby\LifeCycle\StoreGameLobbyStartedActivityLogListener,
+    GameLobby\LifeCycle\StoreGameLobbyGameEndedActivityLogListener,
+    GameLobby\LifeCycle\StoreGameLobbyDistributingPrizesActivityLogListener,
+    GameLobby\LifeCycle\StoreGameLobbyDistributedPrizesActivityLogListener,
+    GameLobby\LifeCycle\StoreGameLobbyArchivedActivityLogListener,
+    //user
+    GameLobby\User\StoreUserJoinedGameLobbyActivityLogListener,
+    GameLobby\User\StoreUserLeftGameLobbyActivityLogListener,
+    GameLobby\User\StoreUserRejoinedGameLobbyActivityLogListener,
+};
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
-use App\Events\GameLobby\StateScheduledEvent;
-use App\Events\GameLobby\AwaitingPlayersEvent;
-use App\Events\GameLobby\GameLoobyCreatedEvent;
-use App\Events\GameLobby\UserLeftGameLobbyEvent;
-use App\Events\GameLobby\UserJoinedGameLobbyEvent;
-use App\Events\GameLobby\UserRejoinedGameLobbyEvent;
-use App\Listeners\GameLobby\User\UserLeftGameLobbyListener;
-use App\Listeners\GameLobby\LifeCycle\StateScheduledListener;
-use App\Listeners\GameLobby\User\UserJoinedGameLobbyListener;
-use App\Listeners\GameLobby\LifeCycle\GameLobbyCreatedListener;
-use App\Listeners\GameLobby\LifeCycle\GameLobbyStartedListener;
-use App\Listeners\GameLobby\User\UserRejoinedGameLobbyListener;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -31,28 +59,56 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        //gameLobby
+        GameLobbyStartimeChanged::class => [
+            StoreGameLobbyStartimeChangedActivityLogListener::class,
+        ],
+        GameLobbyAborted::class => [
+            StoreGameLobbyAbortedActivityLogListener::class,
+        ],
+        //voting
+        GameLobbyStartVotingPassed::class => [
+            StoreGameLobbyStartVotingPassedActivityLogListener::class,
+        ],
+        GameLobbyStartVotingFailed::class => [
+            StoreGameLobbyStartVotingFailedActivityLogListener::class,
+        ],
         //life cycle
-        GameLoobyCreatedEvent::class => [
-            GameLobbyCreatedListener::class,
+        GameLobbyCreatedEvent::class => [
+            StoreGameLobbyCreatedActivityLogListener::class,
         ],
-        StateScheduledEvent::class => [
-            StateScheduledListener::class,
+        //no function to but the event
+        GameLobbyStateScheduledEvent::class => [
+            StoreGameLobbyStateScheduledActivityLogListener::class,
         ],
-        AwaitingPlayersEvent::class => [
-            AwaitingPlayersListener::class,
+        GameLobbyAwaitingPlayersEvent::class => [
+            StoreAwaitingPlayersActivityLogListener::class,
         ],
         GameLobbyStartedEvent::class => [
-            GameLobbyStartedListener::class,
+            StoreGameLobbyStartedActivityLogListener::class,
+        ],
+        GameLobbyGameEndedEvent::class => [
+            StoreGameLobbyGameEndedActivityLogListener::class,
+        ],
+        GameLobbyDistributingPrizesEvent::class => [
+            StoreGameLobbyDistributingPrizesActivityLogListener::class,
+        ],
+        GameLobbyDistributedPrizesEvent::class => [
+            StoreGameLobbyDistributedPrizesActivityLogListener::class,
+        ],
+        GameLobbyArchivedEvent::class => [
+            StoreGameLobbyArchivedActivityLogListener::class,
         ],
         //users
         UserJoinedGameLobbyEvent::class => [
-            UserJoinedGameLobbyListener::class,
+            StoreUserJoinedGameLobbyActivityLogListener::class,
         ],
         UserLeftGameLobbyEvent::class => [
-            UserLeftGameLobbyListener::class,
+            StoreUserLeftGameLobbyActivityLogListener::class,
         ],
+        //no function to but the event
         UserRejoinedGameLobbyEvent::class => [
-            UserRejoinedGameLobbyListener::class,
+            StoreUserRejoinedGameLobbyActivityLogListener::class,
         ],
     ];
 
