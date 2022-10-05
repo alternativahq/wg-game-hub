@@ -29,6 +29,7 @@ class GameLobbyResource extends JsonResource
             'description' => $this->whenNotNull($this->description),
             'max_players' => $this->whenNotNull($this->max_players),
             'min_players' => $this->whenNotNull($this->min_players),
+            'game_play_duration' => $this->whenNotNull($this->game_play_duration),
             'available_spots' => $this->whenNotNull($this->available_spots),
             'has_available_spots' => $this->whenNotNull($this->has_available_spots),
             'players_in_lobby_count' => $this->whenNotNull($this->players_in_lobby_count),

@@ -19,6 +19,7 @@ class UpdateLobbyTemplateRequest extends FormRequest
             'base_entrance_fee' => ['required', 'numeric'],
             'min_players' => ['required', 'numeric'],
             'max_players' => ['required', 'numeric'],
+            'game_play_duration' => ['nullable', 'numeric'],
             'asset_id' => ['required', 'exists:assets,id'],
             'game_id' => ['required', 'exists:games,id'],
             'algorithm_id' => ['required', 'in:' . collect(array_column(GameLobbyAlgorithmsType::cases(), 'value'))->implode(',')],
