@@ -100,6 +100,7 @@ class GameLobbyController extends Controller
         }
 
         $gameLobby->state = GameLobbyStatus::InGame;
+        $gameLobby->url = $request->url;
 
         if (!$gameLobby->save()) {
             return abort(Response::HTTP_INTERNAL_SERVER_ERROR, 'Could not update game settings');

@@ -43,6 +43,7 @@ class GameLobbyResource extends JsonResource
             'game' => new GameResource($this->whenLoaded('game')),
             'users' => UserResource::collection($this->whenLoaded('users')),
             'scores' => UserScoreResource::collection($this->whenLoaded('scores')),
+            'url' => $this->url,
         ];
     }
 }

@@ -32,6 +32,9 @@ let chatBox = ref();
 let gameLobbyModel = reactive(new GameLobby(props.gameLobby.data));
 
 onMounted(() => {
+    if (gameLobbyModel.status === GameLobby.availableStatuses.InGame) {
+        channelInGame({ url: gameLobbyModel.url });
+    }
     gameLobbyModel.startCountDownTimer();
     if (currentUser) {
         window.echo
