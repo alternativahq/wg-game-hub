@@ -23,15 +23,7 @@ class GameLobbyPolicy
 
     public function view(User $user, GameLobby $gameLobby): bool
     {
-        if ($gameLobby->state->is(GameLobbyStatus::InGame)) {
-            return false;
-        }
-
-        if ($gameLobby->state->is(GameLobbyStatus::Scheduled)) {
-            return false;
-        }
-
-        if ($gameLobby->state->is(GameLobbyStatus::Archived)) {
+        if ($gameLobby->state->is(GameLobbyStatus::Scheduled) || $gameLobby->state->is(GameLobbyStatus::Archived)) {
             return false;
         }
 
