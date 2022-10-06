@@ -51,5 +51,5 @@ COPY . /var/www/html
 #RUN php artisan optimize
 
 RUN chown -R root:www-data /var/www/html
-RUN chmod 777 storage/logs/laravel.log
+#RUN chmod 777 storage/logs/laravel.log
 RUN chmod -R 777 storage/
