@@ -13,7 +13,7 @@ let state = reactive({
 </script>
 <template>
     <span class="ml-4 flex min-w-0 flex-col">
-        <div class="cursor-pointer" @click="state.isOpen = !state.isOpen">
+        <div class="cursor-pointer"  @click="state.isOpen = !state.isOpen">
             <div class="flex">
                 <div class="text-sm font-medium capitalize mr-4">{{ step.name }}</div>
                 <div class="text-sm text-gray-500">{{
@@ -21,13 +21,13 @@ let state = reactive({
                 }}</div>
             </div>
             <div class="mb-2 text-sm font-normal capitalize">{{ step.description }}</div>
-            <div class="text-sm font-normal capitalize" v-if="state.isOpen">
-                <BorderedContainer class="mb-8  bg-gray-300">
-                    <div class="p-4">
-                        {{ step.payload }}
-                    </div>
-                </BorderedContainer>
-            </div>
+        </div>
+        <div class="text-sm font-normal capitalize" v-if="state.isOpen">
+            <BorderedContainer class="mb-8  bg-gray-300">
+                <div class="p-4">
+                    {{ step.payload }}
+                </div>
+            </BorderedContainer>
         </div>
     </span>
 </template>
