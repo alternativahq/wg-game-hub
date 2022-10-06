@@ -18,4 +18,9 @@ class GameLobbyLog extends Model
     {
         return $this->belongsTo(GameLobby::class);
     }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

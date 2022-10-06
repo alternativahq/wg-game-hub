@@ -52,42 +52,11 @@ class GameLobbiesController extends Controller
 
     public function show(GameLobby $gameLobby)
     {
-        $assets = Asset::get(['id', 'name']);
-        $gameTypes = GameLobbyType::toSelect();
-        $gameStatus = GameLobbyStatus::toSelect();
-        $gameAlgorithms = GameLobbyAlgorithmsType::toSelect();
-
         return Inertia::render('Admin/Lobbies/ShowGameLobby', [
-            'gameLobby' => new GameLobbyResource($gameLobby),
-            'assets' => $assets,
-            'gameTypes' => $gameTypes,
-            'gameStatus' => $gameStatus,
-            'gameAlgorithms' => $gameAlgorithms,
+            'gameLobby' => new GameLobbyResource($gameLobby->load('gameLobbyLogs')),
+            'usersCount' => $gameLobby->users()->count(),
         ]);
     }
-
-    // public function edit(GameLobby $gameLobby)
-    // {
-    //     $assets = Asset::get(['id', 'name']);
-    //     $gameTypes = GameLobbyType::toSelect();
-    //     $gameStatus = GameLobbyStatus::toSelect();
-    //     $gameAlgorithms = GameLobbyAlgorithmsType::toSelect();
-
-    //     return Inertia::render('Admin/Lobbies/EditGameLobby', [
-    //         'gameLobby' => new GameLobbyResource($gameLobby),
-    //         'assets' => $assets,
-    //         'gameTypes' => $gameTypes,
-    //         'gameStatus' => $gameStatus,
-    //         'gameAlgorithms' => $gameAlgorithms,
-    //     ]);
-    // }
-
-    // public function update(UpdateLobbyRequest $request, GameLobby $gameLobby)
-    // {
-    //     $gameLobby->update($request->validated());
-    //     session()->flash('success', 'lobby updated successfully!');
-    //     return redirect()->route('admin-gameLobbies.show', $gameLobby->game->id);
-    // }
 
     public function destroy(GameLobby $gameLobby)
     {

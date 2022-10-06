@@ -180,10 +180,14 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
                     type="text"
                     id="game_play_duration"
                     name="game_play_duration"
-                    disabled
                     class="mt-4"
                 />
             </div>
+            <InputError class="mt-2">
+                <div v-if="AddLobbyFromTemplateForm.errors.game_play_duration" class="mt-2">
+                    {{ AddLobbyFromTemplateForm.errors.game_play_duration }}
+                </div>
+            </InputError>
             <div class="font-semibold">schedualed at</div>
             <Datepicker
                 required

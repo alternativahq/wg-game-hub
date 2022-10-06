@@ -118,6 +118,11 @@ class GameLobby extends Model
         return $this->hasMany(UserAchievement::class);
     }
 
+    public function gameLobbyLogs(): HasMany
+    {
+        return $this->hasMany(gameLobbyLog::class);
+    }
+
     public function calculateThePrize(): float
     {
         $total = GameLobbyUser::where('game_lobby_id', $this->id)->sum('entrance_fee');

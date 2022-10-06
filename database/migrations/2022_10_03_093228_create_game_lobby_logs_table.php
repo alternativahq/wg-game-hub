@@ -12,7 +12,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('description');
-            $table->json('Payload');
+            $table->json('payload');
             $table->foreignUuid('user_id')->nullable()->constrained('users');
             $table->foreignUuid('game_lobby_id')->constrained('game_lobbies');
             $table->timestamps();

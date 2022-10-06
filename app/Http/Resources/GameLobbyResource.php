@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\GameLobbyLogResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @mixin \App\Models\GameLobby */
@@ -40,6 +41,7 @@ class GameLobbyResource extends JsonResource
             'users_count' => $this->whenNotNull($this->users_count),
             'game_id' => $this->whenNotNull($this->game_id),
             'asset_id' => $this->whenNotNull($this->asset_id),
+            'game_lobby_logs' => GameLobbyLogResource::collection($this->whenLoaded('gameLobbyLogs')),
             'asset' => new AssetResource($this->whenLoaded('asset')),
             'game' => new GameResource($this->whenLoaded('game')),
             'users' => UserResource::collection($this->whenLoaded('users')),
