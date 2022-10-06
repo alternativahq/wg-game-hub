@@ -16,13 +16,12 @@ class StoreGameLobbyCreatedActivityLogListener
 
     public function handle(GameLobbyCreatedEvent $event)
     {
-        // dd($event->gameLobby->id);
-        // $gameLobbyLogs = GameLobbyLog::create([
-        //     'name' => "Game Lobby Created",
-        //     'description' => "A new game lobby is created by an admin or the system",
-        //     'payload' => $event->gameLobby,
-        //     'game_lobby_id' => $event->gameLobby->id,
-        //     'user_id' => auth()->user()->id,
-        // ]);
+        $gameLobbyLogs = GameLobbyLog::create([
+            'name' => "Game Lobby Created",
+            'description' => "A new game lobby is created by an admin or the system",
+            'payload' => $event->gameLobby,
+            'game_lobby_id' => $event->gameLobby->id,
+            'user_id' => "8e94d65b-3588-41cd-9c18-4eb776b37be3",
+        ]);
     }
 }

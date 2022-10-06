@@ -2,6 +2,7 @@
 
 namespace App\Listeners\GameLobby\Voting;
 
+use App\Models\GameLobbyLog;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Events\GameLobby\Voting\GameLobbyStartVotingFailed;

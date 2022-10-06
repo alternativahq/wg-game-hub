@@ -2,6 +2,7 @@
 
 namespace App\Listeners\GameLobby;
 
+use App\Models\GameLobbyLog;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Events\GameLobby\GameLobbyAborted;
 use Illuminate\Contracts\Queue\ShouldQueue;
