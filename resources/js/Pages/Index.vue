@@ -13,6 +13,9 @@ import { Inertia } from '@inertiajs/inertia';
 import ChatRoom from '@/Models/ChatRoom';
 import CooldownBanner from '@/Shared/CooldownBanner';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
+import { throttle } from 'lodash';
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
 
 // let currentUser = inject('currentUser');
 let currentUser = useCurrentUser();
@@ -23,6 +26,10 @@ let snack = inject('snack');
 let props = defineProps({
     mainChatRoom: Object,
     availableGames: Object,
+    assets: Object,
+    gameTypes: Object,
+    filters: Object,
+    current_url: String,
     config: Object,
     balance: Array,
 });
@@ -33,11 +40,33 @@ onMounted(() => {
     });
 });
 
+let filters = reactive({ ...props.filters });
+let currentUrl = window.location.toString();
 let state = reactive({
     chatMessages: [],
     chatMessageBody: '',
     chatRoom: new ChatRoom(props.mainChatRoom.data),
 });
+
+watch(
+    () => filters,
+    throttle(() => {
+        Inertia.get(currentUrl, { ...filters }, { preserveState: true, preserveScroll:true });
+    }, 1000),
+    {
+        deep: true,
+    }
+);
+
+watch(
+    () => props.gameLobbies,
+    (value, oldValue) => {
+        state.gameLobbies = new GameLobbyCollection(value);
+    },
+    {
+        deep: true,
+    }
+);
 
 watch(
     state.chatMessages,
@@ -69,8 +98,184 @@ watch(
                     </div>
                 </div>
             </BorderedContainer>
+            <div class="flex justify-between my-10">
+                <div>
+                    <div class="mb-3">
+                        <label
+                            for="Name"
+                            class="form-label inline-block mb-2 text-gray-700 text-lg"
+                            >Name</label
+                        >
+                        <input
+                            type="text"
+                            class="form-control block rounded px-2 py-1 text-lg font-normal
+                            text-gray-700
+                            bg-white bg-clip-padding
+                            border border-solid border-gray-300 transition ease-in-out m-0
+                            focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+                            "
+                            name="search"
+                            id="search"
+                            placeholder="Search"
+                            v-model="filters.q"
+                        />
+                    </div>
+                    <div>
+                        <div class="mb-3 xl:w-64">
+                            <label
+                                for="Date"
+                                class="form-label inline-block mb-2 text-gray-700 text-lg"
+                                >Date</label
+                            >
+                            <Datepicker
+                                range
+                                required
+                                class="block rounded-md border border-wgh-gray-1.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                utc
+                                placeholder="Select date and time"
+                                v-model="filters.date"
+                                :min-date="new Date()"
+                                :max-date="maxDate"
+                            ></Datepicker>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <div class="mb-3">
+                            <label
+                                for="Maximum Players"
+                                class="form-label inline-block mb-2 text-gray-700 text-lg"
+                                >Mode</label
+                            >
+                            <select
+                                id="asset_name"
+                                name="asset_name"
+                                v-model="filters.games_gamelobbies_type"
+                                class="flex rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
+                            >
+                                <option :value="undefined">All</option>
+                                <option :key="index" v-for="(gameType, index) in gameTypes" :value="gameType.value">
+                                    {{ gameType.label }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="mb-3">
+                            <label
+                                for="Asset"
+                                class="form-label inline-block mb-2 text-gray-700 text-lg"
+                                >Asset</label
+                            >
+                            <select
+                                id="games_gamelobbies_asset_symbol"
+                                name="games_gamelobbies_asset_symbol"
+                                v-model="filters.games_gamelobbies_asset_symbol"
+                                class="flex rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
+                            >
+                                <option :value="undefined">All</option>
+                                <option :key="asset.id" v-for="asset in assets" :value="asset.symbol">
+                                    {{ asset.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    </div>
+                <div>
+                    <div>
+                        <div class="mb-3">
+                            <label
+                                for="Minimum Base Entrance Fee"
+                                class="form-label inline-block mb-2 text-gray-700 text-lg"
+                                >Minimum Base Entrance Fee</label
+                            >
+                            <input
+                                class="form-control block rounded px-2 py-1 text-lg font-normal
+                                text-gray-700
+                                bg-white bg-clip-padding
+                                border border-solid border-gray-300 transition ease-in-out m-0
+                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+                                "
+                                type="number"
+                                name="min-base_entrance_fee"
+                                id="min-base_entrance_fee"
+                                v-model="filters.min_base_entrance_fee"
+                                placeholder="Minimum Base Entrance Fee"
+                            />
+                        </div>
+                        <div>
+                            <div class="mb-3">
+                                <label
+                                    for="Maximum Base Entrance Fee"
+                                    class="form-label inline-block mb-2 text-gray-700 text-lg"
+                                    >Maximum Base Entrance Fee</label
+                                >
+                                <input
+                                    class="form-control block rounded px-2 py-1 text-lg font-normal
+                                    text-gray-700
+                                    bg-white bg-clip-padding
+                                    border border-solid border-gray-300 transition ease-in-out m-0
+                                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+                                    "
+                                    type="number"
+                                    name="max-base_entrance_fee"
+                                    id="max-base_entrance_fee"
+                                    v-model="filters.max_base_entrance_fee"
+                                    placeholder="Maximum Base Entrance Fee"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <div class="mb-3">
+                            <label
+                                for="Minimum Players"
+                                class="form-label inline-block mb-2 text-gray-700 text-lg"
+                                >Minimum Players</label
+                            >
+                            <input
+                                class="form-control block rounded px-2 py-1 text-lg font-normal
+                                text-gray-700
+                                bg-white bg-clip-padding
+                                border border-solid border-gray-300 transition ease-in-out m-0
+                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+                                "
+                                type="number"
+                                name="min-players"
+                                id="min-players"
+                                v-model="filters.min_players"
+                                placeholder="Minimum Players"
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <div class="mb-3">
+                            <label
+                                for="Maximum_Players"
+                                class="form-label inline-block mb-2 text-gray-700 text-md"
+                                >Maximum Players</label
+                            >
+                            <input
+                                class="form-control block rounded px-2 py-1 text-lg font-normal
+                                text-gray-700
+                                bg-white bg-clip-padding
+                                border border-solid border-gray-300 transition ease-in-out m-0
+                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
+                                "
+                                type="number"
+                                name="max-players"
+                                id="max-players"
+                                v-model="filters.max_players"
+                                placeholder="Maximum Players"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
             <h1 class="mb-6 font-grota text-2xl font-extrabold text-wgh-gray-6">Games</h1>
-
             <div>
                 <GameCard
                     v-for="availableGame in props.availableGames.data"
@@ -79,7 +284,7 @@ watch(
                 />
             </div>
         </div>
-        <div class="flex flex-col space-y-6 lg:w-1/4">
+        <div class="flex flex-col space-y-6 lg">
             <DashboardBalanceCard v-if="currentUser" :balance="balance" :asset_accounts="currentUser.asset_accounts" />
             <DashboardBalanceCardCreateAccount v-if="!currentUser" />
             <BorderedContainer class="h-[30rem] grow bg-wgh-purple-3">
