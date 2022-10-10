@@ -4,14 +4,13 @@ namespace App\Events\GameLobby;
 
 use App\Models\GameLobby;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Queue\SerializesModels;
-use App\Http\Resources\GameLobbyResource;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 
-class DistributingPrizesEvent
+class GameLobbyArchivedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -26,13 +25,6 @@ class DistributingPrizesEvent
 
     public function broadcastAs(): string
     {
-        return 'state.distributing-prizes';
-    }
-    
-    public function broadcastWith(): array
-    {
-        return[ 
-            'gameLobby' => (new GameLobbyResource($this->gameLobby))->resolve(),
-        ];
+        return 'status.archived';
     }
 }

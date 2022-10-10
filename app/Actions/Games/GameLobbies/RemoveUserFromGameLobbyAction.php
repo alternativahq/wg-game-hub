@@ -13,8 +13,8 @@ use Illuminate\Http\Request;
 use App\Models\GameLobbyUser;
 use App\Models\WodoAssetAccount;
 use Illuminate\Support\Facades\Http;
-use App\Events\GameLobby\PrizeUpdatedEvent;
-use App\Events\GameLobby\UserLeftGameLobbyEvent;
+use App\Events\GameLobby\GameLobbyPrizeUpdatedEvent;
+use App\Events\GameLobby\GameLobbyUserLeftGameLobbyEvent;
 use App\Actions\Wallet\GetUserAssetAccountAction;
 use App\Enums\Reactions\RemoveUserFromGameLobbyReaction;
 
@@ -96,12 +96,12 @@ class RemoveUserFromGameLobbyAction
 
                 Cache::forget('user.' . Auth::id() . '.current-lobby-session');
 
-                Event::dispatch(new UserLeftGameLobbyEvent(gameLobby: $gameLobby, user: $user));
+                event(new GameLobbyUserLeftGameLobbyEvent(gameLobby: $gameLobby, user: $user));
 
                 $total = (float) GameLobbyUser::where('game_lobby_id', $gameLobby->id)->sum('entrance_fee');
                 $prize = (float) ($total - ($total * 20.0) / 100.0);
 
-                Event::dispatch(new PrizeUpdatedEvent(gameLobby: $gameLobby, newPrize: $prize));
+                Event::dispatch(new GameLobbyPrizeUpdatedEvent(gameLobby: $gameLobby, newPrize: $prize));
 
                 $user->update([
                     'cooldown_end_at' => now()->addMinutes(2),

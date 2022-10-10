@@ -3,8 +3,8 @@
 namespace App\Actions\Games\GameLobbies;
 
 use App\Enums\Reactions\AddUserToGameLobbyReaction;
-use App\Events\GameLobby\PrizeUpdatedEvent;
-use App\Events\GameLobby\UserJoinedGameLobbyEvent;
+use App\Events\GameLobby\GameLobbyPrizeUpdatedEvent;
+use App\Events\GameLobby\GameLobbyUserJoinedGameLobbyEvent;
 use App\Models\ChatRoomUser;
 use App\Models\GameLobby;
 use App\Models\GameLobbyUser;
@@ -101,8 +101,8 @@ class AddUserToGameLobbyAction
                 Cache::forget('user.' . Auth::id() . '.account' . $gameLobby->asset->symbol);
                 Cache::forget('user.' . Auth::id() . '.accounts');
 
-                broadcast(
-                    new UserJoinedGameLobbyEvent(
+                event(
+                    new GameLobbyUserJoinedGameLobbyEvent(
                         gameLobby: $gameLobby,
                         user: $user,
                         entranceFee: $gameLobby->base_entrance_fee,
@@ -110,7 +110,7 @@ class AddUserToGameLobbyAction
                 );
                 $total = (float) GameLobbyUser::where('game_lobby_id', $gameLobby->id)->sum('entrance_fee');
                 $prize = (float) ($total - ($total * 20.0) / 100.0);
-                Event::dispatch(new PrizeUpdatedEvent(gameLobby: $gameLobby, newPrize: $prize));
+                Event::dispatch(new GameLobbyPrizeUpdatedEvent(gameLobby: $gameLobby, newPrize: $prize));
                 return $gameLobby;
             },
         );

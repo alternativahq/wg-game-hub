@@ -14,26 +14,9 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class GameLobbyCreatedEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
-    
+    use Dispatchable, SerializesModels;
+
     public function __construct(public GameLobby $gameLobby, public $payload)
     {
-    }
-
-    public function broadcastOn(): Channel
-    {
-        return new PrivateChannel('game-lobby.' . $this->gameLobby->id);
-    }
-
-    public function broadcastAs(): string
-    {
-        return 'gameLobby.Created';
-    }
-
-    public function broadcastWith(): array
-    {
-        return[ 
-            'gameLobby' => $this->gameLobby,
-        ];
     }
 }

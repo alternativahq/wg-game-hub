@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Lobbies;
 
+use App\Http\Resources\GameLobbyLogResource;
 use App\Models\Game;
 use Inertia\Inertia;
 use App\Models\Asset;
@@ -53,7 +54,13 @@ class GameLobbiesController extends Controller
     public function show(GameLobby $gameLobby)
     {
         return Inertia::render('Admin/Lobbies/ShowGameLobby', [
-            'gameLobby' => new GameLobbyResource($gameLobby->load('gameLobbyLogs')),
+            'gameLobby' => new GameLobbyResource($gameLobby),
+            'gameLobbyActivityLogs' => GameLobbyLogResource::collection(
+                $gameLobby
+                    ->activityLogs()
+                    ->orderBy('created_at')
+                    ->get(),
+            ),
             'usersCount' => $gameLobby->users()->count(),
         ]);
     }

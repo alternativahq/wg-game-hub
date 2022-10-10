@@ -25,7 +25,7 @@ class SendChatMessageToRoomAction
         if ($chatRoom->type === ChatRoomType::Main) {
             broadcast(new MessageSentToMainChatRoomEvent(sender: $user, chatRoomMessage: $message));
         } else {
-            broadcast(new ChatRoomMessageEvent(chatRoom: $chatRoom, sender: $user, chatRoomMessage: $message));
+            event(new ChatRoomMessageEvent($chatRoom, $user, $message));
         }
     }
 }

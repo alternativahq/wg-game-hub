@@ -128,4 +128,9 @@ class GameLobby extends Model
         $total = GameLobbyUser::where('game_lobby_id', $this->id)->sum('entrance_fee');
         return (float) ($total - ($total * 20.0) / 100.0);
     }
+
+    public function activityLogs(): HasMany
+    {
+        return $this->hasMany(GameLobbyLog::class);
+    }
 }

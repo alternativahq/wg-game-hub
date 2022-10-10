@@ -94,17 +94,17 @@ function channelUserLeft(payload) {
 function channelInGame(payload) {
     console.log('redirecting user to game server...');
     try {
+        let newWindow = window.open('', '_blank', 'resizable=yes');
         let gameServerUrl = new URL(payload.url);
         gameServerUrl.searchParams.set('userId', currentUser.id);
         gameServerUrl.searchParams.set('username', currentUser.username);
-        window.open(gameServerUrl.toString(), '_blank').focus();
+        newWindow.location = gameServerUrl.toString();
     } catch (e) {
         return false;
     }
 }
 
 async function channelGameEnded(payload) {
-    console.log('game-ended called');
     Inertia.reload({ only: ['gameLobby', 'currentUserScore'] });
 }
 

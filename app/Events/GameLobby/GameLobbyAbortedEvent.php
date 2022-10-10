@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events\GameLobby\Voting;
+namespace App\Events\GameLobby;
 
 use App\Models\GameLobby;
 use Illuminate\Broadcasting\Channel;
@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class GameLobbyStartVotingFailed
+class GameLobbyAbortedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -26,13 +26,11 @@ class GameLobbyStartVotingFailed
 
     public function broadcastAs(): string
     {
-        return 'gameLobby.start-voting-failed';
+        return 'status.aborted';
     }
-    
+
     public function broadcastWith(): array
     {
-        return[ 
-            'gameLobby' => (new GameLobbyResource($this->gameLobby))->resolve(),
-        ];
+        return [];
     }
 }

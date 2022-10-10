@@ -16,14 +16,13 @@ use Illuminate\Http\Response;
 use App\Enums\GameLobbyStatus;
 use App\Http\Controllers\Controller;
 use App\Events\GameLobbyStartedEvent;
-use App\Events\GameLobby\AwaitingPlayersEvent as GameLobbyAwaitingPlayersEvent;
-use App\Events\GameLobby\DistributingPrizesEvent as GameLobbyDistributingPrizesEvent;
-use App\Events\GameLobby\DistributedPrizesEvent as GameLobbyDistributedPrizesEvent;
-use App\Events\GameLobby\GameEndedEvent;
-use App\Events\GameLobby\GameArchivedEvent;
+use App\Events\GameLobby\GameLobbyAwaitingPlayersEvent as GameLobbyAwaitingPlayersEvent;
+use App\Events\GameLobby\GameLobbyDistributingPrizesEvent as GameLobbyDistributingPrizesEvent;
+use App\Events\GameLobby\GameLobbyDistributedPrizesEvent as GameLobbyDistributedPrizesEvent;
+use App\Events\GameLobby\GameLobbyEndedEvent;
+use App\Events\GameLobby\GameLobbyArchivedEvent;
 use App\Http\Resources\GameLobbyUserResource;
 use App\Events\GameLobby\GameLobbyCreatedEvent;
-use App\Events\GameLobby\ResultsProcessedEvent;
 use App\DataTransferObjects\GameMatchResultData;
 use App\Http\Requests\Admin\StoreGameLobbyRequest;
 use App\Http\Requests\GameMatchResultsPayloadRequest;
@@ -77,9 +76,10 @@ class GameLobbyController extends Controller
                 ]);
             });
         } catch (Exception $exception) {
+            dd($exception);
             return abort(Response::HTTP_INTERNAL_SERVER_ERROR, 'Something went wrong while creating game lobby.');
         }
-        
+
         return response()->noContent();
     }
 
@@ -90,7 +90,7 @@ class GameLobbyController extends Controller
             'state' => GameLobbyStatus::AwaitingPlayers,
         ]);
         event(new GameLobbyAwaitingPlayersEvent($gameLobby));
-        
+
         return response()->noContent();
     }
 
@@ -132,7 +132,7 @@ class GameLobbyController extends Controller
         $gameMatchResultData = GameMatchResultData::fromRequest(request: $request);
         $storeGameMatchResultAction->execute(gameLobby: $gameLobby, gameMatchResultData: $gameMatchResultData);
 
-        broadcast(new GameEndedEvent(gameLobby: $gameLobby));
+        event(new GameLobbyEndedEvent(gameLobby: $gameLobby, matchResults: $request->validated()));
 
         return response()->noContent();
     }
@@ -169,7 +169,7 @@ class GameLobbyController extends Controller
         $gameLobby->update([
             'state' => GameLobbyStatus::Archived,
         ]);
-        broadcast(new GameArchivedEvent(gameLobby: $gameLobby));
+        broadcast(new GameLobbyArchivedEvent(gameLobby: $gameLobby));
         return response()->json();
     }
 
