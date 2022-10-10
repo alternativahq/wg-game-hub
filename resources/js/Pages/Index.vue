@@ -51,7 +51,7 @@ let state = reactive({
 watch(
     () => filters,
     throttle(() => {
-        Inertia.get(currentUrl, { ...filters }, { preserveState: true, preserveScroll:true });
+        Inertia.get(currentUrl, { ...filters }, { preserveState: true, preserveScroll: true });
     }, 1000),
     {
         deep: true,
@@ -84,7 +84,9 @@ watch(
             <ActiveSessionBanner />
             <CooldownBanner />
             <BorderedContainer class="mb-8 bg-wgh-purple-3">
-                <div class="flex flex-col space-y-6 rounded-lg bg-wgh-purple-2 p-6 md:flex-row md:space-x-6 md:space-y-0">
+                <div
+                    class="flex flex-col space-y-6 rounded-lg bg-wgh-purple-2 p-6 md:flex-row md:space-x-6 md:space-y-0"
+                >
                     <div class="w-full md:w-1/2">
                         <img :src="props.config.dashboard_art" alt="Dashboard Art" />
                     </div>
@@ -93,27 +95,19 @@ watch(
                             The First Retro Gaming Playground Competitions!
                         </h2>
                         <p class="mt-4 font-inter text-base font-normal text-white">
-                            Monetize blockchain gaming with the Wodo XWGT Token, available across the Wodo Gaming Hub. Earn, play and win with Wodo!
+                            Monetize blockchain gaming with the Wodo XWGT Token, available across the Wodo Gaming Hub.
+                            Earn, play and win with Wodo!
                         </p>
                     </div>
                 </div>
             </BorderedContainer>
-            <div class="flex justify-between my-10">
+            <div class="my-10 flex justify-between">
                 <div>
                     <div class="mb-3">
-                        <label
-                            for="Name"
-                            class="form-label inline-block mb-2 text-gray-700 text-lg"
-                            >Name</label
-                        >
+                        <label for="Name" class="form-label mb-2 inline-block text-lg text-gray-700">Name</label>
                         <input
                             type="text"
-                            class="form-control block rounded px-2 py-1 text-lg font-normal
-                            text-gray-700
-                            bg-white bg-clip-padding
-                            border border-solid border-gray-300 transition ease-in-out m-0
-                            focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-                            "
+                            class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
                             name="search"
                             id="search"
                             placeholder="Search"
@@ -122,11 +116,7 @@ watch(
                     </div>
                     <div>
                         <div class="mb-3 xl:w-64">
-                            <label
-                                for="Date"
-                                class="form-label inline-block mb-2 text-gray-700 text-lg"
-                                >Date</label
-                            >
+                            <label for="Date" class="form-label mb-2 inline-block text-lg text-gray-700">Date</label>
                             <Datepicker
                                 range
                                 required
@@ -143,9 +133,7 @@ watch(
                 <div>
                     <div>
                         <div class="mb-3">
-                            <label
-                                for="Maximum Players"
-                                class="form-label inline-block mb-2 text-gray-700 text-lg"
+                            <label for="Maximum Players" class="form-label mb-2 inline-block text-lg text-gray-700"
                                 >Mode</label
                             >
                             <select
@@ -163,11 +151,7 @@ watch(
                     </div>
                     <div>
                         <div class="mb-3">
-                            <label
-                                for="Asset"
-                                class="form-label inline-block mb-2 text-gray-700 text-lg"
-                                >Asset</label
-                            >
+                            <label for="Asset" class="form-label mb-2 inline-block text-lg text-gray-700">Asset</label>
                             <select
                                 id="games_gamelobbies_asset_symbol"
                                 name="games_gamelobbies_asset_symbol"
@@ -181,22 +165,17 @@ watch(
                             </select>
                         </div>
                     </div>
-                    </div>
+                </div>
                 <div>
                     <div>
                         <div class="mb-3">
                             <label
                                 for="Minimum Base Entrance Fee"
-                                class="form-label inline-block mb-2 text-gray-700 text-lg"
+                                class="form-label mb-2 inline-block text-lg text-gray-700"
                                 >Minimum Base Entrance Fee</label
                             >
                             <input
-                                class="form-control block rounded px-2 py-1 text-lg font-normal
-                                text-gray-700
-                                bg-white bg-clip-padding
-                                border border-solid border-gray-300 transition ease-in-out m-0
-                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-                                "
+                                class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
                                 type="number"
                                 name="min-base_entrance_fee"
                                 id="min-base_entrance_fee"
@@ -208,16 +187,11 @@ watch(
                             <div class="mb-3">
                                 <label
                                     for="Maximum Base Entrance Fee"
-                                    class="form-label inline-block mb-2 text-gray-700 text-lg"
+                                    class="form-label mb-2 inline-block text-lg text-gray-700"
                                     >Maximum Base Entrance Fee</label
                                 >
                                 <input
-                                    class="form-control block rounded px-2 py-1 text-lg font-normal
-                                    text-gray-700
-                                    bg-white bg-clip-padding
-                                    border border-solid border-gray-300 transition ease-in-out m-0
-                                    focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-                                    "
+                                    class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
                                     type="number"
                                     name="max-base_entrance_fee"
                                     id="max-base_entrance_fee"
@@ -231,18 +205,11 @@ watch(
                 <div>
                     <div>
                         <div class="mb-3">
-                            <label
-                                for="Minimum Players"
-                                class="form-label inline-block mb-2 text-gray-700 text-lg"
+                            <label for="Minimum Players" class="form-label mb-2 inline-block text-lg text-gray-700"
                                 >Minimum Players</label
                             >
                             <input
-                                class="form-control block rounded px-2 py-1 text-lg font-normal
-                                text-gray-700
-                                bg-white bg-clip-padding
-                                border border-solid border-gray-300 transition ease-in-out m-0
-                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-                                "
+                                class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
                                 type="number"
                                 name="min-players"
                                 id="min-players"
@@ -253,18 +220,11 @@ watch(
                     </div>
                     <div>
                         <div class="mb-3">
-                            <label
-                                for="Maximum_Players"
-                                class="form-label inline-block mb-2 text-gray-700 text-md"
+                            <label for="Maximum_Players" class="form-label text-md mb-2 inline-block text-gray-700"
                                 >Maximum Players</label
                             >
                             <input
-                                class="form-control block rounded px-2 py-1 text-lg font-normal
-                                text-gray-700
-                                bg-white bg-clip-padding
-                                border border-solid border-gray-300 transition ease-in-out m-0
-                                focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
-                                "
+                                class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
                                 type="number"
                                 name="max-players"
                                 id="max-players"
@@ -284,7 +244,7 @@ watch(
                 />
             </div>
         </div>
-        <div class="flex flex-col space-y-6 lg">
+        <div class="flex flex-col space-y-6 lg:w-1/4">
             <DashboardBalanceCard v-if="currentUser" :balance="balance" :asset_accounts="currentUser.asset_accounts" />
             <DashboardBalanceCardCreateAccount v-if="!currentUser" />
             <BorderedContainer class="h-[30rem] grow bg-wgh-purple-3">
@@ -310,20 +270,21 @@ watch(
                             :message="chatMessage.message.message"
                         />
                     </div>
-                    <div class="flex justify-between items-center lg:flex-col xl:flex-row rounded-md">
-                        <input type="text"
-                            class=" p-2 outline-none ring-0"
+                    <div class="flex items-center justify-between rounded-md lg:flex-col xl:flex-row">
+                        <input
+                            type="text"
+                            class="p-2 outline-none ring-0"
                             placeholder="Type your message here"
                             v-model="state.chatMessageBody"
                             @keyup.enter="
                                 state.chatRoom.sendChatMessage(state.chatMessageBody);
                                 state.chatMessageBody = '';
                             "
-                        >
+                        />
                         <button
                             :disabled="state.chatMessageBody.length <= 0"
                             @click.prevent="state.chatRoom.sendChatMessage(state.chatMessageBody)"
-                            class="rounded-md  bg-wgh-purple-2 py-2 px-4 disabled:cursor-no-drop"
+                            class="rounded-md bg-wgh-purple-2 py-2 px-4 disabled:cursor-no-drop"
                         >
                             <KiteArrow class="h-4 w-4" />
                         </button>
