@@ -76,7 +76,6 @@ class GameLobbyController extends Controller
                 ]);
             });
         } catch (Exception $exception) {
-            dd($exception);
             return abort(Response::HTTP_INTERNAL_SERVER_ERROR, 'Something went wrong while creating game lobby.');
         }
 

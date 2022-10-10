@@ -7,7 +7,7 @@ use App\Http\Resources\UserResource;
 use App\Http\Resources\GameLobbyResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class GameLobbyLogResource extends JsonResource
+class GameLobbyActivityLogResource extends JsonResource
 {
     public function toArray($request)
     {
