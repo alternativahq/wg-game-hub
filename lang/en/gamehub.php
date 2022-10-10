@@ -13,8 +13,11 @@ return [
     'Beta' => 'Beta',
 
     //game lobby type
-    'TypeOne' => 'TypeOne',
-    'TypeTwo' => 'TypeTwo',
+    'TypeOne' => 'Type One',
+     'DeathMatch' => 'Death Match',
+     'LastManStanding' => 'Last Man Standing',
+     'OneVOne' => 'One V One',
+     'TeamVTeam' => 'Team V Team',
 
     //game lobby status
     'Scheduled' => 'Scheduled',

@@ -237,7 +237,7 @@ export default {
                             <div>
                                 <p class="font-grota text-lg font-extrabold uppercase text-wgh-gray-6">Game Mode</p>
                                 <p class="font-inter font-normal uppercase text-wgh-gray-6">
-                                    {{ gameLobbyModel.type }}
+                                    {{ gameLobbyModel.type_label }}
                                 </p>
                             </div>
                         </div>

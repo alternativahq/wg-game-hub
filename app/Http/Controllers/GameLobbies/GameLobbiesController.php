@@ -2,43 +2,41 @@
 
 namespace App\Http\Controllers\GameLobbies;
 
+use Auth;
+use Inertia\Inertia;
+use App\Models\GameLobby;
+use App\Models\GameLobbyUser;
 use App\Enums\GameLobbyStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\GameLobbyResource;
-use App\Models\GameLobby;
-use App\Models\GameLobbyUser;
-use Auth;
 use Illuminate\Database\Eloquent\Builder;
-use Inertia\Inertia;
 
 class GameLobbiesController extends Controller
 {
     public function show(GameLobby $gameLobby)
     {
         $this->authorize('view', $gameLobby);
+        $gameLobby->load(
+            'game:id,name,description',
+            'users:id,name,last_name,image,username',
+            'asset:id,name,symbol',
+        );
+
+        if (
+            $gameLobby->state->is(GameLobbyStatus::GameEnded) ||
+            $gameLobby->state->is(GameLobbyStatus::DistributingPrizes) ||
+            $gameLobby->state->is(GameLobbyStatus::DistributedPrizes)
+        ) {
+            // load the top 6 including the current user.
+            $gameLobby->load([
+                'scores' => function ($q) {
+                    return $q->orderBy('rank')->limit(5);
+                },
+            ]);
+        }
 
         return Inertia::render('Games/Lobbies/Show', [
-            'gameLobby' => function () use ($gameLobby) {
-                $gameLobby->load(
-                    'game:id,name,description',
-                    'users:id,name,last_name,image,username',
-                    'asset:id,name,symbol',
-                );
-
-                if (
-                    $gameLobby->state->is(GameLobbyStatus::GameEnded) ||
-                    $gameLobby->state->is(GameLobbyStatus::DistributingPrizes) ||
-                    $gameLobby->state->is(GameLobbyStatus::DistributedPrizes)
-                ) {
-                    // load the top 6 including the current user.
-                    $gameLobby->load([
-                        'scores' => function ($q) {
-                            return $q->orderBy('rank')->limit(5);
-                        },
-                    ]);
-                }
-                return new GameLobbyResource($gameLobby);
-            },
+            'gameLobby' => new GameLobbyResource($gameLobby),
             'currentUserScore' => function () use ($gameLobby) {
                 return auth()->user()
                     ? $gameLobby
