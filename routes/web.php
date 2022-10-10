@@ -87,7 +87,7 @@ Route::middleware('auth')->group(function () {
         ->group(function () {
             // CRAD opretion  game lobbies and template
             Route::get('/games', [AdminGamesController::class, 'index'])->name('games');
-            Route::get('/games/{game}/lobbies', [AdminGamesController::class, 'showLobbies'])->name('gameLobbies.show');
+            Route::get('/games/{game}/lobbies', [AdminGamesController::class, 'showLobbies'])->name('games.show');
             Route::get('/games/{game}/templates', [AdminGamesController::class, 'showTemplates'])->name(
                 'gameTemplates.show',
             );
