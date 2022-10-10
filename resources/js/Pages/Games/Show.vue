@@ -330,7 +330,7 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
                                 {{ gameLobby.name }}
                             </h2>
                             <div class="text-bold shrink-0 font-grota text-base text-wgh-gray-6">
-                                <span>{{ gameLobby.base_entrance_fee }} {{ gameLobby.asset?.symbol }}</span>
+                                <span>{{ gameLobby.base_entrance_fee }} {{ gameLobby.asset?.symbol }}/{{gameLobby.game_play_duration}}Mins</span>
                             </div>
                         </div>
                         <button
