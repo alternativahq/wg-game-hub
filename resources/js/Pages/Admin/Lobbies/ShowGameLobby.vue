@@ -22,42 +22,45 @@ let props = defineProps({
                         <div
                             class="mt-4 flex w-full flex-col rounded-lg bg-gray-100 p-4 text-center font-inter text-base font-normal lg:w-1/4"
                         >
-                            <dev class="text-md mb-2 font-semibold">The game lobby will be available at:</dev>
-                            <dev>{{
-                                dayjs(gameLobby.data.scheduled_at)
-                                    .utc()
-                                    .local()
-                                    .tz(dayjs.tz.guess())
-                                    .format('MMMM DD, YYYY hh:mm A')
-                            }}</dev>
+                            <div class="text-md mb-2 font-semibold">The game lobby will be available at:</div>
+                            <div>
+                                {{
+                                    dayjs(gameLobby.data.scheduled_at)
+                                        .utc()
+                                        .local()
+                                        .tz(dayjs.tz.guess())
+                                        .format('MMMM DD, YYYY hh:mm A')
+                                }}
+                            </div>
                         </div>
                         <div
                             class="mt-4 flex w-full flex-col rounded-lg bg-gray-100 p-4 text-center font-inter text-base font-normal lg:w-1/4"
                         >
-                            <dev class="text-md mb-2 font-semibold">The game lobby will start at:</dev>
-                            <dev>{{
-                                dayjs(gameLobby.data.start_at)
-                                    .utc()
-                                    .local()
-                                    .tz(dayjs.tz.guess())
-                                    .format('MMMM DD, YYYY hh:mm A')
-                            }}</dev>
+                            <div class="text-md mb-2 font-semibold">The game lobby will start at:</div>
+                            <div>
+                                {{
+                                    dayjs(gameLobby.data.start_at)
+                                        .utc()
+                                        .local()
+                                        .tz(dayjs.tz.guess())
+                                        .format('MMMM DD, YYYY hh:mm A')
+                                }}
+                            </div>
                         </div>
                         <div
                             class="mt-4 flex w-full flex-col rounded-lg bg-gray-100 p-4 font-inter text-base font-normal lg:w-1/4"
                         >
-                            <dev class="text-md mb-2 text-center font-semibold">Current Lobby Users:</dev>
-                            <dev class="text-center">{{ usersCount }}</dev>
+                            <div class="text-md mb-2 text-center font-semibold">Current Lobby Users:</div>
+                            <div class="text-center">{{ usersCount }}</div>
                         </div>
                         <div
                             v-if="gameLobby.data.type != 3 && gameLobby.data.game_play_duration"
                             class="mt-4 flex w-full flex-col rounded-lg bg-gray-100 p-4 text-center font-inter text-base font-normal lg:w-1/4"
                         >
-                            <dev class="text-md mb-2 font-semibold">Gam Play Duration:</dev>
-                            <dev
-                                >{{ gameLobby.data.game_play_duration / 60 }}
-                                <span class="font-semibold">min</span></dev
-                            >
+                            <div class="text-md mb-2 font-semibold">Gam Play Duration:</div>
+                            <div>
+                                {{ gameLobby.data.game_play_duration / 60 }} <span class="font-semibold">min</span>
+                            </div>
                         </div>
                     </div>
                 </div>
