@@ -27,6 +27,7 @@ class GameLobbyTemplateResource extends JsonResource
             'algorithm_id' => $this->algorithm_id,
             'min_players' => $this->min_players,
             'max_players' => $this->max_players,
+            'game_play_duration' => $this->game_play_duration,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'deleted_at' => $this->deleted_at,

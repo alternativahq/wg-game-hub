@@ -20,6 +20,7 @@ let AddTemplateForm = useForm({
     base_entrance_fee: '',
     min_players: '',
     max_players: '',
+    game_play_duration: '',
     asset_id: '',
     algorithm_id: '',
 });
@@ -146,6 +147,20 @@ function addGameLobbyTemplate() {
             <InputError class="mt-2">
                 <div v-if="AddTemplateForm.errors.max_players" class="mt-2">
                     {{ AddTemplateForm.errors.max_players }}
+                </div>
+            </InputError>
+            <div class="font-semibold">Game Play Duration</div>
+            <TextInput
+                v-model="AddTemplateForm.game_play_duration"
+                placeholder="game_play_duration"
+                type="text"
+                id="game_play_duration"
+                name="game_play_duration"
+                class="mt-4"
+            />
+            <InputError class="mt-2">
+                <div v-if="AddTemplateForm.errors.game_play_duration" class="mt-2">
+                    {{ AddTemplateForm.errors.game_play_duration }}
                 </div>
             </InputError>
             <div class="font-semibold">Asset</div>

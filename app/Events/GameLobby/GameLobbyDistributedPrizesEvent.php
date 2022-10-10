@@ -4,17 +4,18 @@ namespace App\Events\GameLobby;
 
 use App\Models\GameLobby;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use App\Http\Resources\GameLobbyResource;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class PrizeUpdatedEvent implements ShouldBroadcast
+class GameLobbyDistributedPrizesEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public GameLobby $gameLobby, public int $newPrize)
+    public function __construct(public GameLobby $gameLobby)
     {
     }
 
@@ -25,13 +26,6 @@ class PrizeUpdatedEvent implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'prize-updated';
-    }
-
-    public function broadcastWith()
-    {
-        return [
-            'prize' => $this->newPrize,
-        ];
+        return 'status.distributed-prizes';
     }
 }

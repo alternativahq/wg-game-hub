@@ -318,10 +318,10 @@ function deleteLobby(gameLobbie) {
                                             <td
                                                 class="flex items-center whitespace-nowrap px-3 py-4 text-sm text-gray-500"
                                             >
-                                                <Link :href="`/admin/gameLobbies/${gameLobbie.id}/edit`">
+                                                <Link :href="`/admin/gameLobbies/${gameLobbie.id}`">
                                                     <ButtonShape type="purple">
                                                         <span class="flex flex-row space-x-2.5">
-                                                            <span class="font-bold uppercase">Update</span>
+                                                            <span class="font-bold uppercase">Show</span>
                                                         </span>
                                                     </ButtonShape>
                                                 </Link>

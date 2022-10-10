@@ -11,11 +11,11 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UserLeftGameLobbyEvent implements ShouldBroadcast
+class GameLobbyUserJoinedGameLobbyEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public GameLobby $gameLobby, public User $user)
+    public function __construct(public GameLobby $gameLobby, public User $user, public int $entranceFee)
     {
     }
 
@@ -26,7 +26,7 @@ class UserLeftGameLobbyEvent implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'user.left';
+        return 'user.joined';
     }
 
     public function broadcastWith(): array
@@ -39,6 +39,7 @@ class UserLeftGameLobbyEvent implements ShouldBroadcast
                 'full_name' => $this->user->full_name,
                 'username' => $this->user->username,
                 'image_url' => $this->user->image_url,
+                'entrance_fee' => $this->entranceFee,
             ],
         ];
     }

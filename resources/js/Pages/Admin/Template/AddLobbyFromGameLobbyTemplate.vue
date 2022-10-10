@@ -27,6 +27,7 @@ let AddLobbyFromTemplateForm = useForm({
     base_entrance_fee: props.gameTemplate.base_entrance_fee,
     min_players: props.gameTemplate.min_players,
     max_players: props.gameTemplate.max_players,
+    game_play_duration: props.gameTemplate.game_play_duration,
     scheduled_at: '',
     start_at: '',
     asset_id: props.gameTemplate.asset_id,
@@ -169,6 +170,22 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
             <InputError class="mt-2">
                 <div v-if="AddLobbyFromTemplateForm.errors.max_players" class="mt-2">
                     {{ AddLobbyFromTemplateForm.errors.max_players }}
+                </div>
+            </InputError>
+            <div v-if="AddLobbyFromTemplateForm.type != 3">
+                <div class="font-semibold">Game Play Duration</div>
+                <TextInput
+                    v-model="AddLobbyFromTemplateForm.game_play_duration"
+                    placeholder="game_play_duration"
+                    type="text"
+                    id="game_play_duration"
+                    name="game_play_duration"
+                    class="mt-4"
+                />
+            </div>
+            <InputError class="mt-2">
+                <div v-if="AddLobbyFromTemplateForm.errors.game_play_duration" class="mt-2">
+                    {{ AddLobbyFromTemplateForm.errors.game_play_duration }}
                 </div>
             </InputError>
             <div class="font-semibold">schedualed at</div>

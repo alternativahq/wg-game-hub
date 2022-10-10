@@ -1,20 +1,21 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\GameLobby;
 
 use App\Models\GameLobby;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use App\Http\Resources\GameLobbyResource;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class GameLobbyArchivedEvent implements ShouldBroadcast
+class GameLobbyEndedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public GameLobby $gameLobby)
+    public function __construct(public GameLobby $gameLobby, public $matchResults)
     {
     }
 
@@ -25,6 +26,6 @@ class GameLobbyArchivedEvent implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'status.archived';
+        return 'status.game-ended';
     }
 }

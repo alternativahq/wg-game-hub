@@ -2,7 +2,6 @@
 
 namespace App\Events\GameLobby;
 
-use App\Enums\GameLobbyStatus;
 use App\Models\GameLobby;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -11,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ProcessingResultsEvent implements ShouldBroadcast
+class GameLobbyStartVotingPassedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -26,13 +25,6 @@ class ProcessingResultsEvent implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'status.processing-results';
-    }
-
-    public function broadcastWith(): array
-    {
-        return [
-            'game_lobby_status' => GameLobbyStatus::GameEnded,
-        ];
+        return 'start-voting-passed';
     }
 }

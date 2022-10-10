@@ -16,10 +16,13 @@ use Illuminate\Http\Response;
 use App\Enums\GameLobbyStatus;
 use App\Http\Controllers\Controller;
 use App\Events\GameLobbyStartedEvent;
-use App\Events\GameLobby\GameEndedEvent;
-use App\Events\GameLobby\GameArchivedEvent;
+use App\Events\GameLobby\GameLobbyAwaitingPlayersEvent as GameLobbyAwaitingPlayersEvent;
+use App\Events\GameLobby\GameLobbyDistributingPrizesEvent as GameLobbyDistributingPrizesEvent;
+use App\Events\GameLobby\GameLobbyDistributedPrizesEvent as GameLobbyDistributedPrizesEvent;
+use App\Events\GameLobby\GameLobbyEndedEvent;
+use App\Events\GameLobby\GameLobbyArchivedEvent;
 use App\Http\Resources\GameLobbyUserResource;
-use App\Events\GameLobby\ResultsProcessedEvent;
+use App\Events\GameLobby\GameLobbyCreatedEvent;
 use App\DataTransferObjects\GameMatchResultData;
 use App\Http\Requests\Admin\StoreGameLobbyRequest;
 use App\Http\Requests\GameMatchResultsPayloadRequest;
@@ -66,12 +69,14 @@ class GameLobbyController extends Controller
         try {
             DB::transaction(function () use ($payload) {
                 $lobby = GameLobby::create($payload);
+                event(new GameLobbyCreatedEvent($lobby, $payload));
                 ChatRoom::create([
                     'id' => $lobby->id,
                     'type' => ChatRoomType::GameLobby,
                 ]);
             });
         } catch (Exception $exception) {
+            dd($exception);
             return abort(Response::HTTP_INTERNAL_SERVER_ERROR, 'Something went wrong while creating game lobby.');
         }
 
@@ -84,6 +89,7 @@ class GameLobbyController extends Controller
         $gameLobby->update([
             'state' => GameLobbyStatus::AwaitingPlayers,
         ]);
+        event(new GameLobbyAwaitingPlayersEvent($gameLobby));
 
         return response()->noContent();
     }
@@ -127,7 +133,7 @@ class GameLobbyController extends Controller
         $gameMatchResultData = GameMatchResultData::fromRequest(request: $request);
         $storeGameMatchResultAction->execute(gameLobby: $gameLobby, gameMatchResultData: $gameMatchResultData);
 
-        broadcast(new GameEndedEvent(gameLobby: $gameLobby));
+        event(new GameLobbyEndedEvent(gameLobby: $gameLobby, matchResults: $request->validated()));
 
         return response()->noContent();
     }
@@ -140,6 +146,7 @@ class GameLobbyController extends Controller
         ]);
         $gameLobby->load('users:id');
         Notification::send($gameLobby->users, new GameLobbyDistributingPrizesNotification(gameLobby: $gameLobby));
+        event(new GameLobbyDistributingPrizesEvent($gameLobby));
 
         return response()->json();
     }
@@ -152,6 +159,7 @@ class GameLobbyController extends Controller
         ]);
         $gameLobby->load('users:id');
         Notification::send($gameLobby->users, new GameLobbyDistributedPrizesNotification(gameLobby: $gameLobby));
+        event(new GameLobbyDistributedPrizesEvent($gameLobby));
 
         return response()->json();
     }
@@ -162,7 +170,7 @@ class GameLobbyController extends Controller
         $gameLobby->update([
             'state' => GameLobbyStatus::Archived,
         ]);
-        broadcast(new GameArchivedEvent(gameLobby: $gameLobby));
+        broadcast(new GameLobbyArchivedEvent(gameLobby: $gameLobby));
         return response()->json();
     }
 
