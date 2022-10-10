@@ -48,7 +48,8 @@ onMounted(() => {
             .listen(GameLobby.socketEvents.status.distributingPrizes, channelDistributingPrizes)
             .listen(GameLobby.socketEvents.status.distributedPrizes, channelDistributedPrizes)
             .listen(GameLobby.socketEvents.status.archived, channelArchived)
-            .listen(GameLobby.socketEvents.prizeUpdated, channelPrizeUpdated);
+            .listen(GameLobby.socketEvents.prizeUpdated, channelPrizeUpdated)
+            .listen(GameLobby.socketEvents.status.latestUpdate, channelLatestUpdate);
     }
 });
 
@@ -125,6 +126,11 @@ function channelArchived() {
 
 function channelPrizeUpdated(payload) {
     data.prize = payload.prize;
+}
+
+function channelLatestUpdate(payload) {
+    console.log('asdsadasdas..');
+    // data.latest_update = payload.latest_update;
 }
 
 watch(
