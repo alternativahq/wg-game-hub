@@ -21,7 +21,7 @@ let props = defineProps({
 });
 
 let data = reactive({
-    latestUpdateMessage: 'Updates are on the way...',
+    latestUpdateMessage: props.gameLobby.data.latest_update,
     chatMessages: [],
     chatMessageInput: '',
 });
@@ -129,8 +129,8 @@ function channelPrizeUpdated(payload) {
 }
 
 function channelLatestUpdate(payload) {
-    console.log('asdsadasdas..');
-    // data.latest_update = payload.latest_update;
+    // console.log(payload.latest_update);
+    data.latestUpdateMessage = payload.latest_update;
 }
 
 watch(

@@ -28,7 +28,7 @@ class GameLobbyLifecycleEventSubscriber
             'payload' => json_encode($event->payload),
         ]);
         $event->gameLobby->update([
-        'latest_update' => GameLobbyLogType::GameLobbyCreated->toLabel(),
+        'latest_update' => GameLobbyLogType::GameLobbyCreated,
         ]);
         
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -40,7 +40,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => GameLobbyLogType::GameLobbyStateScheduled->toLabel(),
+            'latest_update' => GameLobbyLogType::GameLobbyStateScheduled,
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -54,7 +54,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => GameLobbyLogType::GameLobbyStateAwaitingPlayers->toLabel(),
+            'latest_update' => GameLobbyLogType::GameLobbyStateAwaitingPlayers,
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -69,7 +69,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => GameLobbyLogType::GameLobbyStateInGame->toLabel(),
+            'latest_update' => GameLobbyLogType::GameLobbyStateInGame,
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -84,7 +84,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $gameEndedEvent->gameLobby->update([
-            'latest_update' => GameLobbyLogType::GameLobbyStateEnded->toLabel(),
+            'latest_update' => GameLobbyLogType::GameLobbyStateEnded,
         ]);
         event(new GameLobbyLatestUpdate(gameLobby: $gameEndedEvent->gameLobby));
     }
@@ -97,7 +97,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => GameLobbyLogType::GameLobbyDistributingPrizes->toLabel(),
+            'latest_update' => GameLobbyLogType::GameLobbyDistributingPrizes,
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -111,7 +111,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => GameLobbyLogType::GameLobbyDistributedPrizes->toLabel(),
+            'latest_update' => GameLobbyLogType::GameLobbyDistributedPrizes,
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -125,7 +125,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => GameLobbyLogType::GameLobbyArchived->toLabel(),
+            'latest_update' => GameLobbyLogType::GameLobbyArchived,
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -148,7 +148,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => GameLobbyLogType::UserJoined->toLabel(),
+            'latest_update' => GameLobbyLogType::UserJoined,
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -170,7 +170,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => GameLobbyLogType::UserLeft->toLabel(),
+            'latest_update' => GameLobbyLogType::UserLeft,
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));

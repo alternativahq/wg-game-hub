@@ -29,10 +29,10 @@ class GameLobbyLatestUpdate implements ShouldBroadcast
         return 'status.latest-update';
     }
 
-    // public function broadcastWith(): array
-    // {
-    //     return [
-    //         'latest_update'-> $this->gameLobby->latest_update,
-    //     ];
-    // }
+    public function broadcastWith(): array
+    {
+        return [
+            'latest_update'=> $this->gameLobby->latest_update->toLabel(),
+        ];
+    }
 }
