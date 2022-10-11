@@ -20,6 +20,7 @@ let updateTemplateForm = useForm({
     base_entrance_fee: props.gameTemplate.data.base_entrance_fee,
     min_players: props.gameTemplate.data.min_players,
     max_players: props.gameTemplate.data.max_players,
+    game_play_duration: props.gameTemplate.data.game_play_duration ?? null,
     asset_id: props.gameTemplate.data.asset_id,
     game_id: props.gameTemplate.data.game_id,
     algorithm_id: props.gameTemplate.data.algorithm_id,
@@ -147,6 +148,20 @@ function updateGameLobbyTemplate() {
             <InputError class="mt-2">
                 <div v-if="updateTemplateForm.errors.max_players" class="mt-2">
                     {{ updateTemplateForm.errors.max_players }}
+                </div>
+            </InputError>
+            <div class="font-semibold">Game Play Duration</div>
+            <TextInput
+                v-model="updateTemplateForm.game_play_duration"
+                placeholder="game_play_duration"
+                type="text"
+                id="game_play_duration"
+                name="game_play_duration"
+                class="mt-4"
+            />
+            <InputError class="mt-2">
+                <div v-if="updateTemplateForm.errors.game_play_duration" class="mt-2">
+                    {{ updateTemplateForm.errors.game_play_duration }}
                 </div>
             </InputError>
             <div class="font-semibold">Asset</div>

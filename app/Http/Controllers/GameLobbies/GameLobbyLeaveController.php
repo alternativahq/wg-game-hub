@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\GameLobbies;
 
-use App\Actions\Games\GameLobbies\RemoveUserFromGameLobbyAction;
-use App\Http\Controllers\Controller;
 use App\Models\GameLobby;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Events\GameLobby\GameLobbyUserLeftGameLobbyEvent;
+use App\Actions\Games\GameLobbies\RemoveUserFromGameLobbyAction;
 
 class GameLobbyLeaveController extends Controller
 {
@@ -15,12 +16,9 @@ class GameLobbyLeaveController extends Controller
         RemoveUserFromGameLobbyAction $removeUserFromGameLobbyAction,
     ) {
         $this->authorize('leave', $gameLobby);
-        
+
         $gameLobby->load('asset');
-        $gameLobby = $removeUserFromGameLobbyAction->execute(
-            request: $request,
-            gameLobby: $gameLobby,
-        );
+        $gameLobby = $removeUserFromGameLobbyAction->execute(request: $request, gameLobby: $gameLobby);
 
         return redirect()->route('games.show', [
             'game' => $gameLobby->game_id,

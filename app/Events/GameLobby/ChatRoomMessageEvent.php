@@ -17,11 +17,8 @@ class ChatRoomMessageEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(
-        public ChatRoom $chatRoom,
-        public User $sender,
-        public ChatRoomMessage $chatRoomMessage,
-    ) {
+    public function __construct(public ChatRoom $chatRoom, public User $sender, public ChatRoomMessage $chatRoomMessage)
+    {
     }
 
     public function broadcastOn(): PresenceChannel|array

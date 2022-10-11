@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\GameLobbies;
 
-use App\Actions\Games\GameLobbies\AddUserToGameLobbyAction;
-use App\Enums\Reactions\AddUserToGameLobbyReaction;
-use App\Http\Controllers\Controller;
-use App\Models\GameLobby;
 use Auth;
-use Illuminate\Http\Request;
 use Redirect;
+use App\Models\GameLobby;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Events\GameLobby\GameLobbyUserJoinedGameLobbyEvent;
+use App\Enums\Reactions\AddUserToGameLobbyReaction;
+use App\Actions\Games\GameLobbies\AddUserToGameLobbyAction;
 
 class GameLobbyJoinController extends Controller
 {

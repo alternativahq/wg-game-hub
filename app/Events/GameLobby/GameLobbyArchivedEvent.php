@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class GameEndedEvent implements ShouldBroadcast
+class GameLobbyArchivedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -25,6 +25,6 @@ class GameEndedEvent implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'status.game-ended';
+        return 'status.archived';
     }
 }

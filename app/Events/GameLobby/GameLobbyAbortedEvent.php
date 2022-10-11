@@ -2,16 +2,16 @@
 
 namespace App\Events\GameLobby;
 
-use App\Http\Resources\GameLobbyResource;
 use App\Models\GameLobby;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use App\Http\Resources\GameLobbyResource;
+use Illuminate\Broadcasting\PresenceChannel;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class ResultsProcessedEvent implements ShouldBroadcast
+class GameLobbyAbortedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -26,13 +26,11 @@ class ResultsProcessedEvent implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'status.results-processed';
+        return 'status.aborted';
     }
 
     public function broadcastWith(): array
     {
-        return[ 
-            'gameLobby' => (new GameLobbyResource($this->gameLobby))->resolve(),
-        ];
+        return [];
     }
 }

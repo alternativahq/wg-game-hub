@@ -32,6 +32,9 @@ let chatBox = ref();
 let gameLobbyModel = reactive(new GameLobby(props.gameLobby.data));
 
 onMounted(() => {
+    if (gameLobbyModel.status === GameLobby.availableStatuses.InGame) {
+        channelInGame({ url: gameLobbyModel.url });
+    }
     gameLobbyModel.startCountDownTimer();
     if (currentUser) {
         window.echo
@@ -94,17 +97,17 @@ function channelUserLeft(payload) {
 function channelInGame(payload) {
     console.log('redirecting user to game server...');
     try {
+        let newWindow = window.open('', '_blank', 'resizable=yes');
         let gameServerUrl = new URL(payload.url);
         gameServerUrl.searchParams.set('userId', currentUser.id);
         gameServerUrl.searchParams.set('username', currentUser.username);
-        window.open(gameServerUrl.toString(), '_blank').focus();
+        newWindow.location = gameServerUrl.toString();
     } catch (e) {
         return false;
     }
 }
 
 async function channelGameEnded(payload) {
-    console.log('game-ended called');
     Inertia.reload({ only: ['gameLobby', 'currentUserScore'] });
 }
 
@@ -195,26 +198,46 @@ export default {
                             </div>
                         </div>
                     </BorderedContainer>
-                    <BorderedContainer class="col-span-full w-full bg-wgh-gray-1.5 lg:col-span-6">
+                    <BorderedContainer class="col-span-full w-full bg-wgh-gray-1.5 lg:col-span-3" v-if="gameLobbyModel.type != 3">
                         <div class="flex flex-row items-center space-x-4 rounded-lg bg-white p-4">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 class="h-6 w-6"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                stroke-width="2"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
                             >
                                 <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                                    fill-rule="evenodd"
+                                    d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
+                                    clip-rule="evenodd"
                                 />
                             </svg>
                             <div>
-                                <p class="font-grota text-lg font-extrabold uppercase text-wgh-gray-6">Live updates</p>
+                                <p class="font-grota text-lg font-extrabold uppercase text-wgh-gray-6">Game Play Duration</p>
                                 <p class="font-inter font-normal uppercase text-wgh-gray-6">
-                                    {{ data.latestUpdateMessage }}
+                                    {{  gameLobbyModel.game_play_duration }} min
+                                </p>
+                            </div>
+                        </div>
+                    </BorderedContainer>
+                    <BorderedContainer class="col-span-full w-full bg-wgh-gray-1.5 lg:col-span-3">
+                        <div class="flex flex-row items-center space-x-4 rounded-lg bg-white p-4">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-6 w-6"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                            <div>
+                                <p class="font-grota text-lg font-extrabold uppercase text-wgh-gray-6">Game Mode</p>
+                                <p class="font-inter font-normal uppercase text-wgh-gray-6">
+                                    {{ gameLobbyModel.type_label }}
                                 </p>
                             </div>
                         </div>
@@ -261,6 +284,30 @@ export default {
                         </div>
                     </BorderedContainer>
                 </div>
+                <BorderedContainer class="col-span-full w-full bg-wgh-gray-1.5 lg:col-span-6">
+                        <div class="flex flex-row items-center space-x-4 rounded-lg bg-white p-4">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="h-6 w-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                stroke-width="2"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                                />
+                            </svg>
+                            <div>
+                                <p class="font-grota text-lg font-extrabold uppercase text-wgh-gray-6">Live updates</p>
+                                <p class="font-inter font-normal uppercase text-wgh-gray-6">
+                                    {{ data.latestUpdateMessage }}
+                                </p>
+                            </div>
+                        </div>
+                    </BorderedContainer>
                 <BorderedContainer class="bg-wgh-gray-1.5">
                     <div class="rounded-lg">
                         <div class="flex flex-col">

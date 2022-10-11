@@ -33,6 +33,7 @@ class GameLobbyFactory extends Factory
             'available_spots' => $mp,
             'scheduled_at' => ($scheduledAt = now()->addHours(rand(5, 200))),
             'start_at' => $scheduledAt->addMinutes(15),
+            'game_play_duration' => $this->faker->numberBetween(5, 30),
         ];
     }
 

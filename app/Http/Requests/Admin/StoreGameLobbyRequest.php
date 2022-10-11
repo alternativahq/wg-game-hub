@@ -31,7 +31,11 @@ class StoreGameLobbyRequest extends FormRequest
             'maxPlayers' => ['required', 'numeric', 'gte:minPlayers'],
             'scheduledAt' => ['required', 'date'],
             'startsAt' => ['required', 'date', 'after:scheduled_at'],
-            'algorithmId' => ['required', 'in:' . collect(array_column(GameLobbyAlgorithmsType::cases(), 'value'))->implode(',')],
+            'gamePlayDuration' => ['required_unless:gameMode,ONE_V_ONE', 'numeric'],
+            'algorithmId' => [
+                'required',
+                'in:' . collect(array_column(GameLobbyAlgorithmsType::cases(), 'value'))->implode(','),
+            ],
         ];
     }
 

@@ -48,7 +48,7 @@ class GameTemplatesController extends Controller
             session()->flash('error', 'Something went wrong, please try again later.');
         }
 
-        return redirect()->route('admin-gameLobbies.show', $game->id);
+        return redirect()->route('admin-games.show', $game->id);
     }
 
     public function create(Game $game)
