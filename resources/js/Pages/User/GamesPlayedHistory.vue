@@ -6,15 +6,19 @@ import ButtonShape from '@/Shared/ButtonShape';
 import Pagination from '@/Models/Pagination';
 import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+import { throttle } from 'lodash';
 
 let props = defineProps({
     games: Object,
+    gameTypes: Object,
     userGamesPlayedHistory: Object,
     filters: Object,
     current_url: String,
 });
 
-let filters = reactive(props.filters);
+let filters = reactive({ ...props.filters });
 let currentUrl = window.location.toString();
 let availableGames = props.games.data;
 let pagination = reactive(new Pagination(props.userGamesPlayedHistory));
@@ -26,21 +30,32 @@ function UTCToHumanReadable(u) {
 function byGameFilterChanged() {
     Inertia.get(currentUrl, { filter_by_game: filters.filter_by_game });
 }
+watch(
+    () => filters,
+    throttle(() => {
+        Inertia.get(currentUrl, { ...filters }, { preserveState: true, preserveScroll: true });
+    }, 1000),
+    {
+        deep: true,
+    }
+);
 </script>
 <template>
-    <div>
+    <div class="my-20">
+        <h2 class="mb-6 font-grota text-3xl font-extrabold uppercase text-wgh-gray-6">Games Played History</h2>
         <div class="flex flex-row justify-between">
-            <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Games Played History</h2>
-
-            <div class="filters">
-                <BorderedContainer class="bg-wgh-gray-1.5">
-                    <div class="rounded-lg">
+            <div class="mb-5 flex flex-row justify-between">
+                <div class="filters flex items-center gap-8">
+                    <div class="mb-3">
+                        <label for="Maximum Players" class="form-label mb-2 inline-block text-lg text-gray-700"
+                            >Game</label
+                        >
                         <select
-                            id="location"
-                            name="location"
-                            class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                            id="asset_name"
+                            name="asset_name"
                             v-model="filters.filter_by_game"
                             @change.prevent="byGameFilterChanged"
+                            class="flex rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
                         >
                             <option :value="undefined">All</option>
                             <option :key="game.id" v-for="game in availableGames" :value="game.id">
@@ -48,7 +63,85 @@ function byGameFilterChanged() {
                             </option>
                         </select>
                     </div>
-                </BorderedContainer>
+                    <div class="mb-3">
+                        <label for="Maximum Players" class="form-label mb-2 inline-block text-lg text-gray-700"
+                            >Mode</label
+                        >
+                        <select
+                            id="asset_name"
+                            name="asset_name"
+                            v-model="filters.game_gamelobbies_type"
+                            class="flex rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
+                        >
+                            <option :value="undefined">All</option>
+                            <option :key="index" v-for="(gameType, index) in gameTypes" :value="gameType.value">
+                                {{ gameType.label }}
+                            </option>
+                        </select>
+                    </div>
+                    <div>
+                        <div class="mb-3">
+                            <label for="Rank" class="form-label text-md mb-2 inline-block text-gray-700"
+                                >Rank</label
+                            >
+                            <input
+                                class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                                type="number"
+                                name="Rank"
+                                id="Rank"
+                                v-model="filters.rank"
+                                placeholder="Rank"
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <div class="mb-3 xl:w-64">
+                            <label for="Date" class="form-label mb-2 inline-block text-lg text-gray-700">Date</label>
+                            <Datepicker
+                                range
+                                required
+                                class="block rounded-md border border-wgh-gray-1.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                utc
+                                placeholder="Select date and time"
+                                v-model="filters.date"
+                                :min-date="new Date()"
+                                :max-date="maxDate"
+                            ></Datepicker>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label
+                            for="Minimum Base Entrance Fee"
+                            class="form-label mb-2 inline-block text-lg text-gray-700"
+                            >Minimum Base Entrance Fee</label
+                        >
+                        <input
+                            class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                            type="number"
+                            name="min-base_entrance_fee"
+                            id="min-base_entrance_fee"
+                            v-model="filters.min_base_entrance_fee"
+                            placeholder="Minimum Base Entrance Fee"
+                        />
+                    </div>
+                    <div>
+                        <div class="mb-3">
+                            <label
+                                for="Maximum Base Entrance Fee"
+                                class="form-label mb-2 inline-block text-lg text-gray-700"
+                                >Maximum Base Entrance Fee</label
+                            >
+                            <input
+                                class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                                type="number"
+                                name="max-base_entrance_fee"
+                                id="max-base_entrance_fee"
+                                v-model="filters.max_base_entrance_fee"
+                                placeholder="Maximum Base Entrance Fee"
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <BorderedContainer class="mb-2 overflow-hidden bg-wgh-gray-1.5">
