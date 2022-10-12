@@ -148,7 +148,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => 'User ' . $event->user->username . ' with an id of' . $event->user->id . 'has joined the game lobby.',
+            'latest_update' => $event->user->username . ' has joined the game lobby.',
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -170,7 +170,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => 'User ' . $event->user->username . ' with an id of' . $event->user->id . 'has left the game lobby.',
+            'latest_update' => $event->user->username . ' has left the game lobby.',
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
