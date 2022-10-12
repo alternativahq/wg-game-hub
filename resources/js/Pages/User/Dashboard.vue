@@ -348,7 +348,7 @@ function timePlayedSecondsToHours(s) {
                                                     {{ UTCToHumanReadable(userAchievement.created_at) }}
                                                 </td>
                                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                    {{ userAchievement.achievement.description }}
+                                                    {{ userAchievement.achievement.description.substring(0,50)+ '...' }}
                                                 </td>
                                             </tr>
                                         </tbody>
