@@ -27,7 +27,6 @@ class GameLobby extends Model
 
     protected $casts = [
         'type' => GameLobbyType::class,
-        'latest_update' => GameLobbyLogType::class,
         'state' => GameLobbyStatus::class,
     ];
 

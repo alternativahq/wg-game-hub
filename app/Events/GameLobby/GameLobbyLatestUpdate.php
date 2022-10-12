@@ -32,7 +32,7 @@ class GameLobbyLatestUpdate implements ShouldBroadcast
     public function broadcastWith(): array
     {
         return [
-            'latest_update'=> $this->gameLobby->latest_update->toLabel(),
+            'latest_update'=> $this->gameLobby->latest_update,
         ];
     }
 }

@@ -28,7 +28,7 @@ class GameLobbyLifecycleEventSubscriber
             'payload' => json_encode($event->payload),
         ]);
         $event->gameLobby->update([
-        'latest_update' => GameLobbyLogType::GameLobbyCreated,
+        'latest_update' => $event->gameLobby->name . ' lobby is created',
         ]);
         
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -40,7 +40,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => GameLobbyLogType::GameLobbyStateScheduled,
+            'latest_update' => $event->gameLobby . ' lobby scheduled',
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -54,7 +54,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => GameLobbyLogType::GameLobbyStateAwaitingPlayers,
+            'latest_update' => 'Game lobby is in awaiting players state',
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -69,7 +69,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => GameLobbyLogType::GameLobbyStateInGame,
+            'latest_update' => 'The game has started',
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -84,7 +84,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $gameEndedEvent->gameLobby->update([
-            'latest_update' => GameLobbyLogType::GameLobbyStateEnded,
+            'latest_update' => 'The game has ended',
         ]);
         event(new GameLobbyLatestUpdate(gameLobby: $gameEndedEvent->gameLobby));
     }
@@ -97,7 +97,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => GameLobbyLogType::GameLobbyDistributingPrizes,
+            'latest_update' => 'Game lobby started distributing prizes',
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -111,7 +111,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => GameLobbyLogType::GameLobbyDistributedPrizes,
+            'latest_update' => 'Game lobby finished distributing prizes',
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -125,7 +125,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => GameLobbyLogType::GameLobbyArchived,
+            'latest_update' => 'Game lobby has been archived',
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -148,7 +148,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => GameLobbyLogType::UserJoined,
+            'latest_update' => 'User ' . $event->user->username . ' with an id of' . $event->user->id . 'has joined the game lobby.',
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -170,7 +170,7 @@ class GameLobbyLifecycleEventSubscriber
         ]);
 
         $event->gameLobby->update([
-            'latest_update' => GameLobbyLogType::UserLeft,
+            'latest_update' => 'User ' . $event->user->username . ' with an id of' . $event->user->id . 'has left the game lobby.',
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
