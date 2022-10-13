@@ -33,9 +33,8 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        $gamePlayedHistory = $user
-            ->gamesScores()
-            ->select(['id', 'game_lobby_id', 'game_id', 'rank', 'score'])
+        $gamePlayedHistory = GameLobbyUserScore::whereBelongsTo($user)
+            ->latest()
             ->with(['game:id,name', 'gameLobby:id,created_at,scheduled_at'])
             ->take(5)
             ->get();
