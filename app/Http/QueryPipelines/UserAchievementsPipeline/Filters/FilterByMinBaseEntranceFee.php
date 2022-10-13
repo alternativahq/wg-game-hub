@@ -2,28 +2,24 @@
 
 namespace App\Http\QueryPipelines\UserAchievementsPipeline\Filters;
 
-use Closure;
 use Illuminate\Database\Eloquent\Builder;
+use Closure;
 use Illuminate\Http\Request;
 
-class ByGameFilter
+class FilterByMinBaseEntranceFee
 {
-    protected Request $request;
-
-    public function __construct(Request $request)
+    public function __construct(protected Request $request)
     {
-        $this->request = $request;
     }
 
     public function handle(Builder $builder, Closure $next)
     {
-        $filterTerm = $this->request->get('filter_by_game', null);
-
-        if (!$filterTerm) {
+        $filterTerm = (int) $this->request->get('min_base_entrance_fee', null);
+        if (!$filterTerm || $filterTerm < 0) {
             return $next($builder);
         }
 
-        $builder->where('achievements.game_id', $filterTerm);
+        $builder->where('base_entrance_fee','>=', $filterTerm);
 
         return $next($builder);
     }

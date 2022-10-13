@@ -16,6 +16,7 @@ export default class GameLobby extends Model {
                 distributingPrizes: '.status.distributing-prizes',
                 distributedPrizes: '.status.distributed-prizes',
                 archived: '.status.archived',
+                latestUpdate: '.status.latest-update',
             },
             prizeUpdated: '.prize-updated',
         };

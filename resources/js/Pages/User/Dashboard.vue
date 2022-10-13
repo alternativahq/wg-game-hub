@@ -272,6 +272,7 @@ function timePlayedSecondsToHours(s) {
                                                     {{ scoreItem.game.name }}
                                                 </td>
                                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+
                                                     {{ UTCToHumanReadable(scoreItem.game_lobby.scheduled_at) }}
                                                 </td>
                                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
@@ -348,7 +349,7 @@ function timePlayedSecondsToHours(s) {
                                                     {{ UTCToHumanReadable(userAchievement.created_at) }}
                                                 </td>
                                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                    {{ userAchievement.achievement.description }}
+                                                    {{ userAchievement.achievement.description?.substring(0,50)+ '...' }}
                                                 </td>
                                             </tr>
                                         </tbody>

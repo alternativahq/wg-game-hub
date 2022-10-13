@@ -153,7 +153,7 @@ const navigation = [{ name: 'Dashboard', href: '/', current: true, external: fal
                                 }}</span
                             >
                         </button>
-                        <Menu v-if="currentUser" as="div" class="relative inline-block text-left">
+                        <Menu v-if="currentUser" as="div" class="z-50 relative inline-block text-left">
                             <div>
                                 <MenuButton>
                                     <ButtonShape type="purple">

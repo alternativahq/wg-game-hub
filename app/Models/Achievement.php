@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Builders\AchievementBuilder;
 
 class Achievement extends Model
 {
@@ -14,6 +15,11 @@ class Achievement extends Model
     use HasFactory;
 
     protected $guarded = [];
+    
+    public function newEloquentBuilder($query): AchievementBuilder
+    {
+        return new AchievementBuilder(query: $query);
+    }
 
     public function users(): BelongsToMany
     {
