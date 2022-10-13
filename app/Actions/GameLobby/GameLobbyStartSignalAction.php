@@ -38,6 +38,7 @@ class GameLobbyStartSignalAction
             'startsAt' => $request->start_at,
             'minPlayers' => $request->min_players,
             'maxPlayers' => $request->max_players,
+            'gamePlayDuration' => $request->game_play_duration,
             'scheduleWaitTime' => Carbon::now()
                 ->utc()
                 ->diffInSeconds($request->scheduled_at),
