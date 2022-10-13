@@ -46,6 +46,22 @@ npm install -g @soketi/soketi
 - Install and compile JS, CSS and UI Assets `npm install && npm run dev`
 
 ---
+## Development Deployment
+1. ssh into wodo-dev servers
+2. Run `redeploy-dev.sh` script which is in the root of the project
+
+The script is going to do the following steps
+1. cd into the directory
+2. turn of all the docker containers
+3. pull the new changes 
+4. install all php dependencies
+5. install all js dependencies
+6. build and bundle js and css
+7. start containers
+8. drop the database tables and migrate everything fresh
+9. Seed the database with dummy data
+
+---
 ## Production Deployment
 There is a `Dockerfile` ready in the root of the project.
 

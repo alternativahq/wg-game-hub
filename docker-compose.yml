@@ -12,9 +12,9 @@ services:
     container_name: gamehub
     depends_on:
       redis:
-        condition: service_healthy
+        condition: service_completed_successfully
       mysql:
-        condition: service_healthy
+        condition: service_completed_successfully
     ports:
       - "8091:80"
     #      - "4433:443"
