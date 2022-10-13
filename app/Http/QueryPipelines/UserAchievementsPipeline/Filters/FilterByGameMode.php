@@ -2,28 +2,25 @@
 
 namespace App\Http\QueryPipelines\UserAchievementsPipeline\Filters;
 
-use Closure;
 use Illuminate\Database\Eloquent\Builder;
+use Closure;
 use Illuminate\Http\Request;
 
-class ByGameFilter
+class FilterByGameMode
 {
-    protected Request $request;
-
-    public function __construct(Request $request)
+    public function __construct(protected Request $request)
     {
-        $this->request = $request;
     }
 
     public function handle(Builder $builder, Closure $next)
     {
-        $filterTerm = $this->request->get('filter_by_game', null);
+        $filterTerm = $this->request->get('game_lobbies_type', null);
 
         if (!$filterTerm) {
             return $next($builder);
         }
 
-        $builder->where('achievements.game_id', $filterTerm);
+        $builder->whereRelation('gameLobby', 'type', $filterTerm);
 
         return $next($builder);
     }

@@ -17,14 +17,18 @@ class SortByCreatedAt
 
     public function handle(Builder $builder, Closure $next)
     {
-        $builder->when(
-            $this->request->get('sort_by', null) &&
-                $this->request->get('sort_by') === 'earned_at' &&
-                in_array(strtolower($this->request->get('sort_order', null)), ['asc', 'desc']),
-            function () use ($builder, $next) {
-                $builder->orderBy('user_achievements.created_at', $this->request->get('sort_order'));
-            },
-        );
+        $sortBy = $this->request->get('sort_by');
+        $sortOrder = $this->request->get('sort_order', 'asc');
+
+        if ($sortBy !== 'earned_at') {
+            return $next($builder);
+        }
+
+        if (!in_array(strtolower($sortOrder), ['asc', 'desc'])) {
+            return $next($builder);
+        }
+
+        $builder->orderBy('user_achievements.created_at', $this->request->get('sort_order'));
 
         return $next($builder);
     }

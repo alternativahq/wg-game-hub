@@ -14,14 +14,19 @@ class SortByAchievementName
 
     public function handle(Builder $builder, Closure $next)
     {
-        $builder->when(
-            $this->request->get('sort_by', null) &&
-                $this->request->get('sort_by') === 'achievement_name' &&
-                in_array(strtolower($this->request->get('sort_order', null)), ['asc', 'desc']),
-            function () use ($builder, $next) {
-                $builder->orderBy('name', $this->request->get('sort_order'));
-            },
-        );
+        $sortBy = $this->request->get('sort_by');
+        $sortOrder = $this->request->get('sort_order', 'asc');
+
+        if ($sortBy !== 'achievement_name') {
+            return $next($builder);
+        }
+
+        if (!in_array(strtolower($sortOrder), ['asc', 'desc'])) {
+            return $next($builder);
+        }
+        
+        $builder->orderBy('name', $this->request->get('sort_order'));
+
         return $next($builder);
     }
 }
