@@ -21,7 +21,7 @@ let props = defineProps({
 });
 
 let data = reactive({
-    latestUpdateMessage: 'Updates are on the way...',
+    latestUpdateMessage: props.gameLobby.data.latest_update,
     chatMessages: [],
     chatMessageInput: '',
 });
@@ -48,7 +48,8 @@ onMounted(() => {
             .listen(GameLobby.socketEvents.status.distributingPrizes, channelDistributingPrizes)
             .listen(GameLobby.socketEvents.status.distributedPrizes, channelDistributedPrizes)
             .listen(GameLobby.socketEvents.status.archived, channelArchived)
-            .listen(GameLobby.socketEvents.prizeUpdated, channelPrizeUpdated);
+            .listen(GameLobby.socketEvents.prizeUpdated, channelPrizeUpdated)
+            .listen(GameLobby.socketEvents.status.latestUpdate, channelLatestUpdate);
     }
 });
 
@@ -125,6 +126,11 @@ function channelArchived() {
 
 function channelPrizeUpdated(payload) {
     data.prize = payload.prize;
+}
+
+function channelLatestUpdate(payload) {
+    // console.log(payload.latest_update);
+    data.latestUpdateMessage = payload.latest_update;
 }
 
 watch(
