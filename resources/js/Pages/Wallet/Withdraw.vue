@@ -30,6 +30,7 @@ let withdrawalForm = useForm({
     coin: props.assetInformation.asset,
     walletAddress: props.assetInformation.address,
     network: '',
+    amount: '',
 });
 
 onMounted(() => {
@@ -152,6 +153,21 @@ watch(
                                             type="text"
                                             v-model="withdrawalForm.walletAddress"
                                             disabled
+                                        />
+                                    </div>
+                                </BorderedContainer>
+                            </div>
+                        </div>
+                        <div class="mb-5 flex items-center py-4 px-4">
+                            <div class="mr-20 w-2/5 text-right"></div>
+                            <div class="w-3/5">
+                                <div class="mb-2">Amount</div>
+                                <BorderedContainer class="bg-wgh-gray-1.5">
+                                    <div class="rounded-lg">
+                                        <input
+                                            class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                            type="text"
+                                            v-model="withdrawalForm.amount"
                                         />
                                     </div>
                                 </BorderedContainer>
