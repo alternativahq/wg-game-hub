@@ -5,6 +5,8 @@ return [
     'user_already_joined_the_game_lobby' => 'User already joined the game lobby',
     'insufficient_funds' => 'Insufficient funds',
     'user_not_in_game_lobby' => 'User is not in the game lobby',
+
+    //user asset account
     'Active' => 'Active',
     'Inactive' => 'Inactive',
 
@@ -21,12 +23,13 @@ return [
 
     //game lobby status
     'Scheduled' => 'Scheduled',
-    'InLobby' => 'InLobby',
+    'AwaitingPlayers' => 'Awaiting Players',
     'InGame' => 'InGame',
     'GameEnded' => 'GameEnded',
-    'ProcessingResults' => 'ProcessingResults',
-    'ResultsProcessed' => 'ResultsProcessed',
-    'DistributingPrizes' => 'DistributingPrizes',
-    'PrizesDistributed' => 'PrizesDistributed',
+    'ProcessingResults' => 'Processing Results',
+    'ResultsProcessed' => 'Results Processed',
+    'DistributingPrizes' => 'Distributing Prizes',
+    'DistributedPrizes' => 'Distributed Prizes',
+    'PrizesDistributed' => 'Prizes Distributed',
     'Archived' => 'Archived',
 ];
