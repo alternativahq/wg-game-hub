@@ -272,6 +272,7 @@ function timePlayedSecondsToHours(s) {
                                                     {{ scoreItem.game.name }}
                                                 </td>
                                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+
                                                     {{ UTCToHumanReadable(scoreItem.game_lobby.scheduled_at) }}
                                                 </td>
                                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
