@@ -63,7 +63,7 @@ class GameLobbyController extends Controller
                 'scheduled_at' => $request->scheduledAt,
                 'algorithm_id' => $request->algorithmId,
                 'start_at' => $request->startsAt,
-                'game_play_duration' => $request->gamePlayDuration,
+                'game_play_duration' => $request->gamePlayDuration / 60,
             ])
             ->except('asset')
             ->toArray();
