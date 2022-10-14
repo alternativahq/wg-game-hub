@@ -9,19 +9,20 @@ import { defineEmits } from 'vue';
 
 let props = defineProps({
     open: Boolean,
+    withdrawTransactionsUuid: Boolean,
 });
 
 const emit = defineEmits(['close']);
 
 let WithdrawalConfirmationForm = useForm({
     code: '',
+    withdraw_Transactions_Uuid: props.withdrawTransactionsUuid,
 });
 
 function WithdrawalConfirmationFormSubmit() {
-    WithdrawalConfirmationForm.post('/wallet/withdrawal/sendConfirmation', { onSuccess: () => emit('close') });
+    WithdrawalConfirmationForm.post('/wallet/withdrawal/completeSendConfirmation', { onSuccess: () => emit('close') });
     WithdrawalConfirmationForm.clearErrors();
     WithdrawalConfirmationForm.reset();
-    // emit('close');
 }
 </script>
 <template>
@@ -70,7 +71,7 @@ function WithdrawalConfirmationFormSubmit() {
                                         name="code"
                                         class="mt-4"
                                     />
-                                    <InputError class="mt-2">
+                                    <InputError class="my-5">
                                         <div v-if="WithdrawalConfirmationForm.errors.code" class="mt-2">
                                             {{ WithdrawalConfirmationForm.errors.code }}
                                         </div>

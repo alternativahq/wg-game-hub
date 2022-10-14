@@ -16,6 +16,7 @@ import TransactionDialog from '@/Shared/Modals/TransactionDialog.vue';
 let props = defineProps({
     userWithdrawTransactions: Object,
     assetInformation: Object,
+    withdrawTransactionsUuid: String,
     assets: Object,
     _filters: Object,
     _filtersOptions: Object,
@@ -28,7 +29,7 @@ let pagination = reactive(new Pagination(props.userWithdrawTransactions));
 
 let withdrawalForm = useForm({
     coin: props.assetInformation.asset,
-    walletAddress: props.assetInformation.address,
+    wallet_address: props.assetInformation.address,
     network: '',
     amount: '',
 });
@@ -51,19 +52,21 @@ let state = reactive({
 });
 
 function sendConfirmation() {
-    Inertia.get(
-        '/wallet/withdrawal/sendConfirmation',
-        {},
-        { preserveScroll: true, preserveState: true, replace: true }
-    );
-    state.open = true;
+    withdrawalForm.post('/wallet/withdrawal/sendConfirmation', {
+        preserveScroll: true, preserveState: true,
+        onSuccess: () => state.open = true,
+    });
+    // Inertia.get(
+    //     '/wallet/withdrawal/sendConfirmation',
+    //     {},
+    //     { preserveScroll: true, preserveState: true, replace: true }
+    // );
 }
 
 async function show(transaction) {
     state.transactionShow = transaction;
     let response = await axios.get('/api/wallet/transaction/' + transaction.id + '/log').then((r) => r.data.data);
     state.transactionSteps = response;
-
     state.isShow = true;
 }
 
@@ -98,7 +101,7 @@ watch(
 watch(
     () => props.assetInformation,
     () => {
-        withdrawalForm.walletAddress = props.assetInformation.address;
+        withdrawalForm.wallet_address = props.assetInformation.address;
         withdrawalForm.network = props.assetInformation.asset;
     }
 );
@@ -111,8 +114,9 @@ watch(
             :open="state.isShow"
             @close="state.isShow = false"
         />
-        <WithdrawalDialog :open="state.open" @close="state.open = false" />
+        <WithdrawalDialog :withdrawTransactionsUuid="withdrawTransactionsUuid" :open="state.open" @close="state.open = false" />
         <section class="flex items-center justify-between">
+            
             <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Withdraw Crypto</h2>
             <div class="round mx-5 mb-6 bg-gray-300 px-3 py-2 text-lg font-semibold text-black">Withdrawal Fiat -></div>
         </section>
@@ -151,7 +155,7 @@ watch(
                                         <input
                                             class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                             type="text"
-                                            v-model="withdrawalForm.walletAddress"
+                                            v-model="withdrawalForm.wallet_address"
                                             disabled
                                         />
                                     </div>
@@ -167,10 +171,16 @@ watch(
                                         <input
                                             class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                             type="text"
+                                            placeholder="amount"
                                             v-model="withdrawalForm.amount"
                                         />
                                     </div>
                                 </BorderedContainer>
+                                <InputError class="mt-2">
+                                    <div v-if="withdrawalForm.errors.amount" class="mt-2">
+                                        {{ withdrawalForm.errors.amount }}
+                                    </div>
+                                </InputError>
                             </div>
                         </div>
                         <div class="mb-5 flex items-center py-4 px-4">
