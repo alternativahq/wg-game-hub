@@ -14,6 +14,7 @@ class CompleteWithdrawControllerRequest extends FormRequest
                 'required',
                 new WithdrawalCodeExistAndValid(),
             ],
+            'transaction_uuid' => ['required', 'uuid','exists:withdrawal_confirmations,id'],
         ];
     }
 

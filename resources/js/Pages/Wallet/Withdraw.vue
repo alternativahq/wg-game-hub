@@ -28,8 +28,9 @@ let pagination = reactive(new Pagination(props.userWithdrawTransactions));
 
 let withdrawalForm = useForm({
     coin: props.assetInformation.asset,
-    walletAddress: props.assetInformation.address,
+    wallet_address: props.assetInformation.address,
     network: '',
+    amount: '',
 });
 
 onMounted(() => {
@@ -47,22 +48,25 @@ let state = reactive({
     isShow: false,
     transactionShow: null,
     transactionSteps: null,
+    TransactionUuid: null,
 });
 
 function sendConfirmation() {
-    Inertia.get(
-        '/wallet/withdrawal/sendConfirmation',
-        {},
-        { preserveScroll: true, preserveState: true, replace: true }
-    );
-    state.open = true;
+    withdrawalForm.post('/wallet/withdrawal/sendConfirmation', {
+        preserveScroll: true, preserveState: true,
+        onSuccess: () => state.open = true,
+    });
+    // Inertia.get(
+    //     '/wallet/withdrawal/sendConfirmation',
+    //     {},
+    //     { preserveScroll: true, preserveState: true, replace: true }
+    // );
 }
 
 async function show(transaction) {
     state.transactionShow = transaction;
     let response = await axios.get('/api/wallet/transaction/' + transaction.id + '/log').then((r) => r.data.data);
     state.transactionSteps = response;
-
     state.isShow = true;
 }
 
@@ -97,7 +101,7 @@ watch(
 watch(
     () => props.assetInformation,
     () => {
-        withdrawalForm.walletAddress = props.assetInformation.address;
+        withdrawalForm.wallet_address = props.assetInformation.address;
         withdrawalForm.network = props.assetInformation.asset;
     }
 );
@@ -112,6 +116,7 @@ watch(
         />
         <WithdrawalDialog :open="state.open" @close="state.open = false" />
         <section class="flex items-center justify-between">
+            
             <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Withdraw Crypto</h2>
             <div class="round mx-5 mb-6 bg-gray-300 px-3 py-2 text-lg font-semibold text-black">Withdrawal Fiat -></div>
         </section>
@@ -150,11 +155,32 @@ watch(
                                         <input
                                             class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                             type="text"
-                                            v-model="withdrawalForm.walletAddress"
+                                            v-model="withdrawalForm.wallet_address"
                                             disabled
                                         />
                                     </div>
                                 </BorderedContainer>
+                            </div>
+                        </div>
+                        <div class="mb-5 flex items-center py-4 px-4">
+                            <div class="mr-20 w-2/5 text-right"></div>
+                            <div class="w-3/5">
+                                <div class="mb-2">Amount</div>
+                                <BorderedContainer class="bg-wgh-gray-1.5">
+                                    <div class="rounded-lg">
+                                        <input
+                                            class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                            type="text"
+                                            placeholder="amount"
+                                            v-model="withdrawalForm.amount"
+                                        />
+                                    </div>
+                                </BorderedContainer>
+                                <InputError class="mt-2">
+                                    <div v-if="withdrawalForm.errors.amount" class="mt-2">
+                                        {{ withdrawalForm.errors.amount }}
+                                    </div>
+                                </InputError>
                             </div>
                         </div>
                         <div class="mb-5 flex items-center py-4 px-4">
@@ -178,7 +204,8 @@ watch(
                             <div class="w-3/5">
                                 <button preserve-scroll type="submit" class="w-full">
                                     <ButtonShape type="purple">
-                                        <span class="w-full uppercase">withdrawal</span>
+                                        <span v-if="!withdrawalForm.processing" class="w-full uppercase">withdrawal</span>
+                                        <span v-if="withdrawalForm.processing" class="w-full uppercase">Processing...</span>
                                     </ButtonShape>
                                 </button>
                             </div>

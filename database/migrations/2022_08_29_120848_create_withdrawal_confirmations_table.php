@@ -6,15 +6,10 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('withdrawal_confirmations', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('code')->unique();
             $table
                 ->foreignUuid('user_id')
@@ -26,11 +21,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('withdrawal_confirmations');
