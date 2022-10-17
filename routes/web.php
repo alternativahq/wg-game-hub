@@ -66,10 +66,10 @@ Route::middleware('auth')->group(function () {
     Route::get('wallet/deposit', UserDepositController::class)->name('user.deposit');
 
     // sendConfirmation mail
-    Route::get('wallet/withdrawal/sendConfirmation', UserWithdrawConfirmationController::class)->name(
+    Route::post('wallet/withdrawal/sendConfirmation', UserWithdrawConfirmationController::class)->name(
         'user.wallet.withdrawal.sendConfirmation',
     );
-    Route::post('wallet/withdrawal/sendConfirmation', UserCompleteWithdrawController::class)->name(
+    Route::post('wallet/withdrawal/completeSendConfirmation', UserCompleteWithdrawController::class)->name(
         'user.wallet.complete.withdrawal',
     );
 
