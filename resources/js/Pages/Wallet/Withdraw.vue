@@ -204,7 +204,8 @@ watch(
                             <div class="w-3/5">
                                 <button preserve-scroll type="submit" class="w-full">
                                     <ButtonShape type="purple">
-                                        <span class="w-full uppercase">withdrawal</span>
+                                        <span v-if="!withdrawalForm.processing" class="w-full uppercase">withdrawal</span>
+                                        <span v-if="withdrawalForm.processing" class="w-full uppercase">Processing...</span>
                                     </ButtonShape>
                                 </button>
                             </div>

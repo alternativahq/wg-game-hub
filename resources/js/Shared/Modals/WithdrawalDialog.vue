@@ -21,9 +21,12 @@ let withdrawalConfirmationForm = useForm({
 function WithdrawalConfirmationFormSubmit() {
     let newUrl = new URL(window.location);
     withdrawalConfirmationForm.transaction_uuid = newUrl.searchParams.get('TransactionUuid');
-    withdrawalConfirmationForm.post('/wallet/withdrawal/completeSendConfirmation', { onSuccess: () => emit('close') });
-    withdrawalConfirmationForm.clearErrors();
-    withdrawalConfirmationForm.reset();
+    withdrawalConfirmationForm.post('/wallet/withdrawal/completeSendConfirmation', { 
+        onSuccess: () =>{ 
+            emit('close')
+            withdrawalConfirmationForm.clearErrors();
+            withdrawalConfirmationForm.reset();
+        } });
 }
 </script>
 <template>
@@ -83,7 +86,8 @@ function WithdrawalConfirmationFormSubmit() {
                                         :disabled="withdrawalConfirmationForm.processing"
                                     >
                                         <ButtonShape type="purple">
-                                            <span class="w-full uppercase">Add</span>
+                                            <span v-if="!withdrawalConfirmationForm.processing" class="w-full uppercase">Submit</span>
+                                            <span v-if="withdrawalConfirmationForm.processing" class="w-full uppercase">Processing...</span>
                                         </ButtonShape>
                                     </button>
                                 </form>
