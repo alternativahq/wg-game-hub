@@ -23,7 +23,6 @@ class WithdrawalCodeExistAndValid implements Rule, DataAwareRule
 
     public function passes($attribute, $value): bool
     {
-        // dd($this->data['transaction_uuid']);
         return  !is_null(auth()->user()
                         ->withdrawalConfirmations()
                         ->where('id', $this->data['transaction_uuid'])
