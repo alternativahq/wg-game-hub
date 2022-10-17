@@ -16,7 +16,6 @@ import TransactionDialog from '@/Shared/Modals/TransactionDialog.vue';
 let props = defineProps({
     userWithdrawTransactions: Object,
     assetInformation: Object,
-    withdrawTransactionsUuid: String,
     assets: Object,
     _filters: Object,
     _filtersOptions: Object,
@@ -49,6 +48,7 @@ let state = reactive({
     isShow: false,
     transactionShow: null,
     transactionSteps: null,
+    TransactionUuid: null,
 });
 
 function sendConfirmation() {
@@ -114,7 +114,7 @@ watch(
             :open="state.isShow"
             @close="state.isShow = false"
         />
-        <WithdrawalDialog :withdrawTransactionsUuid="withdrawTransactionsUuid" :open="state.open" @close="state.open = false" />
+        <WithdrawalDialog :open="state.open" @close="state.open = false" />
         <section class="flex items-center justify-between">
             
             <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Withdraw Crypto</h2>

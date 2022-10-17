@@ -5,24 +5,25 @@ import { Inertia } from '@inertiajs/inertia';
 import TextInput from '@/Shared/Inputs/TextInput';
 import InputError from '@/Shared/InputError';
 import ButtonShape from '@/Shared/ButtonShape';
-import { defineEmits } from 'vue';
+import { defineEmits, defineProps} from 'vue';
 
 let props = defineProps({
     open: Boolean,
-    withdrawTransactionsUuid: Boolean,
 });
 
 const emit = defineEmits(['close']);
 
-let WithdrawalConfirmationForm = useForm({
+let withdrawalConfirmationForm = useForm({
     code: '',
-    withdraw_Transactions_Uuid: props.withdrawTransactionsUuid,
+    transaction_uuid: '',
 });
 
 function WithdrawalConfirmationFormSubmit() {
-    WithdrawalConfirmationForm.post('/wallet/withdrawal/completeSendConfirmation', { onSuccess: () => emit('close') });
-    WithdrawalConfirmationForm.clearErrors();
-    WithdrawalConfirmationForm.reset();
+    let newUrl = new URL(window.location);
+    withdrawalConfirmationForm.transaction_uuid = newUrl.searchParams.get('TransactionUuid');
+    withdrawalConfirmationForm.post('/wallet/withdrawal/completeSendConfirmation', { onSuccess: () => emit('close') });
+    withdrawalConfirmationForm.clearErrors();
+    withdrawalConfirmationForm.reset();
 }
 </script>
 <template>
@@ -64,7 +65,7 @@ function WithdrawalConfirmationFormSubmit() {
                                 <form @submit.prevent="WithdrawalConfirmationFormSubmit()">
                                     <div class="font-semibold">code</div>
                                     <TextInput
-                                        v-model="WithdrawalConfirmationForm.code"
+                                        v-model="withdrawalConfirmationForm.code"
                                         placeholder="Enter the code"
                                         type="text"
                                         id="code"
@@ -72,14 +73,14 @@ function WithdrawalConfirmationFormSubmit() {
                                         class="mt-4"
                                     />
                                     <InputError class="my-5">
-                                        <div v-if="WithdrawalConfirmationForm.errors.code" class="mt-2">
-                                            {{ WithdrawalConfirmationForm.errors.code }}
+                                        <div v-if="withdrawalConfirmationForm.errors.code" class="mt-2">
+                                            {{ withdrawalConfirmationForm.errors.code }}
                                         </div>
                                     </InputError>
                                     <button
                                         type="submit"
                                         class="w-full"
-                                        :disabled="WithdrawalConfirmationForm.processing"
+                                        :disabled="withdrawalConfirmationForm.processing"
                                     >
                                         <ButtonShape type="purple">
                                             <span class="w-full uppercase">Add</span>

@@ -26,6 +26,6 @@ class WithdrawConfirmationController extends Controller
         ]);
         //Notification::send($user, new SendWithdrawalConfirmationNotification($code));
 
-        return redirect()->route('user.withdraw', ['withdrawTransactionsUuid' => $WithdrawalConfirmation->id, 'coin' => $request->coin]);
+        return redirect()->route('user.withdraw', ['TransactionUuid' => $WithdrawalConfirmation->id, 'coin' => $request->coin]);
     }
 }
