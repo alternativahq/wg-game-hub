@@ -2,12 +2,15 @@
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import { Inertia } from '@inertiajs/inertia';
 import Steps from '../Steps.vue';
+import { inject } from 'vue';
 
 let props = defineProps({
     open: Boolean,
     transaction: Object,
     transactionSteps: Object,
 });
+let dayjs = inject('dayjs');
+
 </script>
 <template>
     <TransitionRoot as="template" :show="open">
@@ -71,7 +74,7 @@ let props = defineProps({
                                         <div class="mb-4 flex items-center justify-between space-x-4">
                                             <div class="text-md font-normal text-gray-500">Date</div>
                                             <div class="text-md font-semibold text-gray-900">
-                                                {{ transaction.createdAt }}
+                                                {{dayjs(transaction.createdAt).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm:ss A')}}
                                             </div>
                                         </div>
                                         <div class="mb-4 flex items-center justify-between space-x-4">
