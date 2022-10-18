@@ -36,7 +36,7 @@ const navigation = [{ name: 'Dashboard', href: '/', current: true, external: fal
 <template>
     <div>
         <div>
-            <TransitionRoot as="template" :show="state.isNotificationSlideOverOn">
+            <TransitionRoot as="template" class="z-50" :show="state.isNotificationSlideOverOn">
                 <Dialog as="div" class="relative z-10" @close="state.isNotificationSlideOverOn = false">
                     <div class="fixed inset-0" />
                     <div class="fixed inset-0 overflow-hidden">
