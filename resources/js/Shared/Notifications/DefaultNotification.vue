@@ -31,6 +31,6 @@ function UTCToHumanReadable(u) {
         >
             Mark as read
         </div>
-        <div>{{ UTCToHumanReadable(notification.createdAt) }}</div>
+        <div class="text-sm">{{ UTCToHumanReadable(notification.createdAt) }}</div>
     </div>
 </template>
