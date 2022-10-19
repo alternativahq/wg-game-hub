@@ -40,6 +40,8 @@ class GameLobbyResource extends JsonResource
             'scheduled_at' => $this->whenNotNull($this->scheduled_at),
             'start_at' => $this->whenNotNull($this->start_at),
             'algorithm_id' => $this->whenNotNull($this->algorithm_id),
+            'game_start_delay_time' => $this->whenNotNull($this->game_start_delay_time),
+            'game_start_delay_limit' => $this->whenNotNull($this->game_start_delay_limit),
             'scheduled_at_date_time' => $this->whenNotNull($this->scheduled_at_to_date_time),
             'users_count' => $this->whenNotNull($this->users_count),
             'game_id' => $this->whenNotNull($this->game_id),

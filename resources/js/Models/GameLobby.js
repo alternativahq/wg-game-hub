@@ -11,6 +11,7 @@ export default class GameLobby extends Model {
             status: {
                 scheduled: '.status.scheduled',
                 awaitingPlayers: '.status.awaiting-players',
+                gameStartDelayed: '.status.game-start-delayed',
                 inGame: '.status.in-game',
                 gameEnded: '.status.game-ended',
                 distributingPrizes: '.status.distributing-prizes',
@@ -49,6 +50,8 @@ export default class GameLobby extends Model {
     }
 
     startCountDownTimer() {
+        // dayjs(u).utc().local().tz(dayjs.tz.guess())
+        // let startAt = dayjs(this.start).utc().local().tz(dayjs.tz.guess());
         let scheduledAt = dayjs(this.scheduled_at_utc_string);
         this._countDownTimerInterval = setInterval(() => {
             let now = dayjs();

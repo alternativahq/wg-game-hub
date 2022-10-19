@@ -44,6 +44,7 @@ onMounted(() => {
             .listen(GameLobby.socketEvents.userJoined, channelUserJoined)
             .listen(GameLobby.socketEvents.userLeft, channelUserLeft)
             .listen(GameLobby.socketEvents.status.inGame, channelInGame)
+            .listen(GameLobby.socketEvents.status.gameStartDelayed, channelGameStartDelayed)
             .listen(GameLobby.socketEvents.status.gameEnded, channelGameEnded)
             .listen(GameLobby.socketEvents.status.distributingPrizes, channelDistributingPrizes)
             .listen(GameLobby.socketEvents.status.distributedPrizes, channelDistributedPrizes)
@@ -62,6 +63,12 @@ onBeforeUnmount(() => {
 
 function channelError(error) {
     console.error('channel error: ', error);
+}
+
+function channelGameStartDelayed(payload) {
+    gameLobbyModel.killCountDownTimer();
+    gameLobbyModel.start_at = payload.newStartAt;
+    gameLobbyModel.startCountDownTimer();
 }
 
 function sendChatMessage() {

@@ -32,6 +32,8 @@ let AddLobbyFromTemplateForm = useForm({
     start_at: '',
     asset_id: props.gameTemplate.asset_id,
     algorithm_id: props.gameTemplate.algorithm_id,
+    game_start_delay_time: props.gameTemplate.game_start_delay_time,
+    game_start_delay_limit: props.gameTemplate.game_start_delay_limit,
 });
 
 function addLobbyFromGameTemplate() {
@@ -240,6 +242,34 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
                     {{ gameAlgorithm.label }}
                 </option>
             </select>
+            <div class="font-semibold mt-4">Game Start Delay Time </div>
+            <TextInput
+                v-model="AddLobbyFromTemplateForm.game_start_delay_time"
+                placeholder="Game Start Delay Time"
+                type="text"
+                id="game_start_delay_time"
+                name="game_start_delay_time"
+                class="mb-5"
+            />
+            <InputError class="mt-2">
+                <div v-if="AddLobbyFromTemplateForm.errors.game_start_delay_time" class="mt-2">
+                    {{ AddLobbyFromTemplateForm.errors.game_start_delay_time }}
+                </div>
+            </InputError>
+            <div class="font-semibold mt-4">Game Start Delay Limit </div>
+            <TextInput
+                v-model="AddLobbyFromTemplateForm.game_start_delay_limit"
+                placeholder="Game Start Delay Limit"
+                type="text"
+                id="game_start_delay_limit"
+                name="game_start_delay_limit"
+                class="mb-5"
+            />
+            <InputError class="mt-2">
+                <div v-if="AddLobbyFromTemplateForm.errors.game_start_delay_limit" class="mt-2">
+                    {{ AddLobbyFromTemplateForm.errors.game_start_delay_limit }}
+                </div>
+            </InputError>
             <button type="submit" class="w-full mb-2" :disabled="AddLobbyFromTemplateForm.processing">
                 <ButtonShape type="purple">
                     <span class="w-full uppercase">Add Lobby</span>

@@ -9,6 +9,7 @@ use App\Events\GameLobby\GameLobbyAbortedEvent;
 use App\Events\GameLobby\GameLobbyCreatedEvent;
 use App\Events\GameLobby\GameLobbyLatestUpdate;
 use App\Events\GameLobby\GameLobbyArchivedEvent;
+use App\Events\GameLobby\GameLobbyGameStartDelayedEvent;
 use App\Events\GameLobby\GameLobbyStartTimeChangedEvent;
 use App\Events\GameLobby\GameLobbyDistributedPrizesEvent;
 use App\Events\GameLobby\GameLobbyStartVotingFailedEvent;
@@ -55,6 +56,20 @@ class GameLobbyLifecycleEventSubscriber
 
         $event->gameLobby->update([
             'latest_update' => 'Game lobby is in awaiting players state',
+        ]);
+
+        event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
+    }
+
+    public function handleGameStartDelayed(GameLobbyGameStartDelayedEvent $event): void
+    {
+        $event->gameLobby->activityLogs()->create([
+            'name' => GameLobbyLogType::GameLobbyGameStartDelayed,
+            'description' => 'Game lobby has been delayed by '. $event->gameLobby->game_start_delay_time . ' sec',
+        ]);
+
+        $event->gameLobby->update([
+            'latest_update' => 'Game lobby has been delayed by '. $event->gameLobby->game_start_delay_time . ' sec',
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -197,6 +212,7 @@ class GameLobbyLifecycleEventSubscriber
         return [
             GameLobbyCreatedEvent::class => 'handleCreated',
             GameLobbyAwaitingPlayersEvent::class => 'handleAwaitingPlayers',
+            GameLobbyGameStartDelayedEvent::class => 'handleGameStartDelayed',
             GameLobbyStartedEvent::class => 'handleInGame',
             GameLobbyEndedEvent::class => 'handleGameEnded',
             GameLobbyDistributingPrizesEvent::class => 'handleDistributingPrizes',

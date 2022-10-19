@@ -16,20 +16,21 @@ use Illuminate\Http\Response;
 use App\Enums\GameLobbyStatus;
 use App\Http\Controllers\Controller;
 use App\Events\GameLobbyStartedEvent;
-use App\Events\GameLobby\GameLobbyAwaitingPlayersEvent as GameLobbyAwaitingPlayersEvent;
-use App\Events\GameLobby\GameLobbyDistributingPrizesEvent as GameLobbyDistributingPrizesEvent;
-use App\Events\GameLobby\GameLobbyDistributedPrizesEvent as GameLobbyDistributedPrizesEvent;
 use App\Events\GameLobby\GameLobbyEndedEvent;
-use App\Events\GameLobby\GameLobbyArchivedEvent;
 use App\Http\Resources\GameLobbyUserResource;
 use App\Events\GameLobby\GameLobbyCreatedEvent;
 use App\DataTransferObjects\GameMatchResultData;
+use App\Events\GameLobby\GameLobbyArchivedEvent;
 use App\Http\Requests\Admin\StoreGameLobbyRequest;
 use App\Http\Requests\GameMatchResultsPayloadRequest;
+use App\Events\GameLobby\GameLobbyGameStartDelayedEvent;
 use App\Notifications\GameLobbyDistributedPrizesNotification;
 use App\Notifications\ProcessingGameLobbyResultsNotification;
 use App\Notifications\GameLobbyDistributingPrizesNotification;
 use App\Actions\Games\GameMatchResults\StoreGameMatchResultAction;
+use App\Events\GameLobby\GameLobbyAwaitingPlayersEvent as GameLobbyAwaitingPlayersEvent;
+use App\Events\GameLobby\GameLobbyDistributedPrizesEvent as GameLobbyDistributedPrizesEvent;
+use App\Events\GameLobby\GameLobbyDistributingPrizesEvent as GameLobbyDistributingPrizesEvent;
 
 class GameLobbyController extends Controller
 {
@@ -64,6 +65,8 @@ class GameLobbyController extends Controller
                 'algorithm_id' => $request->algorithmId,
                 'start_at' => $request->startsAt,
                 'game_play_duration' => $request->gamePlayDuration,
+                'game_start_delay_time' => $request->gameStartDelayTime,
+                'game_start_delay_limit' => $request->gameStartDelayLimit,
             ])
             ->except('asset')
             ->toArray();
@@ -93,6 +96,20 @@ class GameLobbyController extends Controller
         event(new GameLobbyAwaitingPlayersEvent($gameLobby));
 
         return response()->noContent();
+    }
+
+    public function gameStartDelayed(GameLobby $gameLobby)
+    {
+        abort_unless($gameLobby->state->is(GameLobbyStatus::AwaitingPlayers) && $gameLobby->game_start_delay_limit != null, Response::HTTP_FORBIDDEN);
+        if($gameLobby->game_start_delay_count < $gameLobby->game_start_delay_limit){
+            $gameLobby->update([
+                'start_at' => $gameLobby->start_at->addSecond($gameLobby->game_start_delay_time),
+                'game_start_delay_count' => $gameLobby->game_start_delay_count +1,
+            ]);
+            event(new GameLobbyGameStartDelayedEvent($gameLobby));
+            return response()->noContent();
+        }
+        return response()->json('you can not delay more than '. $gameLobby->game_start_delay_limit . ' times');        
     }
 
     public function inGame(Request $request, GameLobby $gameLobby)

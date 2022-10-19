@@ -28,6 +28,8 @@ class GameLobbyTemplateResource extends JsonResource
             'min_players' => $this->min_players,
             'max_players' => $this->max_players,
             'game_play_duration' => $this->game_play_duration,
+            'game_start_delay_time' => $this->game_start_delay_time,
+            'game_start_delay_limit' => $this->game_start_delay_limit,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'deleted_at' => $this->deleted_at,

@@ -23,6 +23,8 @@ class UpdateLobbyTemplateRequest extends FormRequest
             'asset_id' => ['required', 'exists:assets,id'],
             'game_id' => ['required', 'exists:games,id'],
             'algorithm_id' => ['required', 'in:' . collect(array_column(GameLobbyAlgorithmsType::cases(), 'value'))->implode(',')],
+            'game_start_delay_time' => ['nullable', 'numeric'],
+            'game_start_delay_limit' => ['nullable', 'numeric'],
         ];
     }
 
