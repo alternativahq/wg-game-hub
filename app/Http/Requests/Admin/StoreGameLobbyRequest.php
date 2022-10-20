@@ -36,6 +36,8 @@ class StoreGameLobbyRequest extends FormRequest
                 'required',
                 'in:' . collect(array_column(GameLobbyAlgorithmsType::cases(), 'value'))->implode(','),
             ],
+            'gameStartDelayTime' => ['nullable', 'numeric'],
+            'gameStartDelayLimit' => ['nullable', 'numeric'],
         ];
     }
 

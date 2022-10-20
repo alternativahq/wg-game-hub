@@ -32,7 +32,7 @@ let dayjs = inject('dayjs');
                         <span class="ml-4 flex min-w-0 flex-col">
                             <span class="text-sm font-medium capitalize">{{ step.state }}</span>
                             <span class="text-sm text-gray-500">{{
-                                dayjs(step.createdAt).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A')
+                                dayjs(step.createdAt).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm:ss A')
                             }}</span>
                         </span>
                     </div>

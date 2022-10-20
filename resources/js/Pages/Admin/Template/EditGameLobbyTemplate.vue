@@ -24,6 +24,8 @@ let updateTemplateForm = useForm({
     asset_id: props.gameTemplate.data.asset_id,
     game_id: props.gameTemplate.data.game_id,
     algorithm_id: props.gameTemplate.data.algorithm_id,
+    game_start_delay_time: props.gameTemplate.data.game_start_delay_time,
+    game_start_delay_limit: props.gameTemplate.data.game_start_delay_limit,
 });
 
 function updateGameLobbyTemplate() {
@@ -186,6 +188,34 @@ function updateGameLobbyTemplate() {
                     {{ gameAlgorithm.label }}
                 </option>
             </select>
+            <div class="font-semibold mt-4">Game Start Delay Time </div>
+            <TextInput
+                v-model="updateTemplateForm.game_start_delay_time"
+                placeholder="Game Start Delay Time"
+                type="text"
+                id="game_start_delay_time"
+                name="game_start_delay_time"
+                class="mb-5"
+            />
+            <InputError class="mt-2">
+                <div v-if="updateTemplateForm.errors.game_start_delay_time" class="mt-2">
+                    {{ updateTemplateForm.errors.game_start_delay_time }}
+                </div>
+            </InputError>
+            <div class="font-semibold mt-4">Game Start Delay Limit </div>
+            <TextInput
+                v-model="updateTemplateForm.game_start_delay_limit"
+                placeholder="Game Start Delay Limit"
+                type="text"
+                id="game_start_delay_limit"
+                name="game_start_delay_limit"
+                class="mb-5"
+            />
+            <InputError class="mt-2">
+                <div v-if="updateTemplateForm.errors.game_start_delay_limit" class="mt-2">
+                    {{ updateTemplateForm.errors.game_start_delay_limit }}
+                </div>
+            </InputError>
             <button type="submit" class="w-full mb-2" :disabled="updateTemplateForm.processing">
                 <ButtonShape type="purple">
                     <span class="w-full uppercase">Update</span>

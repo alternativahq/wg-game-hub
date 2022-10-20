@@ -33,6 +33,8 @@ let AddLobbyForm = useForm({
     start_at: '',
     asset_id: '',
     algorithm_id: '',
+    game_start_delay_time: '',
+    game_start_delay_limit: '',
 });
 
 function addGameLobby() {
@@ -234,6 +236,34 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
                     {{ gameAlgorithm.label }}
                 </option>
             </select>
+            <div class="font-semibold mt-4">Game Start Delay Time </div>
+            <TextInput
+                v-model="AddLobbyForm.game_start_delay_time"
+                placeholder="Game Start Delay Time"
+                type="text"
+                id="game_start_delay_time"
+                name="game_start_delay_time"
+                class="mb-5"
+            />
+            <InputError class="mt-2">
+                <div v-if="AddLobbyForm.errors.game_start_delay_time" class="mt-2">
+                    {{ AddLobbyForm.errors.game_start_delay_time }}
+                </div>
+            </InputError>
+            <div class="font-semibold mt-4">Game Start Delay Limit </div>
+            <TextInput
+                v-model="AddLobbyForm.game_start_delay_limit"
+                placeholder="Game Start Delay Limit"
+                type="text"
+                id="game_start_delay_limit"
+                name="game_start_delay_limit"
+                class="mb-5"
+            />
+            <InputError class="mt-2">
+                <div v-if="AddLobbyForm.errors.game_start_delay_limit" class="mt-2">
+                    {{ AddLobbyForm.errors.game_start_delay_limit }}
+                </div>
+            </InputError>
             <button type="submit" class="w-full mb-2" :disabled="AddLobbyForm.processing">
                 <ButtonShape type="purple">
                     <span class="w-full uppercase">Add</span>

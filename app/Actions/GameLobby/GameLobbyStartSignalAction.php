@@ -46,6 +46,8 @@ class GameLobbyStartSignalAction
                 ->utc()
                 ->diffInSeconds($request->start_at),
             'algorithmId' => $request->algorithm_id,
+            'gameStartDelayTime' => $request->game_start_delay_time * 60,
+            'gameStartDelayLimit' => $request->game_start_delay_limit * 60,
         ];
 
         return $this->gameLobbyServiceAPI->startLifecycle($payload);

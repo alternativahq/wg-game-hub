@@ -1,12 +1,18 @@
 <script setup>
 import { inject, provide } from 'vue';
 
+
+let dayjs = inject('dayjs');
 defineProps({
     notification: Object,
     currentUser: Object,
 });
 
-let dayjs = inject('dayjs');
+function UTCToHumanReadable(u) {
+    return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('YYYY/MM/DD hh:mm A');
+}
+
+
 </script>
 <template>
     <div class="flex flex-col justify-between">
@@ -18,10 +24,13 @@ let dayjs = inject('dayjs');
             <p class="text-sm">{{ notification.data.message }}</p>
         </div>
     </div>
-    <div
-        @click.prevent="currentUser.markNotificationAsRead(notification.id)"
-        class="self-baseline rounded bg-blue-200 py-2 px-2 text-xs hover:cursor-pointer hover:bg-blue-300 hover:text-white"
-    >
-        Mark as read
+    <div class="flex items-center justify-between">
+        <div
+            @click.prevent="currentUser.markNotificationAsRead(notification.id)"
+            class="self-baseline rounded bg-blue-200 py-2 px-2 text-xs hover:cursor-pointer hover:bg-blue-300 hover:text-white"
+        >
+            Mark as read
+        </div>
+        <div class="text-sm">{{ UTCToHumanReadable(notification.createdAt) }}</div>
     </div>
 </template>
