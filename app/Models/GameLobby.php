@@ -32,7 +32,7 @@ class GameLobby extends Model
 
     protected $dates = ['scheduled_at', 'start_at'];
 
-    protected $appends = ['has_available_spots', 'players_in_lobby_count', 'scheduled_at_utc_string', 'image_url'];
+    protected $appends = ['has_available_spots', 'players_in_lobby_count', 'scheduled_at_utc_string', 'start_at_utc_string', 'image_url'];
 
     public function imageUrl(): Attribute
     {
@@ -65,6 +65,14 @@ class GameLobby extends Model
         return new Attribute(
             get: function () {
                 return $this->scheduled_at?->toString();
+            },
+        );
+    }
+    public function startAtUtcString(): Attribute
+    {
+        return new Attribute(
+            get: function () {
+                return $this->start_at?->toString();
             },
         );
     }
