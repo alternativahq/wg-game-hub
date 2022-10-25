@@ -33,11 +33,11 @@ class GameLobbyStartSignalAction
             'rules' => $request->rules,
             'asset' => $asset->symbol,
             'state' => GameLobbyStatus::Scheduled->toGameLobbyServiceValue(),
-            'baseEntranceFee' => $request->base_entrance_fee,
+            'baseEntranceFee' => $request->base_entrance_fee * 1,
             'scheduledAt' => $request->scheduled_at,
             'startsAt' => $request->start_at,
-            'minPlayers' => $request->min_players,
-            'maxPlayers' => $request->max_players,
+            'minPlayers' => $request->min_players * 1,
+            'maxPlayers' => $request->max_players * 1,
             'gamePlayDuration' => $request->game_play_duration * 60,
             'scheduleWaitTime' => Carbon::now()
                 ->utc()
@@ -47,7 +47,7 @@ class GameLobbyStartSignalAction
                 ->diffInSeconds($request->start_at),
             'algorithmId' => $request->algorithm_id,
             'gameStartDelayTime' => $request->game_start_delay_time * 60,
-            'gameStartDelayLimit' => $request->game_start_delay_limit,
+            'gameStartDelayLimit' => $request->game_start_delay_limit * 1,
         ];
 
         return $this->gameLobbyServiceAPI->startLifecycle($payload);

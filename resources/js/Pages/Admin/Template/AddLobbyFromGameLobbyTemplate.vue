@@ -242,7 +242,7 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
                     {{ gameAlgorithm.label }}
                 </option>
             </select>
-            <div class="font-semibold mt-4">Game Start Delay Time </div>
+            <div class="font-semibold mt-4">Game Start Delay Time (min)</div>
             <TextInput
                 v-model="AddLobbyFromTemplateForm.game_start_delay_time"
                 placeholder="Game Start Delay Time"
@@ -256,7 +256,7 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
                     {{ AddLobbyFromTemplateForm.errors.game_start_delay_time }}
                 </div>
             </InputError>
-            <div class="font-semibold mt-4">Game Start Delay Limit </div>
+            <div class="font-semibold mt-4">Game Start Delay Limit (times)</div>
             <TextInput
                 v-model="AddLobbyFromTemplateForm.game_start_delay_limit"
                 placeholder="Game Start Delay Limit"
