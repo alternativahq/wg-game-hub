@@ -50,6 +50,8 @@ class GameLobbyController extends Controller
                 'algorithmId',
                 'startsAt',
                 'gamePlayDuration',
+                'gameStartDelayTime',
+                'gameStartDelayLimit',
             )
             ->merge([
                 'available_spots' => $request->maxPlayers,
@@ -109,7 +111,7 @@ class GameLobbyController extends Controller
             event(new GameLobbyGameStartDelayedEvent($gameLobby));
             return response()->noContent();
         }
-        return response()->json('you can not delay more than '. $gameLobby->game_start_delay_limit . ' times');        
+        return response()->json('you can not delay more than '. $gameLobby->game_start_delay_limit . ' times');
     }
 
     public function inGame(Request $request, GameLobby $gameLobby)

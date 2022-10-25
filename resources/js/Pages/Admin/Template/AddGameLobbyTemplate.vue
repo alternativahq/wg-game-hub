@@ -187,7 +187,7 @@ function addGameLobbyTemplate() {
                     {{ gameAlgorithm.label }}
                 </option>
             </select>
-            <div class="font-semibold mt-4">Game Start Delay Time </div>
+            <div class="font-semibold mt-4">Game Start Delay Time (min)</div>
             <TextInput
                 v-model="AddTemplateForm.game_start_delay_time"
                 placeholder="Game Start Delay Time"
@@ -201,7 +201,7 @@ function addGameLobbyTemplate() {
                     {{ AddTemplateForm.errors.game_start_delay_time }}
                 </div>
             </InputError>
-            <div class="font-semibold mt-4">Game Start Delay Limit </div>
+            <div class="font-semibold mt-4">Game Start Delay Limit (times)</div>
             <TextInput
                 v-model="AddTemplateForm.game_start_delay_limit"
                 placeholder="Game Start Delay Limit"
