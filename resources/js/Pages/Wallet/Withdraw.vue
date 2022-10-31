@@ -16,6 +16,7 @@ import TransactionDialog from '@/Shared/Modals/TransactionDialog.vue';
 let props = defineProps({
     userWithdrawTransactions: Object,
     assetInformation: Object,
+    userAssetInformation: Object,
     assets: Object,
     _filters: Object,
     _filtersOptions: Object,
@@ -27,17 +28,37 @@ let currentUrl = window.location.toString();
 let pagination = reactive(new Pagination(props.userWithdrawTransactions));
 
 let withdrawalForm = useForm({
-    coin: props.assetInformation.asset,
-    wallet_address: props.assetInformation.address,
+    coin: props.assetInformation.symbol,
+    wallet_address: props.userAssetInformation.address,
     network: '',
     amount: '',
 });
 
 onMounted(() => {
     if (props.assetInformation) {
-        withdrawalForm.network = props.assetInformation.asset;
+        withdrawalForm.network = props.assetInformation.networks.id;
     }
 });
+
+watch(
+    () => withdrawalForm.coin,
+    debounce(() => {
+        Inertia.reload({
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
+            only: ['userAssetInformation', 'assetInformation'],
+            data: { coin: withdrawalForm.coin},
+        });
+    }, 500)
+);
+
+watch(
+    () => props.userAssetInformation,
+    () => {
+        withdrawalForm.wallet_address = props.userAssetInformation.address;
+    }
+);
 
 function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
@@ -56,11 +77,6 @@ function sendConfirmation() {
         preserveScroll: true, preserveState: true,
         onSuccess: () => state.open = true,
     });
-    // Inertia.get(
-    //     '/wallet/withdrawal/sendConfirmation',
-    //     {},
-    //     { preserveScroll: true, preserveState: true, replace: true }
-    // );
 }
 
 async function show(transaction) {
@@ -79,32 +95,6 @@ watch(
         deep: true,
     }
 );
-
-watch(
-    () => withdrawalForm.coin,
-    debounce(() => {
-        Inertia.reload({
-            preserveState: true,
-            preserveScroll: true,
-            replace: true,
-            only: ['assetInformation'],
-            data: { coin: withdrawalForm.coin },
-        });
-        // Inertia.get(
-        //     currentUrl,
-        //     { coin: withdrawalForm.coin },
-        //     { preserveScroll: true, preserveState: true, replace: true }
-        // );
-    }, 500)
-);
-
-watch(
-    () => props.assetInformation,
-    () => {
-        withdrawalForm.wallet_address = props.assetInformation.address;
-        withdrawalForm.network = props.assetInformation.asset;
-    }
-);
 </script>
 <template>
     <div>
@@ -116,7 +106,7 @@ watch(
         />
         <WithdrawalDialog :open="state.open" @close="state.open = false" />
         <section class="flex items-center justify-between">
-            
+
             <h2 class="mb-6 font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Withdraw Crypto</h2>
             <div class="round mx-5 mb-6 bg-gray-300 px-3 py-2 text-lg font-semibold text-black">Withdrawal Fiat -></div>
         </section>
@@ -144,8 +134,28 @@ watch(
                             </BorderedContainer>
                         </div>
                     </div>
-
-                    <div v-if="assetInformation.id">
+                    <div class="mb-5 flex items-center py-4 px-4">
+                        <div class="mr-20 w-2/5 text-right"></div>
+                        <div class="w-3/5">
+                            <div class="mb-2">Network</div>
+                            <BorderedContainer class="bg-wgh-gray-1.5">
+                                <div class="rounded-lg">
+                                    <select
+                                        id="location"
+                                        name="location"
+                                        v-model="withdrawalForm.network"
+                                        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                    >
+                                        <option :value="undefined">All</option>
+                                        <option :key="network.id" v-for="network in assetInformation.networks" :value="network.id">
+                                            {{ network.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </BorderedContainer>
+                        </div>
+                    </div>
+                    <div v-if="userAssetInformation.id">
                         <div class="mb-5 flex items-center py-4 px-4">
                             <div class="mr-20 w-2/5 text-right">Withdrawal Information</div>
                             <div class="w-3/5">
@@ -186,22 +196,6 @@ watch(
                         <div class="mb-5 flex items-center py-4 px-4">
                             <div class="mr-20 w-2/5 text-right"></div>
                             <div class="w-3/5">
-                                <div class="mb-2">Network</div>
-                                <BorderedContainer class="bg-wgh-gray-1.5">
-                                    <div class="rounded-lg">
-                                        <input
-                                            class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                            type="text"
-                                            v-model="withdrawalForm.network"
-                                            disabled
-                                        />
-                                    </div>
-                                </BorderedContainer>
-                            </div>
-                        </div>
-                        <div class="mb-5 flex items-center py-4 px-4">
-                            <div class="mr-20 w-2/5 text-right"></div>
-                            <div class="w-3/5">
                                 <button preserve-scroll type="submit" class="w-full">
                                     <ButtonShape type="purple">
                                         <span v-if="!withdrawalForm.processing" class="w-full uppercase">withdrawal</span>
@@ -225,28 +219,28 @@ watch(
                 <Link href="" class="mb-2 block text-gray-500 underline"> is there a limit on 24h withdrawal? </Link>
             </div>
         </section>
-        <section class="mb-10 flex" v-if="assetInformation != ''">
+        <section class="mb-10 flex" v-if="userAssetInformation != ''">
             <div class="flex w-2/3">
                 <div class="mr-20 w-2/5"></div>
                 <div class="flex w-3/5 items-center">
                     <div class="w-1/2">
                         <div class="mb-2">
                             <div>Avalibale Balance</div>
-                            <div>{{ assetInformation.balance }} {{ assetInformation.asset }}</div>
+                            <div>{{ userAssetInformation.balance }} {{ userAssetInformation.asset }}</div>
                         </div>
                         <div class="mb-2">
                             <div>Fees</div>
-                            <div>0.02 {{ assetInformation.asset }}</div>
+                            <div>0.02 {{ userAssetInformation.asset }}</div>
                         </div>
                     </div>
                     <div class="w-1/2">
                         <div class="mb-2">
                             <div>Minimom Withdrawal</div>
-                            <div>1.00 {{ assetInformation.asset }}</div>
+                            <div>1.00 {{ userAssetInformation.asset }}</div>
                         </div>
                         <div class="mb-2">
                             <div>Remaning daily withdrawal amount</div>
-                            <div>1 {{ assetInformation.asset }}</div>
+                            <div>1 {{ userAssetInformation.asset }}</div>
                         </div>
                     </div>
                 </div>
@@ -349,7 +343,7 @@ watch(
                                                     }"
                                                     :preserve-scroll="true"
                                                 >
-                                                    Hash    
+                                                    Hash
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
@@ -378,7 +372,7 @@ watch(
                                                     }"
                                                     :preserve-scroll="true"
                                                 >
-                                                    State   
+                                                    State
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
@@ -407,7 +401,7 @@ watch(
                                                     }"
                                                     :preserve-scroll="true"
                                                 >
-                                                    Asset   
+                                                    Asset
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
@@ -436,7 +430,7 @@ watch(
                                                     }"
                                                     :preserve-scroll="true"
                                                 >
-                                                    From Account ID   
+                                                    From Account ID
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
