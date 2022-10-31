@@ -12,6 +12,8 @@ import { useForm } from '@inertiajs/inertia-vue3';
 import { debounce } from 'lodash';
 import WithdrawalDialog from '@/Shared/Modals/WithdrawalDialog.vue';
 import TransactionDialog from '@/Shared/Modals/TransactionDialog.vue';
+import WithdrawalFormCoinDialog from '@/Shared//Modals/WithdrawalFormCoinDialog.vue';
+import WithdrawalFormNetworkDialog from '@/Shared//Modals/WithdrawalFormNetworkDialog.vue';
 
 let props = defineProps({
     userWithdrawTransactions: Object,
@@ -57,6 +59,7 @@ watch(
     () => props.userAssetInformation,
     () => {
         withdrawalForm.wallet_address = props.userAssetInformation.address;
+        state.selectedNetwork = '';
     }
 );
 
@@ -66,6 +69,9 @@ function UTCToHumanReadable(u) {
 
 let state = reactive({
     open: false,
+    selectedNetwork: '',
+    openWithdrawCoin: false,
+    openWithdrawNetwork: false,
     isShow: false,
     transactionShow: null,
     transactionSteps: null,
@@ -117,42 +123,24 @@ watch(
                         <div class="mr-20 w-2/5 text-right">Select a Coin</div>
                         <div class="w-3/5">
                             <div class="mb-2">coin</div>
-                            <BorderedContainer class="bg-wgh-gray-1.5">
+                            <div class="bg-gray-100 border border-gray-500">
                                 <div class="rounded-lg">
-                                    <select
-                                        id="location"
-                                        name="location"
-                                        v-model="withdrawalForm.coin"
-                                        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                    >
-                                        <option :value="undefined">All</option>
-                                        <option :key="asset.symbol" v-for="asset in assets.data" :value="asset.symbol">
-                                            {{ asset.name }}
-                                        </option>
-                                    </select>
+                                    <WithdrawalFormCoinDialog v-model="withdrawalForm.coin" :open="state.openWithdrawCoin" @close="state.openWithdrawCoin = false" :assets="assets.data"/>
+                                    <div class="py-2 px-2 text-lg hover:cursor-pointer hover:bg-gray-200 text-center" @click="state.openWithdrawCoin=true">{{assetInformation.symbol ? assetInformation.symbol: 'Choose a Coin'}}</div>
                                 </div>
-                            </BorderedContainer>
+                            </div>
                         </div>
                     </div>
                     <div class="mb-5 flex items-center py-4 px-4">
                         <div class="mr-20 w-2/5 text-right"></div>
                         <div class="w-3/5">
                             <div class="mb-2">Network</div>
-                            <BorderedContainer class="bg-wgh-gray-1.5">
+                            <div class="bg-gray-100 border border-gray-500">
                                 <div class="rounded-lg">
-                                    <select
-                                        id="location"
-                                        name="location"
-                                        v-model="withdrawalForm.network"
-                                        class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                    >
-                                        <option :value="undefined">All</option>
-                                        <option :key="network.id" v-for="network in assetInformation.networks" :value="network.id">
-                                            {{ network.name }}
-                                        </option>
-                                    </select>
+                                    <WithdrawalFormNetworkDialog @updated="(network) => {state.selectedNetwork = network, withdrawalForm.network = network.id}" :open="state.openWithdrawNetwork" @close="state.openWithdrawNetwork = false" :networks="assetInformation.networks"/>
+                                    <div class="py-2 px-2 text-lg hover:cursor-pointer hover:bg-gray-200 text-center" @click="state.openWithdrawNetwork=true">{{state.selectedNetwork ? state.selectedNetwork.name: 'Choose a network'}}</div>
                                 </div>
-                            </BorderedContainer>
+                            </div>
                         </div>
                     </div>
                     <div v-if="userAssetInformation.id">
@@ -160,32 +148,33 @@ watch(
                             <div class="mr-20 w-2/5 text-right">Withdrawal Information</div>
                             <div class="w-3/5">
                                 <div class="mb-2">Wallet Address</div>
-                                <BorderedContainer class="bg-wgh-gray-1.5">
+                                <div class="bg-gray-100 border border-gray-500">
                                     <div class="rounded-lg">
                                         <input
-                                            class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                            class="py-2 px-2 text-lg w-full bg-gray-300"
                                             type="text"
+                                            placeholder="amount"
                                             v-model="withdrawalForm.wallet_address"
                                             disabled
                                         />
                                     </div>
-                                </BorderedContainer>
+                                </div>
                             </div>
                         </div>
                         <div class="mb-5 flex items-center py-4 px-4">
                             <div class="mr-20 w-2/5 text-right"></div>
                             <div class="w-3/5">
                                 <div class="mb-2">Amount</div>
-                                <BorderedContainer class="bg-wgh-gray-1.5">
+                                <div class="bg-gray-100 border border-gray-500">
                                     <div class="rounded-lg">
                                         <input
-                                            class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                                            class="py-2 px-2 text-lg w-full"
                                             type="text"
                                             placeholder="amount"
                                             v-model="withdrawalForm.amount"
                                         />
                                     </div>
-                                </BorderedContainer>
+                                </div>
                                 <InputError class="mt-2">
                                     <div v-if="withdrawalForm.errors.amount" class="mt-2">
                                         {{ withdrawalForm.errors.amount }}
@@ -230,17 +219,17 @@ watch(
                         </div>
                         <div class="mb-2">
                             <div>Fees</div>
-                            <div>0.02 {{ userAssetInformation.asset }}</div>
+                            <div>{{state.selectedNetwork.fee}} {{ userAssetInformation.asset }}</div>
                         </div>
                     </div>
                     <div class="w-1/2">
                         <div class="mb-2">
                             <div>Minimom Withdrawal</div>
-                            <div>1.00 {{ userAssetInformation.asset }}</div>
+                            <div>{{ state.selectedNetwork.minWithdrawal }} {{ userAssetInformation.asset }}</div>
                         </div>
                         <div class="mb-2">
                             <div>Remaning daily withdrawal amount</div>
-                            <div>1 {{ userAssetInformation.asset }}</div>
+                            <div>{{assetInformation.dailyLimit}} {{ userAssetInformation.asset }}</div>
                         </div>
                     </div>
                 </div>
