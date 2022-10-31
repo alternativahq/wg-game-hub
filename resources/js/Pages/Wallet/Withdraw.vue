@@ -110,6 +110,7 @@ watch(
             :open="state.isShow"
             @close="state.isShow = false"
         />
+        {{assetInformation}}
         <WithdrawalDialog :open="state.open" @close="state.open = false" />
         <section class="flex items-center justify-between">
 

@@ -43,10 +43,9 @@ let props = defineProps({
                             <div>
                                 <div class="mb-4 border-b-2 border-b-gray-400">
                                     <div class="mb-3 flex items-center justify-between text-2xl font-semibold">
-                                        <div>Select network</div>
+                                        <div>Select a coin</div>
                                         <div class="text-2xl hover:cursor-pointer" @click="$emit('close')">&times;</div>
                                     </div>
-                                    <div class="text-sm my-3">network you are withdrawing, if you are unsure, kindly check with the receiveing platform first.</div>
                                 </div>
                                 <div :key="asset.id" v-for="asset in assets" :value="asset.id" @click="$emit('update:modelValue', asset.symbol),$emit('close')" class="flex justify-between my-4 hover:bg-gray-300 px-4 py-2 cursor-pointer">
                                     <div class="">
