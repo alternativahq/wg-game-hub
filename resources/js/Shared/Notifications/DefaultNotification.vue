@@ -11,8 +11,6 @@ defineProps({
 function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('YYYY/MM/DD hh:mm A');
 }
-
-
 </script>
 <template>
     <div class="flex flex-col justify-between">

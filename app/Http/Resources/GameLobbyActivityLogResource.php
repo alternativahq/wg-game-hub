@@ -13,7 +13,7 @@ class GameLobbyActivityLogResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->whenNotNull($this->name->toLabel()),
+            'name' => $this->whenNotNull($this->name),
             'description' => $this->whenNotNull($this->description),
             'payload' => $this->whenNotNull($this->payload),
             'date' => $this->whenNotNull($this->created_at),
