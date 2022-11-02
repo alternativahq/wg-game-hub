@@ -38,7 +38,7 @@ let withdrawalForm = useForm({
 
 onMounted(() => {
     if (props.assetInformation) {
-        withdrawalForm.network = props.assetInformation.networks.id;
+        withdrawalForm.network = state.selectedNetwork;
     }
 });
 
@@ -131,7 +131,7 @@ watch(
                             </div>
                         </div>
                     </div>
-                    <div class="mb-5 flex items-center py-4 px-4">
+                    <div v-if="userAssetInformation.id" class="mb-5 flex items-center py-4 px-4">
                         <div class="mr-20 w-2/5 text-right"></div>
                         <div class="w-3/5">
                             <div class="mb-2">Network</div>

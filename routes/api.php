@@ -29,6 +29,14 @@ Route::middleware('api.basic-auth')->group(function () {
         \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
         'gameStartDelayed',
     ]);
+    Route::put('game-lobbies/{gameLobby}/aborted-refunding', [
+        \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
+        'gameLobbyAbortedRefunding',
+    ]);
+    Route::put('game-lobbies/{gameLobby}/aborted', [
+        \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
+        'gameLobbyAborted',
+    ]);
     Route::put('game-lobbies/{gameLobby}/in-game', [
         \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
         'inGame',

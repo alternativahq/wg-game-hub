@@ -16,6 +16,14 @@ class GameLobbiesController extends Controller
     public function show(GameLobby $gameLobby)
     {
         $this->authorize('view', $gameLobby);
+
+        if(
+            $gameLobby->state->is(GameLobbyStatus::GameLobbyAbortedRefunding) ||
+            $gameLobby->state->is(GameLobbyStatus::GameLobbyAborted)
+        ){
+            return redirect()->route('games.show',$gameLobby->game->id);
+        }
+
         $gameLobby->load(
             'game:id,name,description',
             'users:id,name,last_name,image,username',

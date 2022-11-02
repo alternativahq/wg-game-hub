@@ -7,6 +7,8 @@ enum GameLobbyStatus: int
 {
     case Scheduled = 10;
     case AwaitingPlayers = 20;
+    case GameLobbyAbortedRefunding = 23;
+    case GameLobbyAborted = 26;
     case InGame = 30;
     case GameEnded = 40;
     case DistributingPrizes = 50;

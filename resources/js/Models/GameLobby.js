@@ -12,6 +12,8 @@ export default class GameLobby extends Model {
                 scheduled: '.status.scheduled',
                 awaitingPlayers: '.status.awaiting-players',
                 gameStartDelayed: '.status.game-start-delayed',
+                gameAbortedRefunding: '.status.game-aborted-refunding',
+                gameAborted: '.status.aborted',
                 inGame: '.status.in-game',
                 gameEnded: '.status.game-ended',
                 distributingPrizes: '.status.distributing-prizes',
