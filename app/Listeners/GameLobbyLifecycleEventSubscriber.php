@@ -9,6 +9,7 @@ use App\Events\GameLobby\GameLobbyAbortedEvent;
 use App\Events\GameLobby\GameLobbyCreatedEvent;
 use App\Events\GameLobby\GameLobbyLatestUpdate;
 use App\Events\GameLobby\GameLobbyArchivedEvent;
+use App\Events\GameLobby\GameLobbyAbortedRefundingEvent;
 use App\Events\GameLobby\GameLobbyGameStartDelayedEvent;
 use App\Events\GameLobby\GameLobbyStartTimeChangedEvent;
 use App\Events\GameLobby\GameLobbyDistributedPrizesEvent;
@@ -31,9 +32,9 @@ class GameLobbyLifecycleEventSubscriber
         $event->gameLobby->update([
         'latest_update' => $event->gameLobby->name . ' lobby is created',
         ]);
-        
+
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
-        
+
         $event->gameLobby->activityLogs()->create([
             'name' => GameLobbyLogType::GameLobbyStateScheduled,
             'description' => 'Game lobby scheduled',
@@ -70,6 +71,34 @@ class GameLobbyLifecycleEventSubscriber
 
         $event->gameLobby->update([
             'latest_update' => 'Game lobby has been delayed by '. $event->gameLobby->game_start_delay_time . ' sec',
+        ]);
+
+        event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
+    }
+
+    public function handleAbortedRefunding(GameLobbyAbortedRefundingEvent $event): void
+    {
+        $event->gameLobby->activityLogs()->create([
+            'name' => GameLobbyLogType::GameLobbyStateAbortedRefunding,
+            'description' => 'Game lobby got aborted due to '. $event->cause .' and started refunding the players',
+        ]);
+
+        $event->gameLobby->update([
+            'latest_update' => 'Game lobby got aborted due to '. $event->cause .' and started refunding the players',
+        ]);
+
+        event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
+    }
+
+    public function handleAborted(GameLobbyAbortedEvent $event): void
+    {
+        $event->gameLobby->activityLogs()->create([
+            'name' => GameLobbyLogType::GameLobbyStateAborted,
+            'description' => 'Game lobby got aborted',
+        ]);
+
+        $event->gameLobby->update([
+            'latest_update' => 'Game lobby got aborted',
         ]);
 
         event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
@@ -153,7 +182,7 @@ class GameLobbyLifecycleEventSubscriber
             'description' =>
                 'User username: ' .
                 $event->user->username .
-                ' with and id of ' .
+                ' with an id of ' .
                 $event->user->id .
                 ' joined the game lobby.',
             'payload' => json_encode([
@@ -176,7 +205,7 @@ class GameLobbyLifecycleEventSubscriber
             'description' =>
                 'User username: ' .
                 $event->user->username .
-                ' with and id of ' .
+                ' with an id of ' .
                 $event->user->id .
                 ' left the game lobby.',
             'payload' => json_encode([
@@ -203,16 +232,14 @@ class GameLobbyLifecycleEventSubscriber
     {
     }
 
-    public function handleAborted($event): void
-    {
-    }
-
     public function subscribe($event): array
     {
         return [
             GameLobbyCreatedEvent::class => 'handleCreated',
             GameLobbyAwaitingPlayersEvent::class => 'handleAwaitingPlayers',
             GameLobbyGameStartDelayedEvent::class => 'handleGameStartDelayed',
+            GameLobbyAbortedRefundingEvent::class => 'handleAbortedRefunding',
+            GameLobbyAbortedEvent::class => 'handleAborted',
             GameLobbyStartedEvent::class => 'handleInGame',
             GameLobbyEndedEvent::class => 'handleGameEnded',
             GameLobbyDistributingPrizesEvent::class => 'handleDistributingPrizes',
@@ -223,7 +250,6 @@ class GameLobbyLifecycleEventSubscriber
             GameLobbyStartVotingPassedEvent::class => 'handleStartVotingPassed',
             GameLobbyStartVotingFailedEvent::class => 'handleStartVotingFailed',
             GameLobbyStartTimeChangedEvent::class => 'handleStartTimeChanged',
-            GameLobbyAbortedEvent::class => 'handleAborted',
         ];
     }
 }

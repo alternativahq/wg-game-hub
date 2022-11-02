@@ -27,7 +27,7 @@ class DashboardController extends Controller
                     }),
             request: $request,
         )->paginate();
-        
+
         return Inertia::render('Index', [
             'availableGames' => GameResource::collection($games),
             'mainChatRoom' => new ChatRoomResource(resource: ChatRoom::mainChannel()->first()),

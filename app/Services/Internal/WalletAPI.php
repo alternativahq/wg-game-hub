@@ -47,4 +47,16 @@ class WalletAPI
         $url = $this->baseUrl . '/txs/logs';
         return Http::get($url, ['txId' => $transactionId]);
     }
+
+    public function assets(): Response
+    {
+        $url = $this->baseUrl . '/assets';
+        return Http::get($url);
+    }
+
+    public function asset(string $asset): Response
+    {
+        $url = $this->baseUrl . '/assets/'. $asset;
+        return Http::get($url);
+    }
 }

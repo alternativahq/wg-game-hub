@@ -21,9 +21,12 @@ use App\Http\Resources\GameLobbyUserResource;
 use App\Events\GameLobby\GameLobbyCreatedEvent;
 use App\DataTransferObjects\GameMatchResultData;
 use App\Events\GameLobby\GameLobbyArchivedEvent;
+use App\Http\Requests\GameLobbyAbortedRefunding;
 use App\Http\Requests\Admin\StoreGameLobbyRequest;
+use App\Events\GameLobby\GameLobbyAbortedEvent;
 use App\Http\Requests\GameMatchResultsPayloadRequest;
 use App\Events\GameLobby\GameLobbyGameStartDelayedEvent;
+use App\Events\GameLobby\GameLobbyAbortedRefundingEvent;
 use App\Notifications\GameLobbyDistributedPrizesNotification;
 use App\Notifications\ProcessingGameLobbyResultsNotification;
 use App\Notifications\GameLobbyDistributingPrizesNotification;
@@ -112,6 +115,28 @@ class GameLobbyController extends Controller
             return response()->noContent();
         }
         return response()->json('you can not delay more than '. $gameLobby->game_start_delay_limit . ' times');
+    }
+
+    public function gameLobbyAbortedRefunding(GameLobbyAbortedRefunding $request, GameLobby $gameLobby)
+    {
+        abort_unless($gameLobby->state->is(GameLobbyStatus::AwaitingPlayers), Response::HTTP_FORBIDDEN);
+        $gameLobby->update([
+            'state' => GameLobbyStatus::GameLobbyAbortedRefunding,
+        ]);
+        event(new GameLobbyAbortedRefundingEvent($gameLobby, $request->cause));
+
+        return response()->noContent();
+    }
+
+    public function gameLobbyAborted(GameLobby $gameLobby)
+    {
+        abort_unless($gameLobby->state->is(GameLobbyStatus::GameLobbyAbortedRefunding), Response::HTTP_FORBIDDEN);
+        $gameLobby->update([
+            'state' => GameLobbyStatus::GameLobbyAborted,
+        ]);
+        event(new GameLobbyAbortedEvent($gameLobby));
+
+        return response()->noContent();
     }
 
     public function inGame(Request $request, GameLobby $gameLobby)

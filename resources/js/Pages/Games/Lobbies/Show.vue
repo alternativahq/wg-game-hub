@@ -6,6 +6,7 @@ import { onBeforeUnmount, onMounted, defineProps, reactive, ref, watch } from 'v
 import { Inertia } from '@inertiajs/inertia';
 import { inject } from 'vue';
 import LeaderBoardModal from '@/Shared/Modals/LeaderBoardModal';
+import GameAbortedRefundingDialog from '@/Shared/Modals/GameAbortedRefundingDialog';
 import GameLobby from '@/Models/GameLobby';
 import { Link } from '@inertiajs/inertia-vue3';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
@@ -45,6 +46,8 @@ onMounted(() => {
             .listen(GameLobby.socketEvents.userLeft, channelUserLeft)
             .listen(GameLobby.socketEvents.status.inGame, channelInGame)
             .listen(GameLobby.socketEvents.status.gameStartDelayed, channelGameStartDelayed)
+            .listen(GameLobby.socketEvents.status.gameAbortedRefunding, channelAbortedRefunding)
+            .listen(GameLobby.socketEvents.status.gameAborted, channelAborted)
             .listen(GameLobby.socketEvents.status.gameEnded, channelGameEnded)
             .listen(GameLobby.socketEvents.status.distributingPrizes, channelDistributingPrizes)
             .listen(GameLobby.socketEvents.status.distributedPrizes, channelDistributedPrizes)
@@ -69,6 +72,15 @@ function channelGameStartDelayed(payload) {
     gameLobbyModel.killCountDownTimer();
     gameLobbyModel.start_at = payload.newStartAt;
     gameLobbyModel.startCountDownTimer();
+}
+
+function channelAbortedRefunding(payload) {
+    state.open = true;
+    state.abortRefundingCause = payload.cause;
+}
+
+function channelAborted(payload) {
+    console.log(payload)
 }
 
 function sendChatMessage() {
@@ -157,9 +169,15 @@ import GameLobbyLayout from '@/Layouts/GameLobbyLayout';
 export default {
     layout: [BaseLayout, GameLobbyLayout],
 };
+
+let state = reactive({
+    abortRefundingCause: '',
+    open: false,
+});
 </script>
 <template>
     <div>
+        <GameAbortedRefundingDialog :cause="state.abortRefundingCause" @closed="state.open = false" :gameLobby="gameLobby" :open="state.open"/>
         <LeaderBoardModal
             v-if="gameLobby.data.hasOwnProperty('scores')"
             :is-open="gameLobby.data.hasOwnProperty('scores')"

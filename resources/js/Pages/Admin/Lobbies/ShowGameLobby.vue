@@ -29,7 +29,7 @@ let props = defineProps({
                                         .utc()
                                         .local()
                                         .tz(dayjs.tz.guess())
-                                        .format('MMMM DD, YYYY hh:mm A')
+                                        .format('YYYY/MM/DD hh:mm:ss A')
                                 }}
                             </div>
                         </div>
@@ -43,7 +43,7 @@ let props = defineProps({
                                         .utc()
                                         .local()
                                         .tz(dayjs.tz.guess())
-                                        .format('MMMM DD, YYYY hh:mm A')
+                                        .format('YYYY/MM/DD hh:mm:ss A')
                                 }}
                             </div>
                         </div>

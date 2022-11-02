@@ -51,25 +51,23 @@ class WithdrawController extends Controller
             ],
         );
 
-        //Todo need to set up the pipeline
-
-        // $transactions = UserTransactionPipeline::make(
-        //     builder: Transcation::query()->whereBelongsTo($user),
-        //     request: $request,
-        // );
-
-        $assets = Asset::get(['id', 'name', 'symbol']);
+        $assets = $this->walletAPI->assets()->json();
+        // dd($assets);
+        // $assets = Asset::get(['id', 'name', 'symbol']);
         return Inertia::render('Wallet/Withdraw', [
             'userWithdrawTransactions' => TransactionResource::collection($withdrawTransactions->withQueryString()),
-            'assetInformation' => function () use ($request) {
+            'userAssetInformation' => function () use ($request) {
                 if (!$request->exists('coin')) {
                     return [];
                 }
+                // $response = $this->walletAPI->asset($request->coin)->json();
+                // dd($response);
 
                 $response = $this->walletAPI->accounts([
                     'userId' => auth()->user()->id,
                     'asset' => $request->coin,
                 ]);
+                // dd($response->json('data')[0]);
 
                 if ($response->failed()) {
                     //TODO: Logging should be done here
@@ -78,7 +76,21 @@ class WithdrawController extends Controller
                 }
                 return count($response->json('data')) ? $response->json('data')[0] : [];
             },
-            'assets' => AssetResource::collection($assets),
+            'assetInformation' => function () use ($request) {
+                if (!$request->exists('coin')) {
+                    return [];
+                }
+                $response = $this->walletAPI->asset($request->coin)->json();
+                // dd($response);
+
+                // if ($response->failed()) {
+                //     //TODO: Logging should be done here
+                //     session()->flash('error', 'Something went wrong, please try again later');
+                //     return redirect()->back();
+                // }
+                return count($response) ? $response : [];
+            },
+            'assets' => $assets,
             '_filters' => $request
                 ->collect()
                 ->only(

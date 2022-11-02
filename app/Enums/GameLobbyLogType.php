@@ -10,6 +10,8 @@ enum GameLobbyLogType: string
     case GameLobbyStateScheduled = 'game-lobby-state-scheduled';
     case GameLobbyStateAwaitingPlayers = 'game-lobby-state-awaiting-players';
     case GameLobbyGameStartDelayed = 'game-lobby-game-start-delayed';
+    case GameLobbyStateAbortedRefunding = 'game-lobby-game-aborted-refunding';
+    case GameLobbyStateAborted = 'game-lobby-game-start-aborted';
     case GameLobbyStateEnded = 'game-lobby-state-ended';
     case UserJoined = 'user-joined';
     case UserLeft = 'user-left';
