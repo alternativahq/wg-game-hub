@@ -17,7 +17,7 @@ let state = reactive({
             <div class="flex">
                 <div class="mr-4 text-sm font-medium">{{ step.name }}</div>
                 <div class="text-sm text-gray-500">
-                    {{ dayjs(step.date).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A') }}
+                    {{ dayjs(step.date).utc().local().tz(dayjs.tz.guess()).format('YYYY/MM/DD hh:mm:ss A') }}
                 </div>
             </div>
             <div class="mb-2 text-sm font-normal">{{ step.description }}</div>

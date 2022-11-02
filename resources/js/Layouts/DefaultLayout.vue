@@ -153,7 +153,7 @@ const navigation = [{ name: 'Dashboard', href: '/', current: true, external: fal
                                 }}</span
                             >
                         </button>
-                        <Menu v-if="currentUser" as="div" class="z-50 relative inline-block text-left">
+                        <Menu v-if="currentUser" as="div" class="relative inline-block text-left">
                             <div>
                                 <MenuButton>
                                     <ButtonShape type="purple">
@@ -183,6 +183,17 @@ const navigation = [{ name: 'Dashboard', href: '/', current: true, external: fal
                                         </p>
                                     </div>
                                     <div class="py-1">
+                                        <MenuItem v-slot="{ active }">
+                                            <Link
+                                                :href="`/profile`"
+                                                :class="[
+                                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                    'block px-4 py-2 text-sm',
+                                                ]"
+                                            >
+                                                Profile
+                                            </Link>
+                                        </MenuItem>
                                         <MenuItem v-slot="{ active }">
                                             <Link
                                                 :href="`/w/${currentUser.username}`"
