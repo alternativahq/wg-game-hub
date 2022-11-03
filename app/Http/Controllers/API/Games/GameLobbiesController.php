@@ -31,8 +31,8 @@ class GameLobbiesController extends Controller
         if($request->includeGame){
             $gameLobby->load('game:id,name,description');
         }
-
+        // $s=new GameLobbyResource(resource: $gameLobby);
         $gameLobby->prize_pool = $gameLobby->calculateThePrize();
-        return new GameLobbyResource(resource: $gameLobby);
+        return response()->json(new GameLobbyResource(resource: $gameLobby));
     }
 }
