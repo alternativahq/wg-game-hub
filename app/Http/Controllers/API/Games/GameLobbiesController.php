@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\API\Games;
 
-use App\Http\Controllers\Controller;
-use App\Http\QueryPipelines\GameLobbyPipeline\GameLobbyPipeline;
-use App\Http\Resources\GameLobbyResource;
 use App\Models\Game;
+use Inertia\Inertia;
 use App\Models\GameLobby;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
+use App\Models\GameLobbyUser;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\GameLobbyResource;
+use App\Http\Requests\ShowGameLobbyRequest;
+use App\Http\QueryPipelines\GameLobbyPipeline\GameLobbyPipeline;
 
 class GameLobbiesController extends Controller
 {
@@ -21,10 +23,16 @@ class GameLobbiesController extends Controller
         return GameLobbyResource::collection($gameLobbies);
     }
 
-    public function show(GameLobby $gameLobby)
+    public function show(ShowGameLobbyRequest $request, GameLobby $gameLobby)
     {
-        $gameLobby->load('game:id,name,description', 'users:id,name,image,username');
+        if($request->includeUsers){
+            $gameLobby->load('users:id,name,email,image,username');
+        }
+        if($request->includeGame){
+            $gameLobby->load('game:id,name,description');
+        }
 
+        $gameLobby->prize_pool = $gameLobby->calculateThePrize();
         return new GameLobbyResource(resource: $gameLobby);
     }
 }

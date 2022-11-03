@@ -61,9 +61,8 @@ Route::middleware('api.basic-auth')->group(function () {
         \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
         'archived',
     ]);
-    Route::get('game-lobbies/{gameLobby}/users', [
-        \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
-        'users',
+    Route::get('game-lobbies/{gameLobby}', [GameLobbiesController::class,
+        'show',
     ]);
 });
 
@@ -86,11 +85,11 @@ Route::middleware(['throttle:api', 'auth:sanctum'])->group(function () {
      *     -
      *
      */
-    Route::resource('games.game-lobbies', GameLobbiesController::class)
-        ->parameters(['game-lobbies' => 'gameLobby'])
-        ->shallow()
-        ->only('show', 'index')
-        ->scoped();
+    // Route::resource('games.game-lobbies', GameLobbiesController::class)
+    //     ->parameters(['game-lobbies' => 'gameLobby'])
+    //     ->shallow()
+    //     ->only('show', 'index')
+    //     ->scoped();
 
     Route::get('game-lobbies/{gameLobby}/current-user-score', GameLobbyCurrenUserController::class)->name(
         'games.game-lobbies.current-user-score',

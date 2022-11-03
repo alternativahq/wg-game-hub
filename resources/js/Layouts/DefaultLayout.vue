@@ -191,7 +191,7 @@ const navigation = [{ name: 'Dashboard', href: '/', current: true, external: fal
                                                     'block px-4 py-2 text-sm',
                                                 ]"
                                             >
-                                                Profile
+                                                My Profile
                                             </Link>
                                         </MenuItem>
                                         <MenuItem v-slot="{ active }">
@@ -202,7 +202,7 @@ const navigation = [{ name: 'Dashboard', href: '/', current: true, external: fal
                                                     'block px-4 py-2 text-sm',
                                                 ]"
                                             >
-                                                Dashboard
+                                                Gaming Overview
                                             </Link>
                                         </MenuItem>
                                         <MenuItem v-slot="{ active }">
@@ -213,10 +213,10 @@ const navigation = [{ name: 'Dashboard', href: '/', current: true, external: fal
                                                     'block px-4 py-2 text-sm',
                                                 ]"
                                             >
-                                                Wallet
+                                              Asset Overview
                                             </Link>
                                         </MenuItem>
-                                        <MenuItem v-slot="{ active }">
+                                        <!-- <MenuItem v-slot="{ active }">
                                             <Link
                                                 href="/wallet/transactions"
                                                 :class="[
@@ -226,7 +226,7 @@ const navigation = [{ name: 'Dashboard', href: '/', current: true, external: fal
                                             >
                                                 Transactions
                                             </Link>
-                                        </MenuItem>
+                                        </MenuItem> -->
                                     </div>
                                     <div class="py-1" v-if="currentUser.is_admin">
                                         <MenuItem v-slot="{ active }">
