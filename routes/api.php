@@ -61,9 +61,10 @@ Route::middleware('api.basic-auth')->group(function () {
         \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
         'archived',
     ]);
-    Route::get('game-lobbies/{gameLobby}', [GameLobbiesController::class,
-        'show',
-    ]);
+    // ***********************************GameLobbyCRUD************************************
+    Route::get('/game-lobbies', [GameLobbiesController::class, 'index']);
+    Route::apiResource('game-lobbies', GameLobbiesController::class)
+    ->except(['index', 'store']);
 });
 
 // User URLs
