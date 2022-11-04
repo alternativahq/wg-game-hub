@@ -2,6 +2,7 @@
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import { defineProps, inject, reactive } from 'vue';
 import ButtonShape from '@/Shared/ButtonShape';
+import { Link } from '@inertiajs/inertia-vue3';
 
 let currentUser = inject('currentUser');
 
@@ -488,12 +489,9 @@ orderedPlayers = _.concat(
                                                 </p>
                                             </div>
                                             <div class="flex flex-row justify-center space-x-4">
-                                                <ButtonShape type="gray" class="cursor-pointer uppercase"
-                                                    >Play Again</ButtonShape
-                                                >
-                                                <ButtonShape type="red" class="cursor-pointer uppercase"
-                                                    >CONTINUE</ButtonShape
-                                                >
+                                                <Link :href="`/games/${gameLobby.game_id}`" replace>
+                                                    <ButtonShape type="red" class="cursor-pointer uppercase">Play Again</ButtonShape>
+                                                </Link>
                                             </div>
                                         </div>
                                     </DialogPanel>
