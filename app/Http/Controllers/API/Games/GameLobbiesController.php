@@ -19,12 +19,10 @@ use App\Http\QueryPipelines\AdminGameLobbiesPipeline\AdminGameLobbiesPipeline;
 
 class GameLobbiesController extends Controller
 {
-    public function index(ShowGameLobbyRequest $request, Game $game)
+    public function index(ShowGameLobbyRequest $request)
     {
         $gameLobbies = AdminGameLobbiesPipeline::make(
-            builder: $game
-                ->gameLobbies()
-                ->getQuery(),
+            builder: GameLobby::query(),
             request: $request,
         )
             ->with('asset:id,name,symbol')

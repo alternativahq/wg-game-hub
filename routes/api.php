@@ -62,7 +62,7 @@ Route::middleware('api.basic-auth')->group(function () {
         'archived',
     ]);
     // ***********************************GameLobbyCRUD************************************
-    Route::get('/game/{game}/game-lobbies', [GameLobbiesController::class, 'index']);
+    Route::get('/game-lobbies', [GameLobbiesController::class, 'index']);
     Route::apiResource('game-lobbies', GameLobbiesController::class)
     ->except(['index', 'store']);
 });
