@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\GameLobbyUser;
 use App\Enums\GameLobbyStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\GameLobbyResource;
+use App\Http\Resources\GameLobbyAPIResource;
 use App\Http\Requests\ShowGameLobbyRequest;
 use App\Http\Requests\Admin\UpdateGameLobbyRequest;
 use App\Http\QueryPipelines\GameLobbyPipeline\GameLobbyPipeline;
@@ -34,7 +34,7 @@ class GameLobbiesController extends Controller
         if($request->includeGame){
             $gameLobbies->load('game:id,name,description');
         }
-        return GameLobbyResource::collection($gameLobbies->withQueryString());
+        return GameLobbyAPIResource::collection($gameLobbies->withQueryString());
     }
 
     public function show(ShowGameLobbyRequest $request, GameLobby $gameLobby)
@@ -47,7 +47,7 @@ class GameLobbiesController extends Controller
         }
 
         $gameLobby->prize_pool = $gameLobby->calculateThePrize();
-        return response()->json(new GameLobbyResource(resource: $gameLobby));
+        return response()->json(new GameLobbyAPIResource(resource: $gameLobby));
     }
 
     public function update(UpdateGameLobbyRequest $request, GameLobby $gameLobby)
