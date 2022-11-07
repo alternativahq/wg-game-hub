@@ -1,3 +1,55 @@
+<p align="center">
+  <a href="https://wodo.io/" target="blank"><img src="https://github.com/wodo-platform/wodo-branding/blob/main/src/img/branding/wodo_logo.png" width="320" alt="Wodo Platform" /></a>
+</p>
+
+<div align="center">
+<h2> Wodo Game Hub </h2>
+</div>
+
+<div align="center">
+  <h4>
+    <a href="https://wodo.io/">
+      Website
+    </a>
+    <span> | </span>
+    <a href="#">
+      Product Docs
+    </a>
+    <span> | </span>
+    <a href="#">
+      Architecture Docs
+    </a>
+    <span> | </span>
+    <!-- <a href="#"> -->
+    <!--   CLI -->
+    <!-- </a> -->
+    <!-- <span> | </span> -->
+    <a href="#/CONTRIBUTING.md">
+      Contributing
+    </a>
+    <span> | </span>
+    <a href="https://twitter.com/wodoio">
+      Twitter
+    </a>
+    <span> | </span>
+    <a href="https://t.me/wodoio">
+      Telegram
+    </a>
+    <span> | </span>
+    <a href="https://discord.gg/fbyns8Egpb">
+      Discourd
+    </a>
+    <span> | </span>
+    <a href="https://wodoio.medium.com/">
+      Medium
+    </a>
+    <span> | </span>
+    <a href="https://www.reddit.com/r/wodoio">
+      Reddit
+    </a>
+  </h4>
+</div>
+
 # Wodo GameHub Platform
 Game Hub is an online social arena where wodo community members players play online Wodo games with other community members, join tournaments, and earn instant cryptocurrencies and NFTs while playing.
 Plenty of games developed by Wodo Team and other game developers/companies are playable on the Wodo game hub.
