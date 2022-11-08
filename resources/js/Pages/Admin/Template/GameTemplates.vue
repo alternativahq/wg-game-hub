@@ -227,7 +227,7 @@ function deleteLobby(gameTemplate) {
                                                 {{ gameTemplate.max_players }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ gameTemplate.description }}
+                                                {{ gameTemplate.description?.substring(0,40)+ '...' }}
                                             </td>
                                             <td
                                                 class="flex items-center whitespace-nowrap px-3 py-4 text-sm text-gray-500"
