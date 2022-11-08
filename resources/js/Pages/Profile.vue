@@ -17,7 +17,7 @@ let dayjs = inject('dayjs');
 let activeTransactionNetwork = ref('banano');
 let currentUser = inject('currentUser');
 let state = reactive({
-    showUserProfileForm: true,
+    showUserProfileForm: false,
 });
 </script>
 <template>
