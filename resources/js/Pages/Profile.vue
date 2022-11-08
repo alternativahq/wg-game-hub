@@ -6,17 +6,23 @@ import MedalIcon from '@/Shared/SVG/MedalIcon';
 import RocketIcon from '@/Shared/SVG/RocketIcon';
 import WatchIcon from '@/Shared/SVG/WatchIcon';
 import ButtonShape from '@/Shared/ButtonShape';
-import { inject, ref } from 'vue';
+import UserProfileFormDialog from '@/Shared/Modals/UserProfileFormDialog.vue';
+import { inject, ref, reactive } from 'vue';
 
 let props = defineProps({
     userProfileInfo: Object,
+    genders: Object,
 });
 let dayjs = inject('dayjs');
 let activeTransactionNetwork = ref('banano');
 let currentUser = inject('currentUser');
+let state = reactive({
+    showUserProfileForm: true,
+});
 </script>
 <template>
     <div>
+        <UserProfileFormDialog :userInfo="userProfileInfo" :genders="genders" :open="state.showUserProfileForm" @closed="state.showUserProfileForm = false" />
         <BorderedContainer class="mb-9 bg-wgh-gray-1.5">
             <div class="flex flex-col justify-between rounded-lg bg-white p-6 md:flex-row">
                 <div class="flex flex-row items-start space-x-5 lg:items-center">
@@ -101,7 +107,7 @@ let currentUser = inject('currentUser');
                 <div class="mb-6 flex h-14 shrink-0 flex-row items-center justify-between">
                     <h2 class="font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Profile</h2>
                     <button>
-                        <ButtonShape type="purple">
+                        <ButtonShape type="purple" @click="state.showUserProfileForm = true">
                             <span>Edit</span>
                         </ButtonShape>
                     </button>

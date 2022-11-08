@@ -22,4 +22,11 @@ class UserProfileAPI
 
         return Http::get($url);
     }
+
+    public function updateUserProfileInfo(array $data): Response
+    {
+        $url = $this->baseUrl .'/' . auth()->user()->id;
+
+        return Http::put($url, $data);
+    }
 }

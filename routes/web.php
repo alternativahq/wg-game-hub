@@ -32,9 +32,8 @@ Route::get('/', DashboardController::class)->name(name: 'landing');
 Route::resource('games', GamesController::class)->only('show');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', ProfileController::class)
-        ->middleware('auth')
-        ->name(name: 'profile');
+    Route::get('/profile', [ProfileController::class, 'show'])->name(name: 'profile');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name(name: 'profile');
 
     Route::resource('games.game-lobbies', GameLobbiesController::class)
         ->parameters(['game-lobbies' => 'gameLobby'])
