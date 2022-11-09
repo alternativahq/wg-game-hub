@@ -14,12 +14,12 @@ class UpdateProfileRequest extends FormRequest
         return [
             'name' => ['required', 'string'],
             'familyName' => ['required', 'string'],
-            'email' => ['required', 'email'],
             'preferredUsername' => ['required', 'string'],
             'gender' => ['required', 'in:' . collect(array_column(GenderEnum::cases(), 'value'))->implode(',')],
-            'phoneNumber' => ['required', 'string'],
-            'birthDate' => ['required', 'date'],
-            'address' => ['required', 'string'],
+            'phoneNumber' => ['nullable', 'string'],
+            'birthDate' => ['nullable', 'date'],
+            'address' => ['nullable', 'string'],
+            'picture' => ['nullable', 'string'],
             'updatedAt' => ['required', 'string'],
         ];
     }

@@ -16,7 +16,7 @@ let props = defineProps({
     genders: Object,
 });
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['closed']);
 let dayjs = inject('dayjs');
 
 function UTCToHumanReadable(u) {
@@ -26,7 +26,7 @@ function UTCToHumanReadable(u) {
 let userProfileUpdateForm = useForm({
     name: props.userInfo.name,
     familyName: props.userInfo.familyName,
-    email: props.userInfo.email,
+    picture: props.userInfo.picture,
     preferredUsername: props.userInfo.preferredUsername,
     gender: props.userInfo.gender,
     phoneNumber: props.userInfo.phoneNumber,
@@ -123,21 +123,21 @@ function FormSubmit() {
                                     </div>
                                     <div class="mb-5">
                                         <div >
-                                            <div class="mb-2 text-lg font-semibold">Email</div>
+                                            <div class="mb-2 text-lg font-semibold">Picture</div>
                                             <div class="bg-gray-100 border border-gray-500">
                                                 <div class="rounded-lg">
                                                     <input
                                                         class="py-2 px-2 text-lg w-full "
                                                         type="text"
-                                                        placeholder="email"
-                                                        v-model="userProfileUpdateForm.email"
+                                                        placeholder="picture"
+                                                        v-model="userProfileUpdateForm.picture"
                                                     />
                                                 </div>
                                             </div>
                                         </div>
                                         <InputError class="my-5">
-                                            <div v-if="userProfileUpdateForm.errors.email" class="mt-2">
-                                                {{ userProfileUpdateForm.errors.email }}
+                                            <div v-if="userProfileUpdateForm.errors.picture" class="mt-2">
+                                                {{ userProfileUpdateForm.errors.picture }}
                                             </div>
                                         </InputError>
                                     </div>

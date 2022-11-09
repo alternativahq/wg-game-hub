@@ -123,8 +123,8 @@ let state = reactive({
                             <div class="w-1/2">{{ userProfileInfo.familyName }}</div>
                         </div>
                         <div class="m-4 flex items-center">
-                            <div class="mr-4 w-1/2 text-lg font-semibold">Email:</div>
-                            <div class="w-1/2">{{ userProfileInfo.email }}</div>
+                            <div class="mr-4 w-1/2 text-lg font-semibold">Picture:</div>
+                            <div class="w-1/2">{{ userProfileInfo.picture }}</div>
                         </div>
                         <div class="m-4 flex items-center">
                             <div class="mr-4 w-1/2 text-lg font-semibold">UserName:</div>
