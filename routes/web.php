@@ -13,6 +13,7 @@ use App\Http\Controllers\{
     User\DashboardController as UserDashboardController,
     User\GamePlayedHistoryController as UserGamePlayedHistoryController,
     Wallet\TransactionController as UserTransactionController,
+    Wallet\AccountController,
     Wallet\WalletController as UserWalletController,
     Wallet\WithdrawController as UserWithdrawController,
     Wallet\WithdrawConfirmationController as UserWithdrawConfirmationController,
@@ -60,6 +61,7 @@ Route::middleware('auth')->group(function () {
 
     // User Wallet
     Route::get('wallet', UserWalletController::class)->name('user.wallet');
+    Route::post('wallet/Account', [AccountController::class, 'store']);
     Route::get('wallet/transactions', UserTransactionController::class)->name('user.transactions');
     Route::get('wallet/withdraw', UserWithdrawController::class)->name('user.withdraw');
     Route::get('wallet/deposit', UserDepositController::class)->name('user.deposit');
