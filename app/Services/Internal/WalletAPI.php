@@ -23,6 +23,13 @@ class WalletAPI
         return Http::get($url, $query);
     }
 
+    public function creatAccount(array $data): Response
+    {
+        $url = $this->baseUrl . '/accounts';
+
+        return Http::post($url, $data);
+    }
+
     public function depositToHomeAccount(array $data): Response
     {
         $url = $this->baseUrl . '/txs/home-deposit';

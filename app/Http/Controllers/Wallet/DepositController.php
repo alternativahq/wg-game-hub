@@ -51,35 +51,27 @@ class DepositController extends Controller
             ],
         );
 
-        //Todo need to set up the pipeline
-        // $transactions = UserDepositsPipeline::make(
-        //     builder: Transcation::query()->whereBelongsTo($user),
-        //     request: $request,
-        // );
+        $assetInformation =[];
+        if ($request->exists('coin')) {
+            $response = $this->walletAPI->accounts([
+                'userId' => auth()->user()->id,
+                'asset' => $request->coin,
+            ]);
+            if ($response->failed()) {
+                //TODO: logging should be done here
+                session()->flash('error', 'Something went wrong, please try again later');
+                return redirect()->back();
+            }
+            $assetInformation = count($response->json('data', [])) ? $response->json('data')[0] : [];
+        }
 
         $assets = Asset::get(['id', 'name', 'symbol']);
 
         return Inertia::render('Wallet/Deposit', [
             'userDepositTransactions' => TransactionResource::collection($depositTransactions),
-            'assetInformation' => function () use ($request) {
-                if (!$request->exists('coin')) {
-                    return [];
-                }
-
-                $response = $this->walletAPI->accounts([
-                    'userId' => auth()->user()->id,
-                    'asset' => $request->coin,
-                ]);
-
-                if ($response->failed()) {
-                    //TODO: logging should be done here
-                    session()->flash('error', 'Something went wrong, please try again later');
-                    return redirect()->back();
-                }
-
-                return count($response->json('data', [])) ? $response->json('data')[0] : [];
-            },
+            'assetInformation' => $assetInformation,
             'assets' => AssetResource::collection($assets),
+            'userHasAccount' => $assetInformation? true : false,
             '_filters' => $request
                 ->collect()
                 ->only(

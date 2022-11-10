@@ -23,6 +23,7 @@ dayjs.extend(duration);
 
 let props = defineProps({
     userDepositTransactions: Object,
+    userHasAccount: Boolean,
     assetInformation: Object,
     assets: Object,
     _filters: Object,
@@ -55,11 +56,17 @@ function UTCToHumanReadable(u) {
     return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
 }
 
+let newUrl = new URL(window.location);
+DepositForm.coin = newUrl.searchParams.get('coin');
+
+function gnerateAccount() {
+    Inertia.post('/wallet/Account', DepositForm, {preserveState: true});
+}
+
 async function show(transaction) {
     state.transactionShow = transaction;
     let response = await axios.get('/api/wallet/transaction/' + transaction.id + '/log').then((r) => r.data.data);
     state.transactionSteps = response;
-
     state.open = true;
 }
 
@@ -80,7 +87,7 @@ watch(
             preserveScroll: true,
             preserveState: true,
             replace: true,
-            only: ['assetInformation'],
+            only: ['assetInformation','userHasAccount'],
             data: { coin: DepositForm.coin },
         });
     }
@@ -120,13 +127,25 @@ watch(
                                         v-model="DepositForm.coin"
                                         class="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 font-inter text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                     >
-                                        <option :value="undefined">All</option>
+                                        <option default :value="undefined">All</option>
                                         <option :key="asset.symbol" v-for="asset in assets.data" :value="asset.symbol">
                                             {{ asset.name }}
                                         </option>
                                     </select>
                                 </div>
                             </BorderedContainer>
+                        </div>
+                    </div>
+                    <div class="mb-5 flex items-start py-4 px-4" v-if="!userHasAccount && !DepositForm.coin == ''">
+                        <div class="mr-20 w-2/5 text-right text-lg font-semibold">No account generated for the given asset yet:</div>
+                        <div class="w-3/5">
+                            <form @submit.prevent="gnerateAccount()">
+                                <button preserve-scroll type="submit" class="w-full">
+                                    <ButtonShape type="purple">
+                                        <span class="w-full uppercase">generate one</span>
+                                    </ButtonShape>
+                                </button>
+                            </form>
                         </div>
                     </div>
                     <div v-if="assetInformation.id">
@@ -289,7 +308,7 @@ watch(
                                                     }"
                                                     :preserve-scroll="true"
                                                 >
-                                                    Hash    
+                                                    Hash
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
@@ -318,7 +337,7 @@ watch(
                                                     }"
                                                     :preserve-scroll="true"
                                                 >
-                                                    State   
+                                                    State
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
@@ -347,7 +366,7 @@ watch(
                                                     }"
                                                     :preserve-scroll="true"
                                                 >
-                                                    Asset   
+                                                    Asset
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
@@ -376,7 +395,7 @@ watch(
                                                     }"
                                                     :preserve-scroll="true"
                                                 >
-                                                    From Account ID   
+                                                    From Account ID
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':

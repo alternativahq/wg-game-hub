@@ -13,6 +13,7 @@ use App\Http\Controllers\{
     User\DashboardController as UserDashboardController,
     User\GamePlayedHistoryController as UserGamePlayedHistoryController,
     Wallet\TransactionController as UserTransactionController,
+    Wallet\AccountController,
     Wallet\WalletController as UserWalletController,
     Wallet\WithdrawController as UserWithdrawController,
     Wallet\WithdrawConfirmationController as UserWithdrawConfirmationController,
@@ -32,9 +33,8 @@ Route::get('/', DashboardController::class)->name(name: 'landing');
 Route::resource('games', GamesController::class)->only('show');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', ProfileController::class)
-        ->middleware('auth')
-        ->name(name: 'profile');
+    Route::get('/profile', [ProfileController::class, 'show'])->name(name: 'profile');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name(name: 'profile');
 
     Route::resource('games.game-lobbies', GameLobbiesController::class)
         ->parameters(['game-lobbies' => 'gameLobby'])
@@ -61,6 +61,7 @@ Route::middleware('auth')->group(function () {
 
     // User Wallet
     Route::get('wallet', UserWalletController::class)->name('user.wallet');
+    Route::post('wallet/Account', [AccountController::class, 'store']);
     Route::get('wallet/transactions', UserTransactionController::class)->name('user.transactions');
     Route::get('wallet/withdraw', UserWithdrawController::class)->name('user.withdraw');
     Route::get('wallet/deposit', UserDepositController::class)->name('user.deposit');

@@ -50,6 +50,7 @@ class GameLobbiesController extends Controller
         return response()->json(new GameLobbyAPIResource(resource: $gameLobby));
     }
 
+
     public function update(UpdateGameLobbyRequest $request, GameLobby $gameLobby)
     {
         $asset = Asset::where('symbol', $request->asset)->first();
