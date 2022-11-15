@@ -61,6 +61,10 @@ Route::middleware('api.basic-auth')->group(function () {
         \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
         'archived',
     ]);
+
+    // ***********************************GameCRUD************************************
+    Route::resource('games', GamesController::class);
+
     // ***********************************GameLobbyCRUD************************************
     Route::apiResource('game-lobbies', GameLobbiesController::class)
     ->except(['store']);
@@ -73,7 +77,6 @@ Route::middleware(['throttle:api', 'auth:sanctum'])->group(function () {
      *     - index: list all available games
      *     - show: get specific game
      */
-    Route::resource('games', GamesController::class)->only('index', 'show');
 
     /**
      * - Game Lobbies Api
