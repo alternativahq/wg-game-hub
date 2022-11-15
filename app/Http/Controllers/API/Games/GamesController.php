@@ -3,33 +3,22 @@
 namespace App\Http\Controllers\API\Games;
 
 use App\Models\Game;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\GameResource;
 use App\Http\Requests\StoreGameRequest;
 use App\Http\Resources\GameAPIResource;
 use App\Http\Requests\UpdateGameRequest;
+use App\Http\QueryPipelines\GamesPipeline\GamesPipeline;
 
 class GamesController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $games =  Game::withTrashed()->get();
-
-        // $games = GamesPipeline::make(
-        //     builder: Game::query(),
-        //     request: $request,
-        // )->withTrashed()->paginate();
-
-                // 'q',
-                // 'date',
-                // 'sort_by',
-                // 'sort_order',
-                // 'min_players',
-                // 'max_players',
-                // 'min_base_entrance_fee',
-                // 'max_base_entrance_fee',
-                // 'games_gamelobbies_type',
-                // 'games_gamelobbies_asset_symbol',
+        $games = GamesPipeline::make(
+            builder: Game::query()->withTrashed(),
+            request: $request,
+        )->paginate();
 
         return GameAPIResource::collection($games);
     }
