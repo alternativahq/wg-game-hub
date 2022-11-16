@@ -12,6 +12,8 @@ enum GameLobbyLogType: string
     case GameLobbyGameStartDelayed = 'game-lobby-game-start-delayed';
     case GameLobbyStateAbortedRefunding = 'game-lobby-game-aborted-refunding';
     case GameLobbyStateAborted = 'game-lobby-game-start-aborted';
+    case ProcessingGameResults = 'game-lobby-state-processing-game-results';
+    case ProcessedGameResults = 'game-lobby-state-processed-game-results';
     case GameLobbyStateEnded = 'game-lobby-state-ended';
     case UserJoined = 'user-joined';
     case UserLeft = 'user-left';

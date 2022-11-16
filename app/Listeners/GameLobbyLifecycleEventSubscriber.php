@@ -129,10 +129,38 @@ class GameLobbyLifecycleEventSubscriber
             'name' => GameLobbyLogType::GameLobbyStateEnded,
             'description' => 'Game lobby is ended',
             'payload' => $gameEndedEvent->matchResults,
+            'created_at'=> $now = now(),
+            'updated_at'=> $now,
         ]);
 
         $gameEndedEvent->gameLobby->update([
             'latest_update' => 'The game has ended',
+        ]);
+        event(new GameLobbyLatestUpdate(gameLobby: $gameEndedEvent->gameLobby));
+
+        $gameEndedEvent->gameLobby->activityLogs()->create([
+            'name' => GameLobbyLogType::ProcessingGameResults,
+            'description' => 'Game lobby is processing game results',
+            'payload' => $gameEndedEvent->matchResults,
+            'created_at'=> $then = $now->addSecond(),
+            'updated_at'=> $then,
+        ]);
+
+        $gameEndedEvent->gameLobby->update([
+            'latest_update' => 'Game lobby is processing game results',
+        ]);
+        event(new GameLobbyLatestUpdate(gameLobby: $gameEndedEvent->gameLobby));
+
+        $gameEndedEvent->gameLobby->activityLogs()->create([
+            'name' => GameLobbyLogType::ProcessedGameResults,
+            'description' => 'Game lobby results got processed',
+            'payload' => $gameEndedEvent->matchResults,
+            'created_at'=> $afterThen = $then->addSecond(),
+            'updated_at'=> $afterThen,
+        ]);
+
+        $gameEndedEvent->gameLobby->update([
+            'latest_update' => 'Game lobby results got processed',
         ]);
         event(new GameLobbyLatestUpdate(gameLobby: $gameEndedEvent->gameLobby));
     }

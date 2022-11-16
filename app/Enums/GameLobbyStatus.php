@@ -9,12 +9,13 @@ enum GameLobbyStatus: int
     case AwaitingPlayers = 20;
     case InGame = 30;
     case GameEnded = 40;
-    case DistributingPrizes = 50;
-    case DistributedPrizes = 60;
-    case GameLobbyAbortedRefunding = 70;
-    case GameLobbyAborted = 80;
-    case Archived = 90;
-
+    case ProcessingGameResults = 50;
+    case ProcessedGameResults = 60;
+    case DistributingPrizes = 70;
+    case DistributedPrizes = 80;
+    case GameLobbyAbortedRefunding = 90;
+    case GameLobbyAborted = 100;
+    case Archived = 110;
 
     public function canProcessResult(): bool
     {
