@@ -28,6 +28,8 @@ class GameLobbyLifecycleEventSubscriber
             'name' => GameLobbyLogType::GameLobbyCreated,
             'description' => 'A new game lobby is created',
             'payload' => json_encode($event->payload),
+            'created_at'=> $now = now(),
+            'updated_at'=> $now,
         ]);
         $event->gameLobby->update([
         'latest_update' => $event->gameLobby->name . ' lobby is created',
@@ -39,6 +41,8 @@ class GameLobbyLifecycleEventSubscriber
             'name' => GameLobbyLogType::GameLobbyStateScheduled,
             'description' => 'Game lobby scheduled',
             'payload' => json_encode($event->payload),
+            'created_at'=> $then = $now->addSecond(),
+            'updated_at'=> $then,
         ]);
 
         $event->gameLobby->update([
