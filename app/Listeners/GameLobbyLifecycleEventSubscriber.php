@@ -18,6 +18,8 @@ use App\Events\GameLobby\GameLobbyStartVotingPassedEvent;
 use App\Events\GameLobby\GameLobbyUserLeftGameLobbyEvent;
 use App\Events\GameLobby\GameLobbyDistributingPrizesEvent;
 use App\Events\GameLobby\GameLobbyUserJoinedGameLobbyEvent;
+use App\Events\GameLobby\GameLobbyProcessedGameResultsEvent;
+use App\Events\GameLobby\GameLobbyProcessingGameResultsEvent;
 use App\Events\GameLobby\GameLobbyAwaitingPlayersEvent as GameLobbyAwaitingPlayersEvent;
 
 class GameLobbyLifecycleEventSubscriber
@@ -165,6 +167,34 @@ class GameLobbyLifecycleEventSubscriber
         event(new GameLobbyLatestUpdate(gameLobby: $gameEndedEvent->gameLobby));
     }
 
+    public function handleProcessingGameResults(GameLobbyProcessingGameResultsEvent $event): void
+    {
+        $event->gameLobby->activityLogs()->create([
+            'name' => GameLobbyLogType::ProcessingGameResults,
+            'description' => 'Game lobby is processing game results',
+        ]);
+
+        $event->gameLobby->update([
+            'latest_update' => 'Game lobby is processing game results',
+        ]);
+
+        event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
+    }
+
+    public function handleProcessedGameResults(GameLobbyProcessedGameResultsEvent $event): void
+    {
+        $event->gameLobby->activityLogs()->create([
+            'name' => GameLobbyLogType::ProcessedGameResults,
+            'description' => 'Game lobby results got processed',
+        ]);
+
+        $event->gameLobby->update([
+            'latest_update' => 'Game lobby results got processed',
+        ]);
+
+        event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
+    }
+
     public function handleDistributingPrizes(GameLobbyDistributingPrizesEvent $event): void
     {
         $event->gameLobby->activityLogs()->create([
@@ -274,6 +304,8 @@ class GameLobbyLifecycleEventSubscriber
             GameLobbyAbortedEvent::class => 'handleAborted',
             GameLobbyStartedEvent::class => 'handleInGame',
             GameLobbyEndedEvent::class => 'handleGameEnded',
+            GameLobbyProcessingGameResultsEvent::class => 'handleProcessingGameResults',
+            GameLobbyProcessedGameResultsEvent::class => 'handleProcessedGameResults',
             GameLobbyDistributingPrizesEvent::class => 'handleDistributingPrizes',
             GameLobbyDistributedPrizesEvent::class => 'handleDistributedPrizes',
             GameLobbyArchivedEvent::class => 'handleArchived',
