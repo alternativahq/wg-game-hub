@@ -18,15 +18,17 @@ use App\Http\Controllers\Controller;
 use App\Events\GameLobbyStartedEvent;
 use App\Events\GameLobby\GameLobbyEndedEvent;
 use App\Http\Resources\GameLobbyUserResource;
+use App\Events\GameLobby\GameLobbyAbortedEvent;
 use App\Events\GameLobby\GameLobbyCreatedEvent;
 use App\DataTransferObjects\GameMatchResultData;
 use App\Events\GameLobby\GameLobbyArchivedEvent;
 use App\Http\Requests\GameLobbyAbortedRefunding;
 use App\Http\Requests\Admin\StoreGameLobbyRequest;
-use App\Events\GameLobby\GameLobbyAbortedEvent;
 use App\Http\Requests\GameMatchResultsPayloadRequest;
-use App\Events\GameLobby\GameLobbyGameStartDelayedEvent;
 use App\Events\GameLobby\GameLobbyAbortedRefundingEvent;
+use App\Events\GameLobby\GameLobbyGameStartDelayedEvent;
+use App\Events\GameLobby\GameLobbyProcessedGameResultsEvent;
+use App\Events\GameLobby\GameLobbyProcessingGameResultsEvent;
 use App\Notifications\GameLobbyDistributedPrizesNotification;
 use App\Notifications\ProcessingGameLobbyResultsNotification;
 use App\Notifications\GameLobbyDistributingPrizesNotification;
@@ -172,9 +174,6 @@ class GameLobbyController extends Controller
             'state' => GameLobbyStatus::GameEnded,
         ]);
 
-        // if ($updated) {
-        //     broadcast(new ProcessingGameLobbyResultsNotification(gameLobby: $gameLobby));
-        // }
         $gameMatchResultData = GameMatchResultData::fromRequest(request: $request);
         $storeGameMatchResultAction->execute(gameLobby: $gameLobby, gameMatchResultData: $gameMatchResultData);
 
@@ -183,9 +182,32 @@ class GameLobbyController extends Controller
         return response()->noContent();
     }
 
+    public function processingGameResults(GameLobby $gameLobby) {
+        abort_unless($gameLobby->state->is(GameLobbyStatus::GameEnded), Response::HTTP_FORBIDDEN);
+        $updated = $gameLobby->update([
+            'state' => GameLobbyStatus::ProcessingGameResults,
+        ]);
+
+        event(new GameLobbyProcessingGameResultsEvent(gameLobby: $gameLobby));
+
+        return response()->noContent();
+    }
+
+    public function processedGameResults(GameLobby $gameLobby) {
+        abort_unless($gameLobby->state->is(GameLobbyStatus::ProcessingGameResults), Response::HTTP_FORBIDDEN);
+
+        $updated = $gameLobby->update([
+            'state' => GameLobbyStatus::ProcessedGameResults,
+        ]);
+
+        event(new GameLobbyProcessedGameResultsEvent(gameLobby: $gameLobby));
+
+        return response()->noContent();
+    }
+
     public function distributingPrizes(GameLobby $gameLobby)
     {
-        abort_unless($gameLobby->state->is(GameLobbyStatus::GameEnded), Response::HTTP_FORBIDDEN);
+        abort_unless($gameLobby->state->is(GameLobbyStatus::ProcessedGameResults), Response::HTTP_FORBIDDEN);
         $gameLobby->update([
             'state' => GameLobbyStatus::DistributingPrizes,
         ]);

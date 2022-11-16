@@ -18,6 +18,8 @@ use App\Events\GameLobby\GameLobbyStartVotingPassedEvent;
 use App\Events\GameLobby\GameLobbyUserLeftGameLobbyEvent;
 use App\Events\GameLobby\GameLobbyDistributingPrizesEvent;
 use App\Events\GameLobby\GameLobbyUserJoinedGameLobbyEvent;
+use App\Events\GameLobby\GameLobbyProcessedGameResultsEvent;
+use App\Events\GameLobby\GameLobbyProcessingGameResultsEvent;
 use App\Events\GameLobby\GameLobbyAwaitingPlayersEvent as GameLobbyAwaitingPlayersEvent;
 
 class GameLobbyLifecycleEventSubscriber
@@ -28,6 +30,8 @@ class GameLobbyLifecycleEventSubscriber
             'name' => GameLobbyLogType::GameLobbyCreated,
             'description' => 'A new game lobby is created',
             'payload' => json_encode($event->payload),
+            'created_at'=> $now = now(),
+            'updated_at'=> $now,
         ]);
         $event->gameLobby->update([
         'latest_update' => $event->gameLobby->name . ' lobby is created',
@@ -39,6 +43,8 @@ class GameLobbyLifecycleEventSubscriber
             'name' => GameLobbyLogType::GameLobbyStateScheduled,
             'description' => 'Game lobby scheduled',
             'payload' => json_encode($event->payload),
+            'created_at'=> $then = $now->addSecond(),
+            'updated_at'=> $then,
         ]);
 
         $event->gameLobby->update([
@@ -125,12 +131,68 @@ class GameLobbyLifecycleEventSubscriber
             'name' => GameLobbyLogType::GameLobbyStateEnded,
             'description' => 'Game lobby is ended',
             'payload' => $gameEndedEvent->matchResults,
+            'created_at'=> $now = now(),
+            'updated_at'=> $now,
         ]);
 
         $gameEndedEvent->gameLobby->update([
             'latest_update' => 'The game has ended',
         ]);
         event(new GameLobbyLatestUpdate(gameLobby: $gameEndedEvent->gameLobby));
+
+        $gameEndedEvent->gameLobby->activityLogs()->create([
+            'name' => GameLobbyLogType::ProcessingGameResults,
+            'description' => 'Game lobby is processing game results',
+            'payload' => $gameEndedEvent->matchResults,
+            'created_at'=> $then = $now->addSecond(),
+            'updated_at'=> $then,
+        ]);
+
+        $gameEndedEvent->gameLobby->update([
+            'latest_update' => 'Game lobby is processing game results',
+        ]);
+        event(new GameLobbyLatestUpdate(gameLobby: $gameEndedEvent->gameLobby));
+
+        $gameEndedEvent->gameLobby->activityLogs()->create([
+            'name' => GameLobbyLogType::ProcessedGameResults,
+            'description' => 'Game lobby results got processed',
+            'payload' => $gameEndedEvent->matchResults,
+            'created_at'=> $afterThen = $then->addSecond(),
+            'updated_at'=> $afterThen,
+        ]);
+
+        $gameEndedEvent->gameLobby->update([
+            'latest_update' => 'Game lobby results got processed',
+        ]);
+        event(new GameLobbyLatestUpdate(gameLobby: $gameEndedEvent->gameLobby));
+    }
+
+    public function handleProcessingGameResults(GameLobbyProcessingGameResultsEvent $event): void
+    {
+        $event->gameLobby->activityLogs()->create([
+            'name' => GameLobbyLogType::ProcessingGameResults,
+            'description' => 'Game lobby is processing game results',
+        ]);
+
+        $event->gameLobby->update([
+            'latest_update' => 'Game lobby is processing game results',
+        ]);
+
+        event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
+    }
+
+    public function handleProcessedGameResults(GameLobbyProcessedGameResultsEvent $event): void
+    {
+        $event->gameLobby->activityLogs()->create([
+            'name' => GameLobbyLogType::ProcessedGameResults,
+            'description' => 'Game lobby results got processed',
+        ]);
+
+        $event->gameLobby->update([
+            'latest_update' => 'Game lobby results got processed',
+        ]);
+
+        event(new GameLobbyLatestUpdate(gameLobby: $event->gameLobby));
     }
 
     public function handleDistributingPrizes(GameLobbyDistributingPrizesEvent $event): void
@@ -242,6 +304,8 @@ class GameLobbyLifecycleEventSubscriber
             GameLobbyAbortedEvent::class => 'handleAborted',
             GameLobbyStartedEvent::class => 'handleInGame',
             GameLobbyEndedEvent::class => 'handleGameEnded',
+            GameLobbyProcessingGameResultsEvent::class => 'handleProcessingGameResults',
+            GameLobbyProcessedGameResultsEvent::class => 'handleProcessedGameResults',
             GameLobbyDistributingPrizesEvent::class => 'handleDistributingPrizes',
             GameLobbyDistributedPrizesEvent::class => 'handleDistributedPrizes',
             GameLobbyArchivedEvent::class => 'handleArchived',

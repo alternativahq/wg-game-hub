@@ -184,7 +184,7 @@ let state = reactive({
             :game-lobby="gameLobby.data"
             :currentUserScore="currentUserScore || {}"
         />
-        <div class="col-span-12 mt-4 inline-flex lg:col-span-5">
+        <div class="col-span-12 mt-4 inline-flex items-center lg:col-span-5">
             <Link method="delete" as="button" type="button" :href="`/game-lobbies/${gameLobby.data.id}/leave`" replace>
                 <div
                     class="cursor-pointer rounded-lg border-b-6 border-wgh-red-3 bg-wgh-red-3 transition-all duration-100 active:mt-1.5 active:border-b-0"
@@ -196,6 +196,7 @@ let state = reactive({
                     </div>
                 </div>
             </Link>
+            <div class="ml-20 text-2xl font-serif font-extrabold">{{gameLobby.data.name}}</div>
         </div>
         <div class="grid min-h-full grow grid-cols-12 gap-y-8 pt-4 lg:gap-y-0 lg:gap-x-8">
             <div class="col-span-full h-full space-y-10 lg:col-span-9">

@@ -25,6 +25,7 @@ Route::middleware('api.basic-auth')->group(function () {
         \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
         'toAwaitingPlayers',
     ]);
+
     Route::put('game-lobbies/{gameLobby}/game-start-delayed', [
         \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
         'gameStartDelayed',
@@ -45,6 +46,16 @@ Route::middleware('api.basic-auth')->group(function () {
     Route::put('game-lobbies/{gameLobby}/game-ended', [
         \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
         'gameEnded',
+    ]);
+
+    Route::put('game-lobbies/{gameLobby}/processing-game-results', [
+        \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
+        'processingGameResults',
+    ]);
+
+    Route::put('game-lobbies/{gameLobby}/processed-game-results', [
+        \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
+        'processedGameResults',
     ]);
 
     Route::put('game-lobbies/{gameLobby}/distributing-prizes', [
