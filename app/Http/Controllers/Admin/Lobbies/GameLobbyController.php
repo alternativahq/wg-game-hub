@@ -14,8 +14,10 @@ use App\Enums\GameLobbyType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Enums\GameLobbyStatus;
+use App\Enums\GameLobbyAbourtCause;
 use App\Http\Controllers\Controller;
 use App\Events\GameLobbyStartedEvent;
+use App\Http\Requests\GenericRequestApi;
 use App\Events\GameLobby\GameLobbyEndedEvent;
 use App\Http\Resources\GameLobbyUserResource;
 use App\Events\GameLobby\GameLobbyAbortedEvent;
@@ -119,8 +121,11 @@ class GameLobbyController extends Controller
         return response()->json('you can not delay more than '. $gameLobby->game_start_delay_limit . ' times');
     }
 
-    public function gameLobbyAbortedRefunding(GameLobbyAbortedRefunding $request, GameLobby $gameLobby)
+    public function gameLobbyAbortedRefunding(Request $request, GameLobby $gameLobby)
     {
+        $request->validate([
+            'cause' => ['required', 'in:' . collect(array_column(GameLobbyAbourtCause::cases(), 'value'))->implode(',')],
+        ]);
         abort_unless($gameLobby->state->is(GameLobbyStatus::AwaitingPlayers), Response::HTTP_FORBIDDEN);
         $gameLobby->update([
             'state' => GameLobbyStatus::GameLobbyAbortedRefunding,
@@ -143,10 +148,10 @@ class GameLobbyController extends Controller
 
     public function inGame(Request $request, GameLobby $gameLobby)
     {
-        abort_unless($gameLobby->state->is(GameLobbyStatus::AwaitingPlayers), Response::HTTP_FORBIDDEN);
         $request->validate([
             'url' => ['required', 'url'],
         ]);
+        abort_unless($gameLobby->state->is(GameLobbyStatus::AwaitingPlayers), Response::HTTP_FORBIDDEN);
 
         if (!$gameLobby->state->is(GameLobbyStatus::AwaitingPlayers)) {
             return abort(Response::HTTP_UNAUTHORIZED);
@@ -239,6 +244,23 @@ class GameLobbyController extends Controller
         ]);
         broadcast(new GameLobbyArchivedEvent(gameLobby: $gameLobby));
         return response()->json();
+    }
+
+    public function genericApi(GenericRequestApi $request,GameLobby $gameLobby, $state)
+    {
+        return match ($state) {
+            '20' => $this->toAwaitingPlayers($gameLobby),
+            '30' => $this->inGame($request, $gameLobby),
+            '40' => "you cant add change to this state",
+            '50' => $this->processingGameResults($gameLobby),
+            '60' => $this->processedGameResults($gameLobby),
+            '70' => $this->distributingPrizes($gameLobby),
+            '80' => $this->distributedPrizes($gameLobby),
+            '90' => $this->gameLobbyAbortedRefunding($request, $gameLobby),
+            '100' => $this->gameLobbyAborted($gameLobby),
+            '110' => $this->archived($gameLobby),
+            default => 'bad entrie',
+        };
     }
 
     public function users(GameLobby $gameLobby)
