@@ -73,6 +73,11 @@ Route::middleware('api.basic-auth')->group(function () {
         'archived',
     ]);
 
+    Route::put('game-lobbies/{gameLobby}/state/{state}', [
+        \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
+        'genericApi',
+    ]);
+
     // ***********************************GameCRUD************************************
     Route::resource('games', GamesController::class);
 
