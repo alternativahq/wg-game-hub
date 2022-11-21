@@ -150,15 +150,13 @@ class GameLobbyController extends Controller
     {
         $request->validate([
             'url' => ['required', 'url'],
+            'sessionId' => ['required'],
         ]);
         abort_unless($gameLobby->state->is(GameLobbyStatus::AwaitingPlayers), Response::HTTP_FORBIDDEN);
 
-        if (!$gameLobby->state->is(GameLobbyStatus::AwaitingPlayers)) {
-            return abort(Response::HTTP_UNAUTHORIZED);
-        }
-
         $gameLobby->state = GameLobbyStatus::InGame;
         $gameLobby->url = $request->url;
+        $gameLobby->session_id = $request->sessionId;
 
         if (!$gameLobby->save()) {
             return abort(Response::HTTP_INTERNAL_SERVER_ERROR, 'Could not update game settings');

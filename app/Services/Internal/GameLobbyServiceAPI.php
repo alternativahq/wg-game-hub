@@ -20,4 +20,11 @@ class GameLobbyServiceAPI
 
         return Http::retry(5, 1000)->post($url, $data);
     }
+
+    public function getToken($gameLobby_id, $user_id): Response
+    {
+        $url = $this->baseUrl . '/game-tokens/' . $user_id . '/' . $gameLobby_id;
+
+        return Http::post($url);
+    }
 }
