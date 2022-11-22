@@ -5,6 +5,7 @@ use App\Http\Controllers\{
     ChatRooms\ChatRoomMessageController,
     DashboardController,
     GameLobbies\GameLobbyJoinController,
+    GameLobbies\GameLobbyPlayCanvasController,
     GameLobbies\GameLobbyLeaveController,
     GameLobbies\GameLobbiesController,
     ProfileController,
@@ -43,6 +44,8 @@ Route::middleware('auth')->group(function () {
         ->scoped();
 
     // GameLobbies
+    Route::get('game-lobbies/{gameLobby}/playcanvas', GameLobbyPlayCanvasController::class);
+
     Route::post('game-lobbies/{gameLobby}/join', GameLobbyJoinController::class)
         ->name('games.game-lobbies.join')
         ->middleware('EnsureUserIsNotInCooldownPeriod');

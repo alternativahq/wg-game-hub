@@ -98,6 +98,7 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'current_url' => url()->current(),
+            'app_url' => config('app.url'),
             'auth' => function () use ($request) {
                 return [
                     'user' => $request->user() ? $this->loadUserData(request: $request) : null,
