@@ -49,6 +49,7 @@ class GameLobbyController extends Controller
             ->except(
                 'gameMode',
                 'gameId',
+                'sessionId',
                 'themeColor',
                 'baseEntranceFee',
                 'minPlayers',
@@ -66,6 +67,7 @@ class GameLobbyController extends Controller
                 'asset_id' => $asset->id,
                 'type' => $lobbyType->value,
                 'game_id' => $request->gameId,
+                'session_id' => $request->sessionId,
                 'theme_color' => $request->themeColor,
                 'base_entrance_fee' => $request->baseEntranceFee,
                 'min_players' => $request->minPlayers,
