@@ -25,6 +25,7 @@ Route::middleware('api.basic-auth')->group(function () {
         \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
         'toAwaitingPlayers',
     ]);
+
     Route::put('game-lobbies/{gameLobby}/game-start-delayed', [
         \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
         'gameStartDelayed',
@@ -47,6 +48,16 @@ Route::middleware('api.basic-auth')->group(function () {
         'gameEnded',
     ]);
 
+    Route::put('game-lobbies/{gameLobby}/processing-game-results', [
+        \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
+        'processingGameResults',
+    ]);
+
+    Route::put('game-lobbies/{gameLobby}/processed-game-results', [
+        \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
+        'processedGameResults',
+    ]);
+
     Route::put('game-lobbies/{gameLobby}/distributing-prizes', [
         \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
         'distributingPrizes',
@@ -61,6 +72,15 @@ Route::middleware('api.basic-auth')->group(function () {
         \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
         'archived',
     ]);
+
+    Route::put('game-lobbies/{gameLobby}/state/{state}', [
+        \App\Http\Controllers\Admin\Lobbies\GameLobbyController::class,
+        'genericApi',
+    ]);
+
+    // ***********************************GameCRUD************************************
+    Route::resource('games', GamesController::class);
+
     // ***********************************GameLobbyCRUD************************************
     Route::apiResource('game-lobbies', GameLobbiesController::class)
     ->except(['store']);
@@ -73,7 +93,6 @@ Route::middleware(['throttle:api', 'auth:sanctum'])->group(function () {
      *     - index: list all available games
      *     - show: get specific game
      */
-    Route::resource('games', GamesController::class)->only('index', 'show');
 
     /**
      * - Game Lobbies Api

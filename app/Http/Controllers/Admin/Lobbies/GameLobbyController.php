@@ -14,19 +14,23 @@ use App\Enums\GameLobbyType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Enums\GameLobbyStatus;
+use App\Enums\GameLobbyAbourtCause;
 use App\Http\Controllers\Controller;
 use App\Events\GameLobbyStartedEvent;
+use App\Http\Requests\GenericRequestApi;
 use App\Events\GameLobby\GameLobbyEndedEvent;
 use App\Http\Resources\GameLobbyUserResource;
+use App\Events\GameLobby\GameLobbyAbortedEvent;
 use App\Events\GameLobby\GameLobbyCreatedEvent;
 use App\DataTransferObjects\GameMatchResultData;
 use App\Events\GameLobby\GameLobbyArchivedEvent;
 use App\Http\Requests\GameLobbyAbortedRefunding;
 use App\Http\Requests\Admin\StoreGameLobbyRequest;
-use App\Events\GameLobby\GameLobbyAbortedEvent;
 use App\Http\Requests\GameMatchResultsPayloadRequest;
-use App\Events\GameLobby\GameLobbyGameStartDelayedEvent;
 use App\Events\GameLobby\GameLobbyAbortedRefundingEvent;
+use App\Events\GameLobby\GameLobbyGameStartDelayedEvent;
+use App\Events\GameLobby\GameLobbyProcessedGameResultsEvent;
+use App\Events\GameLobby\GameLobbyProcessingGameResultsEvent;
 use App\Notifications\GameLobbyDistributedPrizesNotification;
 use App\Notifications\ProcessingGameLobbyResultsNotification;
 use App\Notifications\GameLobbyDistributingPrizesNotification;
@@ -117,8 +121,11 @@ class GameLobbyController extends Controller
         return response()->json('you can not delay more than '. $gameLobby->game_start_delay_limit . ' times');
     }
 
-    public function gameLobbyAbortedRefunding(GameLobbyAbortedRefunding $request, GameLobby $gameLobby)
+    public function gameLobbyAbortedRefunding(Request $request, GameLobby $gameLobby)
     {
+        $request->validate([
+            'cause' => ['required', 'in:' . collect(array_column(GameLobbyAbourtCause::cases(), 'value'))->implode(',')],
+        ]);
         abort_unless($gameLobby->state->is(GameLobbyStatus::AwaitingPlayers), Response::HTTP_FORBIDDEN);
         $gameLobby->update([
             'state' => GameLobbyStatus::GameLobbyAbortedRefunding,
@@ -141,17 +148,15 @@ class GameLobbyController extends Controller
 
     public function inGame(Request $request, GameLobby $gameLobby)
     {
-        abort_unless($gameLobby->state->is(GameLobbyStatus::AwaitingPlayers), Response::HTTP_FORBIDDEN);
         $request->validate([
             'url' => ['required', 'url'],
+            'sessionId' => ['required'],
         ]);
-
-        if (!$gameLobby->state->is(GameLobbyStatus::AwaitingPlayers)) {
-            return abort(Response::HTTP_UNAUTHORIZED);
-        }
+        abort_unless($gameLobby->state->is(GameLobbyStatus::AwaitingPlayers), Response::HTTP_FORBIDDEN);
 
         $gameLobby->state = GameLobbyStatus::InGame;
         $gameLobby->url = $request->url;
+        $gameLobby->session_id = $request->sessionId;
 
         if (!$gameLobby->save()) {
             return abort(Response::HTTP_INTERNAL_SERVER_ERROR, 'Could not update game settings');
@@ -172,9 +177,6 @@ class GameLobbyController extends Controller
             'state' => GameLobbyStatus::GameEnded,
         ]);
 
-        // if ($updated) {
-        //     broadcast(new ProcessingGameLobbyResultsNotification(gameLobby: $gameLobby));
-        // }
         $gameMatchResultData = GameMatchResultData::fromRequest(request: $request);
         $storeGameMatchResultAction->execute(gameLobby: $gameLobby, gameMatchResultData: $gameMatchResultData);
 
@@ -183,9 +185,32 @@ class GameLobbyController extends Controller
         return response()->noContent();
     }
 
+    public function processingGameResults(GameLobby $gameLobby) {
+        abort_unless($gameLobby->state->is(GameLobbyStatus::GameEnded), Response::HTTP_FORBIDDEN);
+        $updated = $gameLobby->update([
+            'state' => GameLobbyStatus::ProcessingGameResults,
+        ]);
+
+        event(new GameLobbyProcessingGameResultsEvent(gameLobby: $gameLobby));
+
+        return response()->noContent();
+    }
+
+    public function processedGameResults(GameLobby $gameLobby) {
+        abort_unless($gameLobby->state->is(GameLobbyStatus::ProcessingGameResults), Response::HTTP_FORBIDDEN);
+
+        $updated = $gameLobby->update([
+            'state' => GameLobbyStatus::ProcessedGameResults,
+        ]);
+
+        event(new GameLobbyProcessedGameResultsEvent(gameLobby: $gameLobby));
+
+        return response()->noContent();
+    }
+
     public function distributingPrizes(GameLobby $gameLobby)
     {
-        abort_unless($gameLobby->state->is(GameLobbyStatus::GameEnded), Response::HTTP_FORBIDDEN);
+        abort_unless($gameLobby->state->is(GameLobbyStatus::ProcessedGameResults), Response::HTTP_FORBIDDEN);
         $gameLobby->update([
             'state' => GameLobbyStatus::DistributingPrizes,
         ]);
@@ -217,6 +242,23 @@ class GameLobbyController extends Controller
         ]);
         broadcast(new GameLobbyArchivedEvent(gameLobby: $gameLobby));
         return response()->json();
+    }
+
+    public function genericApi(GenericRequestApi $request,GameLobby $gameLobby, $state)
+    {
+        return match ($state) {
+            '20' => $this->toAwaitingPlayers($gameLobby),
+            '30' => $this->inGame($request, $gameLobby),
+            '40' => "you cant add change to this state",
+            '50' => $this->processingGameResults($gameLobby),
+            '60' => $this->processedGameResults($gameLobby),
+            '70' => $this->distributingPrizes($gameLobby),
+            '80' => $this->distributedPrizes($gameLobby),
+            '90' => $this->gameLobbyAbortedRefunding($request, $gameLobby),
+            '100' => $this->gameLobbyAborted($gameLobby),
+            '110' => $this->archived($gameLobby),
+            default => 'bad entrie',
+        };
     }
 
     public function users(GameLobby $gameLobby)

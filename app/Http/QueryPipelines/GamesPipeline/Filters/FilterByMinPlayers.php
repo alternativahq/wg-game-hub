@@ -20,7 +20,7 @@ class FilterByMinPlayers
         }
 
         $builder->whereHas('gameLobbies', function($q) use($filterTerm){
-            return $q->where('min_players', '<=', $filterTerm);
+            return $q->where('min_players', '>=', $filterTerm);
         });
 
         return $next($builder);

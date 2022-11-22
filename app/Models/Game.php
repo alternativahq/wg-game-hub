@@ -18,6 +18,8 @@ class Game extends Model
     use SoftDeletes;
     use HasUUID;
 
+    protected $guarded = [];
+
     protected $casts = [
         'status' => GameStatus::class,
     ];
