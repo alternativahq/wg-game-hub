@@ -27,12 +27,12 @@ class GameLobbyPlayCanvasController extends Controller
         $check = $gameLobby->users()->where('user_id', $userId)->first();
         if($check){
             $response = $this->gameLobbyServiceAPI->getToken($gameLobbyId, $userId);
-            if($response->json()['statusCode'] != '404'){
+            if(!$response->failed()){
                 $token = $response->json()['token'];
-                return view("PlayCanvas", compact('userId', 'gameLobbyId','sessionId'));
+                return view("PlayCanvas", compact('userId', 'gameLobbyId','sessionId', 'token'));
             }
         }
-        $errorMessage = isset($response) ? 'you token has been expired.' : 'your are not in this gameLobby.';
+        $errorMessage = isset($response) ? 'Your token has Expired.' : 'Your are not in this gameLobby.';
         session()->flash('error', $errorMessage);
         return redirect()->route('game-lobbies.show', $gameLobby->id);
     }

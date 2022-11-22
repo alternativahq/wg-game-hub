@@ -8,10 +8,12 @@ use Illuminate\Support\Facades\Http;
 class GameLobbyServiceAPI
 {
     protected string $baseUrl;
+    protected string $tokenBaseUrl;
 
     public function __construct()
     {
         $this->baseUrl = config('wodo.game-lobby-service-base-url');
+        $this->tokenBaseUrl = config('wodo.game-lobby-token-service-base-url');
     }
 
     public function startLifecycle(array $data): Response
@@ -23,8 +25,8 @@ class GameLobbyServiceAPI
 
     public function getToken($gameLobby_id, $user_id): Response
     {
-        $url = $this->baseUrl . '/game-tokens/' . $user_id . '/' . $gameLobby_id;
+        $url = $this->tokenBaseUrl . '/game-tokens/' . $user_id . '/' . $gameLobby_id;
 
-        return Http::post($url);
+        return Http::get($url);
     }
 }
