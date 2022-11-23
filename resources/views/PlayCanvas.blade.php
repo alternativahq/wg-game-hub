@@ -8,22 +8,6 @@
     <link rel="stylesheet" href="http://static.wodo.io.s3-website.eu-central-1.amazonaws.com/wfps/TemplateData/style.css">
   </head>
   <body>
-    {{-- the varebales that you want --}}
-    <div>
-        <div>
-            Game lobby id: {{$gameLobbyId}}
-        </div>
-        <div>
-            User id: {{$userId}}
-        </div>
-        <div>
-            Session id: {{$sessionId}}
-        </div>
-        <div>
-            Token: {{$token}}
-        </div>
-    </div>
-    {{-- end --}}
     <div id="unity-container" class="unity-desktop">
       <canvas id="unity-canvas" width=800 height=500></canvas>
       <div id="unity-loading-bar">
@@ -36,7 +20,7 @@
       <div id="unity-footer">
         <div id="unity-webgl-logo"></div>
         <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">WodoFPS</div>
+        <div id="unity-build-title">Metal Impact</div>
       </div>
     </div>
     <script>
@@ -79,7 +63,7 @@
         codeUrl: buildUrl + "/webgl.wasm.gz",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Wodo Network",
-        productName: "WodoFPS",
+        productName: "Metal Impact",
         productVersion: "1.0",
         showBanner: unityShowBanner,
       };
@@ -113,6 +97,11 @@
 
       loadingBar.style.display = "block";
 
+      var lobbyID = {{ Js::from($gameLobbyId) }};
+      var userId = {{ Js::from($userId) }};
+      var sessionId = {{ Js::from($sessionId) }};
+      var token = {{ Js::from($token) }};
+
       var script = document.createElement("script");
       script.src = loaderUrl;
       script.onload = () => {
@@ -120,6 +109,10 @@
           progressBarFull.style.width = 100 * progress + "%";
         }).then((unityInstance) => {
           loadingBar.style.display = "none";
+          unityInstance.SendMessage("JavascriptTalk","setLobby",lobbyID);
+          unityInstance.SendMessage("JavascriptTalk","setSession",sessionId);
+          unityInstance.SendMessage("JavascriptTalk","setUser",userId);
+          unityInstance.SendMessage("JavascriptTalk","setToken",token);
           fullscreenButton.onclick = () => {
             unityInstance.SetFullscreen(1);
           };
