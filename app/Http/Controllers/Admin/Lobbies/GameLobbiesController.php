@@ -69,6 +69,6 @@ class GameLobbiesController extends Controller
     {
         $gameLobby->delete();
         session()->flash('success', 'lobby deleted successfully!');
-        return redirect()->route('admin-gameLobbies.show', $gameLobby->game->id);
+        return redirect()->route('admin-games.show', $gameLobby->game->id);
     }
 }
