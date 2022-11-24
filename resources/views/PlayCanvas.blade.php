@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | WodoFPS</title>
-    <link rel="shortcut icon" href="http://static.wodo.io.s3-website.eu-central-1.amazonaws.com/wfps/TemplateData/favicon.ico">
-    <link rel="stylesheet" href="http://static.wodo.io.s3-website.eu-central-1.amazonaws.com/wfps/TemplateData/style.css">
+    <link rel="shortcut icon" href="https://webgl.wodo.io/fps/TemplateData/favicon.ico">
+    <link rel="stylesheet" href="https://webgl.wodo.io/fps/TemplateData/style.css">
   </head>
   <body>
     <div id="unity-container" class="unity-desktop">
