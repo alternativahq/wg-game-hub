@@ -55,7 +55,7 @@
         updateBannerVisibility();
       }
 
-      var buildUrl = "http://static.wodo.io.s3-website.eu-central-1.amazonaws.com/wfps/Build";
+      var buildUrl = "https://webgl.wodo.io/fps/Build";//"http://static.wodo.io.s3-website.eu-central-1.amazonaws.com/wfps/Build";
       var loaderUrl = buildUrl + "/webgl.loader.js";
       var config = {
         dataUrl: buildUrl + "/webgl.data.gz",
