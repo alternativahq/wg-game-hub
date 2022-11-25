@@ -34,6 +34,7 @@ class GameLobbyStartSignalAction
             'asset' => $asset->symbol,
             'state' => GameLobbyStatus::Scheduled->toGameLobbyServiceValue(),
             'baseEntranceFee' => $request->base_entrance_fee * 1,
+            'commission' => $request->commission * 1,
             'scheduledAt' => $request->scheduled_at,
             'startsAt' => $request->start_at,
             'minPlayers' => $request->min_players * 1,

@@ -24,6 +24,7 @@ class StoreLobbyTemplateRequest extends FormRequest
             'algorithm_id' => ['required', 'in:' . collect(array_column(GameLobbyAlgorithmsType::cases(), 'value'))->implode(',')],
             'game_start_delay_time' => ['nullable', 'numeric'],
             'game_start_delay_limit' => ['nullable', 'numeric'],
+            'commission' => ['required', 'numeric'],
         ];
     }
 

@@ -26,6 +26,7 @@ let updateTemplateForm = useForm({
     algorithm_id: props.gameTemplate.data.algorithm_id,
     game_start_delay_time: props.gameTemplate.data.game_start_delay_time,
     game_start_delay_limit: props.gameTemplate.data.game_start_delay_limit,
+    commission: props.gameTemplate.data.commission,
 });
 
 function updateGameLobbyTemplate() {
@@ -108,6 +109,20 @@ function updateGameLobbyTemplate() {
             <InputError class="mt-2">
                 <div v-if="updateTemplateForm.errors.rules" class="mt-2">
                     {{ updateTemplateForm.errors.rules }}
+                </div>
+            </InputError>
+            <div class="font-semibold">commission (%)</div>
+            <TextInput
+                v-model="updateTemplateForm.commission"
+                placeholder="commission"
+                type="text"
+                id="commission"
+                name="commission"
+                class="mt-4"
+            />
+            <InputError class="mt-2">
+                <div v-if="updateTemplateForm.errors.commission" class="mt-2">
+                    {{ updateTemplateForm.errors.commission }}
                 </div>
             </InputError>
             <div class="font-semibold">base_entrance_fee</div>

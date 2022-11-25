@@ -25,6 +25,7 @@ let AddTemplateForm = useForm({
     algorithm_id: '',
     game_start_delay_time : '',
     game_start_delay_limit : '',
+    commission : '',
 });
 
 function addGameLobbyTemplate() {
@@ -107,6 +108,20 @@ function addGameLobbyTemplate() {
             <InputError class="mt-2">
                 <div v-if="AddTemplateForm.errors.rules" class="mt-2">
                     {{ AddTemplateForm.errors.rules }}
+                </div>
+            </InputError>
+            <div class="font-semibold">commission (%)</div>
+            <TextInput
+                v-model="AddTemplateForm.commission"
+                placeholder="commission"
+                type="text"
+                id="commission"
+                name="commission"
+                class="mt-4"
+            />
+            <InputError class="mt-2">
+                <div v-if="AddTemplateForm.errors.commission" class="mt-2">
+                    {{ AddTemplateForm.errors.commission }}
                 </div>
             </InputError>
             <div class="font-semibold">base_entrance_fee</div>
