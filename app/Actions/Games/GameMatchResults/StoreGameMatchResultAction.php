@@ -26,7 +26,7 @@ class StoreGameMatchResultAction
             gameMatchResultData: $gameMatchResultData,
         );
 
-        $gameLobby->state = GameLobbyStatus::GameEnded;
+        $gameLobby->state = GameLobbyStatus::ProcessedGameResults;
         $gameLobby->save();
 
         // TODO: Dispatch queued task to start distributing the prizes.
