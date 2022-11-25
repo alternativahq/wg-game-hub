@@ -176,7 +176,7 @@ class GameLobbyController extends Controller
     ) {
         abort_unless($gameLobby->state->is(GameLobbyStatus::InGame), Response::HTTP_FORBIDDEN);
         $updated = $gameLobby->update([
-            'state' => GameLobbyStatus::GameEnded,
+            'state' => GameLobbyStatus::ProcessedGameResults,
         ]);
 
         $gameMatchResultData = GameMatchResultData::fromRequest(request: $request);
