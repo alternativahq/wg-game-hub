@@ -25,6 +25,7 @@ class StoreLobbyRequest extends FormRequest
             'scheduled_at' => ['required', 'date'],
             'start_at' => ['required', 'date', 'after:scheduled_at'],
             'asset_id' => ['required', 'exists:assets,id'],
+            'commission' => ['required', 'numeric'],
             //TODO: need to make sure value or name
             'algorithm_id' => [
                 'required',

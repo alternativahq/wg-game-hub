@@ -141,7 +141,8 @@ class GameLobby extends Model
     public function calculateThePrize(): float
     {
         $total = GameLobbyUser::where('game_lobby_id', $this->id)->sum('entrance_fee');
-        return (float) ($total - ($total * 20.0) / 100.0);
+
+        return (float) ($total - ($total * $this->commission) / 100.0);
     }
 
     public function activityLogs(): HasMany

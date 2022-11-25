@@ -29,6 +29,7 @@ class StoreGameLobbyRequest extends FormRequest
             'baseEntranceFee' => ['required', 'numeric'],
             'minPlayers' => ['required', 'numeric', 'lte:maxPlayers'],
             'maxPlayers' => ['required', 'numeric', 'gte:minPlayers'],
+            'commission' => ['required', 'numeric'],
             'scheduledAt' => ['required', 'date'],
             'startsAt' => ['required', 'date', 'after:scheduled_at'],
             'gamePlayDuration' => ['required_unless:gameMode,ONE_V_ONE', 'numeric'],

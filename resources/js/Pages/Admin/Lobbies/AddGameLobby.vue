@@ -35,6 +35,7 @@ let AddLobbyForm = useForm({
     algorithm_id: '',
     game_start_delay_time: '',
     game_start_delay_limit: '',
+    commission: '',
 });
 
 function addGameLobby() {
@@ -124,6 +125,20 @@ const maxDate = computed(() => addMonths(new Date(getYear(new Date()), getMonth(
             <InputError class="mt-2">
                 <div v-if="AddLobbyForm.errors.rules" class="mt-2">
                     {{ AddLobbyForm.errors.rules }}
+                </div>
+            </InputError>
+            <div class="font-semibold">commission (%)</div>
+            <TextInput
+                v-model="AddLobbyForm.commission"
+                placeholder="commission"
+                type="text"
+                id="commission"
+                name="commission"
+                class="mt-4"
+            />
+            <InputError class="mt-2">
+                <div v-if="AddLobbyForm.errors.commission" class="mt-2">
+                    {{ AddLobbyForm.errors.commission }}
                 </div>
             </InputError>
             <div class="font-semibold">base entrance fee</div>
