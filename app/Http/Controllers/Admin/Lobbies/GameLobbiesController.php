@@ -65,6 +65,15 @@ class GameLobbiesController extends Controller
         ]);
     }
 
+    public function details(GameLobby $gameLobby)
+    {
+        // return $gameLobby->usersAchievements()->where('user_id', auth()->user()->id)->get();
+        return Inertia::render('Games/Lobbies/Details', [
+            'gameLobby' => new GameLobbyResource($gameLobby->load('game', 'asset')),
+            'scores' => $gameLobby->scores()->with('user')->orderBy('score', 'desc')->take(3)->get(),
+        ]);
+    }
+
     public function destroy(GameLobby $gameLobby)
     {
         $gameLobby->delete();

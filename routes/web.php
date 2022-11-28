@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
 
     // GameLobbies
     Route::get('game-lobbies/{gameLobby}/playcanvas', GameLobbyPlayCanvasController::class);
+    Route::get('game-lobbies/{gameLobby}/details', [AdminGameLobbiesController::class,'details']);
 
     Route::post('game-lobbies/{gameLobby}/join', GameLobbyJoinController::class)
         ->name('games.game-lobbies.join')
