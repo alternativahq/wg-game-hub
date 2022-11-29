@@ -36,11 +36,9 @@ orderedPlayers = _.concat(
         ['asc']
     )
 );
-
 </script>
 <template>
     <div>
-        {{gameLobby}}
         <BorderedContainer class="bg-green-200 mb-10">
             <div class="divide-y-2 rounded-lg bg-gray-50 p-6">
                 <div class="flex flex-col  md:flex-row item-start gap-16 mt-10 mb-5">
