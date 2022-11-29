@@ -68,9 +68,26 @@ class GameLobbiesController extends Controller
     public function details(GameLobby $gameLobby)
     {
         // return $gameLobby->usersAchievements()->where('user_id', auth()->user()->id)->get();
+        $gameLobby->load(
+            'game:id,name,description',
+            'users:id,name,last_name,image,username',
+            'asset:id,name,symbol',
+        );
+        $gameLobby->load([
+            'scores' => function ($q) {
+                return $q->orderBy('rank')->limit(3);
+            },
+        ]);
         return Inertia::render('Games/Lobbies/Details', [
-            'gameLobby' => new GameLobbyResource($gameLobby->load('game', 'asset')),
-            'scores' => $gameLobby->scores()->with('user')->orderBy('score', 'desc')->take(3)->get(),
+            'gameLobby' => new GameLobbyResource($gameLobby),
+            'currentUserScore' => function () use ($gameLobby) {
+                return auth()->user()
+                    ? $gameLobby
+                        ->scores()
+                        ->where('user_id', auth()->user()->id)
+                        ->first()
+                    : [];
+            },
         ]);
     }
 
