@@ -10,7 +10,7 @@ import NanoCoinIcon from '@/Shared/SVG/NanoCoinIcon';
 import BNBCoinIcon from '@/Shared/SVG/BNBCoinIcon';
 import EthereiumCoinIcon from '@/Shared/SVG/EthereiumCoinIcon';
 import AvalancheCoinIcon from '@/Shared/SVG/AvalancheCoinIcon';
-import { ChevronDownIcon } from '@heroicons/vue/solid';
+import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 
 let currentUser = inject('currentUser');
 

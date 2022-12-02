@@ -3,7 +3,7 @@ import { defineProps } from 'vue';
 import { Link } from '@inertiajs/inertia-vue3';
 import { ref, inject } from 'vue';
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
-import { XIcon } from '@heroicons/vue/outline';
+import { XIcon } from '@heroicons/vue/24/outline';
 import { Inertia } from '@inertiajs/inertia';
 import Navigation from './navigation.vue';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
