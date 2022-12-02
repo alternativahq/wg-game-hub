@@ -20,7 +20,7 @@ import { useCurrentUser } from '@/Composables/useCurrentUser';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import { throttle } from 'lodash';
-import { ChevronDownIcon } from '@heroicons/vue/solid';
+import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 import { addMonths, getMonth, getYear } from 'date-fns';
 
 //TODO: useing currentUser insted of inject because inject does not reload

@@ -1,5 +1,5 @@
 <script setup>
-import { ChevronDownIcon } from '@heroicons/vue/solid';
+import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 import { defineProps, reactive, watch } from 'vue';
 import BorderedContainer from '@/Shared/BorderedContainer';
 import ButtonShape from '@/Shared/ButtonShape';
@@ -265,6 +265,12 @@ watch(
                                                     </span>
                                                 </Link>
                                             </th>
+                                            <th
+                                                scope="col"
+                                                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                            >
+                                            Controles
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-200 bg-white">
@@ -284,6 +290,17 @@ watch(
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                 {{ UTCToHumanReadable(item.game_lobby.scheduled_at) }}
+                                            </td>
+                                            <td
+                                                class="flex items-center whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                                            >
+                                                <Link :href="`/game-lobbies/${item.game_lobby.id}/details`">
+                                                    <ButtonShape type="purple">
+                                                        <span class="flex flex-row space-x-2.5">
+                                                            <span class="font-bold uppercase">Show</span>
+                                                        </span>
+                                                    </ButtonShape>
+                                                </Link>
                                             </td>
                                         </tr>
                                     </tbody>

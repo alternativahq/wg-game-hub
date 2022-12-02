@@ -2,7 +2,7 @@
 import LogoRed from '@/Shared/SVG/LogoRed';
 import Logo from '@/Shared/SVG/Logo';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
-import { ChevronDownIcon } from '@heroicons/vue/solid';
+import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 import NavigationItem from '@/Shared/Navigation/NavigationItem';
 import RocketIcon from '@/Shared/SVG/RocketIcon';
 import AccountIcon from '@/Shared/SVG/AccountIcon';
@@ -20,7 +20,7 @@ import {
     TransitionChild,
     TransitionRoot,
 } from '@headlessui/vue';
-import { MenuIcon, XIcon, BellIcon } from '@heroicons/vue/outline';
+import { MenuIcon, XIcon, BellIcon } from '@heroicons/vue/24/outline';
 import { inject, reactive } from 'vue';
 import FlashMessage from '../Shared/FlashMessage.vue';
 import DefaultNotification from '@/Shared/Notifications/DefaultNotification';

@@ -1,5 +1,5 @@
 <script setup>
-import { ChevronDownIcon } from '@heroicons/vue/solid';
+import { ChevronDownIcon } from '@heroicons/vue/24/solid';
 import { defineProps, reactive, watch } from 'vue';
 import BorderedContainer from '@/Shared/BorderedContainer';
 import ButtonShape from '@/Shared/ButtonShape';
