@@ -4,7 +4,7 @@ import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-vue3';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
 import BorderedContainer from '@/Shared/BorderedContainer';
-import { TrophyIcon } from '@heroicons/vue/24/solid';
+import { ClockIcon, InformationCircleIcon, TrophyIcon } from '@heroicons/vue/24/solid';
 import { CurrencyDollarIcon } from '@heroicons/vue/24/solid';
 import { Bars4Icon } from '@heroicons/vue/24/solid';
 import { CalendarDaysIcon } from '@heroicons/vue/24/solid';
@@ -14,6 +14,7 @@ let dayjs = inject('dayjs');
 
 let props = defineProps({
     gameLobby: Object,
+    scores: Object,
     currentUserScore: Object,
     current_url: String,
 });
@@ -43,10 +44,10 @@ orderedPlayers = _.concat(
 </script>
 <template>
     <div>
-        <BorderedContainer class="bg-green-200 mb-10">
+        <BorderedContainer class="bg-purple-300 mb-10">
             <div class="flex flex-col md:flex-row rounded-lg bg-gray-50 p-6">
-                <div class="w-4/5 mr-5 flex flex-col md:flex-row item-start gap-16 mt-10 mb-5">
-                    <div class="mb-5">
+                <div class="w-full md:w-3/5 mr-5 flex flex-col md:flex-row item-start mt-10 mb-5">
+                    <div class="mb-5 md:mr-16">
                         <img :src="gameLobby.data.game.image_url" :alt="`${gameLobby.data.game.name} art`"
                             class="aspect-[16/9] rounded-lg md:mb-0 max-h-[40.25rem] md:w-full md:max-h-[10.25rem]"
                         />
@@ -56,11 +57,11 @@ orderedPlayers = _.concat(
                             {{gameLobby.data.game.name}}
                         </div>
                         <div class="text-md text-gray-500">
-                            {{gameLobby.data.game.description}}
+                            {{gameLobby.data.game.description?.substring(0,100)+ '...' }}
                         </div>
                     </div>
                 </div>
-                <div class="w-1/5 space-y-6 divide-y-2 font-semibold">
+                <div class="w-full md:w-2/5 space-y-9 divide-y-2 font-semibold">
                     <div class="flex gap-2">
                         <div><Bars4Icon class="h-5 w-5"/></div>
                         <div>{{gameLobby.data.name?.substring(0,25)+ '...' }}</div>
@@ -87,48 +88,53 @@ orderedPlayers = _.concat(
                 </div>
             </div>
         </BorderedContainer>
-        <div>
+        <div class="">
             <div class="text-3xl font-bold mb-6">Lobby Details</div>
-            <BorderedContainer class="bg-blue-200 mb-10">
-                <div class="flex gap-2 rounded-lg bg-gray-50 p-6">
-                    <div class="w-1/2">
-                        <div class=" space-y-6 divide-y-2 font-semibold">
-                            <div class="flex gap-2">
+            <BorderedContainer class="bg-purple-300 mb-10">
+                <div class="flex flex-col md:flex-row gap-2 rounded-lg bg-gray-50 p-6">
+                    <div class="w-full mb-8 md:w-1/2 md:mb-0">
+                        <div class="mt-10 space-y-10 divide-y-2 font-semibold">
+                            <div class="flex items-center gap-2">
                                 <div><Bars4Icon class="h-5 w-5"/></div>
-                                <div>{{gameLobby.data.name?.substring(0,25)+ '...' }}</div>
+                                <div>{{gameLobby.data.name?.substring(0,80)+ '...' }}</div>
                             </div>
-                            <div class="flex gap-2">
-                                <div><TrophyIcon class="h-5 w-5"/></div>
-                                <div>{{ currentUserScore.rank }} place</div>
+                            <div class="flex items-center gap-2">
+                                <div><Bars4Icon class="h-5 w-5"/></div>
+                                <div>{{ gameLobby.data.description }}</div>
                             </div>
-                            <div class="flex gap-2">
+                            <div class="flex items-center gap-2">
                                 <div><CurrencyDollarIcon class="h-5 w-5"/></div>
-                                <div>{{ currentUserScore.rank }} earned</div>
+                                <div>{{gameLobby.data.base_entrance_fee}} {{gameLobby.data.asset.symbol}} entrance fee</div>
                             </div>
-                            <div class="flex gap-2">
-                                <div><CalendarDaysIcon class="h-5 w-5"/></div>
-                                <div>Played At {{
-                                        dayjs(gameLobby.data.start_at)
-                                        .utc()
-                                        .local()
-                                        .tz(dayjs.tz.guess())
-                                        .format('H:s YYYY/MM/DD')
-                                    }}
-                                </div>
+                            <div class="flex items-center gap-2">
+                                <div><ClockIcon class="h-5 w-5"/></div>
+                                <div>{{gameLobby.data.game_play_duration}} (min)</div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div><InformationCircleIcon class="h-5 w-5"/></div>
+                                <div>{{gameLobby.data.type_label}}</div>
                             </div>
                         </div>
                     </div>
-                    <div class="w-1/2">
-                        <BorderedContainer class="bg-blue-200 mb-10">
-                            <div class="flex justify-around gap-2 rounded-lg bg-gray-50 p-6">
-                                <div v-for="player in orderedPlayers" :key="player.id" class="flex flex-row md:flex-col">
-                                    <div class="w-1/3">
-                                        <img :src="player.image_url" :alt="`${player.image_url} art`"
-                                            class="h-12 w-12 object-cover md:h-24 md:w-24"
-                                        />
+                    <div class="w-full md:w-1/2">
+                        <div class="text-xl font-semibold mb-2">Players</div>
+                        <BorderedContainer class="bg-purple-200 mb-0 md:mb-10">
+                            <div class="overflow-hidden h-48 md:h-64 flex-col justify-around gap-2 rounded-lg bg-gray-50 p-4">
+                                <div class="flex justify-around md:flex-row mb-4">
+                                    <div class="font-semibold">Avatar</div>
+                                    <div class="font-semibold">Name</div>
+                                    <div class="font-semibold">Rank</div>
+                                </div>
+                                <div class="overflow-y-scroll">
+                                    <div v-for="player in players" :key="player.id" class=" flex justify-around items-center mb-4">
+                                        <div>
+                                            <img :src="player.image_url" :alt="`${player.image_url} art`"
+                                                class="h-5 w-5 object-cover md:h-11 md:w-11"
+                                            />
+                                        </div>
+                                        <div>{{player.name}}</div>
+                                        <div>{{player.rank}}</div>
                                     </div>
-                                    <div class="w-1/3">{{player.name}}</div>
-                                    <div class="w-1/3">{{player.ranmk}}</div>
                                 </div>
                             </div>
                         </BorderedContainer>
@@ -136,92 +142,58 @@ orderedPlayers = _.concat(
                 </div>
             </BorderedContainer>
         </div>
-        <BorderedContainer class="bg-green-200 mb-10">
-            <div class="divide-y-2 rounded-lg bg-gray-50 p-2">
-                <div class="text-center text-3xl font-bold mb-10">Top Players</div>
-                <div class="flex flex-col md:flex-row justify-around py-5 md:text-center">
-                    <div v-for="player in orderedPlayers" :key="player.id" class="flex flex-row md:flex-col">
-                        <div class="mb-4 w-1/2 md:w-20">
-                            <img :src="player.image_url" :alt="`${player.image_url} art`"
-                                class="h-12 w-12 object-cover md:h-24 md:w-24"
-                            />
-                        </div>
-                        <div class="w-1/2 md:w-20">
-                            <div>{{player.name}}</div>
-                            <div>Rank: {{player.rank}}</div>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="mb-6"
-                    v-if="currentUserScore && currentUserScore.hasOwnProperty('rank')"
-                >
-                    <p class="text-center font-semibold text-lg mt-5 text-wgh-gray-6">
-                        Your Rank: #
-                        {{ currentUserScore.rank }}
-                    </p>
-                    <p class="text-center font-semibold text-lg mt-5 text-wgh-gray-6">
-                        Earned:
-                        {{ currentUserScore.rank }}
-                    </p>
-                </div>
-            </div>
-        </BorderedContainer>
-        <BorderedContainer class="bg-blue-200 mb-4">
-            <div class="divide-y-2 rounded-lg bg-gray-50 p-6">
-                <div class="text-center text-3xl font-bold ">Lobby Details</div>
-            </div>
-        </BorderedContainer>
-        <div>
-            <div class="">
-                <BorderedContainer class="bg-blue-200 mb-10">
-                    <div class="divide-y-2 rounded-lg bg-gray-50 p-6">
-                        <div class="py-4 flex items-center">
-                            <div class="mr-4 w-1/2 text-lg font-semibold">Name:</div>
-                            <div class="w-1/2">{{gameLobby.data.name}}</div>
-                        </div>
-                        <div class="py-4 flex items-center">
-                            <div class="mr-4 w-1/2 text-lg font-semibold">Description:</div>
-                            <div class="w-1/2">{{gameLobby.data.description}}</div>
-                        </div>
-                        <div class="py-4 flex items-center">
-                            <div class="mr-4 w-1/2 text-lg font-semibold">Entrance Fee:</div>
-                            <div class="w-1/2">{{gameLobby.data.base_entrance_fee}} {{gameLobby.data.asset.symbol}}</div>
-                        </div>
-                        <div class="py-4 flex items-center" v-if="gameLobby.data.game_play_duration">
-                            <div class="mr-4 w-1/2 text-lg font-semibold">Game Play Duration:</div>
-                            <div class="w-1/2">{{gameLobby.data.game_play_duration}} min</div>
-                        </div>
-                        <div class="py-4 flex items-center">
-                            <div class="mr-4 w-1/2 text-lg font-semibold">Game Mode:</div>
-                            <div class="w-1/2">{{gameLobby.data.type_label}}</div>
-                        </div>
-                        <div class="py-4 flex items-center">
-                            <div class="mr-4 w-1/2 text-lg font-semibold">Min Players:</div>
-                            <div class="w-1/2">{{gameLobby.data.min_players}} Players</div>
-                        </div>
-                        <div class="py-4 flex items-center">
-                            <div class="mr-4 w-1/2 text-lg font-semibold">Max Players:</div>
-                            <div class="w-1/2">{{gameLobby.data.max_players}} Players</div>
-                        </div>
-                        <div class="py-4 flex items-center">
-                            <div class="mr-4 w-1/2 text-lg font-semibold">Rules:</div>
-                            <div class="w-1/2">{{gameLobby.data.rules}}</div>
-                        </div>
-                        <div class="py-4 flex items-center">
-                            <div class="mr-4 w-1/2 text-lg font-semibold">Played_At:</div>
-                            <div class="w-1/2">{{
-                                    dayjs(gameLobby.data.start_at)
-                                    .utc()
-                                    .local()
-                                    .tz(dayjs.tz.guess())
-                                    .format('YYYY/MM/DD')
-                                }}
+        <div class="">
+            <div class="text-3xl font-bold mb-6">Achievments</div>
+            <BorderedContainer class="bg-purple-300 mb-10 ">
+                <div class="flex flex-col md:flex-row gap-2 rounded-lg bg-gray-50 p-6">
+                    <div class="w-full md:w-1/2">
+                        <div class="text-xl font-semibold mb-2">Badges</div>
+                        <BorderedContainer class="bg-purple-200 mb-10">
+                            <div class="overflow-hidden h-72 flex-col justify-around gap-2 rounded-lg bg-gray-50 p-6">
+                                <div class="flex justify-around md:flex-row mb-4">
+                                    <div class="font-semibold">Avatar</div>
+                                    <div class="font-semibold">Name</div>
+                                    <div class="font-semibold">Rank</div>
+                                </div>
+                                <div class="overflow-y-scroll">
+                                    <div v-for="player in players" :key="player.id" class=" flex justify-around items-center mb-4">
+                                        <div>
+                                            <img :src="player.image_url" :alt="`${player.image_url} art`"
+                                                class="h-5 w-5 object-cover md:h-11 md:w-11"
+                                            />
+                                        </div>
+                                        <div>{{player.name}}</div>
+                                        <div>{{player.rank}}</div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </BorderedContainer>
                     </div>
-                </BorderedContainer>
-            </div>
+                    <div class="w-full md:w-1/2">
+                        <div class="text-xl font-semibold mb-2">NFTs</div>
+                        <BorderedContainer class="bg-purple-200 mb-10">
+                            <div class="overflow-hidden h-72 flex-col justify-around gap-2 rounded-lg bg-gray-50 p-6">
+                                <div class="flex justify-around md:flex-row mb-4">
+                                    <div class="font-semibold">Avatar</div>
+                                    <div class="font-semibold">Name</div>
+                                    <div class="font-semibold">Rank</div>
+                                </div>
+                                <div class="overflow-y-scroll">
+                                    <div v-for="player in players" :key="player.id" class=" flex justify-around items-center mb-4">
+                                        <div>
+                                            <img :src="player.image_url" :alt="`${player.image_url} art`"
+                                                class="h-5 w-5 object-cover md:h-11 md:w-11"
+                                            />
+                                        </div>
+                                        <div>{{player.name}}</div>
+                                        <div>{{player.rank}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </BorderedContainer>
+                    </div>
+                </div>
+            </BorderedContainer>
         </div>
     </div>
 </template>
