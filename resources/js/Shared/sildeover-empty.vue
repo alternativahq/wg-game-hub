@@ -3,7 +3,7 @@ import { defineProps } from 'vue';
 import { Link } from '@inertiajs/inertia-vue3';
 import { ref, inject } from 'vue';
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
-import { XIcon } from '@heroicons/vue/24/outline';
+import { XMarkIcon } from '@heroicons/vue/24/outline';
 import { Inertia } from '@inertiajs/inertia';
 import Navigation from './navigation.vue';
 import { useCurrentUser } from '@/Composables/useCurrentUser';
@@ -78,7 +78,7 @@ const open = ref(false);
                                                         @click="open = false"
                                                     >
                                                         <span class="sr-only">Close panel</span>
-                                                        <XIcon class="h-6 w-6" aria-hidden="true" />
+                                                        <XMarkIcon class="h-6 w-6" aria-hidden="true" />
                                                     </button>
                                                 </div>
                                             </div>
