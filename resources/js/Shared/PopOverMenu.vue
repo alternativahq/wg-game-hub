@@ -11,7 +11,7 @@ import {
     TransitionChild,
     TransitionRoot,
 } from '@headlessui/vue';
-import { MenuIcon, XIcon, BellIcon } from '@heroicons/vue/outline';
+import { MenuIcon, XMarkIcon, BellIcon } from '@heroicons/vue/outline';
 import { reactive } from 'vue';
 
 const user = reactive({
