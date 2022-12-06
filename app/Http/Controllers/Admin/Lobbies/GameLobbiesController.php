@@ -75,7 +75,7 @@ class GameLobbiesController extends Controller
         );
         $gameLobby->load([
             'scores' => function ($q) {
-                return $q->orderBy('rank')->limit(3);
+                return $q->orderBy('rank')->limit(10);
             },
         ]);
         return Inertia::render('Games/Lobbies/Details', [
