@@ -121,7 +121,6 @@ function channelInGame(payload) {
         let newWindow = window.open('', '_blank', 'resizable=yes');
         let gamepage = new URL(`${props.app_url}/game-lobbies/${props.gameLobby.data.id}/playcanvas`);
         newWindow.location = gamepage.toString();
-        gameLobbyModel.killCountDownTimer();
     } catch (e) {
         return false;
     }

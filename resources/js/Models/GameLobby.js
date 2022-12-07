@@ -56,7 +56,6 @@ export default class GameLobby extends Model {
 
     startCountDownTimer() {
         let startAt = dayjs(this.start_at);
-        let blbl;
         this._countDownTimerInterval = setInterval(() => {
             let now = dayjs();
             let diff = dayjs.duration(startAt.diff(now));
