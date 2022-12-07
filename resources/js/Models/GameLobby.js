@@ -38,6 +38,9 @@ export default class GameLobby extends Model {
     }
 
     get timeToStartAsString() {
+        if(this._timeToStart <= "0d 0h 0m 0s"){
+            return "0d 0h 0m 0s"
+        }
         return this._timeToStart;
     }
 
@@ -61,6 +64,9 @@ export default class GameLobby extends Model {
             let minutes = `${diff.get('minutes')}m`;
             let seconds = `${diff.get('seconds')}s`;
             this._timeToStart = `${days} ${hours} ${minutes} ${seconds}`;
+            if(this._timeToStart <= "0d 0h 0m 0s"){
+                clearInterval(this._countDownTimerInterval)
+            }
         }, 1000);
     }
 
