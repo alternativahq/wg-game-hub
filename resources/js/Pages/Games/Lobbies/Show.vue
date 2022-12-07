@@ -107,6 +107,7 @@ function channelNewChatMessage(message) {
 function channelUserJoined(payload) {
     gameLobbyModel.addUser(payload.user);
     data.latestUpdateMessage = `${payload.user.name} joined the lobby.`;
+    Inertia.reload({ only: ['prize'] });
 }
 
 function channelUserLeft(payload) {
@@ -120,6 +121,7 @@ function channelInGame(payload) {
         let newWindow = window.open('', '_blank', 'resizable=yes');
         let gamepage = new URL(`${props.app_url}/game-lobbies/${props.gameLobby.data.id}/playcanvas`);
         newWindow.location = gamepage.toString();
+        gameLobbyModel.killCountDownTimer();
     } catch (e) {
         return false;
     }
@@ -246,7 +248,7 @@ let state = reactive({
                             <div>
                                 <p class="font-grota text-lg font-extrabold uppercase text-wgh-gray-6">Game Play Duration</p>
                                 <p class="font-inter font-normal uppercase text-wgh-gray-6">
-                                    {{  gameLobbyModel.game_play_duration }} min
+                                    {{  gameLobbyModel.game_play_duration /60 }} min
                                 </p>
                             </div>
                         </div>
