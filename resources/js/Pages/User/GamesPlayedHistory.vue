@@ -9,6 +9,7 @@ import { Inertia } from '@inertiajs/inertia';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import { throttle } from 'lodash';
+import { UTCToHumanReadable} from '@/Helpers/Time'
 
 let props = defineProps({
     games: Object,
@@ -22,10 +23,6 @@ let filters = reactive({ ...props.filters });
 let currentUrl = window.location.toString();
 let availableGames = props.games.data;
 let pagination = reactive(new Pagination(props.userGamesPlayedHistory));
-
-function UTCToHumanReadable(u) {
-    return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
-}
 
 function byGameFilterChanged() {
     Inertia.get(currentUrl, { filter_by_game: filters.filter_by_game });
@@ -289,7 +286,7 @@ watch(
                                                 #{{ item.rank }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ UTCToHumanReadable(item.game_lobby.scheduled_at) }}
+                                                {{ UTCToHumanReadable(item.game_lobby.scheduled_at, 'MMMM DD, YYYY hh:mm A') }}
                                             </td>
                                             <td
                                                 class="flex items-center whitespace-nowrap px-3 py-4 text-sm text-gray-500"

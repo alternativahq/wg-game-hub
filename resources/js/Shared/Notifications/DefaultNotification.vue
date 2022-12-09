@@ -1,5 +1,6 @@
 <script setup>
-import { inject, provide } from 'vue';
+import { inject } from 'vue';
+import { UTCToHumanReadable } from '@/Helpers/Time'
 
 
 let dayjs = inject('dayjs');
@@ -8,9 +9,6 @@ defineProps({
     currentUser: Object,
 });
 
-function UTCToHumanReadable(u) {
-    return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('YYYY/MM/DD hh:mm A');
-}
 </script>
 <template>
     <div class="flex flex-col justify-between">
@@ -29,6 +27,6 @@ function UTCToHumanReadable(u) {
         >
             Mark as read
         </div>
-        <div class="text-sm">{{ UTCToHumanReadable(notification.createdAt) }}</div>
+        <div class="text-sm">{{ UTCToHumanReadable(notification.createdAt, 'MMMM DD, YYYY hh:mm A') }}</div>
     </div>
 </template>

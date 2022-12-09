@@ -7,6 +7,7 @@ import Pagination from '@/Models/Pagination';
 import { Link } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import { throttle } from 'lodash';
+import { UTCToHumanReadable } from '@/Helpers/Time'
 
 let props = defineProps({
     gameLobbies: Object,
@@ -18,10 +19,6 @@ let props = defineProps({
 let filters = reactive({ ...props.filters });
 let currentUrl = window.location.toString();
 let pagination = reactive(new Pagination(props.gameLobbies));
-
-function UTCToHumanReadable(u) {
-    return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
-}
 
 watch(
     () => filters,
@@ -313,7 +310,7 @@ function deleteLobby(gameLobbie) {
                                                 {{ gameLobbie.max_players }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ UTCToHumanReadable(gameLobbie.scheduled_at) }}
+                                                {{ UTCToHumanReadable(gameLobbie.scheduled_at, 'MMMM DD, YYYY hh:mm A') }}
                                             </td>
                                             <td
                                                 class="flex items-center whitespace-nowrap px-3 py-4 text-sm text-gray-500"
