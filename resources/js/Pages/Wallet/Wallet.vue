@@ -1,7 +1,7 @@
 <script setup>
 import BorderedContainer from '@/Shared/BorderedContainer';
 import ButtonShape from '@/Shared/ButtonShape';
-import { inject, reactive } from 'vue';
+import { inject, reactive, watch } from 'vue';
 import { Link } from '@inertiajs/inertia-vue3';
 import WodoTokenIcon from '@/Shared/SVG/WodoTokenIcon';
 import BananoCoinIcon from '@/Shared/SVG/BananoCoinIcon';
@@ -11,15 +11,20 @@ import BNBCoinIcon from '@/Shared/SVG/BNBCoinIcon';
 import EthereiumCoinIcon from '@/Shared/SVG/EthereiumCoinIcon';
 import AvalancheCoinIcon from '@/Shared/SVG/AvalancheCoinIcon';
 import { ChevronDownIcon } from '@heroicons/vue/24/solid';
+import { throttle } from 'lodash';
+import { Inertia } from '@inertiajs/inertia';
+import Pagination from '@/Models/Pagination';
 
 let currentUser = inject('currentUser');
 
 let props = defineProps({
     assetAccounts: Object,
     filters: Object,
+    assets: Object,
     current_url: String,
 });
 
+let pagination = reactive(new Pagination(props.assetAccounts));
 let filters = reactive({ ...props.filters });
 let currentUrl = window.location.toString();
 
@@ -36,9 +41,71 @@ function component(account) {
 
     return assets[account.asset] || null;
 }
+
+watch(
+    () => filters,
+    throttle(() => {
+        Inertia.get(currentUrl, { ...filters }, { preserveState: true, preserveScroll: true });
+    }, 1000),
+    {
+        deep: true,
+    }
+);
 </script>
 <template>
     <section class="overflow-x-auto">
+        <!-- <div class="flex gap-10 items-center">
+            <div>
+                <div class="mb-3">
+                    <label for="Asset" class="form-label mb-2 inline-block text-lg text-gray-700">Asset</label>
+                    <select
+                        id="filter_by_asset"
+                        name="filter_by_asset"
+                        v-model="filters.filter_by_asset"
+                        class="flex rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
+                    >
+                        <option :value="undefined">All</option>
+                        <option :key="asset.id" v-for="asset in assets" :value="asset.symbol">
+                            {{ asset.name }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <div class="mb-3">
+                    <label
+                        for="Min Balance"
+                        class="form-label mb-2 inline-block text-lg text-gray-700"
+                        >From Balance</label
+                    >
+                    <input
+                        class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                        type="number"
+                        name="Min Balance"
+                        id="Min Balance"
+                        v-model="filters.balance_from"
+                        placeholder="from balance"
+                    />
+                </div>
+            </div>
+            <div>
+                <div class="mb-3">
+                    <label
+                        for="Min Balance"
+                        class="form-label mb-2 inline-block text-lg text-gray-700"
+                        >To Balance</label
+                    >
+                    <input
+                        class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                        type="number"
+                        name="Min Balance"
+                        id="Min Balance"
+                        v-model="filters.balance_to"
+                        placeholder="to balance"
+                    />
+                </div>
+            </div>
+        </div> -->
         <div class="mb-6 flex flex-col items-center justify-between space-y-2 md:flex-row md:space-y-0">
             <h2 class="truncate font-grota text-2xl font-extrabold uppercase text-wgh-gray-6">Asset Accounts</h2>
             <div class="mb-5 flex flex-row items-center space-x-4">
@@ -72,7 +139,7 @@ function component(account) {
                                                     class="group inline-flex"
                                                     :href="currentUrl"
                                                     :data="{
-                                                        sort_by: 'name',
+                                                        sort_by: 'asset',
                                                         sort_order: filters.sort_order === 'desc' ? 'asc' : 'desc',
                                                     }"
                                                 >
@@ -80,11 +147,11 @@ function component(account) {
                                                     <span
                                                         :class="{
                                                             'invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible':
-                                                                filters.sort_by !== 'name',
+                                                                filters.sort_by !== 'asset',
                                                             'ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300':
-                                                                filters.sort_by === 'name',
+                                                                filters.sort_by === 'asset',
                                                             'rotate-180':
-                                                                filters.sort_by === 'name' &&
+                                                                filters.sort_by === 'asset' &&
                                                                 filters.sort_order === 'asc',
                                                         }"
                                                     >
@@ -195,5 +262,37 @@ function component(account) {
                 </div>
             </div>
         </BorderedContainer>
+        <!-- <BorderedContainer class="mb-2 bg-wgh-gray-1.5 mt-8">
+            <nav
+                class="flex w-full items-center justify-between rounded-lg border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
+                aria-label="Pagination"
+            >
+                <div class="hidden sm:block">
+                    <p class="font-inter text-sm text-gray-700">
+                        Showing
+                        {{ ' ' }}
+                        <span class="font-medium">{{ pagination.from }}</span>
+                        {{ ' ' }}
+                        to
+                        {{ ' ' }}
+                        <span class="font-medium">{{ pagination.to }}</span>
+                        {{ ' ' }}
+                        of
+                        {{ ' ' }}
+                        <span class="font-medium">{{ pagination.total }}</span>
+                        {{ ' ' }}
+                        results
+                    </p>
+                </div>
+                <div class="flex flex-1 justify-between space-x-4 sm:justify-end">
+                    <Link :href="pagination.links.prev" preserve-scroll>
+                        <ButtonShape v-if="pagination.links.prev" type="gray"> Previous</ButtonShape>
+                    </Link>
+                    <Link :href="pagination.links.next" preserve-scroll>
+                        <ButtonShape v-if="pagination.links.next" type="gray"> Next</ButtonShape>
+                    </Link>
+                </div>
+            </nav>
+        </BorderedContainer> -->
     </section>
 </template>
