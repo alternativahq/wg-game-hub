@@ -14,6 +14,7 @@ import WithdrawalDialog from '@/Shared/Modals/WithdrawalDialog.vue';
 import TransactionDialog from '@/Shared/Modals/TransactionDialog.vue';
 import WithdrawalFormCoinDialog from '@/Shared//Modals/WithdrawalFormCoinDialog.vue';
 import WithdrawalFormNetworkDialog from '@/Shared//Modals/WithdrawalFormNetworkDialog.vue';
+import { UTCToHumanReadable } from '@/Helpers/Time'
 
 let props = defineProps({
     userWithdrawTransactions: Object,
@@ -62,10 +63,6 @@ watch(
         state.selectedNetwork = '';
     }
 );
-
-function UTCToHumanReadable(u) {
-    return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
-}
 
 let state = reactive({
     open: false,
@@ -553,7 +550,7 @@ watch(
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
-                                                {{ UTCToHumanReadable(transaction.createdAt) }}
+                                                {{ UTCToHumanReadable(transaction.createdAt, 'MMMM DD, YYYY hh:mm A') }}
                                             </td>
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"

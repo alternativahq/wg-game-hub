@@ -19,9 +19,6 @@ let filters = reactive({ ...props.filters });
 let pagination = reactive(new Pagination(props.gameTemplates));
 let currentUrl = window.location.toString();
 
-function UTCToHumanReadable(u) {
-    return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
-}
 
 watch(
     () => filters,
