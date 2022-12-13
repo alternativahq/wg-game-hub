@@ -21,7 +21,7 @@ class FilterByDate
         if ($filterTerm->count() > 2 || $filterTerm->count() < 0) {
             return $next($builder);
         }
-        
+
         if ($filterTerm->count() === 2) {
             $builder->whereHas('gameLobby', function($q) use($filterTerm){
                 return $q->whereBetween('start_at', [

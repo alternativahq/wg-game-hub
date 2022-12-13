@@ -91,11 +91,48 @@ watch(
                             />
                         </div>
                     </div>
+                    <!-- <div class="mb-3">
+                        <label
+                            for="Minimum Earned"
+                            class="form-label mb-2 inline-block text-lg text-gray-700"
+                            >Min Earned</label
+                        >
+                        <input
+                            class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                            type="number"
+                            name="min-base_entrance_fee"
+                            id="min-base_entrance_fee"
+                            v-model="filters.min_earned"
+                            placeholder="Min Earned"
+                        />
+                    </div>
                     <div>
+                        <div class="mb-3">
+                            <label
+                                for="Maximum Earned"
+                                class="form-label mb-2 inline-block text-lg text-gray-700"
+                                >Max Earned</label
+                            >
+                            <input
+                                class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                                type="number"
+                                name="max-base_entrance_fee"
+                                id="max-base_entrance_fee"
+                                v-model="filters.max_earned"
+                                placeholder="Max Earned"
+                            />
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+        <div class="flex flex-row justify-between">
+            <div class="mb-5 flex flex-row justify-between">
+                <div class="filters flex items-center gap-8">
+                    <!-- <div>
                         <div class="mb-3 xl:w-64">
                             <label for="Date" class="form-label mb-2 inline-block text-lg text-gray-700">Date</label>
                             <Datepicker
-                                range
                                 required
                                 class="block rounded-md border border-wgh-gray-1.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 utc
@@ -105,12 +142,40 @@ watch(
                                 :max-date="maxDate"
                             ></Datepicker>
                         </div>
+                    </div> -->
+                    <div>
+                        <div class="mb-3 xl:w-64">
+                            <label for="Date" class="form-label mb-2 inline-block text-lg text-gray-700">From Date</label>
+                            <Datepicker
+                                required
+                                class="block rounded-md border border-wgh-gray-1.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                utc
+                                placeholder="Select date and time"
+                                v-model="filters.date_from"
+                                :min-date="new Date()"
+                                :max-date="maxDate"
+                            ></Datepicker>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="mb-3 xl:w-64">
+                            <label for="Date" class="form-label mb-2 inline-block text-lg text-gray-700">To Date</label>
+                            <Datepicker
+                                required
+                                class="block rounded-md border border-wgh-gray-1.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                utc
+                                placeholder="Select date and time"
+                                v-model="filters.date_to"
+                                :min-date="new Date()"
+                                :max-date="maxDate"
+                            ></Datepicker>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label
-                            for="Minimum Base Entrance Fee"
+                            for="Minimum Earned"
                             class="form-label mb-2 inline-block text-lg text-gray-700"
-                            >Minimum Base Entrance Fee</label
+                            >Min Entrance Fee</label
                         >
                         <input
                             class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
@@ -118,15 +183,15 @@ watch(
                             name="min-base_entrance_fee"
                             id="min-base_entrance_fee"
                             v-model="filters.min_base_entrance_fee"
-                            placeholder="Minimum Base Entrance Fee"
+                            placeholder="Min Entrance Fee"
                         />
                     </div>
                     <div>
                         <div class="mb-3">
                             <label
-                                for="Maximum Base Entrance Fee"
+                                for="Maximum Earned"
                                 class="form-label mb-2 inline-block text-lg text-gray-700"
-                                >Maximum Base Entrance Fee</label
+                                >Max Entrance Fee</label
                             >
                             <input
                                 class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
@@ -134,7 +199,7 @@ watch(
                                 name="max-base_entrance_fee"
                                 id="max-base_entrance_fee"
                                 v-model="filters.max_base_entrance_fee"
-                                placeholder="Maximum Base Entrance Fee"
+                                placeholder="Max Entrance Fee"
                             />
                         </div>
                     </div>
@@ -286,7 +351,7 @@ watch(
                                                 #{{ item.rank }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ UTCToHumanReadable(item.game_lobby.scheduled_at, 'MMMM DD, YYYY hh:mm A') }}
+                                                {{ UTCToHumanReadable(item.game_lobby.start_at) }}
                                             </td>
                                             <td
                                                 class="flex items-center whitespace-nowrap px-3 py-4 text-sm text-gray-500"
