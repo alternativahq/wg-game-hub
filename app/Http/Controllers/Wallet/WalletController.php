@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Wallet;
 
-use App\Actions\Wallet\GetUserAssetAccountsAction;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\UserAssetAccountResource;
-use App\Services\Internal\WalletAPI;
 use Auth;
 use Http;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
+use App\Models\Asset;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Services\Internal\WalletAPI;
+use Illuminate\Pagination\LengthAwarePaginator;
+use App\Http\Resources\UserAssetAccountResource;
+use App\Actions\Wallet\GetUserAssetAccountsAction;
 
 class WalletController extends Controller
 {
@@ -22,11 +23,15 @@ class WalletController extends Controller
 
     public function __invoke(Request $request)
     {
+        $assets = Asset::get(['id', 'name', 'symbol']);
         $response = $this->walletAPI->accounts(
             query: [
                 'userId' => auth()->user()->id,
                 'sort_by' => $request->sort_by,
                 'sort_order' => $request->sort_order,
+                'asset' => $request->filter_by_asset,
+                'balance' => $request->balance_from,
+                'balance' => $request->balance_to,
             ],
         );
 
@@ -43,9 +48,11 @@ class WalletController extends Controller
                 'path' => url()->current(),
             ],
         );
+
         return Inertia::render('Wallet/Wallet', [
+            'assets' => $assets,
             'assetAccounts' => $assetAccounts,
-            'filters' => $request->only('sort_by', 'sort_order'),
+            'filters' => $request->only('sort_by', 'sort_order', 'filter_by_asset', 'balance_from', 'balance_to'),
         ]);
     }
 }

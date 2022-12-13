@@ -15,6 +15,7 @@ import TextInput from '@/Shared/Inputs/TextInput';
 import { useForm } from '@inertiajs/inertia-vue3';
 import { debounce } from 'lodash';
 import TransactionDialog from '@/Shared/Modals/TransactionDialog.vue';
+import { UTCToHumanReadable} from '@/Helpers/Time'
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -51,10 +52,6 @@ let DepositForm = useForm({
     coin: props.assetInformation.asset,
     network: '',
 });
-
-function UTCToHumanReadable(u) {
-    return dayjs(u).utc().local().tz(dayjs.tz.guess()).format('MMMM DD, YYYY hh:mm A');
-}
 
 let newUrl = new URL(window.location);
 DepositForm.coin = newUrl.searchParams.get('coin');
@@ -529,8 +526,8 @@ watch(
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
-                                                {{ UTCToHumanReadable(transaction.createdAt) }}
-                                            </td>
+                                                {{ UTCToHumanReadable(transaction.createdAt, 'MMMM DD, YYYY hh:mm A') }}
+                                            </td>   
                                             <td
                                                 class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
                                             >
