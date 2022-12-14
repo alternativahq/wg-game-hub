@@ -80,7 +80,7 @@ function channelAbortedRefunding(payload) {
 }
 
 function channelAborted(payload) {
-    console.log(payload)
+    // console.log(payload)
 }
 
 function sendChatMessage() {
@@ -116,7 +116,7 @@ function channelUserLeft(payload) {
 }
 
 function channelInGame(payload) {
-    console.log('redirecting user to game server...');
+    // console.log('redirecting user to game server...');
     try {
         let newWindow = window.open('', '_blank', 'resizable=yes');
         let gamepage = new URL(`${props.app_url}/game-lobbies/${props.gameLobby.data.id}/playcanvas`);
@@ -131,11 +131,11 @@ async function channelGameEnded(payload) {
 }
 
 function channelDistributingPrizes() {
-    console.log('distributing prizes..');
+    // console.log('distributing prizes..');
 }
 
 function channelDistributedPrizes() {
-    console.log('prizes distributed..');
+    // console.log('prizes distributed..');
 }
 
 function channelArchived() {
@@ -147,7 +147,7 @@ function channelPrizeUpdated(payload) {
 }
 
 function channelLatestUpdate(payload) {
-    // console.log(payload.latest_update);
+    console.log(payload.latest_update);
     data.latestUpdateMessage = payload.latest_update;
 }
 

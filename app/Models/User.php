@@ -70,7 +70,7 @@ class User extends Authenticatable
     {
         return new Attribute(
             get: function () {
-                return 'https://joeschmoe.io/api/v1/' . $this->username;
+                return "https://avatars.dicebear.com/api/adventurer/{$this->username}.svg";
             },
         );
     }

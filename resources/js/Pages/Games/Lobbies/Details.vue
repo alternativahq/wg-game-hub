@@ -52,31 +52,31 @@ let badges = [
     {
         id: 1,
         name: "sharp shooter",
-        image_url: "https://joeschmoe.io/api/v1/12321312312",
+        image_url: "https://avatars.dicebear.com/api/adventurer/sduhfuih.svg",
         description: "its a badge for the most head shots"
     },
     {
         id: 2,
         name: "tank master",
-        image_url: "https://joeschmoe.io/api/v1/12321312",
+        image_url: "https://avatars.dicebear.com/api/adventurer/asd.svg",
         description: "its a badge for the best tank drivers "
     },
     {
         id: 3,
         name: "chicken dinner",
-        image_url: "https://joeschmoe.io/api/v1/asdass",
+        image_url: "https://avatars.dicebear.com/api/adventurer/sduhqfuih.svg",
         description: "its a badge for battle royal winners"
     },
     {
         id: 4,
         name: "last man stand",
-        image_url: "https://joeschmoe.io/api/v1/assdasdsaass",
+        image_url: "https://avatars.dicebear.com/api/adventurer/asdf.svg",
         description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
     },
     {
         id: 5,
         name: "men of mayhem",
-        image_url: "https://joeschmoe.io/api/v1/saçdöşasldasşl",
+        image_url: "https://avatars.dicebear.com/api/adventurer/qwe.svg",
         description: "iasdsadsa sadsa ds"
     },
 ]
@@ -85,31 +85,31 @@ let nfts = [
     {
         id: 1,
         name: "wodo network XWGT",
-        image_url: "https://joeschmoe.io/api/v1/asdsad",
+        image_url: "https://avatars.dicebear.com/api/adventurer/xcv.svg",
         description: "lorem ipsum"
     },
     {
         id: 2,
         name: "ninja squad nft #1",
-        image_url: "https://joeschmoe.io/api/v1/12dasadsd321312",
+        image_url: "https://avatars.dicebear.com/api/adventurer/fgh.svg",
         description: "lorem ipsum"
     },
     {
         id: 3,
         name: "monkey club nft #3",
-        image_url: "https://joeschmoe.io/api/v1/dasdas",
+        image_url: "https://avatars.dicebear.com/api/adventurer/tyh.svg",
         description: "lorem ipsum"
     },
     {
         id: 4,
         name: "luna token",
-        image_url: "https://joeschmoe.io/api/v1/dasdad",
+        image_url: "https://avatars.dicebear.com/api/adventurer/bdf.svg",
         description: "lorem ipsum"
     },
     {
         id: 5,
         name: "men of mayhem",
-        image_url: "https://joeschmoe.io/api/v1/dadada",
+        image_url: "https://avatars.dicebear.com/api/adventurer/bfg.svg",
         description: "lorem ipsum"
     },
 ]
