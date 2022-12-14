@@ -9,7 +9,7 @@ import { Inertia } from '@inertiajs/inertia';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import { throttle } from 'lodash';
-import { UTCToHumanReadable } from '@Helpers/Time'
+import { UTCToHumanReadable } from '@/Helpers/Time'
 
 let props = defineProps({
     games: Object,
@@ -40,9 +40,9 @@ watch(
 </script>
 <template>
     <div class="my-20">
-        <div class="mb-5 flex flex-row items-center justify-between">
+        <div class="mb-5 flex flex-col xl:flex-row items-center justify-between">
             <h2 class=" font-grota text-3xl font-extrabold uppercase text-wgh-gray-6">Achievements</h2>
-            <div class="filters flex items-center gap-8">
+            <div class="filters flex flex-col xl:flex-row  items-center gap-8">
                 <div>
                     <div class="mb-3">
                         <label
@@ -51,7 +51,7 @@ watch(
                             >Name</label
                         >
                         <input
-                            class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                            class="form-control w-full m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
                             type="text"
                             name="name"
                             id="name"
@@ -69,7 +69,7 @@ watch(
                         name="asset_name"
                         v-model="filters.filter_by_game"
                         @change.prevent="byGameFilterChanged"
-                        class="flex rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
+                        class="flex rounded w-full border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
                     >
                         <option :value="undefined">All</option>
                         <option :key="game.id" v-for="game in availableGames" :value="game.id">
@@ -78,16 +78,15 @@ watch(
                     </select>
                 </div>
                 <div>
-                    <div class="mb-3 xl:w-64">
+                    <div class="mb-3">
                         <label for="Date" class="form-label mb-2 inline-block text-lg text-gray-700">Date</label>
                         <Datepicker
                             range
                             required
-                            class="block rounded-md border border-wgh-gray-1.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            class="block w-full rounded-md border border-wgh-gray-1.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             utc
                             placeholder="Select date and time"
                             v-model="filters.date"
-                            :max-date="maxDate"
                         ></Datepicker>
                     </div>
                 </div>

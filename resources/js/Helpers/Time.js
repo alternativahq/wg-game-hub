@@ -7,5 +7,5 @@ export function timePlayedSecondsToHours(s) {
 }
 
 export function TimeAgo(param){
-    return dayjs().to(dayjs(param)) 
+    return dayjs().to(dayjs(param))
 }
