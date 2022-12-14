@@ -41,165 +41,161 @@ watch(
     <div class="my-20">
         <h2 class="mb-6 font-grota text-3xl font-extrabold uppercase text-wgh-gray-6">Games Played History</h2>
         <div class="flex flex-row justify-between">
-            <div class="mb-5 flex flex-row justify-between">
-                <div class="filters flex items-center gap-8">
+            <div class="filters flex flex-col xl:flex-row items-center gap-8">
+                <div class="mb-3">
+                    <label for="Maximum Players" class="form-label mb-2 inline-block text-lg text-gray-700"
+                        >Game</label
+                    >
+                    <select
+                        id="asset_name"
+                        name="asset_name"
+                        v-model="filters.filter_by_game"
+                        @change.prevent="byGameFilterChanged"
+                        class="flex w-full rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
+                    >
+                        <option :value="undefined">All</option>
+                        <option :key="game.id" v-for="game in availableGames" :value="game.id">
+                            {{ game.name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="Maximum Players" class="form-label mb-2 inline-block text-lg text-gray-700"
+                        >Mode</label
+                    >
+                    <select
+                        id="asset_name"
+                        name="asset_name"
+                        v-model="filters.game_gamelobbies_type"
+                        class="flex  w-fullrounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
+                    >
+                        <option :value="undefined">All</option>
+                        <option :key="index" v-for="(gameType, index) in gameTypes" :value="gameType.value">
+                            {{ gameType.label }}
+                        </option>
+                    </select>
+                </div>
+                <div>
                     <div class="mb-3">
-                        <label for="Maximum Players" class="form-label mb-2 inline-block text-lg text-gray-700"
-                            >Game</label
+                        <label for="Rank" class="form-label text-md mb-2 inline-block text-gray-700"
+                            >Rank</label
                         >
-                        <select
-                            id="asset_name"
-                            name="asset_name"
-                            v-model="filters.filter_by_game"
-                            @change.prevent="byGameFilterChanged"
-                            class="flex rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
-                        >
-                            <option :value="undefined">All</option>
-                            <option :key="game.id" v-for="game in availableGames" :value="game.id">
-                                {{ game.name }}
-                            </option>
-                        </select>
+                        <input
+                            class="form-control w-full m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                            type="number"
+                            name="Rank"
+                            id="Rank"
+                            v-model="filters.rank"
+                            placeholder="Rank"
+                        />
                     </div>
+                </div>
+                <!-- <div class="mb-3">
+                    <label
+                        for="Minimum Earned"
+                        class="form-label mb-2 inline-block text-lg text-gray-700"
+                        >Min Earned</label
+                    >
+                    <input
+                        class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                        type="number"
+                        name="min-base_entrance_fee"
+                        id="min-base_entrance_fee"
+                        v-model="filters.min_earned"
+                        placeholder="Min Earned"
+                    />
+                </div>
+                <div>
                     <div class="mb-3">
-                        <label for="Maximum Players" class="form-label mb-2 inline-block text-lg text-gray-700"
-                            >Mode</label
-                        >
-                        <select
-                            id="asset_name"
-                            name="asset_name"
-                            v-model="filters.game_gamelobbies_type"
-                            class="flex rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
-                        >
-                            <option :value="undefined">All</option>
-                            <option :key="index" v-for="(gameType, index) in gameTypes" :value="gameType.value">
-                                {{ gameType.label }}
-                            </option>
-                        </select>
-                    </div>
-                    <div>
-                        <div class="mb-3">
-                            <label for="Rank" class="form-label text-md mb-2 inline-block text-gray-700"
-                                >Rank</label
-                            >
-                            <input
-                                class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
-                                type="number"
-                                name="Rank"
-                                id="Rank"
-                                v-model="filters.rank"
-                                placeholder="Rank"
-                            />
-                        </div>
-                    </div>
-                    <!-- <div class="mb-3">
                         <label
-                            for="Minimum Earned"
+                            for="Maximum Earned"
                             class="form-label mb-2 inline-block text-lg text-gray-700"
-                            >Min Earned</label
+                            >Max Earned</label
                         >
                         <input
                             class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
                             type="number"
-                            name="min-base_entrance_fee"
-                            id="min-base_entrance_fee"
-                            v-model="filters.min_earned"
-                            placeholder="Min Earned"
+                            name="max-base_entrance_fee"
+                            id="max-base_entrance_fee"
+                            v-model="filters.max_earned"
+                            placeholder="Max Earned"
                         />
                     </div>
-                    <div>
-                        <div class="mb-3">
-                            <label
-                                for="Maximum Earned"
-                                class="form-label mb-2 inline-block text-lg text-gray-700"
-                                >Max Earned</label
-                            >
-                            <input
-                                class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
-                                type="number"
-                                name="max-base_entrance_fee"
-                                id="max-base_entrance_fee"
-                                v-model="filters.max_earned"
-                                placeholder="Max Earned"
-                            />
-                        </div>
-                    </div> -->
-                </div>
+                </div> -->
             </div>
         </div>
         <div class="flex flex-row justify-between">
-            <div class="mb-5 flex flex-row justify-between">
-                <div class="filters flex items-center gap-8">
-                    <!-- <div>
-                        <div class="mb-3 xl:w-64">
-                            <label for="Date" class="form-label mb-2 inline-block text-lg text-gray-700">Date</label>
-                            <Datepicker
-                                required
-                                class="block rounded-md border border-wgh-gray-1.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                utc
-                                placeholder="Select date and time"
-                                v-model="filters.date"
-                                :min-date="new Date()"
-                                :max-date="maxDate"
-                            ></Datepicker>
-                        </div>
-                    </div> -->
-                    <div>
-                        <div class="mb-3 xl:w-64">
-                            <label for="Date" class="form-label mb-2 inline-block text-lg text-gray-700">From Date</label>
-                            <Datepicker
-                                required
-                                class="block rounded-md border border-wgh-gray-1.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                utc
-                                placeholder="Select date and time"
-                                v-model="filters.date_from"
-                                :min-date="new Date()"
-                            ></Datepicker>
-                        </div>
+            <div class="filters flex flex-col xl:flex-row items-center gap-8">
+                <!-- <div>
+                    <div class="mb-3 xl:w-64">
+                        <label for="Date" class="form-label mb-2 inline-block text-lg text-gray-700">Date</label>
+                        <Datepicker
+                            required
+                            class="block rounded-md border border-wgh-gray-1.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            utc
+                            placeholder="Select date and time"
+                            v-model="filters.date"
+                            :min-date="new Date()"
+                            :max-date="maxDate"
+                        ></Datepicker>
                     </div>
-                    <div>
-                        <div class="mb-3 xl:w-64">
-                            <label for="Date" class="form-label mb-2 inline-block text-lg text-gray-700">To Date</label>
-                            <Datepicker
-                                required
-                                class="block rounded-md border border-wgh-gray-1.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                utc
-                                placeholder="Select date and time"
-                                v-model="filters.date_to"
-                                :min-date="new Date()"
-                            ></Datepicker>
-                        </div>
+                </div> -->
+                <div>
+                    <div class="mb-3 xl:w-64">
+                        <label for="Date" class="form-label mb-2 inline-block text-lg text-gray-700">From Date</label>
+                        <Datepicker
+                            required
+                            class="block rounded-md w-full border border-wgh-gray-1.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            utc
+                            placeholder="Select date and time"
+                            v-model="filters.date_from"
+                            :min-date="new Date()"
+                        ></Datepicker>
                     </div>
+                </div>
+                <div>
+                    <div class="mb-3 xl:w-64">
+                        <label for="Date" class="form-label mb-2 inline-block text-lg text-gray-700">To Date</label>
+                        <Datepicker
+                            required
+                            class="block rounded-md w-full border border-wgh-gray-1.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            utc
+                            placeholder="Select date and time"
+                            v-model="filters.date_to"
+                            :min-date="new Date()"
+                        ></Datepicker>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label
+                        for="Minimum Earned"
+                        class="form-label mb-2 inline-block text-lg text-gray-700"
+                        >Min Entrance Fee</label
+                    >
+                    <input
+                        class="form-control m-0 w-full block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                        type="number"
+                        name="min-base_entrance_fee"
+                        id="min-base_entrance_fee"
+                        v-model="filters.min_base_entrance_fee"
+                        placeholder="Min Entrance Fee"
+                    />
+                </div>
+                <div>
                     <div class="mb-3">
                         <label
-                            for="Minimum Earned"
+                            for="Maximum Earned"
                             class="form-label mb-2 inline-block text-lg text-gray-700"
-                            >Min Entrance Fee</label
+                            >Max Entrance Fee</label
                         >
                         <input
-                            class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                            class="form-control w-full m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
                             type="number"
-                            name="min-base_entrance_fee"
-                            id="min-base_entrance_fee"
-                            v-model="filters.min_base_entrance_fee"
-                            placeholder="Min Entrance Fee"
+                            name="max-base_entrance_fee"
+                            id="max-base_entrance_fee"
+                            v-model="filters.max_base_entrance_fee"
+                            placeholder="Max Entrance Fee"
                         />
-                    </div>
-                    <div>
-                        <div class="mb-3">
-                            <label
-                                for="Maximum Earned"
-                                class="form-label mb-2 inline-block text-lg text-gray-700"
-                                >Max Entrance Fee</label
-                            >
-                            <input
-                                class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
-                                type="number"
-                                name="max-base_entrance_fee"
-                                id="max-base_entrance_fee"
-                                v-model="filters.max_base_entrance_fee"
-                                placeholder="Max Entrance Fee"
-                            />
-                        </div>
                     </div>
                 </div>
             </div>
