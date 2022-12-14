@@ -101,13 +101,13 @@ watch(
                     </div>
                 </div>
             </BorderedContainer>
-            <div class="my-10 flex justify-between">
+            <div class="my-10 flex flex-col 2xl:flex-row justify-between">
                 <div>
                     <div class="mb-3">
                         <label for="Name" class="form-label mb-2 inline-block text-lg text-gray-700">Name</label>
                         <input
                             type="text"
-                            class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                            class="form-control w-full m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
                             name="search"
                             id="search"
                             placeholder="Search"
@@ -115,17 +115,16 @@ watch(
                         />
                     </div>
                     <div>
-                        <div class="mb-3 xl:w-64">
+                        <div class="mb-3">
                             <label for="Date" class="form-label mb-2 inline-block text-lg text-gray-700">Date</label>
                             <Datepicker
                                 range
                                 required
-                                class="block rounded-md border border-wgh-gray-1.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                class="block rounded-md border w-full border-wgh-gray-1.5 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 utc
                                 placeholder="Select date and time"
                                 v-model="filters.date"
                                 :min-date="new Date()"
-                                :max-date="maxDate"
                             ></Datepicker>
                         </div>
                     </div>
@@ -140,7 +139,7 @@ watch(
                                 id="asset_name"
                                 name="asset_name"
                                 v-model="filters.games_gamelobbies_type"
-                                class="flex rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
+                                class="flex rounded border w-full border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
                             >
                                 <option :value="undefined">All</option>
                                 <option :key="index" v-for="(gameType, index) in gameTypes" :value="gameType.value">
@@ -156,7 +155,7 @@ watch(
                                 id="games_gamelobbies_asset_symbol"
                                 name="games_gamelobbies_asset_symbol"
                                 v-model="filters.games_gamelobbies_asset_symbol"
-                                class="flex rounded border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
+                                class="flex rounded w-full border border-wgh-gray-1 px-4 py-2 pr-10 font-grota text-sm font-normal text-wgh-gray-6 placeholder-wgh-gray-3 outline-none"
                             >
                                 <option :value="undefined">All</option>
                                 <option :key="asset.id" v-for="asset in assets" :value="asset.symbol">
@@ -175,7 +174,7 @@ watch(
                                 >Minimum Base Entrance Fee</label
                             >
                             <input
-                                class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                                class="form-control w-full m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
                                 type="number"
                                 name="min-base_entrance_fee"
                                 id="min-base_entrance_fee"
@@ -191,7 +190,7 @@ watch(
                                     >Maximum Base Entrance Fee</label
                                 >
                                 <input
-                                    class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                                    class="form-control w-full m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
                                     type="number"
                                     name="max-base_entrance_fee"
                                     id="max-base_entrance_fee"
@@ -209,7 +208,7 @@ watch(
                                 >Minimum Players</label
                             >
                             <input
-                                class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                                class="form-control w-full m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
                                 type="number"
                                 name="min-players"
                                 id="min-players"
@@ -224,7 +223,7 @@ watch(
                                 >Maximum Players</label
                             >
                             <input
-                                class="form-control m-0 block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+                                class="form-control m-0 w-full block rounded border border-solid border-gray-300 bg-white bg-clip-padding px-2 py-1 text-lg font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
                                 type="number"
                                 name="max-players"
                                 id="max-players"

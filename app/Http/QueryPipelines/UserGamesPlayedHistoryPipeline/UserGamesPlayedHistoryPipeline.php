@@ -12,6 +12,8 @@ use App\Http\QueryPipelines\UserGamesPlayedHistoryPipeline\Filters\FilterByRank;
 use App\Http\QueryPipelines\UserGamesPlayedHistoryPipeline\Filters\FilterByGameMode;
 use App\Http\QueryPipelines\UserGamesPlayedHistoryPipeline\Filters\FilterByMaxBaseEntranceFee;
 use App\Http\QueryPipelines\UserGamesPlayedHistoryPipeline\Filters\FilterByMinBaseEntranceFee;
+use App\Http\QueryPipelines\UserGamesPlayedHistoryPipeline\Filters\FilterDateFrom;
+use App\Http\QueryPipelines\UserGamesPlayedHistoryPipeline\Filters\FilterDateTo;
 
 class UserGamesPlayedHistoryPipeline extends Pipeline
 {
@@ -31,8 +33,11 @@ class UserGamesPlayedHistoryPipeline extends Pipeline
             new ByGameFilter(request: $this->request),
             new FilterByMaxBaseEntranceFee(request: $this->request),
             new FilterByMinBaseEntranceFee(request: $this->request),
+            new FilterByMinBaseEntranceFee(request: $this->request),
             new FilterByGameMode(request: $this->request),
             new FilterByRank(request: $this->request),
+            new FilterDateFrom(request: $this->request),
+            new FilterDateTo(request: $this->request),
             new FilterByDate(request: $this->request),
         ];
     }

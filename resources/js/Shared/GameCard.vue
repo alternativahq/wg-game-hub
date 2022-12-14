@@ -5,7 +5,6 @@ import GameOptionsIcon from '@/Shared/SVG/GameOptionsIcon';
 import GameLiveIcon from '@/Shared/SVG/GameLiveIcon';
 import ButtonShape from '@/Shared/ButtonShape';
 import BorderedContainer from '@/Shared/BorderedContainer';
-import { onMounted } from 'vue';
 
 let props = defineProps({
     game: Object
@@ -17,13 +16,6 @@ const onlinePlayers = generateNumber(2100,1501);
 function generateNumber(max, min) {
       return Math.floor(Math.random()*(max-min+1)+min);
 };
-
-onMounted(() => {
- console.log(`lobbyCount: ${lobbyCount}`);
- console.log(`onlinePlayers: ${onlinePlayers}`);
-});
-
-
 </script>
 <template>
     <BorderedContainer class="mb-5 bg-wgh-gray-1.5">

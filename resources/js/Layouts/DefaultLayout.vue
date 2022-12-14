@@ -20,7 +20,7 @@ import {
     TransitionChild,
     TransitionRoot,
 } from '@headlessui/vue';
-import { MenuIcon, XMarkIcon, BellIcon } from '@heroicons/vue/24/outline';
+import { Bars3Icon, XMarkIcon, BellIcon } from '@heroicons/vue/24/outline';
 import { inject, reactive } from 'vue';
 import FlashMessage from '../Shared/FlashMessage.vue';
 import DefaultNotification from '@/Shared/Notifications/DefaultNotification';
@@ -276,7 +276,7 @@ const navigation = [{ name: 'Dashboard', href: '/', current: true, external: fal
                             class="inline-flex items-center justify-center rounded-md bg-transparent p-2 text-indigo-200 hover:bg-white hover:bg-opacity-10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
                         >
                             <span class="sr-only">Open main menu</span>
-                            <MenuIcon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
+                            <Bars3Icon v-if="!open" class="block h-6 w-6" aria-hidden="true" />
                             <XMarkIcon v-else class="block h-6 w-6" aria-hidden="true" />
                         </PopoverButton>
 
