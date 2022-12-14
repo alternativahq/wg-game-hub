@@ -153,7 +153,6 @@ watch(
                                 placeholder="Select date and time"
                                 v-model="filters.date_from"
                                 :min-date="new Date()"
-                                :max-date="maxDate"
                             ></Datepicker>
                         </div>
                     </div>
@@ -167,7 +166,6 @@ watch(
                                 placeholder="Select date and time"
                                 v-model="filters.date_to"
                                 :min-date="new Date()"
-                                :max-date="maxDate"
                             ></Datepicker>
                         </div>
                     </div>

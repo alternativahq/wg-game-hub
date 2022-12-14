@@ -49,7 +49,7 @@ const latestGamesPlayedHistoryData = [
             prize_pool: null,
             scheduled_at: "2022-10-26T09:49:40.000000Z",
             scheduled_at_utc_string: "Wed Oct 26 2022 09:49:40 GMT+0000",
-            start_at_utc_string: "Tue Dec 6 2022 09:49:40 GMT+0000",            
+            start_at_utc_string: "Tue Dec 6 2022 09:49:40 GMT+0000",
         },
         game_id: "fdaa08b1-07c4-4d29-aeaf-457285bd1ef5",
         game_lobby_id: "b7aa0e47-64dc-4a35-94d8-b9dda01bc871",
@@ -79,7 +79,7 @@ const latestGamesPlayedHistoryData = [
             prize_pool: null,
             scheduled_at: "2022-10-26T09:49:40.000000Z",
             scheduled_at_utc_string: "Wed Oct 26 2022 09:49:40 GMT+0000",
-            start_at_utc_string: "Wed Dec 4 2022 09:49:40 GMT+0000",      
+            start_at_utc_string: "Wed Dec 4 2022 09:49:40 GMT+0000",
         },
         game_id: "fdaa08b1-07c4-4d29-aeaf-457285bd1ef5",
         game_lobby_id: "b7aa0e47-64dc-4a35-94d8-b9dda01bc871",
@@ -109,7 +109,7 @@ const latestGamesPlayedHistoryData = [
             prize_pool: null,
             scheduled_at: "2022-10-26T09:49:40.000000Z",
             scheduled_at_utc_string: "Wed Oct 26 2022 09:49:40 GMT+0000",
-            start_at_utc_string: "Thu Dec 1 2022 09:49:40 GMT+0000",            
+            start_at_utc_string: "Thu Dec 1 2022 09:49:40 GMT+0000",
         },
         game_id: "fdaa08b1-07c4-4d29-aeaf-457285bd1ef5",
         game_lobby_id: "b7aa0e47-64dc-4a35-94d8-b9dda01bc871",
@@ -139,7 +139,7 @@ const latestGamesPlayedHistoryData = [
             prize_pool: null,
             scheduled_at: "2022-10-26T09:49:40.000000Z",
             scheduled_at_utc_string: "Wed Oct 26 2022 09:49:40 GMT+0000",
-            start_at_utc_string: "Tue Nov 1 2022 09:49:40 GMT+0000",         
+            start_at_utc_string: "Tue Nov 1 2022 09:49:40 GMT+0000",
         },
         game_id: "fdaa08b1-07c4-4d29-aeaf-457285bd1ef5",
         game_lobby_id: "b7aa0e47-64dc-4a35-94d8-b9dda01bc871",
@@ -169,7 +169,7 @@ const latestGamesPlayedHistoryData = [
             prize_pool: null,
             scheduled_at: "2022-10-26T09:49:40.000000Z",
             scheduled_at_utc_string: "Wed Oct 26 2022 09:49:40 GMT+0000",
-            start_at_utc_string: "Wed Oct 26 2022 09:49:40 GMT+0000",         
+            start_at_utc_string: "Wed Oct 26 2022 09:49:40 GMT+0000",
         },
         game_id: "fdaa08b1-07c4-4d29-aeaf-457285bd1ef5",
         game_lobby_id: "b7aa0e47-64dc-4a35-94d8-b9dda01bc871",
@@ -233,8 +233,6 @@ let userAchievements= [
         type: "progress",
     }
 ];
-
-console.log(props.latestGamesPlayedHistory)
 
 </script>
 <template>
@@ -370,7 +368,7 @@ console.log(props.latestGamesPlayedHistory)
                     </div>
                     </div>
                     <!-- playtime section ends -->
-                    
+
                     <div class="flex items-start rounded-xl bg-white p-4 shadow-lg">
                     <div class="flex h-12 w-12 items-center justify-center rounded-full border border-red-100 bg-red-50">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -454,7 +452,7 @@ console.log(props.latestGamesPlayedHistory)
                                                     scope="col"
                                                     class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8"
                                                 >
-                                                    
+
                                                 </th>
                                                 <th
                                                     scope="col"
@@ -579,7 +577,7 @@ console.log(props.latestGamesPlayedHistory)
                                                     scope="col"
                                                     class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8"
                                                 >
-                                                    
+
                                                 </th>
                                                 <th
                                                     scope="col"
