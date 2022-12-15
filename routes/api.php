@@ -16,6 +16,8 @@ use App\Http\Controllers\API\{
 use Illuminate\Support\Facades\Route;
 
 // Machine to Machine
+// aws-auth or api.basic-auth comes from kernal.php
+// auth:api it will work
 Route::middleware('api.basic-auth')->group(function () {
     Route::post('notifications', SendNotificationController::class)->name('notifications.send');
 
