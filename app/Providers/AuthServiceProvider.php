@@ -7,6 +7,9 @@ use App\Models\GameLobby;
 use App\Policies\ChatRoomPolicy;
 use App\Policies\GameLobbyPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -29,6 +32,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Auth::viaRequest('custom-token', function (Request $request) {
+            $tokenObj = json_decode($request->header('Authorization'), false);
+            return User::where('id', $tokenObj->sub)->first();
+        });
     }
 }
