@@ -42,6 +42,7 @@ class Kernel extends HttpKernel
         'api' => [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            // \App\Http\Middleware\AWSMiddleware::class,
         ],
     ];
 
@@ -66,5 +67,6 @@ class Kernel extends HttpKernel
         'EnsureUserIsNotInCooldownPeriod' => \App\Http\Middleware\EnsureUserIsNotInCooldownPeriodMiddleware::class,
         'isAdmin' => \App\Http\Middleware\IsAdminMiddleware::class,
         'api.basic-auth' => \App\Http\Middleware\Api\BasicTokenAuthMiddleware::class,
+        // 'aws-auth' => \App\Http\Middleware\AWSMiddleware::class,
     ];
 }
